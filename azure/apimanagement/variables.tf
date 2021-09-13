@@ -41,5 +41,5 @@ variable "policy_payload" {
 
 variable "tags" {
   description = "Resource tags."
-  type = list
+  type = map
 }
