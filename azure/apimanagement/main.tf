@@ -13,6 +13,8 @@ resource "azurerm_api_management" "api" {
   publisher_email     = var.squad_email
 
   sku_name = "Developer_1"
+
+  tags = "${var.tags}"
 }
 
 resource "azurerm_storage_account" "api" {
@@ -22,13 +24,15 @@ resource "azurerm_storage_account" "api" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
-  tags = local.default_tags
+  tags = "${var.tags}"
 }
 
 resource "azurerm_storage_container" "api" {
   name                  = "${var.organization}${var.project}"
   storage_account_name  = azurerm_storage_account.api.name
   container_access_type = "private"
+
+  tags = "${var.tags}"
 }
 
 resource "azurerm_api_management_api" "api" {
@@ -44,14 +48,17 @@ resource "azurerm_api_management_api" "api" {
     content_format = "openapi+json"
     content_value  = var.openapi_specs
   }
+
+  tags = "${var.tags}"
 }
 
 resource "azurerm_api_management_api_policy" "api" {
   api_name            = azurerm_api_management_api.api.name
   api_management_name = azurerm_api_management.api.name
   resource_group_name = azurerm_resource_group.api.name
-
   xml_content = var.policy_payload
+
+  tags = "${var.tags}"
 }
 
 resource "azurerm_api_management_backend" "api" {
@@ -60,4 +67,6 @@ resource "azurerm_api_management_backend" "api" {
   api_management_name = azurerm_api_management.api.name
   protocol            = "http"
   url                 = "${var.api_backend_url}"
+
+  tags = "${var.tags}"
 }
