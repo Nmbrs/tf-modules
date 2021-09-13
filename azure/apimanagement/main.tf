@@ -31,8 +31,6 @@ resource "azurerm_storage_container" "api" {
   name                  = "${var.organization}${var.project}"
   storage_account_name  = azurerm_storage_account.api.name
   container_access_type = "private"
-
-  tags = "${var.tags}"
 }
 
 resource "azurerm_api_management_api" "api" {

@@ -23,6 +23,11 @@ variable "service" {
   type        = string
 }
 
+variable "api_backend_url" {
+  description = "API backend url"
+  type        = string
+}
+
 variable "path" {
   description = "API path"
   type        = string
