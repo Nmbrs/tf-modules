@@ -38,3 +38,8 @@ variable "policy_payload" {
   description = "API policy XML content."
   type        = string
 }
+
+variable "tags" {
+  description = "Resource tags."
+  type = list
+}
