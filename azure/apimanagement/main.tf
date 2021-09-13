@@ -53,8 +53,6 @@ resource "azurerm_api_management_api_policy" "api" {
   api_management_name = azurerm_api_management.api.name
   resource_group_name = azurerm_resource_group.api.name
   xml_content = var.policy_payload
-
-  tags = "${var.tags}"
 }
 
 resource "azurerm_api_management_backend" "api" {
