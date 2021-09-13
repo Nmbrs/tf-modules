@@ -65,6 +65,4 @@ resource "azurerm_api_management_backend" "api" {
   api_management_name = azurerm_api_management.api.name
   protocol            = "http"
   url                 = "${var.api_backend_url}"
-
-  tags = "${var.tags}"
 }
