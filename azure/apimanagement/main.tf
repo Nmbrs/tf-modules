@@ -46,8 +46,6 @@ resource "azurerm_api_management_api" "api" {
     content_format = "openapi+json"
     content_value  = var.openapi_specs
   }
-
-  tags = "${var.tags}"
 }
 
 resource "azurerm_api_management_api_policy" "api" {
