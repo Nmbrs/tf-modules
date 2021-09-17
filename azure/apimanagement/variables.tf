@@ -48,3 +48,8 @@ variable "tags" {
   description = "Resource tags."
   type = map
 }
+
+variable "environment" {
+  description = "Nmbrs environment where is being deployed."
+  type        = string
+}

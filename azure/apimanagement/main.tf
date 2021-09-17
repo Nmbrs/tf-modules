@@ -6,7 +6,7 @@ resource "azurerm_resource_group" "api" {
 }
 
 resource "azurerm_api_management" "api" {
-  name                = "api-${var.organization}-${var.project}"
+  name                = "api-${var.organization}-${var.project}-${var.environment}"
   location            = local.location
   resource_group_name = azurerm_resource_group.api.name
   publisher_name      = var.squad_name
@@ -18,7 +18,7 @@ resource "azurerm_api_management" "api" {
 }
 
 resource "azurerm_storage_account" "api" {
-  name                     = "sa${var.organization}${var.project}"
+  name                     = "sa${var.organization}${var.project}${var.environment}"
   resource_group_name      = azurerm_resource_group.api.name
   location                 = local.location
   account_tier             = "Standard"
@@ -38,7 +38,7 @@ resource "azurerm_api_management_api" "api" {
   resource_group_name = azurerm_resource_group.api.name
   api_management_name = azurerm_api_management.api.name
   revision            = "1"
-  display_name        = "${var.organization} ${var.project} ${var.service}"
+  display_name        = "${var.service}"
   path                = var.path
   protocols           = ["https"]
   service_url         = azurerm_api_management_backend.api.url
