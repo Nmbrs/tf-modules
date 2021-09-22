@@ -33,25 +33,10 @@ variable "tags" {
   type        = map(any)
 }
 
-variable "sku_tier" {
-  description = "app service plan tier [PremiumV2 or PremiumV3]"
-  type        = string
-
-  validation {
-    condition = contains(["PremiumV2", "PremiumV3"], var.sku_tier)
-    
-
-    error_message = "sku tier must be either PremiumV2 or PremiumV3"
-  }
+variable "plan" {
+  type = string
 }
 
-variable "sku_size" {
-  description = "app service plan instance sizetype [P1, P2 or P3]"
-  type        = string
-
-  validation {
-    condition = contains(["P1", "P2", "P3"], var.sku_size)
-
-    error_message = "sku size must be P1."
-  }
+variable "size" {
+  type = string
 }
