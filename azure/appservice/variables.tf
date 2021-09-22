@@ -23,11 +23,6 @@ variable "project" {
   type        = string
 }
 
-variable "service" {
-  description = "microservice or application string to be reused on resource naming"
-  type        = string
-}
-
 variable "tags" {
   description = "Resource tags."
   type        = map(any)
