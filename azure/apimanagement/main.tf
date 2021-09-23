@@ -11,7 +11,9 @@ resource "azurerm_api_management" "api" {
   resource_group_name = azurerm_resource_group.api.name
   publisher_name      = var.squad_name
   publisher_email     = var.squad_email
-
+  identity {
+    type = "SystemAssigned"
+  }
   sku_name = "Developer_1"
 
   tags = "${var.tags}"
@@ -124,7 +126,6 @@ resource "azurerm_api_management_named_value" "api" {
   display_name        = "ApiProperty"
   secret = true
   value_from_key_vault {
-  secret_id = var.vaultid
-  //identity_client_id = var.managedidentityid
+  secret_id = var.vault_id
   }
 }

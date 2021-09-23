@@ -59,14 +59,7 @@ variable "environment" {
   type        = string
 }
 
-variable "vaultid" {
+variable "vault_id" {
   description = "Vault Resource ID"
   type        = string
-  sensitive = true
-}
-
-variable "managedidentityid" {
-  description = "Client ID of the managed identity used to access the key vault"
-  type = string
-  sensitive =  false
 }
