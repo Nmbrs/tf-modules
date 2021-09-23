@@ -44,6 +44,11 @@ variable "policy_payload" {
   type        = string
 }
 
+variable "policy_product" {
+  description = "API product policy XML content."
+  type        = string
+}
+
 variable "tags" {
   description = "Resource tags."
   type = map
@@ -52,4 +57,16 @@ variable "tags" {
 variable "environment" {
   description = "Nmbrs environment where is being deployed."
   type        = string
+}
+
+variable "vaultid" {
+  description = "Vault Resource ID"
+  type        = string
+  sensitive = true
+}
+
+variable "managedidentityid" {
+  description = "Client ID of the managed identity used to access the key vault"
+  type = string
+  sensitive =  false
 }

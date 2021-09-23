@@ -62,3 +62,69 @@ resource "azurerm_api_management_backend" "api" {
   protocol            = "http"
   url                 = "${var.api_backend_url}"
 }
+
+resource "azurerm_api_management_product" "api" {
+  product_id            = "test-product"
+  api_management_name   = azurerm_api_management.api.name
+  resource_group_name   = azurerm_resource_group.api.name
+  display_name          = "Test Product"
+  description           = "Test product with terraform"
+  subscription_required = true
+  published             = true
+}
+
+resource "azurerm_api_management_product_policy" "api" {
+  product_id          = azurerm_api_management_product.api.product_id
+  api_management_name = azurerm_api_management_product.api.api_management_name
+  resource_group_name = azurerm_api_management_product.api.resource_group_name
+
+  xml_content = var.policy_product
+
+}
+
+resource "azurerm_api_management_product_api" "api" {
+  api_name            = azurerm_api_management_api.api.name
+  product_id          = azurerm_api_management_product.api.product_id
+  api_management_name = azurerm_api_management.api.name
+  resource_group_name = azurerm_api_management.api.resource_group_name
+  
+}
+
+data "azurerm_api_management_group" "api" {
+  name                = "developers"
+  api_management_name = azurerm_api_management.api.name
+  resource_group_name = azurerm_api_management.api.resource_group_name
+}
+
+data "azurerm_api_management_group" "api2" {    
+  name                = "guests"
+  api_management_name = azurerm_api_management.api.name
+  resource_group_name = azurerm_api_management.api.resource_group_name
+}
+
+resource "azurerm_api_management_product_group" "api" {
+  product_id          = azurerm_api_management_product.api.product_id
+  group_name          = data.azurerm_api_management_group.api.name
+  api_management_name = azurerm_api_management.api.name
+  resource_group_name = azurerm_api_management.api.resource_group_name
+}
+
+resource "azurerm_api_management_product_group" "api2" {
+  product_id          = azurerm_api_management_product.api.product_id
+  group_name          = data.azurerm_api_management_group.api2.name
+  api_management_name = azurerm_api_management.api.name
+  resource_group_name = azurerm_api_management.api.resource_group_name
+}
+
+
+resource "azurerm_api_management_named_value" "api" {
+  name                = "api-apimg"
+  resource_group_name = azurerm_resource_group.api.name
+  api_management_name = azurerm_api_management.api.name
+  display_name        = "ApiProperty"
+  secret = true
+  value_from_key_vault {
+  secret_id = var.vaultid
+  //identity_client_id = var.managedidentityid
+  }
+}
