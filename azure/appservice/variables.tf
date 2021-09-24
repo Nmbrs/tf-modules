@@ -23,11 +23,6 @@ variable "project" {
   type        = string
 }
 
-variable "tags" {
-  description = "Resource tags."
-  type        = map(any)
-}
-
 variable "plan" {
   type = string
 }
