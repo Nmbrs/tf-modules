@@ -5,7 +5,7 @@ resource "azurerm_resource_group" "app" {
   tags = {
     country     = var.country
     environment = var.environment
-    squad       = var.owner
+    squad       = var.squad
   }
 }
 
@@ -23,7 +23,7 @@ resource "azurerm_app_service_plan" "app" {
   tags = {
     country     = var.country
     environment = var.environment
-    squad       = var.owner
+    squad       = var.squad
   }
 }
 
@@ -40,6 +40,6 @@ resource "azurerm_app_service" "app" {
   tags = {
     country     = var.country
     environment = var.environment
-    squad       = var.owner
+    squad       = var.squad
   }
 }
