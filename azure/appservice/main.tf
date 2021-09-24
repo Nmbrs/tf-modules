@@ -48,8 +48,7 @@ resource "azurerm_app_service" "app" {
 resource "azurerm_log_analytics_workspace" "apm" {
   name                = "wsp-${var.project}"
   location            = azurerm_resource_group.app.location
-  resource_group_name = azurerm_resource_group.app.name
-  sku                 = "Premium"
+  resource_group_name = azurerm_resource_group.app.name  
   retention_in_days   = 90
 }
 
@@ -57,6 +56,6 @@ resource "azurerm_application_insights" "apm" {
   name                = "apm-${var.project}"
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name
-  workspace_id        = azurerm_log_analytics_workspace.apm.id
+  workspace_id        = azurerm_log_analytics_workspace.apm .id
   application_type    = "web"
 }
