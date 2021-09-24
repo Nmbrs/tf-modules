@@ -3,5 +3,5 @@ output "instrumentation_key" {
 }
 
 output "app_id" {
-  value = azurerm_application_insights.app.app_id
+  value = azurerm_application_insights.apm.app_id
 }
