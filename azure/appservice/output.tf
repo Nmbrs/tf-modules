@@ -10,7 +10,7 @@ output "resource_group" {
   value = azurerm_resource_group.app.name
 }
 
-output "localtion" {
+output "location" {
   value = azurerm_resource_group.app.location
 }
 
