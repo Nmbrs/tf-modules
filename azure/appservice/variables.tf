@@ -18,6 +18,11 @@ variable "environment" {
   type        = string
 }
 
+variable "product" {
+  description = "Product tag"
+  type        = string
+}
+
 variable "project" {
   description = "project name. It will be used by some resources."
   type        = string

@@ -6,6 +6,7 @@ resource "azurerm_resource_group" "app" {
     country     = var.country
     environment = var.environment
     squad       = var.squad
+    product     = var.product
   }
 }
 
@@ -25,6 +26,7 @@ resource "azurerm_app_service_plan" "app" {
     country     = var.country
     environment = var.environment
     squad       = var.squad
+    product     = var.product
   }
 }
 
@@ -46,6 +48,7 @@ resource "azurerm_app_service" "app" {
     country     = var.country
     environment = var.environment
     squad       = var.squad
+    product     = var.product
   }
 }
 
@@ -54,6 +57,14 @@ resource "azurerm_log_analytics_workspace" "apm" {
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name  
   retention_in_days   = 90
+
+  tags = {
+    country     = var.country
+    environment = var.environment
+    squad       = var.squad
+    product     = var.product
+  }
+
 }
 
 resource "azurerm_application_insights" "apm" {  
@@ -62,4 +73,11 @@ resource "azurerm_application_insights" "apm" {
   resource_group_name = azurerm_resource_group.app.name
   workspace_id        = azurerm_log_analytics_workspace.apm .id
   application_type    = "web"
+
+  tags = {
+    country     = var.country
+    environment = var.environment
+    squad       = var.squad
+    product     = var.product
+  }
 }
