@@ -13,4 +13,3 @@ output "resource_group" {
 output "location" {
   value = azurerm_resource_group.app.location
 }
-
