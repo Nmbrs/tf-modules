@@ -38,6 +38,10 @@ resource "azurerm_app_service" "app" {
     linux_fx_version = "DOTNETCORE|3.1"
   }
 
+  identity {
+    type = "SystemAssigned"
+  }
+
   tags = {
     country     = var.country
     environment = var.environment
