@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "app" {
-  name     = "rg-${var.project}"
+  name     = "rg-${var.project}-${var.environment}"
   location = local.location
 
   tags = {
@@ -11,7 +11,7 @@ resource "azurerm_resource_group" "app" {
 }
 
 resource "azurerm_app_service_plan" "app" {
-  name                = "asp-${var.project}"
+  name                = "asp-${var.project}-${var.environment}"
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name
   kind                = "Linux"
@@ -31,7 +31,7 @@ resource "azurerm_app_service_plan" "app" {
 }
 
 resource "azurerm_app_service" "app" {
-  name                = "as-${var.project}"
+  name                = "as-${var.project}-${var.environment}"
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name
   app_service_plan_id = azurerm_app_service_plan.app.id
@@ -53,7 +53,7 @@ resource "azurerm_app_service" "app" {
 }
 
 resource "azurerm_log_analytics_workspace" "apm" {
-  name                = "wsp-${var.project}"
+  name                = "wsp-${var.project}-${var.environment}"
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name  
   retention_in_days   = 90
@@ -68,7 +68,7 @@ resource "azurerm_log_analytics_workspace" "apm" {
 }
 
 resource "azurerm_application_insights" "apm" {  
-  name                = "apm-${var.project}"
+  name                = "apm-${var.project}-${var.environment}"
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name
   workspace_id        = azurerm_log_analytics_workspace.apm .id
