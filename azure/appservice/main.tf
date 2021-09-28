@@ -81,3 +81,18 @@ resource "azurerm_application_insights" "apm" {
     product     = var.product
   }
 }
+
+resource "azurerm_storage_account" "app" {
+  name                     = "sa${var.project}{var.environment}"
+  resource_group_name      = azurerm_resource_group.app.name
+  location                 = azurerm_resource_group.app.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  tags = {
+    country     = var.country
+    environment = var.environment
+    squad       = var.squad
+    product     = var.product
+  }
+}
