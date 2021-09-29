@@ -15,7 +15,7 @@ resource "azurerm_app_service_plan" "app" {
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name
   kind                = "Linux"
-  reserved = true
+  reserved            = true
 
   sku {
     tier = var.plan
@@ -55,7 +55,7 @@ resource "azurerm_app_service" "app" {
 resource "azurerm_log_analytics_workspace" "apm" {
   name                = "wsp-${var.project}-${var.environment}"
   location            = azurerm_resource_group.app.location
-  resource_group_name = azurerm_resource_group.app.name  
+  resource_group_name = azurerm_resource_group.app.name
   retention_in_days   = 90
 
   tags = {
@@ -67,11 +67,11 @@ resource "azurerm_log_analytics_workspace" "apm" {
 
 }
 
-resource "azurerm_application_insights" "apm" {  
+resource "azurerm_application_insights" "apm" {
   name                = "apm-${var.project}-${var.environment}"
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name
-  workspace_id        = azurerm_log_analytics_workspace.apm .id
+  workspace_id        = azurerm_log_analytics_workspace.apm.id
   application_type    = "web"
 
   tags = {
