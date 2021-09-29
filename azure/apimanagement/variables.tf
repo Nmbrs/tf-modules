@@ -60,6 +60,6 @@ variable "environment" {
 }
 
 variable "vault_id" {
-  description = "Vault Resource ID"
+  description = "Secret Id that you want to get from the key vault"
   type        = string
 }

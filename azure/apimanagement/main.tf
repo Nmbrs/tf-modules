@@ -66,10 +66,10 @@ resource "azurerm_api_management_backend" "api" {
 }
 
 resource "azurerm_api_management_product" "api" {
-  product_id            = "test-product"
+  product_id            = "product-${var.organization}-${var.project}"
   api_management_name   = azurerm_api_management.api.name
   resource_group_name   = azurerm_resource_group.api.name
-  display_name          = "Test Product"
+  display_name          = "Product ${var.organization} ${var.project}"
   description           = "Test product with terraform"
   subscription_required = true
   published             = true
@@ -119,10 +119,10 @@ resource "azurerm_api_management_product_group" "api2" {
 }
 
 resource "azurerm_api_management_named_value" "api" {
-  name                = "api-apimg"
+  name                = "NamedValue"
   resource_group_name = azurerm_resource_group.api.name
   api_management_name = azurerm_api_management.api.name
-  display_name        = "ApiProperty"
+  display_name        = "NamedValue"
   secret = true
   value_from_key_vault {
   secret_id = var.vault_id
