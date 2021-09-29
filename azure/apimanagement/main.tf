@@ -118,7 +118,6 @@ resource "azurerm_api_management_product_group" "api2" {
   resource_group_name = azurerm_api_management.api.resource_group_name
 }
 
-
 resource "azurerm_api_management_named_value" "api" {
   name                = "api-apimg"
   resource_group_name = azurerm_resource_group.api.name
