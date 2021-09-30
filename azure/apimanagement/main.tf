@@ -11,7 +11,9 @@ resource "azurerm_api_management" "api" {
   resource_group_name = azurerm_resource_group.api.name
   publisher_name      = var.squad_name
   publisher_email     = var.squad_email
-
+  identity {
+    type = "SystemAssigned"
+  }
   sku_name = "Developer_1"
 
   tags = "${var.tags}"
@@ -61,4 +63,50 @@ resource "azurerm_api_management_backend" "api" {
   api_management_name = azurerm_api_management.api.name
   protocol            = "http"
   url                 = "${var.api_backend_url}"
+}
+
+resource "azurerm_api_management_product" "api" {
+  product_id            = "product-${var.organization}-${var.project}"
+  api_management_name   = azurerm_api_management.api.name
+  resource_group_name   = azurerm_resource_group.api.name
+  display_name          = "Product ${var.organization} ${var.project}"
+  description           = "Test product with terraform"
+  subscription_required = true
+  published             = true
+}
+
+resource "azurerm_api_management_product_policy" "api" {
+  product_id          = azurerm_api_management_product.api.product_id
+  api_management_name = azurerm_api_management_product.api.api_management_name
+  resource_group_name = azurerm_api_management_product.api.resource_group_name
+
+  xml_content = var.policy_product
+
+}
+
+resource "azurerm_api_management_product_api" "api" {
+  api_name            = azurerm_api_management_api.api.name
+  product_id          = azurerm_api_management_product.api.product_id
+  api_management_name = azurerm_api_management.api.name
+  resource_group_name = azurerm_api_management.api.resource_group_name
+  
+}
+
+resource "azurerm_api_management_product_group" "api" {
+  product_id          = azurerm_api_management_product.api.product_id
+  for_each            = toset(var.groups)
+  group_name          = each.value
+  api_management_name = azurerm_api_management.api.name
+  resource_group_name = azurerm_api_management.api.resource_group_name
+}
+
+resource "azurerm_api_management_named_value" "api" {
+  name                = "NamedValue"
+  resource_group_name = azurerm_resource_group.api.name
+  api_management_name = azurerm_api_management.api.name
+  display_name        = "NamedValue"
+  secret = true
+  value_from_key_vault {
+  secret_id = var.vault_id
+  }
 }

@@ -9,3 +9,7 @@ output "api_management_name" {
 output "resource_group" {
   value = azurerm_api_management_api.api.resource_group_name
 }
+
+output "azurerm_api_management_identity" {
+  value = azurerm_api_management.api.identity
+}
