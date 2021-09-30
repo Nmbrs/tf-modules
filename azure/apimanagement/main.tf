@@ -92,28 +92,10 @@ resource "azurerm_api_management_product_api" "api" {
   
 }
 
-data "azurerm_api_management_group" "api" {
-  name                = "developers"
-  api_management_name = azurerm_api_management.api.name
-  resource_group_name = azurerm_api_management.api.resource_group_name
-}
-
-data "azurerm_api_management_group" "api2" {    
-  name                = "guests"
-  api_management_name = azurerm_api_management.api.name
-  resource_group_name = azurerm_api_management.api.resource_group_name
-}
-
 resource "azurerm_api_management_product_group" "api" {
   product_id          = azurerm_api_management_product.api.product_id
-  group_name          = data.azurerm_api_management_group.api.name
-  api_management_name = azurerm_api_management.api.name
-  resource_group_name = azurerm_api_management.api.resource_group_name
-}
-
-resource "azurerm_api_management_product_group" "api2" {
-  product_id          = azurerm_api_management_product.api.product_id
-  group_name          = data.azurerm_api_management_group.api2.name
+  for_each            = toset(var.groups)
+  group_name          = each.value
   api_management_name = azurerm_api_management.api.name
   resource_group_name = azurerm_api_management.api.resource_group_name
 }

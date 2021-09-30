@@ -63,3 +63,12 @@ variable "vault_id" {
   description = "Secret Id that you want to get from the key vault"
   type        = string
 }
+
+variable "groups" {
+  type = list (string)
+  default = [ 
+    "developers",
+    "guests", 
+  ]
+  description = "Groups to be assigned to the product"
+}
