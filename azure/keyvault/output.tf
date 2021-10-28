@@ -1,13 +1,13 @@
-output "key-vault-id" {
+output "key_vault_id" {
   description = "Key Vault ID"
-  value       = azurerm_key_vault.key-vault.id
+  value       = azurerm_key_vault.key_vault.id
 }
 
-output "key-vault-url" {
+output "key_vault_url" {
   description = "Key Vault URI"
-  value       = azurerm_key_vault.key-vault.vault_uri
+  value       = azurerm_key_vault.key_vault.vault_uri
 }
 
-output "key-vault-secrets" {
+output "key_vault_secrets" {
   value = values(azurerm_key_vault_secret.secret).*.value
 }
