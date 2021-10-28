@@ -1,12 +1,6 @@
-resource "azurerm_resource_group" "rg" {
-  name      = var.resource_group_name
-  location  = local.location
-  location  = "West Europe"
-}
-
 # Create the Azure Key Vault
 resource "azurerm_key_vault" "key-vault" {
-  name                = var.name
+  name                = "kv-nmbrs-${var.name}"
   location            = local.location
   resource_group_name = rg.name
   
