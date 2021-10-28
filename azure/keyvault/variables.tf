@@ -13,40 +13,24 @@ variable "name" {
   }
 }
 
-variable "sku_name" {
-  type        = string
-  description = "Select Standard or Premium SKU"
-  default     = "standard"
-  
-  validation {
-    condition     = var.sku_name == "standard" || var.sku_name == "premium"
-    error_message = "The sku name must be either standard or premium"
-  }
-}
-
-variable "enabled_for_deployment" {
-  type        = string
-  description = "Allow Azure Virtual Machines to retrieve certificates stored as secrets from the Azure Key Vault"
-  default     = "true"
-}
-
-variable "enabled_for_disk_encryption" {
-  type        = string
-  description = "Allow Azure Disk Encryption to retrieve secrets from the Azure Key Vault and unwrap keys" 
-  default     = "true"
-}
-
-variable "enabled_for_template_deployment" {
-  type        = string
-  description = "Allow Azure Resource Manager to retrieve secrets from the Azure Key Vault"
-  default     = "true"
-}
-
 variable "secrets" {
   type = map(object({
     value = string
   }))
   description = "Define Azure Key Vault secrets"
+  default = {}
+}
+
+variable "policies" {
+  type = map(object({
+    tenant_id               = string
+    object_id               = string
+    key_permissions         = list(string)
+    secret_permissions      = list(string)
+    certificate_permissions  = list(string)
+    storage_permissions     = list(string)
+  }))
+  description = "Define a Azure Key Vault access policy"
   default = {}
 }
 
@@ -103,17 +87,4 @@ variable "kv-storage-permissions-read" {
   type        = list(string)
   description = "List of read storage permissions, must be one or more from the following: backup, delete, deletesas, get, getsas, list, listsas, purge, recover, regeneratekey, restore, set, setsas and update"
   default     = [ "get", "getsas", "list", "listsas" ]
-}
-
-variable "policies" {
-  type = map(object({
-    tenant_id               = string
-    object_id               = string
-    key_permissions         = list(string)
-    secret_permissions      = list(string)
-    certificate_permissions = list(string)
-    storage_permissions     = list(string)
-  }))
-  description = "Define a Azure Key Vault access policy"
-  default = {}
 }

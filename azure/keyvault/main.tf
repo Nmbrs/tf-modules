@@ -1,13 +1,17 @@
+resource "azurerm_resource_group" "rg" {
+  name      = var.resource_group_name
+  location  = local.location
+  location  = "West Europe"
+}
+
 # Create the Azure Key Vault
 resource "azurerm_key_vault" "key-vault" {
   name                = var.name
-  location            = var.location
-  resource_group_name = var.resource_group_name
+  location            = local.location
+  resource_group_name = rg.name
   
-  enabled_for_disk_encryption     = var.enabled_for_disk_encryption
-
   # tenant_id = data.azurerm_client_config.current.tenant_id
-  sku_name  = var.sku_name
+  sku_name  = "standard"
 
   network_acls {
     default_action = "Allow"
@@ -26,10 +30,10 @@ resource "azurerm_key_vault_access_policy" "default_policy" {
     create_before_destroy = true
   }
 
-  key_permissions = var.kv-key-permissions-full
-  secret_permissions = var.kv-secret-permissions-full
-  certificate_permissions = var.kv-certificate-permissions-full
-  storage_permissions = var.kv-storage-permissions-full
+  key_permissions         = var.kv-key-permissions-full
+  secret_permissions      = var.kv-secret-permissions-full
+  certificate_permissions  = var.kv-certificate-permissions-full
+  storage_permissions     = var.kv-storage-permissions-full
 }
 
 # Create an Azure Key Vault access policy
@@ -40,7 +44,7 @@ resource "azurerm_key_vault_access_policy" "policy" {
   object_id               = lookup(each.value, "object_id")
   key_permissions         = lookup(each.value, "key_permissions")
   secret_permissions      = lookup(each.value, "secret_permissions")
-  certificate_permissions = lookup(each.value, "certificate_permissions")
+  certificate_permissions  = lookup(each.value, "certificate_permissions")
   storage_permissions     = lookup(each.value, "storage_permissions")
 }
 
@@ -53,7 +57,7 @@ resource "random_password" "password" {
   min_numeric = 2
   min_special = 2
 
-  keepers = {
+  keepers     = {
     name = each.key
   }
 }
@@ -65,7 +69,7 @@ resource "azurerm_key_vault_secret" "secret" {
   name         = each.key
   value        = lookup(each.value, "value") != "" ? lookup(each.value, "value") : random_password.password[each.key].result
   tags         = var.tags
-  depends_on = [
+  depends_on   = [
     azurerm_key_vault.key-vault,
     azurerm_key_vault_access_policy.default_policy,
   ]
