@@ -4,7 +4,7 @@ data "azurerm_client_config" "current" {}
 resource "azurerm_key_vault" "key-vault" {
   name                = "kv-nmbrs-${var.name}"
   location            = local.location
-  resource_group_name = rg.name
+  resource_group_name = local.name
   
   # tenant_id = data.azurerm_client_config.current.tenant_id
   sku_name  = "standard"
