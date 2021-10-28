@@ -1,10 +1,10 @@
 data "azurerm_client_config" "current" {}
 
 # Create the Azure Key Vault
-resource "azurerm_key_vault" "key-vault" {
+resource "azurerm_key_vault" "key_vault" {
   name                = "kv-nmbrs-${var.name}"
   location            = local.location
-  resource_group_name = local.name
+  resource_group_name = var.resource_group_name
   
   # tenant_id = data.azurerm_client_config.current.tenant_id
   sku_name  = "standard"
@@ -26,16 +26,16 @@ resource "azurerm_key_vault_access_policy" "default_policy" {
     create_before_destroy = true
   }
 
-  key_permissions         = var.kv-key-permissions-full
-  secret_permissions      = var.kv-secret-permissions-full
-  certificate_permissions  = var.kv-certificate-permissions-full
-  storage_permissions     = var.kv-storage-permissions-full
+  key_permissions         = var.kv_key_permissions_full
+  secret_permissions      = var.kv_secret_permissions_full
+  certificate_permissions  = var.kv_certificate_permissions_full
+  storage_permissions     = var.kv_storage_permissions_full
 }
 
 # Create an Azure Key Vault access policy
 resource "azurerm_key_vault_access_policy" "policy" {
   for_each                = var.policies
-  key_vault_id            = azurerm_key_vault.key-vault.id
+  key_vault_id            = azurerm_key_vault.key_vault.id
   tenant_id               = lookup(each.value, "tenant_id")
   object_id               = lookup(each.value, "object_id")
   key_permissions         = lookup(each.value, "key_permissions")
@@ -61,12 +61,12 @@ resource "random_password" "password" {
 # Create an Azure Key Vault secrets
 resource "azurerm_key_vault_secret" "secret" {
   for_each     = var.secrets
-  key_vault_id = azurerm_key_vault.key-vault.id
+  key_vault_id = azurerm_key_vault.key_vault.id
   name         = each.key
   value        = lookup(each.value, "value") != "" ? lookup(each.value, "value") : random_password.password[each.key].result
-  tags         = var.tags
+    
   depends_on   = [
-    azurerm_key_vault.key-vault,
+    azurerm_key_vault.key_vault,
     azurerm_key_vault_access_policy.default_policy,
   ]
 }
