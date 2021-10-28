@@ -1,3 +1,5 @@
+data "azurerm_client_config" "current" {}
+
 # Create the Azure Key Vault
 resource "azurerm_key_vault" "key-vault" {
   name                = "kv-nmbrs-${var.name}"
