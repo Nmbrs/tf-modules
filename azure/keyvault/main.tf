@@ -5,11 +5,8 @@ resource "azurerm_key_vault" "key_vault" {
   name                = "kv-nmbrs-${var.name}"
   location            = local.location
   resource_group_name = var.resource_group_name
-
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  
-  # tenant_id = data.azurerm_client_config.current.tenant_id
-  sku_name  = "standard"
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+  sku_name            = "standard"
 
   network_acls {
     default_action = "Allow"
@@ -31,7 +28,7 @@ resource "azurerm_key_vault_access_policy" "default_policy" {
   key_permissions         = var.kv_key_permissions_full
   secret_permissions      = var.kv_secret_permissions_full
   certificate_permissions  = var.kv_certificate_permissions_full
-  storage_permissions     = var.kv_storage_permissions_full
+  storage_permissions     = var.kv_storage_permissions_full  
 }
 
 # Create an Azure Key Vault access policy
@@ -68,7 +65,6 @@ resource "azurerm_key_vault_secret" "secret" {
   value        = lookup(each.value, "value") != "" ? lookup(each.value, "value") : random_password.password[each.key].result
     
   depends_on   = [
-    azurerm_key_vault.key_vault,
-    azurerm_key_vault_access_policy.default_policy,
+    azurerm_key_vault.key_vault
   ]
 }
