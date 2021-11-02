@@ -65,6 +65,7 @@ resource "azurerm_key_vault_secret" "secret" {
   value        = lookup(each.value, "value") != "" ? lookup(each.value, "value") : random_password.password[each.key].result
     
   depends_on   = [
-    azurerm_key_vault.key_vault
+    azurerm_key_vault.key_vault,
+    azurerm_key_vault_access_policy.default_policy,
   ]
 }
