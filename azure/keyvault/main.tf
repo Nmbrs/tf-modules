@@ -2,7 +2,7 @@ data "azurerm_client_config" "current" {}
 
 # Create the Azure Key Vault
 resource "azurerm_key_vault" "key_vault" {
-  name                = "kv-nmbrs-${var.name}"
+  name                = "KV-${var.name}"
   location            = local.location
   resource_group_name = var.resource_group_name
   tenant_id           = data.azurerm_client_config.current.tenant_id
