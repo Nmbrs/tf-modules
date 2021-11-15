@@ -1,3 +1,8 @@
+variable "project" {
+    type        = string
+    description = "This variable defines the project name to be interpolated in multiple resources."
+}
+
 variable "vm_resourcegroup" {
     type = string
     description = "Resource group name"

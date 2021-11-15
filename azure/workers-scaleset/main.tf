@@ -19,7 +19,7 @@ data "azurerm_subnet" "scaleset" {
 }
 
 resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
-    name                = "worker-vmss"
+    name                = "vmss-${var.project}-worker"
     resource_group_name = data.azurerm_resource_group.scaleset.name
     location            = data.azurerm_resource_group.scaleset.location
     sku                 = var.vm_size
@@ -40,11 +40,11 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
 }
 
     network_interface {
-        name    = "worker_vmss_nic"
+        name    = "vmss-${var.project}-worker-nic"
         primary = true
 
     ip_configuration {
-        name      = "worker_vmss_ip"
+        name      = "vmss-${var.project}-worker-ip"
         primary   = true
         subnet_id = data.azurerm_subnet.scaleset.id
     }
