@@ -18,8 +18,8 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     location            = local.location 
     sku                 = var.vm_size
     instances           = var.vm_count
-    admin_password      = "adminuser"
-    admin_username      = random_password.scaleset.result
+    admin_username      = "adminuser"
+    admin_password      = random_password.scaleset.result
 
     source_image_reference {
         publisher = "MicrosoftWindowsServer"
