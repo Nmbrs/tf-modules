@@ -2,7 +2,7 @@ output "subnet_id" {
     value = data.azurerm_subnet.scaleset.id
 }
 
-output "random_password" {
-    value = random_password.scaleset.result
+output "admin_password" {
+    value = azurerm_windows_virtual_machine_scale_set.scaleset.admin_password
     sensitive = true
 }
