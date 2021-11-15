@@ -1,10 +1,4 @@
-provider "azurerm" {
-    features {}
-}
-
-data "azurerm_resource_group" "scaleset" {
-    name = var.vm_resourcegroup
-}
+data "azurerm_client_config" "current" {}
 
 resource "random_password" "scaleset" {
     length           = 16
@@ -20,8 +14,8 @@ data "azurerm_subnet" "scaleset" {
 
 resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     name                = "vmss-${var.project}"
-    resource_group_name = data.azurerm_resource_group.scaleset.name
-    location            = data.azurerm_resource_group.scaleset.location
+    resource_group_name = var.vm_resourcegroup
+    location            = local.location 
     sku                 = var.vm_size
     instances           = var.vm_count
     admin_password      = "adminuser"
