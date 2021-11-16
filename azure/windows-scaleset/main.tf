@@ -42,7 +42,11 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     type_handler_version       = "1.10"
     auto_upgrade_minor_version = true
 
-    settings = jsonencode("${var.vm_extension_custom_script}")
+    settings = <<SETTINGS
+      {
+        ${var.vm_extension_custom_script}")
+      }
+      SETTINGS
   }
 
   network_interface {
