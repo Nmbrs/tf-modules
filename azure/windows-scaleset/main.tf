@@ -20,6 +20,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     instances           = var.vm_count
     admin_username      = "adminuser"
     admin_password      = random_password.scaleset.result
+    timezone            = "W. Europe Standard Time"
 
     source_image_reference {
         publisher = "MicrosoftWindowsServer"
@@ -31,6 +32,16 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     os_disk {
         storage_account_type = "Premium_LRS"
         caching              = "ReadWrite"
+}
+
+    extension {
+    name                       = "CustomScript"
+    publisher                  = "Microsoft.Compute"
+    type                       = "CustomScriptExtension"
+    type_handler_version       = "1.10"
+    auto_upgrade_minor_version = true
+
+    settings = jsonencode({ "commandToExecute" = "powershell.exe -c \"[System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_WorkerCount','10',[System.EnvironmentVariableTarget]::Machine)\"" })
 }
 
     network_interface {
