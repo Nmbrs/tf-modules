@@ -42,6 +42,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     caching              = "ReadWrite"
   }
 
+/*
   extension {
     name                       = "CustomScript"
     publisher                  = "Microsoft.Compute"
@@ -49,9 +50,15 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     type_handler_version       = "1.10"
     auto_upgrade_minor_version = true
 
-    settings = jsonencode({ "commandToExecute" = "powershell -c \"[System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_WorkerCount','10',[System.EnvironmentVariableTarget]::Machine)\"; \"[System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_Queues','scheduledsignals',[System.EnvironmentVariableTarget]::Machine)\"; Install-WindowsFeature -Name Web-Server -IncludeAllSubFeature -IncludeManagementTools" })
-
+    settings = <<SETTINGS
+      {
+        "fileUris": ["https://raw.githubusercontent.com/Microsoft/dotnet-core-sample-templates/master/dotnet-core-music-windows/scripts/configure-music-app.ps1"],
+        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File configure-music-app.ps1"
+      }
+      SETTINGS
+      
   }
+  */
 
   network_interface {
     name    = "vmss-${var.project}-nic"
@@ -63,4 +70,18 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
       subnet_id = data.azurerm_subnet.scaleset.id
     }
   }
+}
+
+resource "azurerm_virtual_machine_scale_set_extension" "extension" {
+  name                 = "hostname"
+  virtual_machine_scale_set_id   = azurerm_windows_virtual_machine_scale_set.scaleset.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.0"
+
+  settings = <<SETTINGS
+    {
+        "commandToExecute": "hostname && uptime"
+    }
+    SETTINGS
 }
