@@ -13,7 +13,8 @@ data "azurerm_subnet" "scaleset" {
 }
 
 resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
-    name                = "vmss-${var.project}"
+    name                = "${var.project}"
+    computer_name_prefix = "vmss"
     resource_group_name = var.vm_resourcegroup
     location            = local.location 
     sku                 = var.vm_size
@@ -25,7 +26,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     source_image_reference {
         publisher = "MicrosoftWindowsServer"
         offer     = "WindowsServer"
-        sku       = "2022-Datacenter-Server"
+        sku       = "2019-Datacenter"
         version   = "latest"
 }
 
