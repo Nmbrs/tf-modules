@@ -4,7 +4,7 @@ variable "project" {
 }
 
 variable "vm_resource_group" {
-  type = string
+  type        = string
   description = "Resource group name"
 }
 
@@ -19,7 +19,7 @@ variable "vm_count" {
 }
 
 variable "vm_extension_custom_script" {
-  type = string
+  type        = string
   description = "defines the script to be executed as an extension."
 }
 
