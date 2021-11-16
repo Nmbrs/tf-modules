@@ -7,15 +7,15 @@ resource "random_password" "scaleset" {
 }
 
 data "azurerm_subnet" "scaleset" {
-    name                 = "backend"
-    virtual_network_name = "VNET-NetworkPayrollTestNL"
-    resource_group_name  = "RG-NetworkPayrollTestNL"
+    name                 = var.vnet_name
+    virtual_network_name = var.vnet_virtual_network_name
+    resource_group_name  = var.vnet_resource_group_name
 }
 
 resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     name                = "${var.project}"
     computer_name_prefix = "vmss"
-    resource_group_name = var.vm_resourcegroup
+    resource_group_name = var.vm_resource_group
     location            = local.location 
     sku                 = var.vm_size
     instances           = var.vm_count
