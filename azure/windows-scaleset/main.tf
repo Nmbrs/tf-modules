@@ -42,7 +42,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     type_handler_version       = "1.10"
     auto_upgrade_minor_version = true
 
-    settings = jsonencode({ "commandToExecute" = "powershell.exe -c \"[System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_WorkerCount','10',[System.EnvironmentVariableTarget]::Machine)\"" })
+    settings = jsonencode("${var.vm_extension_custom_script}")
 }
 
     network_interface {
@@ -55,19 +55,4 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
         subnet_id = data.azurerm_subnet.scaleset.id
     }
   }
-}
-
-resource "azurerm_virtual_machine_scale_set_extension" "extension" {
-  name                         = "app_env_variables"
-  virtual_machine_scale_set_id = azurerm_windows_virtual_machine_scale_set.scaleset.id
-  publisher                    = "Microsoft.Azure.Extensions"
-  type                         = "CustomScript"
-  type_handler_version         = "2.0"
-  settings = jsonencode({
-    "commandToExecute" = "echo $HOSTNAME"
-  })
-
-  depends_on = [ 
-    azurerm_windows_virtual_machine_scale_set.scaleset
-  ]
 }
