@@ -56,3 +56,18 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     }
   }
 }
+
+resource "azurerm_virtual_machine_scale_set_extension" "extension" {
+  name                         = "app_env_variables"
+  virtual_machine_scale_set_id = azurerm_windows_virtual_machine_scale_set.scaleset.id
+  publisher                    = "Microsoft.Azure.Extensions"
+  type                         = "CustomScript"
+  type_handler_version         = "2.0"
+  settings = jsonencode({
+    "commandToExecute" = "echo $HOSTNAME"
+  })
+
+  depends_on = [ 
+    azurerm_windows_virtual_machine_scale_set.scaleset
+  ]
+}
