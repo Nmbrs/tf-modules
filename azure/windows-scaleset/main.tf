@@ -4,12 +4,19 @@ resource "random_password" "scaleset" {
   length           = 16
   special          = true
   override_special = "_%@"
+  lower = true
+  upper = true
+  number = true
 }
 
 data "azurerm_subnet" "scaleset" {
   name                 = var.vnet_name
   virtual_network_name = var.vnet_virtual_network_name
   resource_group_name  = var.vnet_resource_group_name
+}
+
+data "template_file" "tf-script" {
+  template = file("../terraform-modules//azure/windows-scaleset/script.ps1")
 }
 
 resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
@@ -42,11 +49,8 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     type_handler_version       = "1.10"
     auto_upgrade_minor_version = true
 
-    settings = <<SETTINGS
-      {
-        ${var.vm_extension_custom_script}")
-      }
-      SETTINGS
+    settings = jsonencode({ "commandToExecute" = "powershell -c \"[System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_WorkerCount','10',[System.EnvironmentVariableTarget]::Machine)\"; \"[System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_Queues','scheduledsignals',[System.EnvironmentVariableTarget]::Machine)\"; Install-WindowsFeature -Name Web-Server -IncludeAllSubFeature -IncludeManagementTools" })
+
   }
 
   network_interface {
