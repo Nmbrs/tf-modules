@@ -59,8 +59,9 @@ resource "azurerm_virtual_machine_scale_set_extension" "environment" {
   type_handler_version = "2.0"
 
   settings = jsonencode({
-        "fileUris": ["https://raw.githubusercontent.com/Nmbrs/terraform-modules/workers-scaleset/scripts/worker-signal-extension.ps1"],
-        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File worker-signal-extension.ps1"
+        "commandToExecute" = "powershell -c $Script = Invoke-WebRequest 'https://raw.githubusercontent.com/Nmbrs/terraform-modules/workers-scaleset/scripts/worker-signal-extension.ps1'; $ScriptBlock = [Scriptblock]::Create($Script.Content); Invoke-Command -ScriptBlock $ScriptBlock"
+        # "fileUris": ["https://raw.githubusercontent.com/Nmbrs/terraform-modules/workers-scaleset/scripts/worker-signal-extension.ps1"],
+        # "commandToExecute" = "powershell -ExecutionPolicy Unrestricted -File worker-signal-extension.ps1"
     })    
 }
 
