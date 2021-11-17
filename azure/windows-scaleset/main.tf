@@ -15,6 +15,7 @@ data "azurerm_subnet" "scaleset" {
   resource_group_name  = var.vnet_resource_group_name
 }
 
+
 resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
   name                 = var.project
   computer_name_prefix = "vmss"
@@ -50,8 +51,8 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
   }
 }
 
-resource "azurerm_virtual_machine_scale_set_extension" "extension" {
-  name                 = "hostname"
+resource "azurerm_virtual_machine_scale_set_extension" "environment" {
+  name                 = "environment"
   virtual_machine_scale_set_id   = azurerm_windows_virtual_machine_scale_set.scaleset.id
   publisher            = "Microsoft.Azure.Extensions"
   type                 = "CustomScript"
@@ -60,12 +61,11 @@ resource "azurerm_virtual_machine_scale_set_extension" "extension" {
   settings = jsonencode({
         "fileUris": ["https://raw.githubusercontent.com/Nmbrs/terraform-modules/workers-scaleset/scripts/worker-signal-extension.ps1"],
         "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File worker-signal-extension.ps1"
-
     })    
 }
 
-/* resource "azurerm_virtual_machine_scale_set_extension" "extension1" {
-  name                 = "hostname"
+/* resource "azurerm_virtual_machine_scale_set_extension" "iis" {
+  name                 = "iss"
   virtual_machine_scale_set_id   = azurerm_windows_virtual_machine_scale_set.scaleset.id
   publisher            = "Microsoft.Azure.Extensions"
   type                 = "CustomScript"
