@@ -18,10 +18,10 @@ variable "vm_count" {
   description = "Number of virtual machines to be created on the scale set."
 }
 
-# variable "vm_extension_custom_script" {
-#   type        = string
-#   description = "defines the script to be executed as an extension."
-# }
+variable "vm_extension_custom_script" {
+  type        = string
+  description = "URL to the post installation script extension."
+}
 
 variable "vnet_resource_group_name" {
   type        = string

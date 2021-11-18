@@ -47,7 +47,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     force_update_tag     = "1"
 
   settings = jsonencode({ 
-    "fileUris": ["https://raw.githubusercontent.com/Nmbrs/terraform-modules/workers-scaleset/scripts/worker-signal-extension.ps1"],
+    "fileUris": ["${var.vm_extension_custom_script}"],
     "commandToExecute" = "powershell -ExecutionPolicy Unrestricted -File worker-signal-extension.ps1" })
   }
 
