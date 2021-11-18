@@ -1,11 +1,11 @@
 data "azurerm_client_config" "current" {}
 
 resource "random_password" "scaleset" {
-  length           = 16
-  special          = true
-  lower = true
-  upper = true
-  number = true
+  length  = 16
+  special = true
+  lower   = true
+  upper   = true
+  number  = true
 }
 
 data "azurerm_subnet" "scaleset" {
