@@ -8,6 +8,11 @@ variable "vm_resource_group" {
   description = "Resource group name"
 }
 
+variable "environment" {
+  type        = string
+  description = "defines the environment to provision the resources."
+}
+
 variable "vm_size" {
   type        = string
   description = "Azure virtual machine machine size. [Standard_F2s_v2, Standard_F4s_v2,Standard_F8s_v2, Standard_F16s_v2, Standard_F32s_v2, Standard_F48s_v2, Standard_F64s_v2, Standard_F72s_v2]"

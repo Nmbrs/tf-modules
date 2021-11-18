@@ -26,6 +26,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
   admin_password       = random_password.scaleset.result
   timezone             = "W. Europe Standard Time"
   overprovision        = false
+  upgrade_mode         = "Automatic"
 
   source_image_reference {
     publisher = "MicrosoftWindowsServer"
