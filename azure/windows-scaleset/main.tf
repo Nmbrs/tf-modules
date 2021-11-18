@@ -3,7 +3,6 @@ data "azurerm_client_config" "current" {}
 resource "random_password" "scaleset" {
   length           = 16
   special          = true
-  #override_special = "_%@"
   lower = true
   upper = true
   number = true
@@ -17,7 +16,7 @@ data "azurerm_subnet" "scaleset" {
 
 
 resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
-  name                 = var.project
+  name                 = "${var.project}-${var.environment}"
   computer_name_prefix = "vmss"
   resource_group_name  = var.vm_resource_group
   location             = local.location
