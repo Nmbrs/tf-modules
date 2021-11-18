@@ -26,6 +26,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
   admin_username       = "adminuser"
   admin_password       = random_password.scaleset.result
   timezone             = "W. Europe Standard Time"
+  overprovision        = false
 
   source_image_reference {
     publisher = "MicrosoftWindowsServer"
@@ -46,19 +47,8 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     type_handler_version = "1.10"
     force_update_tag     = "1"
 
-  settings = jsonencode({ 
-    "fileUris": ["${var.vm_extension_custom_script}"],
-    "commandToExecute" = "powershell -ExecutionPolicy Unrestricted -File worker-signal-extension.ps1" })
+  settings = jsonencode({ "commandToExecute" = "powershell -c $Script = Invoke-WebRequest '${var.vm_extension_custom_script}' -usebasicparsing; $ScriptBlock = [Scriptblock]::Create($Script.Content); Invoke-Command -ScriptBlock $ScriptBlock" })
   }
-
-  # extension {
-  #   name                 = "IIS"
-  #   publisher            = "Microsoft.Azure.Extensions"
-  #   type                 = "CustomScript"
-  #   type_handler_version = "2.0.0"
-
-  # settings = jsonencode({ "commandToExecute": "powershell -ExecutionPolicy Unrestricted Install-WindowsFeature -Name Web-Server -IncludeAllSubFeature -IncludeManagementTools" })
-  # }
 
   network_interface {
     name    = "vmss-${var.project}-nic"
@@ -71,26 +61,3 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     }
   }
 }
-
-# resource "azurerm_virtual_machine_scale_set_extension" "environment" {
-#     name                 = "environment"
-#     virtual_machine_scale_set_id   = azurerm_windows_virtual_machine_scale_set.scaleset.id
-#     publisher            = "Microsoft.Compute"
-#     type                 = "CustomScriptExtension"
-#     type_handler_version = "1.10"
-#     auto_upgrade_minor_version = true
-
-#   settings = jsonencode({ 
-#             "fileUris": ["https://raw.githubusercontent.com/Nmbrs/terraform-modules/workers-scaleset/scripts/worker-signal-extension.ps1"],
-#             "commandToExecute" = "powershell -ExecutionPolicy Unrestricted -File worker-signal-extension.ps1" })
-# }
-
-# resource "azurerm_virtual_machine_scale_set_extension" "iis" {
-#   name                 = "iss"
-#   virtual_machine_scale_set_id   = azurerm_windows_virtual_machine_scale_set.scaleset.id
-#   publisher            = "Microsoft.Compute"
-#   type                 = "CustomScriptExtension"
-#   type_handler_version = "2.0"
-
-#   settings = jsonencode({ "commandToExecute": "powershell -ExecutionPolicy Unrestricted Install-WindowsFeature -Name Web-Server -IncludeAllSubFeature -IncludeManagementTools" })
-# }
