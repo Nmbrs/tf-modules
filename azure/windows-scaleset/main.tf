@@ -41,9 +41,10 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
   
   extension {
     name                 = "environment"
-    publisher            = "Microsoft.Azure.Extensions"
-    type                 = "CustomScript"
-    type_handler_version = "2.0"
+    publisher            = "Microsoft.Compute"
+    type                 = "CustomScriptExtension"
+    type_handler_version = "1.10"
+    force_update_tag     = "1"
 
   settings = jsonencode({ 
     "fileUris": ["https://raw.githubusercontent.com/Nmbrs/terraform-modules/workers-scaleset/scripts/worker-signal-extension.ps1"],
