@@ -9,7 +9,7 @@ resource "random_password" "scaleset" {
 }
 
 data "azurerm_subnet" "scaleset" {
-  name                 = var.vnet_name
+  name                 = var.subnet_name
   virtual_network_name = var.vnet_virtual_network_name
   resource_group_name  = var.vnet_resource_group_name
 }
