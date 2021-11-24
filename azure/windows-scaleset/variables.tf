@@ -40,7 +40,7 @@ variable "vnet_virtual_network_name" {
 
 }
 
-variable "vnet_name" {
+variable "subnet_name" {
   type        = string
-  description = "defines azure vnet name."
+  description = "defines azure subnet name."
 }
