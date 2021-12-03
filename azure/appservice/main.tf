@@ -15,7 +15,7 @@ resource "azurerm_app_service_plan" "app" {
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name
   kind                = "Linux"
-  reserved            = true
+  reserved            = false
 
   sku {
     tier = var.plan
