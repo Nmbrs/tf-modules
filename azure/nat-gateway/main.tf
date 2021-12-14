@@ -22,9 +22,9 @@ resource "azurerm_nat_gateway_public_ip_association" "natgw" {
 }
 
 data "azurerm_subnet" "natgw" {
-  name                 = var.subnet_name
-  virtual_network_name = var.vnet_virtual_network_name
-  resource_group_name  = var.vnet_resource_group_name
+  name                              = var.vnet.subnet_name
+  virtual_network_name  = var.vnet.virtual_network_name
+  resource_group_name  = var.vnet.resource_group_name
 }
 
 resource "azurerm_subnet_nat_gateway_association" "natgw" {
