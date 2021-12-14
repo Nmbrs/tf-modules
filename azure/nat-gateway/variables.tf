@@ -13,19 +13,11 @@ variable "environment" {
   description = "defines the environment to provision the resources."
 }
 
-variable "vnet_resource_group_name" {
-  type        = string
-  description = "defines the vnet resource group."
-
-}
-
-variable "vnet_virtual_network_name" {
-  type        = string
-  description = "defines the azure vnet virtual network."
-
-}
-
-variable "subnet_name" {
-  type        = string
-  description = "defines azure subnet name."
+variable "vnet" {
+  type        = object({
+    resource_group_name   = string
+    virtual_network_name  = string
+    subnet_name           = string
+  })
+  description = "azure vnet structure data"
 }
