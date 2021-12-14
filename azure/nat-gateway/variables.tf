@@ -5,7 +5,7 @@ variable "project" {
 
 variable "natgw_resource_group" {
   type        = string
-  description = "Resource group name"
+  description = "nat gateway resource group name"
 }
 
 variable "environment" {
