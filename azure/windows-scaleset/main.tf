@@ -51,10 +51,8 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
   { "commandToExecute": "powershell -c [System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_WorkerCount','${var.max_number_threads}',[System.EnvironmentVariableTarget]::Machine);[System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_Queues','${var.queue_name}',[System.EnvironmentVariableTarget]::Machine)"     
   }
   SETTINGS
-  }
-  
-
-  network_interface {
+  }  
+    network_interface {
     name    = "vmss-${var.project}-nic"
     primary = true
 
