@@ -48,7 +48,8 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     force_update_tag     = "1"
   
   settings = <<SETTINGS
-  { "commandToExecute" = "powershell -c [System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_WorkerCount','10',[System.EnvironmentVariableTarget]::Machine)" }
+  { "commandToExecute": "powershell -c [System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_WorkerCount','${var.max_number_threads}',[System.EnvironmentVariableTarget]::Machine);[System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_Queues','${var.queue_name}',[System.EnvironmentVariableTarget]::Machine)"     
+  }
   SETTINGS
   }
   

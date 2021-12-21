@@ -44,3 +44,13 @@ variable "subnet_name" {
   type        = string
   description = "defines azure subnet name."
 }
+
+variable "max_number_threads" {
+  type        = number
+  description = "defines the max number of threads that the worker can fire up."
+}
+
+variable "queue_name" {
+  type        = string
+  description = "defines the queue that the worker will be listening for events."
+}
