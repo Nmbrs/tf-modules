@@ -21,14 +21,7 @@ resource "azurerm_nat_gateway_public_ip_association" "natgw" {
   public_ip_address_id = "${azurerm_public_ip.natgw.id}"
 }
 
-# data "azurerm_subnet" "natgw" {
-#   name                  = var.vnet.subnet_name
-#   virtual_network_name  = var.vnet.virtual_network_name
-#   resource_group_name   = var.vnet.resource_group_name
-# }
-
 resource "azurerm_subnet_nat_gateway_association" "natgw" {
   subnet_id      = var.vnet
-  # subnet_id      = data.azurerm_subnet.natgw.id
   nat_gateway_id = azurerm_nat_gateway.natgw.id
 }
