@@ -23,11 +23,6 @@ variable "vm_count" {
   description = "Number of virtual machines to be created on the scale set."
 }
 
-variable "vm_extension_custom_script" {
-  type        = string
-  description = "URL to the post installation script extension."
-}
-
 variable "vnet_resource_group_name" {
   type        = string
   description = "defines the vnet resource group."
@@ -43,4 +38,14 @@ variable "vnet_virtual_network_name" {
 variable "subnet_name" {
   type        = string
   description = "defines azure subnet name."
+}
+
+variable "max_number_threads" {
+  type        = number
+  description = "defines the max number of threads that the worker can fire up."
+}
+
+variable "queue_name" {
+  type        = string
+  description = "defines the queue that the worker will be listening for events."
 }

@@ -46,11 +46,13 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     type                 = "CustomScriptExtension"
     type_handler_version = "1.10"
     force_update_tag     = "1"
-
-  settings = jsonencode({ "commandToExecute" = "powershell -c $Script = Invoke-WebRequest '${var.vm_extension_custom_script}' -usebasicparsing; $ScriptBlock = [Scriptblock]::Create($Script.Content); Invoke-Command -ScriptBlock $ScriptBlock" })
+  
+  settings = <<SETTINGS
+  { "commandToExecute": "powershell -c [System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_WorkerCount','${var.max_number_threads}',[System.EnvironmentVariableTarget]::Machine);[System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_Queues','${var.queue_name}',[System.EnvironmentVariableTarget]::Machine)"     
   }
-
-  network_interface {
+  SETTINGS
+  }  
+    network_interface {
     name    = "vmss-${var.project}-nic"
     primary = true
 
