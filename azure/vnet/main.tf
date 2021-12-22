@@ -7,11 +7,6 @@ resource "azurerm_virtual_network" "vnet" {
   location            = local.location
   resource_group_name = data.azurerm_resource_group.rg.name
   address_space       = ["${var.address_space}"]
-
-  subnet {
-    name           = "GatewaySubnet"
-    address_prefix = var.subnet_prefix_gateway
-    }
 }
 
 resource "azurerm_subnet" "vnet" {
