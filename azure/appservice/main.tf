@@ -36,8 +36,6 @@ resource "azurerm_app_service" "app" {
   resource_group_name = azurerm_resource_group.app.name
   app_service_plan_id = azurerm_app_service_plan.app.id
   https_only = true
-  ftps_state = Disabled
-
   identity {
     type = "SystemAssigned"
   }
