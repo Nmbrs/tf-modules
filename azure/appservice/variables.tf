@@ -1,3 +1,8 @@
+variable "resource_group" {
+  description = "azure resource group name."
+  type = string
+}
+
 variable "tags" {
   description = "nmbrs environment resource tag."
   type = map(string)
