@@ -3,15 +3,16 @@ variable "resource_group" {
   type = string
 }
 
-variable "tags" {
-  description = "nmbrs environment resource tag."
-  type = map(string)
-}
-
 variable "project" {
   description = "project name. It will be used by some resources."
   type        = string
 }
+
+variable "environment" {
+  description = "nmbrs environment name."
+  type = string
+}
+
 variable "plan" {
   description = "azure app service plan name (PremiumV2, Standard, etc)"
   type = string
