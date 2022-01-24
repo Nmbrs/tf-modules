@@ -15,7 +15,7 @@ resource "azurerm_app_service_plan" "app" {
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name
   kind                = "Windows"
-  reserved = false
+  reserved            = false
 
   sku {
     tier = var.plan
@@ -31,13 +31,13 @@ resource "azurerm_app_service_plan" "app" {
 }
 
 resource "azurerm_app_service" "app" {
-  name                = "as-${var.project}-${var.environment}"
-  location            = azurerm_resource_group.app.location
-  resource_group_name = azurerm_resource_group.app.name
-  app_service_plan_id = azurerm_app_service_plan.app.id
-  https_only = true
-  enable_client_affinity = true
-  stack               = var.stack
+  name                    = "as-${var.project}-${var.environment}"
+  location                = azurerm_resource_group.app.location
+  resource_group_name     = azurerm_resource_group.app.name
+  app_service_plan_id     = azurerm_app_service_plan.app.id
+  https_only              = true
+  enable_client_affinity  = true
+  stack                   = var.stack
   identity {
     type = "SystemAssigned"
   }
@@ -47,7 +47,8 @@ resource "azurerm_app_service" "app" {
     ftps_state                = "All allowed"
     managed_pipeline_mode     = "Integrated"
     use_32_bit_worker_process = false
-    websockets_enabled        = "false"
+    websockets_enabled        = false
+    remote_debugging_enabled  = false
   }
   tags = {
     country     = var.country
