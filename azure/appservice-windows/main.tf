@@ -36,10 +36,19 @@ resource "azurerm_app_service" "app" {
   resource_group_name = azurerm_resource_group.app.name
   app_service_plan_id = azurerm_app_service_plan.app.id
   https_only = true
+  enable_client_affinity = true
+  stack               = var.stack
   identity {
     type = "SystemAssigned"
   }
-
+  site_config = {
+    always_on                 = true
+    dotnet_framework_version  = var.dotnet_framework_version
+    ftps_state                = "All allowed"
+    managed_pipeline_mode     = "Integrated"
+    use_32_bit_worker_process = false
+    websockets_enabled        = "false"
+  }
   tags = {
     country     = var.country
     environment = var.environment

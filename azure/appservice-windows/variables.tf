@@ -29,11 +29,21 @@ variable "project" {
 }
 
 variable "plan" {
-  description = "defines the app service plan type (Standard, Premium)."
+  description = "defines the app service plan type (i.e: Standard, Premium)."
   type = string
 }
 
 variable "size" {
-  description = "defines the app service size type (S1, P1V2 etc)."
+  description = "defines the app service size type (i.e: S1, P1V2 etc)."
+  type = string
+}
+
+variable "stack" {
+  description = "defines the stack for app service (i.e: .Net, Python, Java)."
+  type = string
+}
+
+variable "dotnetVersion" {
+  description = "defines the dotnet framework version for app service (i.e: 4.6, 4.7, 4.8)."
   type = string
 }
