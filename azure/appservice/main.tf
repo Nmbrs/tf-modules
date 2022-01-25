@@ -31,7 +31,7 @@ resource "azurerm_log_analytics_workspace" "app" {
 }
 
 resource "azurerm_application_insights" "app" {  
-  name                = "apm-${var.project}-${var.environment}"
+  name                = "appins-${var.project}-${var.environment}"
   location            = local.location
   resource_group_name = var.resource_group
   workspace_id        = azurerm_log_analytics_workspace.app .id
