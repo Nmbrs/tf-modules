@@ -47,3 +47,12 @@ variable "dotnetVersion" {
   description = "defines the dotnet framework version for app service (i.e: 4.6, 4.7, 4.8)."
   type = string
 }
+variable "location" {
+  description = "azure region."
+  type = string
+  default = "West Europe"
+}
+variable "resource_group" {
+  description = "azure resource group name."
+  type = string
+}

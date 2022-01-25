@@ -1,19 +1,7 @@
-resource "azurerm_resource_group" "app" {
-  name     = "rg-${var.project}-${var.environment}"
-  location = local.location
-
-  tags = {
-    country     = var.country
-    environment = var.environment
-    squad       = var.squad
-    product     = var.product
-  }
-}
-
 resource "azurerm_app_service_plan" "app" {
   name                = "asp-${var.project}-${var.environment}"
-  location            = azurerm_resource_group.app.location
-  resource_group_name = azurerm_resource_group.app.name
+  location            = local.location
+  resource_group_name = var.resource_group
   kind                = "Windows"
   reserved            = false
 
@@ -25,8 +13,8 @@ resource "azurerm_app_service_plan" "app" {
 
 resource "azurerm_app_service" "app" {
   name                    = "as-${var.project}-${var.environment}"
-  location                = azurerm_resource_group.app.location
-  resource_group_name     = azurerm_resource_group.app.name
+  location                = local.location
+  resource_group_name     = var.resource_group
   app_service_plan_id     = azurerm_app_service_plan.app.id
   https_only              = true
   enable_client_affinity  = true
@@ -46,17 +34,17 @@ resource "azurerm_app_service" "app" {
   }
 }
 
-resource "azurerm_log_analytics_workspace" "apm" {
+resource "azurerm_log_analytics_workspace" "app" {
   name                = "wsp-${var.project}-${var.environment}"
-  location            = azurerm_resource_group.app.location
-  resource_group_name = azurerm_resource_group.app.name  
+  location            = local.location
+  resource_group_name = var.resource_group  
   retention_in_days   = 90
 }
 
-resource "azurerm_application_insights" "apm" {  
-  name                = "AppIns-${var.project}-${var.environment}-WebApp"
-  location            = azurerm_resource_group.app.location
-  resource_group_name = azurerm_resource_group.app.name
+resource "azurerm_application_insights" "app" {  
+  name                = "appins-${var.project}-${var.environment}"
+  location            = local.location
+  resource_group_name = var.resource_group
   workspace_id        = azurerm_log_analytics_workspace.apm .id
   application_type    = "web"
 
