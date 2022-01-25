@@ -18,7 +18,7 @@ resource "azurerm_app_service" "app" {
   app_service_plan_id     = azurerm_app_service_plan.app.id
   https_only              = true
   enable_client_affinity  = true
-  stack                   = var.stack
+  stack                   = ".net"
   identity {
     type = "SystemAssigned"
   }
