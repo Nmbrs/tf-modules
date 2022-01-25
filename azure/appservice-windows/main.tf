@@ -21,13 +21,6 @@ resource "azurerm_app_service_plan" "app" {
     tier = var.plan
     size = var.size
   }
-
-  tags = {
-    country     = var.country
-    environment = var.environment
-    squad       = var.squad
-    product     = var.product
-  }
 }
 
 resource "azurerm_app_service" "app" {
@@ -44,17 +37,12 @@ resource "azurerm_app_service" "app" {
   site_config = {
     always_on                 = true
     dotnet_framework_version  = var.dotnet_framework_version
-    ftps_state                = "All allowed"
+    ftps_state                = "FtpsOnly"
+    http2_enabled             = true
     managed_pipeline_mode     = "Integrated"
     use_32_bit_worker_process = false
     websockets_enabled        = false
     remote_debugging_enabled  = false
-  }
-  tags = {
-    country     = var.country
-    environment = var.environment
-    squad       = var.squad
-    product     = var.product
   }
 }
 
@@ -63,27 +51,13 @@ resource "azurerm_log_analytics_workspace" "apm" {
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name  
   retention_in_days   = 90
-
-  tags = {
-    country     = var.country
-    environment = var.environment
-    squad       = var.squad
-    product     = var.product
-  }
-
 }
 
 resource "azurerm_application_insights" "apm" {  
-  name                = "apm-${var.project}-${var.environment}"
+  name                = "AppIns-${var.project}-${var.environment}-WebApp"
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name
   workspace_id        = azurerm_log_analytics_workspace.apm .id
   application_type    = "web"
 
-  tags = {
-    country     = var.country
-    environment = var.environment
-    squad       = var.squad
-    product     = var.product
-  }
 }
