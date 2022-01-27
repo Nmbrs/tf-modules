@@ -18,11 +18,10 @@ resource "azurerm_app_service" "app" {
   app_service_plan_id     = azurerm_app_service_plan.app.id
   https_only              = true
   enable_client_affinity  = true
-  stack                   = ".net"
   identity {
     type = "SystemAssigned"
   }
-  site_config = {
+  site_config {
     always_on                 = true
     dotnet_framework_version  = var.dotnet_framework_version
     ftps_state                = "FtpsOnly"
@@ -45,7 +44,7 @@ resource "azurerm_application_insights" "app" {
   name                = "appins-${var.project}-${var.environment}"
   location            = local.location
   resource_group_name = var.resource_group
-  workspace_id        = azurerm_log_analytics_workspace.apm .id
+  workspace_id        = azurerm_log_analytics_workspace.apm.id
   application_type    = "web"
 
 }
