@@ -7,3 +7,8 @@ variable "tags" {
   description = "nmbrs list of mandatory resource tags."
   type = map(string)
 }
+
+variable "environment" {
+  description = "nmbrs environment name."
+  type = string
+}
