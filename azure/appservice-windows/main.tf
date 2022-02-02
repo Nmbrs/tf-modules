@@ -11,11 +11,9 @@ resource "azurerm_app_service_plan" "app" {
   }
 }
 
-resource "azurerm_virtual_network" "app" {
-  name                = "vnet-${var.project}-${var.environment}"
-  location            = local.location
-  resource_group_name = var.resource_group
-  address_space       =  ["172.22.0.0/16"]
+data "azurerm_virtual_network" "vnet" {
+  name                = var.vnet.name
+  resource_group_name = var.vnet.resource_group_name
 }
 resource "azurerm_subnet" "app" {
   name                 = "snet-${var.project}-${var.environment}"
