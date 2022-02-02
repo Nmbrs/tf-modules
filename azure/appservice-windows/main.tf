@@ -44,7 +44,6 @@ resource "azurerm_app_service" "app" {
   
   site_config {
     always_on                 = true
-    #virtual_network_name      = "${azurerm_virtual_network.vnet.name}"
     dotnet_framework_version  = var.dotnetVersion
     ftps_state                = "FtpsOnly"
     http2_enabled             = true
