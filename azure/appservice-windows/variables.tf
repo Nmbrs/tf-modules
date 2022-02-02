@@ -19,7 +19,7 @@ variable "size" {
 }
 
 variable "dotnetVersion" {
-  description = "defines the dotnet framework version for app service (i.e: 4.6, 4.7, 4.8)."
+  description = "defines the dotnet framework version for app service (i.e: v2.0 v4.0 v5.0 v6.0)."
   type        = string
 }
 
@@ -28,11 +28,12 @@ variable "resource_group" {
   type        = string
 }
 
-variable "vnet" {
-  description = "azure nmbrs vnet information struct that holds vnet required information."
+variable "vnet_subnet_id" {
+  type = string
+  description = "azure vnet subnet id that is going to be associated with the app service."
+}
+
+variable "tags" {
+  description = "nmbrs list of mandatory resource tags."
   type = map(string)
-  default = {
-    name: "default"
-    resource_group_name: "default"
-  }
 }
