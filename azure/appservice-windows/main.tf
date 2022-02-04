@@ -9,6 +9,8 @@ resource "azurerm_app_service_plan" "app" {
     tier = var.plan
     size = var.size
   }
+
+  tags     = var.tags
 }
 
 resource "azurerm_app_service" "app" {
@@ -32,6 +34,8 @@ resource "azurerm_app_service" "app" {
     websockets_enabled        = false
     remote_debugging_enabled  = false
   }
+
+  tags     = var.tags
 }
 
 resource "azurerm_log_analytics_workspace" "app" {
@@ -39,6 +43,8 @@ resource "azurerm_log_analytics_workspace" "app" {
   location            = local.location
   resource_group_name = var.resource_group  
   retention_in_days   = 90
+
+  tags     = var.tags
 }
 
 resource "azurerm_application_insights" "app" {  
@@ -48,4 +54,11 @@ resource "azurerm_application_insights" "app" {
   workspace_id        = azurerm_log_analytics_workspace.app.id
   application_type    = "web"
 
+  tags     = var.tags
+
+}
+
+resource "azurerm_app_service_virtual_network_swift_connection" "app" {
+  app_service_id = azurerm_app_service.app.id
+  subnet_id      = var.vnet_subnet_id
 }
