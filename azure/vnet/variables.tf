@@ -22,3 +22,9 @@ variable "subnets" {
   description = "The virtal networks subnets with their properties."
   type        = any
 }
+
+variable "vnets_to_peer" {
+  description = "List of vnet to peer with."
+  default     = {}
+  type        = any
+}
