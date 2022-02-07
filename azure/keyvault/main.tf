@@ -27,8 +27,8 @@ resource "azurerm_key_vault_access_policy" "default_policy" {
 
   key_permissions         = var.kv_key_permissions_full
   secret_permissions      = var.kv_secret_permissions_full
-  certificate_permissions  = var.kv_certificate_permissions_full
-  storage_permissions     = var.kv_storage_permissions_full  
+  certificate_permissions = var.kv_certificate_permissions_full
+  storage_permissions     = var.kv_storage_permissions_full
 }
 
 # Create an Azure Key Vault access policy
@@ -39,7 +39,7 @@ resource "azurerm_key_vault_access_policy" "policy" {
   object_id               = lookup(each.value, "object_id")
   key_permissions         = lookup(each.value, "key_permissions")
   secret_permissions      = lookup(each.value, "secret_permissions")
-  certificate_permissions  = lookup(each.value, "certificate_permissions")
+  certificate_permissions = lookup(each.value, "certificate_permissions")
   storage_permissions     = lookup(each.value, "storage_permissions")
 }
 
@@ -52,7 +52,7 @@ resource "random_password" "password" {
   min_numeric = 2
   min_special = 2
 
-  keepers     = {
+  keepers = {
     name = each.key
   }
 }
@@ -63,8 +63,8 @@ resource "azurerm_key_vault_secret" "secret" {
   key_vault_id = azurerm_key_vault.key_vault.id
   name         = each.key
   value        = lookup(each.value, "value") != "" ? lookup(each.value, "value") : random_password.password[each.key].result
-    
-  depends_on   = [
+
+  depends_on = [
     azurerm_key_vault.key_vault,
     azurerm_key_vault_access_policy.default_policy,
   ]

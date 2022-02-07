@@ -51,7 +51,7 @@ variable "policy_product" {
 
 variable "tags" {
   description = "Resource tags."
-  type = map
+  type        = map(any)
 }
 
 variable "environment" {
@@ -65,10 +65,10 @@ variable "vault_id" {
 }
 
 variable "groups" {
-  type = list (string)
-  default = [ 
+  type = list(string)
+  default = [
     "developers",
-    "guests", 
+    "guests",
   ]
   description = "Groups to be assigned to the product"
 }

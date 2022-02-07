@@ -10,20 +10,20 @@ resource "azurerm_app_service_plan" "app" {
     size = var.size
   }
 
-  tags     = var.tags
+  tags = var.tags
 }
 
 resource "azurerm_app_service" "app" {
-  name                    = "as-${var.project}-${var.environment}"
-  location                = local.location
-  resource_group_name     = var.resource_group
-  app_service_plan_id     = azurerm_app_service_plan.app.id
-  https_only              = true
-  
+  name                = "as-${var.project}-${var.environment}"
+  location            = local.location
+  resource_group_name = var.resource_group
+  app_service_plan_id = azurerm_app_service_plan.app.id
+  https_only          = true
+
   identity {
     type = "SystemAssigned"
   }
-  
+
   site_config {
     always_on                 = true
     dotnet_framework_version  = var.dotnetVersion
@@ -35,26 +35,26 @@ resource "azurerm_app_service" "app" {
     remote_debugging_enabled  = false
   }
 
-  tags     = var.tags
+  tags = var.tags
 }
 
 resource "azurerm_log_analytics_workspace" "app" {
   name                = "wsp-${var.project}-${var.environment}"
   location            = local.location
-  resource_group_name = var.resource_group  
+  resource_group_name = var.resource_group
   retention_in_days   = 90
 
-  tags     = var.tags
+  tags = var.tags
 }
 
-resource "azurerm_application_insights" "app" {  
+resource "azurerm_application_insights" "app" {
   name                = "appins-${var.project}-${var.environment}"
   location            = local.location
   resource_group_name = var.resource_group
   workspace_id        = azurerm_log_analytics_workspace.app.id
   application_type    = "web"
 
-  tags     = var.tags
+  tags = var.tags
 
 }
 

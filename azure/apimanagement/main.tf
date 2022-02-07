@@ -2,7 +2,7 @@ resource "azurerm_resource_group" "api" {
   name     = "rg-${var.organization}-${var.project}"
   location = local.location
 
-  tags = "${var.tags}"
+  tags = var.tags
 }
 
 resource "azurerm_api_management" "api" {
@@ -16,7 +16,7 @@ resource "azurerm_api_management" "api" {
   }
   sku_name = "Developer_1"
 
-  tags = "${var.tags}"
+  tags = var.tags
 }
 
 resource "azurerm_storage_account" "api" {
@@ -26,7 +26,7 @@ resource "azurerm_storage_account" "api" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
-  tags = "${var.tags}"
+  tags = var.tags
 }
 
 resource "azurerm_storage_container" "api" {
@@ -36,11 +36,11 @@ resource "azurerm_storage_container" "api" {
 }
 
 resource "azurerm_api_management_api" "api" {
-  name                = "${var.service}"
+  name                = var.service
   resource_group_name = azurerm_resource_group.api.name
   api_management_name = azurerm_api_management.api.name
   revision            = "1"
-  display_name        = "${var.service}"
+  display_name        = var.service
   path                = var.path
   protocols           = ["https"]
   service_url         = azurerm_api_management_backend.api.url
@@ -54,7 +54,7 @@ resource "azurerm_api_management_api_policy" "api" {
   api_name            = azurerm_api_management_api.api.name
   api_management_name = azurerm_api_management.api.name
   resource_group_name = azurerm_resource_group.api.name
-  xml_content = var.policy_payload
+  xml_content         = var.policy_payload
 }
 
 resource "azurerm_api_management_backend" "api" {
@@ -62,7 +62,7 @@ resource "azurerm_api_management_backend" "api" {
   resource_group_name = azurerm_resource_group.api.name
   api_management_name = azurerm_api_management.api.name
   protocol            = "http"
-  url                 = "${var.api_backend_url}"
+  url                 = var.api_backend_url
 }
 
 resource "azurerm_api_management_product" "api" {
@@ -89,7 +89,7 @@ resource "azurerm_api_management_product_api" "api" {
   product_id          = azurerm_api_management_product.api.product_id
   api_management_name = azurerm_api_management.api.name
   resource_group_name = azurerm_api_management.api.resource_group_name
-  
+
 }
 
 resource "azurerm_api_management_product_group" "api" {
@@ -105,8 +105,8 @@ resource "azurerm_api_management_named_value" "api" {
   resource_group_name = azurerm_resource_group.api.name
   api_management_name = azurerm_api_management.api.name
   display_name        = "NamedValue"
-  secret = true
+  secret              = true
   value_from_key_vault {
-  secret_id = var.vault_id
+    secret_id = var.vault_id
   }
 }
