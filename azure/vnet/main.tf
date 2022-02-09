@@ -45,14 +45,11 @@ resource "azurerm_subnet" "vnet" {
 }
 
 resource "azurerm_virtual_network_peering" "peers" {
-  for_each                     = var.vnets_to_peer
+  for_each                     = var.vnets_to_peer  
   resource_group_name          = data.azurerm_resource_group.network.name
-  remote_virtual_network_id    = "/subscriptions/${data.azurerm_subscription.current.subscription_id}/resourceGroups/${each.value["remote_vnet_rg_name"]}/providers/Microsoft.Network/virtualNetworks/${each.value["remote_vnet_name"]}"
-  allow_virtual_network_access = lookup(each.value, "allow_virtual_network_access", null) #(Optional) Controls if the VMs in the remote virtual network can access VMs in the local virtual network. Defaults to false.
-  allow_forwarded_traffic      = lookup(each.value, "allow_forwarded_traffic", null)      #(Optional) Controls if forwarded traffic from VMs in the remote virtual network is allowed. Defaults to false.
-  allow_gateway_transit        = lookup(each.value, "allow_gateway_transit", null)        #(Optional) Controls gatewayLinks can be used in the remote virtual network’s link to the local virtual network.
-  use_remote_gateways          = lookup(each.value, "use_remote_gateways", null)          #(Optional) Controls if remote gateways can be used on the local virtual network. If the flag is set to true, and allow_gateway_transit on the remote peering is also true, virtual network will use gateways of remote virtual network for transit. Only one peering can have this flag set to true. This flag cannot be set if virtual network already has a gateway. Defaults to false.
-
+  remote_virtual_network_id    = "/subscriptions/${data.azurerm_subscription.current.subscription_id}/resourceGroups/${data.azurerm_resource_group.network.name}/providers/Microsoft.Network/virtualNetworks/${each.value["remote_vnet_name"]}"
   name                         = "${lookup(azurerm_virtual_network.vnets, each.value["vnet_key"], null)["name"]}_to_${each.value["remote_vnet_name"]}"
-  virtual_network_name         = lookup(azurerm_virtual_network.vnets, each.value["vnet_key"], null)["name"]
+  virtual_network_name         = lookup(azurerm_virtual_network.vnets, each.value["vnet_key"], null)["name"]  
+
+  depends_on           = [azurerm_virtual_network.vnets]
 }
