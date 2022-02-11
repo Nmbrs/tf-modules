@@ -11,7 +11,7 @@ locals {
 
 resource "azurerm_virtual_network" "vnets" {
   for_each            = var.virtual_networks
-  name                = "vnet-${each.value["prefix"]}-${each.value["id"]}"
+  name                = "vnet-${each.value["prefix"]}"
   location            = local.location
   resource_group_name = data.azurerm_resource_group.network.name
   address_space       = each.value["address_space"]
@@ -21,7 +21,7 @@ resource "azurerm_virtual_network" "vnets" {
 
 resource "azurerm_subnet" "vnet" {
   for_each             = var.subnets
-  name                 = each.key
+  name                 = "sbnet-${each.value["name"]}"
   resource_group_name  = data.azurerm_resource_group.network.name
   address_prefixes     = each.value["address_prefixes"]
 
