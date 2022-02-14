@@ -39,20 +39,20 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
     storage_account_type = "Premium_LRS"
     caching              = "ReadWrite"
   }
-  
+
   extension {
     name                 = "environment"
     publisher            = "Microsoft.Compute"
     type                 = "CustomScriptExtension"
     type_handler_version = "1.10"
     force_update_tag     = "1"
-  
-  settings = <<SETTINGS
+
+    settings = <<SETTINGS
   { "commandToExecute": "powershell -c [System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_WorkerCount','${var.max_number_threads}',[System.EnvironmentVariableTarget]::Machine);[System.Environment]::SetEnvironmentVariable('Hangfire_BackgroundJobServerOptions_Queues','${var.queue_name}',[System.EnvironmentVariableTarget]::Machine)"     
   }
   SETTINGS
-  }  
-    network_interface {
+  }
+  network_interface {
     name    = "vmss-${var.project}-nic"
     primary = true
 

@@ -15,6 +15,6 @@ variable "environment" {
 
 
 variable "vnet" {
-  type = list
+  type        = list(any)
   description = "subnet to be added to the nat gw"
 }

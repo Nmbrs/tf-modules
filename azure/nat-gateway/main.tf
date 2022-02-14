@@ -17,12 +17,12 @@ resource "azurerm_nat_gateway" "natgw" {
 }
 
 resource "azurerm_nat_gateway_public_ip_association" "natgw" {
-  nat_gateway_id       = "${azurerm_nat_gateway.natgw.id}"
-  public_ip_address_id = "${azurerm_public_ip.natgw.id}"
+  nat_gateway_id       = azurerm_nat_gateway.natgw.id
+  public_ip_address_id = azurerm_public_ip.natgw.id
 }
 
 resource "azurerm_subnet_nat_gateway_association" "natgw" {
-  for_each = toset(var.vnet)
+  for_each       = toset(var.vnet)
   subnet_id      = each.value
   nat_gateway_id = azurerm_nat_gateway.natgw.id
 }

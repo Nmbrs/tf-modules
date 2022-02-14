@@ -1,6 +1,6 @@
 variable "resource_group" {
   description = "azure resource group name."
-  type = string
+  type        = string
 }
 
 variable "project" {
@@ -10,21 +10,21 @@ variable "project" {
 
 variable "environment" {
   description = "nmbrs environment name."
-  type = string
+  type        = string
 }
 
 variable "plan" {
   description = "azure app service plan name (PremiumV2, Standard, etc)"
-  type = string
+  type        = string
 }
 
 variable "size" {
   description = "azure app service machine type (P1V3, P2V1, etc)"
-  type = string
+  type        = string
 }
 
 variable "location" {
   description = "azure region."
-  type = string
-  default = "West Europe"
+  type        = string
+  default     = "West Europe"
 }

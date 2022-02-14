@@ -29,11 +29,11 @@ variable "resource_group" {
 }
 
 variable "vnet_subnet_id" {
-  type = string
+  type        = string
   description = "azure vnet subnet id that is going to be associated with the app service."
 }
 
 variable "tags" {
   description = "nmbrs list of mandatory resource tags."
-  type = map(string)
+  type        = map(string)
 }
