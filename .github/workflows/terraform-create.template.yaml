@@ -1,0 +1,62 @@
+name: Terraform apply
+
+on:
+  workflow_call:
+    inputs:  
+      secrets_keys_list:
+        description: Comma separated list of secret keys that need to be fetched from the Key Vault
+        required: true
+        type: string
+
+    secrets:
+      key_vault_name:
+        description: Key Vault name
+        required: true
+      key_vault_credentials:
+        description: Azure credentials to access Key Vault
+        required: true
+
+jobs:
+  terraform-apply:
+    name: Apply Terraform configurations
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      # Azure login with SP credentials
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.key_vault_credentials }}
+
+      # Retrieve secrets from Azure Key Vault
+      - name: Get secrets from KV
+        uses: Azure/get-keyvault-secrets@v1
+        with:
+          keyvault: ${{ secrets.key_vault_name }}
+          # comma separated list of secret keys that need to be fetched from the Key Vault
+          secrets: ${{ inputs.secrets_keys_list }}
+        id: getSecrets
+      
+      # Checkout repository
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Retrieves the Terraform CLI used in the GitHub action workflow
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ steps.getSecrets.outputs.terraformApiToken }}
+
+      # Checks whether the repository has been properly formatted.
+      # If it isn't properly formatted this step will produce an error.
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      # Initializes Terraform configurations.
+      - name: Terraform Init
+        run: terraform init
+
+      # Applies terraform configuration.
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
