@@ -28,9 +28,9 @@ variable "resource_group" {
   type        = string
 }
 
-variable "type" {
+variable "apps" {
   description = "Type of app service to be created eg. worker, web, mobile, api"
-  type        = any
+  type        = map(any)
 }
 
 variable "vnet_subnet_id" {

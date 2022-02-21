@@ -14,8 +14,8 @@ resource "azurerm_app_service_plan" "app" {
 }
 
 resource "azurerm_app_service" "app" {
-  count               = length(var.type)
-  name                = "as-${var.project}-${var.type[count.index]}-${var.environment}"
+  for_each            = var.apps
+  name                = "as-${var.project}-${each.value["name"]}-${var.environment}"
   location            = local.location
   resource_group_name = var.resource_group
   app_service_plan_id = azurerm_app_service_plan.app.id
@@ -60,7 +60,7 @@ resource "azurerm_application_insights" "app" {
 }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "app" {
-  count          = length(var.type)
-  app_service_id = azurerm_app_service.app[count.index].id
+  for_each       = var.apps
+  app_service_id = azurerm_app_service.app[each.value["name"]].id
   subnet_id      = var.vnet_subnet_id
 }
