@@ -8,9 +8,14 @@ variable "project" {
   type        = string
 }
 
-variable "appserviceplanid" {
-  type = string
-  description = "Id of the appservice plan to connect the apps"
+variable "plan" {
+  description = "defines the app service plan type (i.e: Standard, Premium)."
+  type        = string
+}
+
+variable "size" {
+  description = "defines the app service size type (i.e: S1, P1V2 etc)."
+  type        = string
 }
 
 variable "dotnetVersion" {
@@ -21,6 +26,11 @@ variable "dotnetVersion" {
 variable "resource_group" {
   description = "azure resource group name."
   type        = string
+}
+
+variable "type" {
+  description = "Type of app service to be created eg. worker, web, mobile, api"
+  type        = any
 }
 
 variable "vnet_subnet_id" {
