@@ -11,7 +11,7 @@ locals {
 
 resource "azurerm_virtual_network" "vnets" {
   for_each            = var.virtual_networks
-  name                = "vnet-${each.value["prefix"]}"
+  name                = "${each.value["prefix"]}"
   location            = local.location
   resource_group_name = data.azurerm_resource_group.network.name
   address_space       = each.value["address_space"]
@@ -21,12 +21,12 @@ resource "azurerm_virtual_network" "vnets" {
 
 resource "azurerm_subnet" "vnet" {
   for_each             = var.subnets
-  name                 = "sbnet-${each.value["name"]}"
+  name                 = "${each.value["name"]}"
   resource_group_name  = data.azurerm_resource_group.network.name
   address_prefixes     = each.value["address_prefixes"]
 
   depends_on           = [azurerm_virtual_network.vnets]
-  #virtual_network_name = "vnet-${lookup(var.virtual_networks, each.value["vnet_key"], "wrong_vnet_key_in_vnets")["prefix"]}-${lookup(var.virtual_networks, each.value["vnet_key"], "wrong_vnet_key_in_vnets")["id"]}"
+  #virtual_network_name = "${lookup(var.virtual_networks, each.value["vnet_key"], "wrong_vnet_key_in_vnets")["prefix"]}-${lookup(var.virtual_networks, each.value["vnet_key"], "wrong_vnet_key_in_vnets")["id"]}"
   virtual_network_name      = lookup(azurerm_virtual_network.vnets, each.value["vnet_key"], null)["name"]
 
   dynamic "delegation" {
