@@ -12,3 +12,9 @@ variable "environment" {
   description = "nmbrs environment name."
   type        = string
 }
+
+variable "location" {
+  description = "azure resource region."
+  type = string
+  default = "westeurope"
+}
