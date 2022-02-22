@@ -9,14 +9,14 @@ variable "tags" {
 }
 
 variable "environment" {
-  # For a complete list of available Azure regions run at cli:  
-  # az account list-locations  --query "[].{displayName:displayName, location:name}" --output table
-  description = "(Required) The Azure Region where the Resource Group should exist. Changing this forces a new Resource Group to be created."
+  description = "nmbrs environment name."
   type        = string
 }
 
 variable "location" {
-  description = "azure resource region."
+  # For a complete list of available Azure regions run at cli:  
+  # az account list-locations  --query "[].{displayName:displayName, location:name}" --output table
+  description = "(Required) The Azure Region where the Resource Group should exist. Changing this forces a new Resource Group to be created."
   type        = string
   default     = "westeurope"
 }
