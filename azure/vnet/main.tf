@@ -21,7 +21,7 @@ resource "azurerm_virtual_network" "vnets" {
 
 resource "azurerm_subnet" "vnet" {
   for_each             = var.subnets
-  name                 = "sbnet-${each.value["name"]}"
+  name                 = "snet-${each.value["name"]}"
   resource_group_name  = data.azurerm_resource_group.network.name
   address_prefixes     = each.value["address_prefixes"]
 
