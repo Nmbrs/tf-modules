@@ -8,6 +8,11 @@ variable "project" {
   type        = string
 }
 
+variable "location" {
+  description = "location of the resource"
+  type        = string
+}
+
 variable "plan" {
   description = "defines the app service plan type (i.e: Standard, Premium)."
   type        = string
@@ -31,11 +36,6 @@ variable "resource_group" {
 variable "apps" {
   description = "Type of app service to be created eg. worker, web, mobile, api"
   type        = map(any)
-}
-
-variable "vnet_subnet_id" {
-  type        = string
-  description = "azure vnet subnet id that is going to be associated with the app service."
 }
 
 variable "tags" {

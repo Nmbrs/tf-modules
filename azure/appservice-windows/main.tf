@@ -1,6 +1,6 @@
 resource "azurerm_app_service_plan" "app" {
   name                = "asp-${var.project}-${var.environment}"
-  location            = local.location
+  location            = var.location
   resource_group_name = var.resource_group
   kind                = "Windows"
   reserved            = false
@@ -16,7 +16,7 @@ resource "azurerm_app_service_plan" "app" {
 resource "azurerm_app_service" "app" {
   for_each            = var.apps
   name                = "as-${var.project}-${each.value["name"]}-${var.environment}"
-  location            = local.location
+  location            = var.location
   resource_group_name = var.resource_group
   app_service_plan_id = azurerm_app_service_plan.app.id
   https_only          = true
@@ -41,7 +41,7 @@ resource "azurerm_app_service" "app" {
 
 resource "azurerm_log_analytics_workspace" "app" {
   name                = "wsp-${var.project}-${var.environment}"
-  location            = local.location
+  location            = var.location
   resource_group_name = var.resource_group
   retention_in_days   = 90
 
@@ -50,11 +50,10 @@ resource "azurerm_log_analytics_workspace" "app" {
 
 resource "azurerm_application_insights" "app" {
   name                = "appins-${var.project}-${var.environment}"
-  location            = local.location
+  location            = var.location
   resource_group_name = var.resource_group
   workspace_id        = azurerm_log_analytics_workspace.app.id
   application_type    = "web"
-
   tags = var.tags
 
 }
@@ -62,5 +61,5 @@ resource "azurerm_application_insights" "app" {
 resource "azurerm_app_service_virtual_network_swift_connection" "app" {
   for_each       = var.apps
   app_service_id = azurerm_app_service.app[each.value["name"]].id
-  subnet_id      = var.vnet_subnet_id
+  subnet_id      = each.value["subnet"]
 }
