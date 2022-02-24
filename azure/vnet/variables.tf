@@ -1,16 +1,16 @@
 variable "resource_group_name" {
+  description = "Resource Group name used for the vnet"
   type        = string
-  description = "Resource Group used for the vnet"
 }
 
 variable "project" {
-  type        = string
   description = "This variable defines the project name to be interpolated in multiple resources."
+  type        = string
 }
 
 variable "environment" {
-  type        = string
   description = "defines the environment to provision the resources."
+  type        = string
 }
 
 variable "virtual_networks" {
