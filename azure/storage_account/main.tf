@@ -5,9 +5,12 @@ resource "random_id" "storage_account_name" {
     environment = "${var.environment}"
     project     = "${var.project}"
   }
-  # Note: storage account name cannot be longer than 24 characters
-  # Prefix length <= 20 chars and random id = 4 chars (2 bytes hex)
-  prefix      = substr("sanmbrs${var.environment}${var.project}", 0, 20)
+  # Notes: 
+  # storage account name cannot be longer than 24 characters
+  # storage account name can only consist of lowercase letters and numbers
+  # Prefix length <= 20 chars and 
+  # random id = 4 chars (2 bytes hex)
+  prefix      = substr(replace(lower("sanmbrs${var.environment}${var.project}"), "/[^0-9A-Za-z]/", ""), 0, 20)
   byte_length = 2
 
 }
