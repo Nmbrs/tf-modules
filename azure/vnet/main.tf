@@ -4,19 +4,14 @@ data "azurerm_resource_group" "network" {
   name = var.resource_group_name
 }
 
-locals {
-  location = data.azurerm_resource_group.network.location
-  tags     = data.azurerm_resource_group.network.tags
-}
 
 resource "azurerm_virtual_network" "vnets" {
   for_each            = var.virtual_networks
   name                = "vnet-${each.value["prefix"]}"
-  location            = local.location
+  location            = data.azurerm_resource_group.network.location
   resource_group_name = data.azurerm_resource_group.network.name
   address_space       = each.value["address_space"]
-
-  tags = local.tags
+  tags = data.azurerm_resource_group.tags
 }
 
 resource "azurerm_subnet" "vnet" {
