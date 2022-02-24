@@ -4,7 +4,7 @@ resource "azurerm_virtual_network" "vnets" {
   location            = data.azurerm_resource_group.network.location
   resource_group_name = data.azurerm_resource_group.network.name
   address_space       = each.value["address_space"]
-  tags = data.azurerm_resource_group.network.tags
+  tags                = data.azurerm_resource_group.network.tags
 }
 
 resource "azurerm_subnet" "vnet" {
@@ -13,7 +13,7 @@ resource "azurerm_subnet" "vnet" {
   resource_group_name = data.azurerm_resource_group.network.name
   address_prefixes    = each.value["address_prefixes"]
 
-  depends_on = [azurerm_virtual_network.vnets]
+  depends_on           = [azurerm_virtual_network.vnets]
   virtual_network_name = lookup(azurerm_virtual_network.vnets, each.value["vnet_key"], null)["name"]
 
   dynamic "delegation" {
