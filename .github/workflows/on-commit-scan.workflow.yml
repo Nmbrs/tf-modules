@@ -33,8 +33,8 @@ jobs:
           #api-key: ${{ secrets.CHECKOV_API_TOKEN }}
       
       - name: Generate Checkov output file
-        id: output
-        uses: run echo "$CHECKOV_RESULTS" > checkov.sarif
+        id: checkov-output
+        run: echo "$CHECKOV_RESULTS" > checkov.sarif
 
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v1
