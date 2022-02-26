@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - main
+      - maint/*
 
 jobs:
   terraform-scan:
@@ -18,14 +19,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.8
-
-      - name: Test with Checkov
+      - name: Scanning with Checkov
+        id: checkov
         uses: bridgecrewio/checkov-action@master
         with:
           directory: .
-          framework: terraform 
-        id: checkov
+          quiet: true # optional: display only failed checks
+          soft_fail: true # optional: do not return an error code if there are failed checks
+          framework: terraform # optional: run only on a specific infrastructure {cloudformation,terraform,kubernetes,all}
+          output_format: sarif # optional: the output format, one of: cli, json, junitxml, github_failed_only, or sarif. Default: sarif
+          download_external_modules: true # optional: download external terraform modules from public git repositories and terraform registry
+          log_level: DEBUG # optional: set log level. Default WARNING
