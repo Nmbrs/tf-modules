@@ -17,18 +17,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Run Checkov to check Terraform files.
-        id: checkov
-        uses: bridgecrewio/checkov-action@master
-        with:
-          directory: .
-          quiet: true # optional: display only failed checks
-          soft_fail: false # optional: do not return an error code if there are failed checks
-          soft_fail_on: true
-          hard_fail_on: true
-          framework: terraform # optional: {cloudformation,terraform,kubernetes,all}
-          output_format: sarif # optional:  cli, json, junitxml, github_failed_only, or sarif
-          download_external_modules: true
-          log_level: WARNING
+      # - name: Run Checkov to check Terraform files.
+      #   id: checkov
+      #   uses: bridgecrewio/checkov-action@master
+      #   with:
+      #     directory: .
+      #     quiet: true # optional: display only failed checks
+      #     soft_fail: false # optional: do not return an error code if there are failed checks
+      #     soft_fail_on: true
+      #     hard_fail_on: true
+      #     framework: terraform # optional: {cloudformation,terraform,kubernetes,all}
+      #     output_format: sarif # optional:  cli, json, junitxml, github_failed_only, or sarif
+      #     download_external_modules: true
+      #     log_level: WARNING
           #api-key: ${{ secrets.CHECKOV_API_TOKEN }}
+      - name: tfsec
+        uses: tfsec/tfsec-sarif-action@main
+        with:
+          sarif_file: tfsec.sarif         
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          # Path to SARIF file relative to the root of the repository
+          sarif_file: tfsec.sarif    
+
 
