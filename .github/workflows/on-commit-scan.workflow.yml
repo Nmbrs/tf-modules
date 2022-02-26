@@ -2,17 +2,15 @@ name: Scan Terraform for Vulnerabilities
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, edited, synchronize]
 
   push:
-    branches:
-      - main
-      - maint/*
+    branches: 
+    - 'main'
 
 jobs:
   terraform-scan:
     name: Scan Terraform
-
     runs-on: ubuntu-20.04
 
     steps:
