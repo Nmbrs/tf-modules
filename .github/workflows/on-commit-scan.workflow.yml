@@ -30,4 +30,5 @@ jobs:
           output_format: sarif # optional:  cli, json, junitxml, github_failed_only, or sarif
           download_external_modules: true
           log_level: WARNING
+          api-key: ${{ secrets.CHECKOV_API_TOKEN }}
 
