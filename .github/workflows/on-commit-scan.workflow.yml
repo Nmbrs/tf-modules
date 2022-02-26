@@ -31,11 +31,15 @@ jobs:
           download_external_modules: true
           log_level: WARNING
           #api-key: ${{ secrets.CHECKOV_API_TOKEN }}
+      
+      - name: Generate Checkov output file
+        id: output
+        uses: run echo "$CHECKOV_RESULTS" > checkov.sarif
 
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v1
         with:
-          sarif_file: ${{ steps.checkov.outputs.results }}
+          sarif_file: checkov.sarif
 
   tfsec-scan:
     name: Tfsec Scan 
