@@ -9,8 +9,8 @@ on:
     - 'main'
 
 jobs:
-  terraform-scan:
-    name: Scan Terraform
+  checkov-scan:
+    name: Checkov Scan 
     runs-on: ubuntu-20.04
 
     steps:
@@ -37,6 +37,13 @@ jobs:
         with:
           sarif_file: ${{ steps.checkov.outputs.results }}
 
+  tfsec-scan:
+    name: Tfsec Scan 
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       
       - name: Run tfsec
         uses: tfsec/tfsec-sarif-action@9a83b5c3524f825c020e356335855741fd02745f
