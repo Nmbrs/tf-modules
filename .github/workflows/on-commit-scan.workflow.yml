@@ -24,8 +24,8 @@ jobs:
           directory: .
           quiet: true # optional: display only failed checks
           soft_fail: false # optional: do not return an error code if there are failed checks
-          soft_fail_on: true
-          hard_fail_on: true
+          #soft_fail_on: true
+          #hard_fail_on: true
           framework: terraform # optional: {cloudformation,terraform,kubernetes,all}
           output_format: sarif # optional:  cli, json, junitxml, github_failed_only, or sarif
           download_external_modules: true
