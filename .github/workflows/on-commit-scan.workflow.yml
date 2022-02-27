@@ -63,17 +63,14 @@ jobs:
     steps:
       - name: Checkout
       - uses: actions/checkout@v2
-
-      - name: Mkdir results-dir
-        run: mkdir -p results-dir
       
-      - name: run kics Scan
+      - name: Run kics
         uses: checkmarx/kics-action@latest
         with:
           path: 'terraform'
-          output_path: results-dir
+          output_path: .
       
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v1
         with:
-          sarif_file: results-dir/results.sarif
+          sarif_file: results.sarif
