@@ -55,22 +55,3 @@ jobs:
         with:
           # Path to SARIF file relative to the root of the repository
           sarif_file: tfsec.sarif 
-
-  kics-scan:
-    name: Kics Scan
-    runs-on: ubuntu-20.04
-
-    steps:
-      - name: Checkout
-      - uses: actions/checkout@v2
-      
-      - name: Run kics
-        uses: checkmarx/kics-action@latest
-        with:
-          path: 'terraform'
-          output_path: .
-      
-      - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: results.sarif
