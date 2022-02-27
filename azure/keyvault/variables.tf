@@ -13,8 +13,8 @@ variable "name" {
   description = "The name of the Azure Key Vault"
 
   validation {
-    condition     = length(var.name) <= 21
-    error_message = "The key vault name max lenght is 21 since 3 are reserved for the prefix."
+    condition     = length(var.name) <= 24
+    error_message = "The key vault name max lenght is 24."
   }
 }
 
