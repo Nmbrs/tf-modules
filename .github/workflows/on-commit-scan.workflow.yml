@@ -68,7 +68,7 @@ jobs:
         run: mkdir -p results-dir
       
       - name: Run Kics
-        uses: checkmarx/kics-action@v1.3
+        uses: checkmarx/kics-action@v1.4
         with:
           path: 'terraform'
           output_path: results-dir
