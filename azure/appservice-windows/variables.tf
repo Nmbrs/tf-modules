@@ -34,7 +34,7 @@ variable "resource_group" {
 }
 
 variable "apps" {
-  description = "Type of app service to be created eg. worker, web, mobile, api"
+  description = "List of desired applications to be deployed on Azure app service resource (webapp, mobile, identity, others)."
   type        = map(any)
 }
 
