@@ -70,7 +70,7 @@ jobs:
       - name: Run Kics
         uses: checkmarx/kics-action@v1.4
         with:
-          path: 'terraform'
+          path: '.'
           output_path: results-dir
           platform_type: terraform
           output_formats: 'sarif'          
