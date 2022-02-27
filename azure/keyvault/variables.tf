@@ -3,6 +3,11 @@ variable "resource_group_name" {
   description = "The name of an existing Resource Group"
 }
 
+variable "location" {
+  description = "Azure resource region."
+  type        = string
+}
+
 variable "name" {
   type        = string
   description = "The name of the Azure Key Vault"
