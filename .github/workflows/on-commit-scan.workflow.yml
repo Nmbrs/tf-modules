@@ -48,6 +48,7 @@ jobs:
       - name: Run tfsec
         uses: tfsec/tfsec-sarif-action@9a83b5c3524f825c020e356335855741fd02745f
         with:
+          soft-fail: true
           sarif_file: tfsec.sarif         
 
       - name: Upload SARIF file
@@ -55,6 +56,11 @@ jobs:
         with:
           # Path to SARIF file relative to the root of the repository
           sarif_file: tfsec.sarif 
+      
+      - name: tfsec
+        uses: tfsec/tfsec-pr-commenter-action@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}          
 
   kics-scan:
     name: Kics Scan 
