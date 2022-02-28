@@ -1,6 +1,6 @@
 variable "resource_group_name" {
+  description = "Resource Group name used for the vnet"
   type        = string
-  description = "Resource Group used for the vnet"
 }
 
 variable "vnet_name" {
