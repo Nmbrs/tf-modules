@@ -1,21 +1,20 @@
-resource "azurerm_virtual_network" "vnets" {
-  for_each            = var.virtual_networks
-  name                = "vnet-${each.value["prefix"]}"
-  location            = data.azurerm_resource_group.network.location
-  resource_group_name = data.azurerm_resource_group.network.name
-  address_space       = each.value["address_space"]
-  tags                = data.azurerm_resource_group.network.tags
+resource "azurerm_virtual_network" "vnet" {
+  name                = var.vnet_name
+  address_space       = var.address_space
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  tags                = var.tags
 }
 
-resource "azurerm_subnet" "vnet" {
-  for_each            = var.subnets
-  name                = "snet-${each.value["name"]}"
-  resource_group_name = data.azurerm_resource_group.network.name
-  address_prefixes    = each.value["address_prefixes"]
+resource "azurerm_subnet" "subnet" {
+  for_each = { for subnet in var.subnets : subnet.name => subnet }
 
-  depends_on           = [azurerm_virtual_network.vnets]
-  virtual_network_name = lookup(azurerm_virtual_network.vnets, each.value["vnet_key"], null)["name"]
-
+  name                                           = each.key
+  resource_group_name                            = var.resource_group_name
+  virtual_network_name                           = azurerm_virtual_network.vnet.name
+  address_prefixes                               = each.value.address_prefixes
+  enforce_private_link_endpoint_network_policies = each.value.enforce_private_link_endpoint_network_policies
+  enforce_private_link_service_network_policies  = each.value.enforce_private_link_service_network_policies
   dynamic "delegation" {
     for_each = lookup(each.value, "delegation", [])
     content {
@@ -31,12 +30,3 @@ resource "azurerm_subnet" "vnet" {
   }
 }
 
-resource "azurerm_virtual_network_peering" "peers" {
-  for_each                  = var.vnets_to_peer
-  resource_group_name       = data.azurerm_resource_group.network.name
-  remote_virtual_network_id = "/subscriptions/${data.azurerm_subscription.current.subscription_id}/resourceGroups/${data.azurerm_resource_group.network.name}/providers/Microsoft.Network/virtualNetworks/${each.value["remote_vnet_name"]}"
-  name                      = "${lookup(azurerm_virtual_network.vnets, each.value["vnet_key"], null)["name"]}_to_${each.value["remote_vnet_name"]}"
-  virtual_network_name      = lookup(azurerm_virtual_network.vnets, each.value["vnet_key"], null)["name"]
-
-  depends_on = [azurerm_virtual_network.vnets]
-}

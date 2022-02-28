@@ -3,28 +3,33 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "project" {
-  description = "This variable defines the project name to be interpolated in multiple resources."
+variable "vnet_name" {
+  description = "VNET name"
   type        = string
 }
 
-variable "environment" {
-  description = "defines the environment to provision the resources."
-  type        = string
-}
-
-variable "virtual_networks" {
-  description = "The virtal networks with their properties."
-  type        = any
+variable "address_space" {
+  description = "VNET address space"
+  type        = list(string)
 }
 
 variable "subnets" {
-  description = "The virtal networks subnets with their properties."
-  type        = any
+  description = "Subnets configuration"
+  type = list(object({
+    name                                           = string
+    address_prefixes                               = list(string)
+    enforce_private_link_endpoint_network_policies = bool
+    enforce_private_link_service_network_policies  = bool
+  }))
 }
 
-variable "vnets_to_peer" {
-  description = "List of vnet to peer with."
+variable "tags" {
+  description = "Associated tags"
   default     = {}
-  type        = any
 }
+
+variable "location" {
+  description = "Geographic location"
+  type        = string
+}
+
