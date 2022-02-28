@@ -6,10 +6,10 @@ resource "random_id" "storage_account_name" {
     project     = "${var.project}"
   }
   # Notes: 
-  # storage account name cannot be longer than 24 characters
-  # storage account name can only consist of lowercase letters and numbers
-  # Prefix length <= 20 chars and 
-  # random id = 4 chars (2 bytes hex)
+  # - storage account name cannot be longer than 24 characters
+  # - storage account name can only consist of lowercase letters and numbers
+  # - Prefix length <= 20 characters
+  # - random id = 4 characters (2 bytes hex)
   prefix      = substr(replace(lower("sanmbrs${var.environment}${var.project}"), "/[^0-9A-Za-z]/", ""), 0, 20)
   byte_length = 2
 
@@ -17,8 +17,9 @@ resource "random_id" "storage_account_name" {
 
 resource "azurerm_storage_account" "storage_account" {
   name                      = random_id.storage_account_name.hex
-  resource_group_name       = data.azurerm_resource_group.rg.name
-  location                  = data.azurerm_resource_group.rg.location
+  resource_group_name       = var.resource_group_name
+  location                  = var.location
+  tags                      = var.tags
   account_kind              = var.kind
   account_tier              = var.account_tier
   account_replication_type  = var.replication_type
