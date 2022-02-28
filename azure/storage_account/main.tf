@@ -1,3 +1,7 @@
+data "azurerm_resource_group" "rg" {
+  name = var.resource_group_name
+}
+
 resource "random_id" "storage_account_name" {
   # Arbitrary map of values that, when changed, will trigger recreation of resource
   # See: https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id
@@ -19,6 +23,7 @@ resource "azurerm_storage_account" "storage_account" {
   name                      = random_id.storage_account_name.hex
   resource_group_name       = data.azurerm_resource_group.rg.name
   location                  = data.azurerm_resource_group.rg.location
+  tags                      = data.azurerm_resource_group.rg.tags
   account_kind              = var.kind
   account_tier              = var.account_tier
   account_replication_type  = var.replication_type
