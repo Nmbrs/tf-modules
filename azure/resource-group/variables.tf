@@ -1,21 +1,37 @@
-variable "project" {
-  description = "nmbrs project name to be used on the resource group name construction."
+variable "name" {
   type        = string
-}
-
-variable "tags" {
-  description = "nmbrs list of mandatory resource tags."
-  type        = map(string)
-}
-
-variable "environment" {
-  description = "nmbrs environment name."
-  type        = string
+  description = "Specifies the name of the the resource."
 }
 
 variable "location" {
-  # For a complete list of available Azure regions run at cli:  
-  # az account list-locations  --query "[].{displayName:displayName, location:name}" --output table
-  description = "(Required) The Azure Region where the Resource Group should exist. Changing this forces a new Resource Group to be created."
+  description = "Specifies the Azure Region where the resource should exists. Warning: Changing this forces a resource to be recreated."
   type        = string
 }
+
+
+variable "tags" {
+  description = "List of mandatory resource tags."
+  type        = map(string)
+
+  validation {
+    condition     = can(coalesce(lookup(var.tags, "environment", null)))
+    error_message = "The tag \"environment\" is missing or its value is null or empty."
+  }
+
+  validation {
+    condition     = can(coalesce(lookup(var.tags, "product", null)))
+    error_message = "The tag \"product\" is missing or its value is null or empty."
+  }
+
+  validation {
+    condition     = can(coalesce(lookup(var.tags, "squad", null)))
+    error_message = "The tag \"environment\" is missing or its value is null or empty."
+  }
+
+  validation {
+    condition     = can(coalesce(lookup(var.tags, "country", null)))
+    error_message = "The tag \"squad\" is missing or its value is null or empty."
+  }
+}
+
+
