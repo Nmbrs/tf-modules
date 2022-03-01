@@ -23,7 +23,7 @@ variable "account_kind" {
   type        = string
 
   validation {
-    condition     = contains(["BlobStorage", "BlockBlobStorage", "FileStorage", "Storage", "StorageV2" ], var.account_kind)
+    condition     = contains(["BlobStorage", "BlockBlobStorage", "FileStorage", "Storage", "StorageV2"], var.account_kind)
     error_message = "The account_kind value is invalid. Valid options are BlobStorage, BlockBlobStorage, FileStorage, Storage and StorageV2."
   }
 }
