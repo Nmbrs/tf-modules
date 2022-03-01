@@ -1,16 +1,9 @@
-variable "environment" {
+variable "name" {
   type        = string
-  description = "Environment for the resource."
-}
-
-variable "project" {
-  type        = string
-  description = "Project name for the resource."
+  description = "Name of the resource."
 }
 
 variable "location" {
-  # For a complete list of available Azure regions run at cli:  
-  # az account list-locations  --query "[].{displayName:displayName, location:name}" --output table
   description = "The Azure Region where the Resource Group should exist. Changing this forces a new Resource Group to be created."
   type        = string
 }
