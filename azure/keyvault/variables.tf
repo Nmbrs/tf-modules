@@ -18,17 +18,8 @@ variable "name" {
   }
 }
 
-variable "secrets" {
-  type = map(object({
-    value = string
-  }))
-  description = "Define Azure Key Vault secrets"
-  default     = {}
-}
-
 variable "policies" {
   type = map(object({
-    tenant_id               = string
     object_id               = string
     key_permissions         = list(string)
     secret_permissions      = list(string)
