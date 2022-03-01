@@ -24,7 +24,7 @@ variable "account_kind" {
 
   validation {
     condition     = contains(["BlobStorage", "BlockBlobStorage", "FileStorage", "Storage", "StorageV2" ], var.account_kind)
-    error_message = "The account_kind value \"${var.account_kind}\" is invalid. Valid options are BlobStorage, BlockBlobStorage, FileStorage, Storage and StorageV2"
+    error_message = "The account_kind value is invalid. Valid options are BlobStorage, BlockBlobStorage, FileStorage, Storage and StorageV2."
   }
 }
 
@@ -33,8 +33,8 @@ variable "account_tier" {
   type        = string
 
   validation {
-    condition     = contains(["Standard", "Premium"], var.replication_type)
-    error_message = "The account_tier value \"${var.account_tier}\" is invalid. Valid options are Standard and Premium."
+    condition     = contains(["Standard", "Premium"], var.account_tier)
+    error_message = "The account_tier value is invalid. Valid options are Standard and Premium."
   }
 }
 
