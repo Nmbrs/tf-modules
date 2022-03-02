@@ -1,49 +1,49 @@
-variable "project" {
+variable "name" {
   type        = string
-  description = "nmbrs project name."
+  description = "Specifies the name of the the resource."
 }
 
-variable "environment" {
+variable "location" {
+  description = "Specifies the Azure Region where the resource should exists. Warning: Changing this forces a resource to be recreated."
   type        = string
-  description = "environment type of the apps"
 }
 
 variable "resource_group_name" {
+  description = "The name of the resource group in which to create the resource."
   type        = string
-  description = "Resource Group used for the storage account"
 }
 
-variable "kind" {
-  # Valid options are BlobStorage, BlockBlobStorage, FileStorage, Storage and StorageV2. 
-  type        = string
+variable "tags" {
+  description = "List of mandatory resource tags."
+  type        = map(string)
+}
+
+variable "account_kind" {
   description = "Defines the Kind of storage account."
-  default     = "StorageV2"
+  type        = string
+
+  validation {
+    condition     = contains(["BlobStorage", "BlockBlobStorage", "FileStorage", "Storage", "StorageV2"], var.account_kind)
+    error_message = "The account_kind value is invalid. Valid options are BlobStorage, BlockBlobStorage, FileStorage, Storage and StorageV2."
+  }
 }
 
 variable "account_tier" {
-  # Valid options are Standard and Premium. 
-  # For BlockBlobStorage and FileStorage accounts only Premium is valid.
-  type        = string
   description = "Defines the Tier to use for this storage account."
-  default     = "Standard"
+  type        = string
+
+  validation {
+    condition     = contains(["Standard", "Premium"], var.account_tier)
+    error_message = "The account_tier value is invalid. Valid options are Standard and Premium."
+  }
 }
 
 variable "replication_type" {
-  # Valid options are LRS, GRS, RAGRS, ZRS, GZRS and RAGZRS.
-  type        = string
   description = "Defines the type of replication to use for this storage account."
-  default     = "LRS"
-}
-
-variable "min_tls_version" {
-  # Valid options are TLS1_0, TLS1_1, and TLS1_2. 
   type        = string
-  description = "The minimum supported TLS version for the storage account."
-  default     = "TLS1_2"
-}
 
-variable "enable_https_traffic_only" {
-  type        = bool
-  description = "Boolean flag which forces HTTPS if enabled"
-  default     = true
+  validation {
+    condition     = contains(["LRS", "GRS", "RAGS", "ZRS", "GZRS", "RAGZRS"], var.replication_type)
+    error_message = "The replication_type value is invalid. Valid options are LRS, GRS, RAGRS, ZRS, GZRS and RAGZRS."
+  }
 }
