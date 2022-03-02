@@ -20,7 +20,7 @@ jobs:
       - name: Run tfsec
         uses: tfsec/tfsec-sarif-action@master
         with:
-          soft-fail: true
+          soft_fail: true
           sarif_file: tfsec.sarif         
 
       - name: Upload SARIF file
