@@ -19,7 +19,7 @@ variable "name" {
 }
 
 variable "tags" {
-  type = any
+  type        = any
   description = "List of azure tag resources."
 }
 

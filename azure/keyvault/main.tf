@@ -2,7 +2,7 @@ data "azurerm_client_config" "current" {}
 
 # Create the Azure Key Vault
 resource "azurerm_key_vault" "key_vault" {
-  name                = "${var.name}"
+  name                = var.name
   location            = var.location
   resource_group_name = var.resource_group_name
   tenant_id           = data.azurerm_client_config.current.tenant_id
@@ -43,5 +43,5 @@ resource "azurerm_key_vault_access_policy" "policy" {
   secret_permissions      = lookup(each.value, "secret_permissions")
   certificate_permissions = lookup(each.value, "certificate_permissions")
   storage_permissions     = lookup(each.value, "storage_permissions")
-  
+
 }
