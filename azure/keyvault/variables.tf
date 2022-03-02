@@ -18,6 +18,11 @@ variable "name" {
   }
 }
 
+variable "tags" {
+  type = any
+  description = "List of azure tag resources."
+}
+
 variable "policies" {
   type = map(object({
     object_id               = string

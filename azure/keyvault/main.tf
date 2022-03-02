@@ -1,9 +1,5 @@
 data "azurerm_client_config" "current" {}
 
-data "azurerm_resource_group" "rg" {
-  name = var.resource_group_name
-}
-
 # Create the Azure Key Vault
 resource "azurerm_key_vault" "key_vault" {
   name                = "${var.name}"
@@ -17,7 +13,7 @@ resource "azurerm_key_vault" "key_vault" {
     bypass         = "AzureServices"
   }
 
-  tags = data.azurerm_resource_group.rg.tags
+  tags = var.tags
 }
 
 # Create a Default Azure Key Vault access policy with Admin permissions
