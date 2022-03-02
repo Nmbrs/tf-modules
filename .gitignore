@@ -1,12 +1,38 @@
+# OS
+.DS_Store
+
+# Logs
+logs
+*.log*
+
+## Temporary files
+/tmp
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
 # Local .terraform directories
-**/.terraform/*
+**/.terraform/
+**/.terraform*
 
 # .tfstate files
 *.tfstate
 *.tfstate.*
 
-# Crash log files
-crash.log
+# .out files
+*.out
 
 # Ignore any .tfvars files that are generated automatically for each Terraform run. Most
 # .tfvars files are managed as part of configuration and so should be included in
@@ -26,8 +52,7 @@ override.tf.json
 # !example_override.tf
 
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
-# example: *tfplan*
+*tfplan*
 
-**/.terraform.lock.hcl
-.DS_Store
+# Snyk extension
 .dccache
