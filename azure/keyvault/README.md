@@ -13,6 +13,8 @@ keyvault when need.
 
 ## How to use it?
 
+Here is a sample that helps illustrating how to user the module on a Terraform service
+
 ```hcl
 module "keyvault" {
     source = "git"
@@ -27,17 +29,25 @@ module "keyvault" {
     }
 
     policies = {
-        squad_infra = {
-            object_id = "7574db9b-72f3-431c-b068-b8769935e90c"
+        some_app = {
+            object_id = "083093bc-e962-41a5-a075-35c27bf0be43"
             key_permissions         = ["get", "list"]
             secret_permissions      = ["get", "list"]
             certificate_permissions = ["get", "list"]
             storage_permissions     = ["get", "list"]
         }
-    
+        squad_infra = {
+            object_id = "7574db9b-72f3-431c-b068-b8769935e90c"
+            key_permissions         = []
+            secret_permissions      = ["get", "list", "set", "delete"]
+            certificate_permissions = ["get", "list", "set", "delete"]
+            storage_permissions     = ["get", "list", "set", "delete"]
+        }
     }
 }
 ```
+
+I would like to highlight the `policies` data strcuture, and more precise the `object_id` property, which value is associated to an Azure Active Directory element, like a user, group, app or service principal.
 
 
 
