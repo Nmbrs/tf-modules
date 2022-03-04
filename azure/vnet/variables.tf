@@ -14,13 +14,9 @@ variable "address_space" {
 }
 
 variable "subnets" {
-  description = "Subnets configuration"
-  type = list(object({
-    name                                           = string
-    address_prefixes                               = list(string)
-    enforce_private_link_endpoint_network_policies = bool
-    enforce_private_link_service_network_policies  = bool
-  }))
+  type        = any
+  default     = []
+  description = "List of objects that represent the configuration of each subnet."
 }
 
 variable "tags" {
