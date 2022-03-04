@@ -49,5 +49,11 @@ module "keyvault" {
 
 I would like to highlight the `policies` data strcuture, and more precise the `object_id` property, which value is associated to an Azure Active Directory element, like a user, group, app or service principal.
 
+In the following table are the possible permissions for each keyvault type.
 
-
+| Type         | Permissions   |
+| ------------ | ------------- |
+| secret       | backup, delete, get, list, purge, recover, restore and set |
+| certificate  | backup, create, decrypt, delete, encrypt, get, import, list, purge, recover, restore, sign, unwrapKey, update, verify and wrapKey |
+| key          | backup, create, delete, deleteissuers, get, getissuers, import, list, listissuers, managecontacts, manageissuers, purge, recover, restore, setissuers and update  |
+| storage      | backup, delete, deletesas, get, getsas, list, listsas, purge, recover, regeneratekey, restore, set, setsas and update  |
