@@ -46,10 +46,18 @@ module "keyvault" {
     }
 }
 ```
+### Policies
 
-I would like to highlight the `policies` data strcuture, and more precise the `object_id` property, which value is associated to an Azure Active Directory element, like a user, group, app or service principal.
+#### Object ID
 
-In the following table are the possible permissions for each keyvault type.
+The `object_id` property is The object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault.
+
+> Note: The object ID must be unique for the list of access policies.
+
+### Permissions
+
+In the following table are the list of permissions for each keyvault type.
+
 
 | Type         | Permissions   |
 | ------------ | ------------- |
