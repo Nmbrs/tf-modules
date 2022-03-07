@@ -1,5 +1,5 @@
 locals {
   force_tags = {
-      CreatedBy: "Terraform"
+      ManageBy: "Terraform"
   }
 }
