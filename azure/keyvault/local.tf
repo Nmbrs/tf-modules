@@ -1,5 +1,5 @@
 locals {
   force_tags = {
-      terraform: "created"
+      CreatedBy: "Terraform"
   }
 }
