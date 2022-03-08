@@ -27,6 +27,6 @@ locals {
   }
 
   auto_tags = {
-      ManageBy: "Terraform"
+      ManagedBy: "Terraform"
   }
 }
