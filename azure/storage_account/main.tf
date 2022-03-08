@@ -9,7 +9,7 @@ resource "azurerm_storage_account" "storage_account" {
   enable_https_traffic_only = true
   min_tls_version           = "TLS1_2"
 
-  queue_properties  {
+  queue_properties {
      logging {
          delete                = true
          read                  = true
