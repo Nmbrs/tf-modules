@@ -13,18 +13,17 @@ resource "azurerm_subnet" "subnet" {
   resource_group_name                            = var.resource_group_name
   virtual_network_name                           = azurerm_virtual_network.vnet.name
   address_prefixes                               = each.value.address_prefixes
-  enforce_private_link_endpoint_network_policies = each.value.enforce_private_link_endpoint_network_policies
-  enforce_private_link_service_network_policies  = each.value.enforce_private_link_service_network_policies
+  service_endpoints                              = lookup(each.value, "service_endpoints", [])  
+  enforce_private_link_service_network_policies  = lookup(each.value, "enforce_private_link_service_network_policies", false)
+  enforce_private_link_endpoint_network_policies = lookup(each.value, "enforce_private_link_endpoint_network_policies", false)
+
   dynamic "delegation" {
-    for_each = lookup(each.value, "delegation", [])
+    for_each = lookup(each.value, "delegation", null) != null ? [""] : []
     content {
-      name = lookup(delegation.value, "name", null)
-      dynamic "service_delegation" {
-        for_each = lookup(delegation.value, "service_delegation", [])
-        content {
-          name    = lookup(service_delegation.value, "name", null)    # (Required) The name of service to delegate to. Possible values include Microsoft.BareMetal/AzureVMware, Microsoft.BareMetal/CrayServers, Microsoft.Batch/batchAccounts, Microsoft.ContainerInstance/containerGroups, Microsoft.Databricks/workspaces, Microsoft.HardwareSecurityModules/dedicatedHSMs, Microsoft.Logic/integrationServiceEnvironments, Microsoft.Netapp/volumes, Microsoft.ServiceFabricMesh/networks, Microsoft.Sql/managedInstances, Microsoft.Sql/servers, Microsoft.Web/hostingEnvironments and Microsoft.Web/serverFarms.
-          actions = lookup(service_delegation.value, "actions", null) # (Required) A list of Actions which should be delegated. Possible values include Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action, Microsoft.Network/virtualNetworks/subnets/action and Microsoft.Network/virtualNetworks/subnets/join/action.
-        }
+      name = each.value.delegation
+      service_delegation {
+        name    = each.value.delegation
+        actions = formatlist("Microsoft.Network/%s", local.service_delegation_actions[each.value.delegation])
       }
     }
   }
