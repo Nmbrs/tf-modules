@@ -9,7 +9,7 @@ resource "azurerm_key_vault" "key_vault" {
   sku_name            = "standard"
 
   network_acls {
-    default_action = "Allow"
+    default_action = "Deny"
     bypass         = "AzureServices"
   }
 
