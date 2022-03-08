@@ -1,21 +1,16 @@
-variable "project" {
-  description = "nmbrs project name to be used on the resource group name construction."
+variable "name" {
+  description = "(Required) The Azure resource group name to be used. The name must follow the CAF naming convention"
   type        = string
 }
 
 variable "tags" {
-  description = "nmbrs list of mandatory resource tags."
+  description = "Azure resource tags map."
   type        = map(string)
-}
-
-variable "environment" {
-  description = "nmbrs environment name."
-  type        = string
 }
 
 variable "location" {
   # For a complete list of available Azure regions run at cli:  
   # az account list-locations  --query "[].{displayName:displayName, location:name}" --output table
-  description = "(Required) The Azure Region where the Resource Group should exist. Changing this forces a new Resource Group to be created."
+  description = "(Required) The Azure Region where the Resource Group should exist. Changing this forces a new Resource Group to be created."                
   type        = string
 }
