@@ -10,7 +10,7 @@ resource "azurerm_app_service_plan" "app" {
     size = var.size
   }
 
-  tags = var.tags
+  tags = merge(var.tags, local.auto_tags)
 }
 
 resource "azurerm_app_service" "app" {
@@ -36,7 +36,7 @@ resource "azurerm_app_service" "app" {
     remote_debugging_enabled  = false
   }
 
-  tags = var.tags
+  tags = merge(var.tags, local.auto_tags)
 }
 
 resource "azurerm_log_analytics_workspace" "app" {
@@ -45,7 +45,7 @@ resource "azurerm_log_analytics_workspace" "app" {
   resource_group_name = var.resource_group
   retention_in_days   = 90
 
-  tags = var.tags
+  tags = merge(var.tags, local.auto_tags)
 }
 
 resource "azurerm_application_insights" "app" {
@@ -54,8 +54,8 @@ resource "azurerm_application_insights" "app" {
   resource_group_name = var.resource_group
   workspace_id        = azurerm_log_analytics_workspace.app.id
   application_type    = "web"
-  tags = var.tags
-
+  
+  tags = merge(var.tags, local.auto_tags)
 }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "app" {
