@@ -15,7 +15,7 @@ Fundamentally, you need to declare the module and pass the following variables i
 
 ```hcl
 module "storage_account" {
-  source              = "../tf-modules/azure/storage-account"storage_account"
+  source              = "../tf-modules/azure/storage-account"
   name                = "sauniquename123"
   location            = "West Europe"
   resource_group_name = "rg-my-resource-group"
