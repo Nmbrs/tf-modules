@@ -7,25 +7,22 @@
   </a>
 </p>
 
-# ⚠️ This module is deprecated and `azurerm_resource_group` published on [the Terraform registry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) should be used instead. This module will not have active support any more.
-
-
 ---
 
 > A terraform module to support the creation of a resource group in Azure.
 
 ## Module Input variables
 
-- `project` - Project name.
-- `environment` - Environment name.
+- `name` - name of the Azure resource group to be created.
 - `location` - Specifies the Azure Region where the resource should exists.
 - `tags` - List of mandatory resource tags.
 
 ## Module Output Variables
 
-- `resource_group_name` - Name
-- `resource_group_id` - id
-- `resource_group_location` - location
+- `name` - Name
+- `id` - id
+- `location` - location
+- `tags` - tags
 
 ## How to use it?
 
@@ -34,8 +31,7 @@ Fundamentally, you need to declare the module and pass the following variables i
 ```hcl
 module "resource-group" {
   source                    = "../tf-modules/azure/resource-group"
-  project                   = "my_project"
-  environment               = "production"
+  name                      = "rg-my_project-dev"
   location                  = "West Europe"
   tags                      = {
     country : "nl"
