@@ -13,7 +13,7 @@ resource "azurerm_key_vault" "key_vault" {
     bypass         = "AzureServices"
   }
 
-  tags = merge(var.tags, local.force_tags)
+  tags = merge(var.tags, local.auto_tags)
 }
 
 # Create a Default Azure Key Vault access policy with Admin permissions
