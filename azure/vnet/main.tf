@@ -3,7 +3,7 @@ resource "azurerm_virtual_network" "vnet" {
   address_space       = var.address_space
   location            = var.location
   resource_group_name = var.resource_group_name
-  tags                = var.tags
+  tags = merge(var.tags, local.auto_tags)
 }
 
 resource "azurerm_subnet" "subnet" {

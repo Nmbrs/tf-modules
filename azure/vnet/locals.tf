@@ -25,4 +25,8 @@ locals {
     "Microsoft.Web/hostingEnvironments"               = ["virtualNetworks/subnets/action"]
     "Microsoft.Web/serverFarms"                       = ["virtualNetworks/subnets/action"]
   }
+
+  auto_tags = {
+      ManageBy: "Terraform"
+  }
 }
