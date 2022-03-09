@@ -9,4 +9,26 @@ resource "azurerm_storage_account" "storage_account" {
   min_tls_version           = "TLS1_2"
 
   tags = merge(var.tags, local.auto_tags)
+  
+  queue_properties {
+    logging {
+      delete                = true
+      read                  = true
+      write                 = true
+      version               = "1.0"
+      retention_policy_days = 10
+    }
+    hour_metrics {
+      enabled = true
+      include_apis = true
+      retention_policy_days = 7
+      version = "1.0"
+    }
+    minute_metrics {
+      enabled               = false
+      include_apis          = false
+      retention_policy_days = 10
+      version = "1.0"
+    }
+   }
 }
