@@ -22,22 +22,22 @@ module "keyvault" {
     location            = "westeurope"
     resource_group_name = "rg-heimdall-dev"
     tags        = {
-        Country : "nl"
-        Squad : "infra"
-        Product : "internal"
-        Environment : "dev"
+        Country : "NL"
+        Squad : "Infra"
+        Product : "Internal"
+        Environment : "Dev"
     }
 
     policies = {
         some_app = {
-            object_id = "083093bc-e962-41a5-a075-35c27bf0be43"
+            object_id = "083093de-e964-41b7-a075-35c27bf0be00"
             key_permissions         = ["get", "list"]
             secret_permissions      = ["get", "list"]
             certificate_permissions = ["get", "list"]
             storage_permissions     = ["get", "list"]
         }
-        squad_infra = {
-            object_id = "7574db9b-72f3-431c-b068-b8769935e90c"
+        some_group = {
+            object_id = "7574db98-72g5-431b-b070-b8769935e81f"
             key_permissions         = []
             secret_permissions      = ["get", "list", "set", "delete"]
             certificate_permissions = ["get", "list", "set", "delete"]
