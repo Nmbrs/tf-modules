@@ -39,6 +39,13 @@ resource "azurerm_app_service" "app" {
   tags = merge(var.tags, local.auto_tags)
 }
 
+resource "azurerm_app_service_custom_hostname_binding" "customdomain" {
+  for_each            = var.apps
+  hostname            = each.value["custom_domain"]
+  app_service_name    = azurerm_app_service.app[each.key].name
+  resource_group_name = var.resource_group
+}
+
 resource "azurerm_log_analytics_workspace" "app" {
   name                = "wsp-${var.project}-${var.environment}"
   location            = var.location
