@@ -39,7 +39,7 @@ resource "azurerm_app_service" "app" {
   tags = merge(var.tags, local.auto_tags)
 }
 
-resource "azurerm_app_service_custom_hostname_binding" "customdomain" {
+resource "azurerm_app_service_custom_hostname_binding" "custom_domain" {
   for_each            = var.apps
   hostname            = each.value["custom_domain"]
   app_service_name    = azurerm_app_service.app[each.key].name
