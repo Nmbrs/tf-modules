@@ -18,3 +18,7 @@
 #   value = data.azurerm_app_service.binding.custom_domain_verification_id
   
 # }
+
+output "certificate_thumbprint" {
+  value = data.azurerm_key_vault_certificate.binding.thumbprint
+}
