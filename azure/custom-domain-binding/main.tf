@@ -5,7 +5,7 @@ data "azurerm_dns_zone" "binding" {
 
 resource "azurerm_dns_cname_record" "binding" {
   for_each            = var.apps
-  name                = each.value["name"]
+  name                = each.value["cname"]
   zone_name           = data.azurerm_dns_zone.binding.name
   resource_group_name = data.azurerm_dns_zone.binding.resource_group_name
   ttl                 = 300
