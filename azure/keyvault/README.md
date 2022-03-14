@@ -28,8 +28,8 @@ module "keyvault" {
         Environment : "Dev"
     }
 
-    writers = ["7574db9b-72f3-431c-b068-b8769935e90c"]
-    readers = ["984a10dc-52c5-4e1c-9e91-5215fa5ae26b"]
+    writers = ["some-azure-ad-object-id", "some-azure-ad-object-id"]
+    readers = ["some-azure-ad-object-id", "some-azure-ad-object-id", "some-azure-ad-object-id"]
 }
 ```
 ### Policies
