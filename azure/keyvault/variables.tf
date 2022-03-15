@@ -67,11 +67,11 @@ variable "kv_certificate_permissions_read" {
 variable "kv_secret_permissions_write" {
   type        = list(string)
   description = "List of full secret permissions, must be one or more from the following: backup, delete, get, list, purge, recover, restore and set"
-  default     = ["get", "list", "set"]
+  default     = ["get", "list", "set", "delete"]
 }
 
 variable "kv_certificate_permissions_write" {
   type        = list(string)
   description = "List of full certificate permissions, must be one or more from the following: backup, create, delete, deleteissuers, get, getissuers, import, list, listissuers, managecontacts, manageissuers, purge, recover, restore, setissuers and update"
-  default     = ["get", "list", "update"]
+  default     = ["get", "list", "update", "delete"]
 }
