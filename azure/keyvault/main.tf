@@ -37,7 +37,6 @@ data "azuread_group" "ad_group" {
   security_enabled = true
 }
 
-
 resource "azurerm_key_vault_access_policy" "readers_policy" {
   for_each = toset(var.readers)
   key_vault_id            = azurerm_key_vault.key_vault.id
