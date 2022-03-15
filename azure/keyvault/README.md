@@ -18,7 +18,7 @@ Here is a sample that helps illustrating how to user the module on a Terraform s
 ```hcl
 module "keyvault" {
     source = "git"
-    name                = "kv-heimdall-dev"
+    name                = "kv-nmbrsheimdall-dev"
     location            = "westeurope"
     resource_group_name = "rg-heimdall-dev"
     tags        = {
@@ -28,22 +28,8 @@ module "keyvault" {
         Environment : "Dev"
     }
 
-    policies = {
-        some_app = {
-            object_id = "083093de-e964-41b7-a075-35c27bf0be00"
-            key_permissions         = ["get", "list"]
-            secret_permissions      = ["get", "list"]
-            certificate_permissions = ["get", "list"]
-            storage_permissions     = ["get", "list"]
-        }
-        some_group = {
-            object_id = "7574db98-72g5-431b-b070-b8769935e81f"
-            key_permissions         = []
-            secret_permissions      = ["get", "list", "set", "delete"]
-            certificate_permissions = ["get", "list", "set", "delete"]
-            storage_permissions     = ["get", "list", "set", "delete"]
-        }
-    }
+    writers = ["some-azure-ad-object-id", "some-azure-ad-object-id"]
+    readers = ["some-azure-ad-object-id", "some-azure-ad-object-id", "some-azure-ad-object-id"]
 }
 ```
 ### Policies
