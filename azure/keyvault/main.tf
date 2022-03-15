@@ -31,11 +31,17 @@ resource "azurerm_key_vault_access_policy" "default_policy" {
   certificate_permissions = var.kv_certificate_permissions_full
 }
 
+data "azuread_group" "ad_group" {
+  for_each = toset(concat(var.readers, var.writers))
+  display_name     = each.key
+  security_enabled = true
+}
+
 resource "azurerm_key_vault_access_policy" "readers_policy" {
   for_each = toset(var.readers)
   key_vault_id            = azurerm_key_vault.key_vault.id
   tenant_id               = data.azurerm_client_config.current.tenant_id
-  object_id               = each.key
+  object_id               = data.azuread_group.ad_group[each.key].object_id
   secret_permissions      = var.kv_secret_permissions_read
   certificate_permissions = var.kv_certificate_permissions_read  
 }
@@ -44,7 +50,7 @@ resource "azurerm_key_vault_access_policy" "writers_policy" {
   for_each                = toset(var.writers)
   key_vault_id            = azurerm_key_vault.key_vault.id
   tenant_id               = data.azurerm_client_config.current.tenant_id
-  object_id               = each.key
+  object_id               = data.azuread_group.ad_group[each.key].object_id
   secret_permissions      = var.kv_secret_permissions_write
   certificate_permissions = var.kv_certificate_permissions_write
 }

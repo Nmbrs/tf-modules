@@ -28,26 +28,17 @@ module "keyvault" {
         Environment : "Dev"
     }
 
-    writers = ["some-azure-ad-object-id", "some-azure-ad-object-id"]
-    readers = ["some-azure-ad-object-id", "some-azure-ad-object-id", "some-azure-ad-object-id"]
+    writers = ["some_security_group_name", "some_security_group_name"]
+    readers = ["some_security_group_name", "some_security_group_name", "some_security_group_name"]
 }
 ```
-### Policies
-
-#### Object ID
-
-The `object_id` property is The object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault.
-
-> Note: The object ID must be unique for the list of access policies.
+## Policies
 
 ### Permissions
 
-In the following table are the list of permissions for each keyvault type.
+There're only two access policies: readers and writers, that will be applied to both secrets and certificates.
 
-
-| Type         | Permissions   |
-| ------------ | ------------- |
-| secret       | backup, delete, get, list, purge, recover, restore and set |
-| certificate  | backup, create, decrypt, delete, encrypt, get, import, list, purge, recover, restore, sign, unwrapKey, update, verify and wrapKey |
-| key          | backup, create, delete, deleteissuers, get, getissuers, import, list, listissuers, managecontacts, manageissuers, purge, recover, restore, setissuers and update  |
-| storage      | backup, delete, deletesas, get, getsas, list, listsas, purge, recover, regeneratekey, restore, set, setsas and update  |
+| Type         | Permissions                      |
+| ------------ | -------------------------------- |
+| writers      | get, list, write, update, delete |
+| readers      | get, list                        |
