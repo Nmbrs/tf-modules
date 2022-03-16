@@ -4,16 +4,16 @@ variable "dns_zone" {
 }
 
 variable "a" {
-  description = "Type of app service to be created eg. worker, web, mobile, api"
+  description = "A record to be created"
   type        = map(any)
 }
 
 variable "cname" {
-  description = "Type of app service to be created eg. worker, web, mobile, api"
+  description = "CNAME record to be created"
   type        = map(any)
 }
 
 variable "txt" {
-  description = "Type of app service to be created eg. worker, web, mobile, api"
+  description = "TXT record to be created"
   type        = map(any)
 }
