@@ -42,7 +42,7 @@ resource "azurerm_key_vault_access_policy" "readers_policy" {
   key_vault_id            = azurerm_key_vault.key_vault.id
   tenant_id               = data.azurerm_client_config.current.tenant_id
   object_id               = data.azuread_group.ad_group[each.key].object_id
-  secret_permissions      = local.secrets_full_permissions
+  secret_permissions      = local.secrets_read_permissions
   certificate_permissions = local.certificates_read_permissions
 }
 
