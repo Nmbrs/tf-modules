@@ -24,12 +24,12 @@ variable "tags" {
 }
 
 variable "writers" {
-  type = list(string)
+  type        = list(string)
   description = "Define a Azure Key Vault access policy"
 }
 
 variable "readers" {
-  type = list(string)
+  type        = list(string)
   description = "Define a Azure Key Vault access policy"
 }
 
@@ -41,37 +41,60 @@ variable "readers" {
 ###################################################################################################
 variable "kv_secret_permissions_full" {
   type        = list(string)
-  description = "List of full secret permissions, must be one or more from the following: backup, delete, get, list, purge, recover, restore and set"
-  default     = ["backup", "delete", "get", "list", "purge", "recover", "restore", "set"]
+  description = "List of full permissions for secrets."
+  validation {
+    condition     = alltrue([for permission in var.kv_secret_permissions_full : contains(["Backup", "Delete", "Get", "List", "Purge", "Recover", "Restore", "Set"], permission)])
+    error_message = "At least one of the elements in the kv_secret_permissions_full list is invalid. Valid options are Backup, Delete, Get, List, Purge, Recover, Restore, Set."
+  }
+  default = ["Backup", "Delete", "Get", "List", "Purge", "Recover", "Restore", "Set"]
 }
 
 variable "kv_certificate_permissions_full" {
   type        = list(string)
-  description = "List of full certificate permissions, must be one or more from the following: backup, create, delete, deleteissuers, get, getissuers, import, list, listissuers, managecontacts, manageissuers, purge, recover, restore, setissuers and update"
-  default = ["create", "delete", "deleteissuers", "get", "getissuers", "import", "list", "listissuers",
-  "managecontacts", "manageissuers", "purge", "recover", "setissuers", "update", "backup", "restore"]
+  description = "List of full permissions for certificates."
+  validation {
+    condition     = alltrue([for permission in var.kv_certificate_permissions_full : contains(["Backup", "Create", "Delete", "DeleteIssuers", "Get", "GetIssuers", "Import", "List", "ListIssuers", "ManageContacts", "ManageIssuers", "Purge", "Recover", "Restore", "SetIssuers", "Update"], permission)])
+    error_message = "At least one of the elements in the kv_certificate_permissions_full list is invalid. Valid options are Backup, Create, Delete, DeleteIssuers, Get, GetIssuers, Import, List, ListIssuers, ManageContacts, ManageIssuers, Purge, Recover, Restore, SetIssuers, Update."
+  }
+  default = ["Backup", "Create", "Delete", "DeleteIssuers", "Get", "GetIssuers", "Import", "List", "ListIssuers", "ManageContacts", "ManageIssuers", "Purge", "Recover", "Restore", "SetIssuers", "Update"]
 }
 
 variable "kv_secret_permissions_read" {
   type        = list(string)
-  description = "List of full secret permissions, must be one or more from the following: backup, delete, get, list, purge, recover, restore and set"
-  default     = ["get", "list"]
+  description = "List of reading permissions for secrets."
+  validation {
+    condition     = alltrue([for permission in var.kv_secret_permissions_read : contains(["Backup", "Delete", "Get", "List", "Purge", "Recover", "Restore", "Set"], permission)])
+    error_message = "At least one of the elements in the kv_secret_permissions_read list is invalid. Valid options are Backup, Delete, Get, List, Purge, Recover, Restore, Set."
+  }
+  default = ["Get", "List"]
 }
 
 variable "kv_certificate_permissions_read" {
   type        = list(string)
-  description = "List of full certificate permissions, must be one or more from the following: backup, create, delete, deleteissuers, get, getissuers, import, list, listissuers, managecontacts, manageissuers, purge, recover, restore, setissuers and update"
-  default     = ["get", "list"]
+  description = "List of reading permissions for certificates."
+  validation {
+    condition     = alltrue([for permission in var.kv_certificate_permissions_read : contains(["Backup", "Create", "Delete", "DeleteIssuers", "Get", "GetIssuers", "Import", "List", "ListIssuers", "ManageContacts", "ManageIssuers", "Purge", "Recover", "Restore", "SetIssuers", "Update"], permission)])
+    error_message = "At least one of the elements in the kv_certificate_permissions_read list is invalid. Valid options are Backup, Create, Delete, DeleteIssuers, Get, GetIssuers, Import, List, ListIssuers, ManageContacts, ManageIssuers, Purge, Recover, Restore, SetIssuers, Update."
+  }
+  default = ["Get", "List"]
 }
 
 variable "kv_secret_permissions_write" {
   type        = list(string)
-  description = "List of full secret permissions, must be one or more from the following: backup, delete, get, list, purge, recover, restore and set"
-  default     = ["get", "list", "set"]
+  description = "List of writing permissions for secrets."
+  validation {
+    condition     = alltrue([for permission in var.kv_secret_permissions_write : contains(["Backup", "Delete", "Get", "List", "Purge", "Recover", "Restore", "Set"], permission)])
+    error_message = "At least one of the elements in the kv_secret_permissions_write list is invalid. Valid options are Backup, Delete, Get, List, Purge, Recover, Restore, Set."
+  }
+  default = ["Get", "List", "Set"]
 }
 
 variable "kv_certificate_permissions_write" {
   type        = list(string)
-  description = "List of full certificate permissions, must be one or more from the following: backup, create, delete, deleteissuers, get, getissuers, import, list, listissuers, managecontacts, manageissuers, purge, recover, restore, setissuers and update"
-  default     = ["get", "list", "update"]
+  description = "List of writing permissions for certificates."
+  validation {
+    condition     = alltrue([for permission in var.kv_certificate_permissions_write : contains(["Backup", "Create", "Delete", "DeleteIssuers", "Get", "GetIssuers", "Import", "List", "ListIssuers", "ManageContacts", "ManageIssuers", "Purge", "Recover", "Restore", "SetIssuers", "Update"], permission)])
+    error_message = "At least one of the elements in the kv_certificate_permissions_write list is invalid. Valid options are Backup, Create, Delete, DeleteIssuers, Get, GetIssuers, Import, List, ListIssuers, ManageContacts, ManageIssuers, Purge, Recover, Restore, SetIssuers, Update."
+  }
+  default = ["Get", "List", "Update"]
 }
