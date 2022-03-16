@@ -3,6 +3,11 @@ variable "dns_zone" {
   type        = string
 }
 
+variable "a" {
+  description = "Type of app service to be created eg. worker, web, mobile, api"
+  type        = map(any)
+}
+
 variable "cname" {
   description = "Type of app service to be created eg. worker, web, mobile, api"
   type        = map(any)

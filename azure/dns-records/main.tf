@@ -3,19 +3,40 @@ data "azurerm_dns_zone" "record" {
   resource_group_name = "rg-dnszones"
 }
 
-resource "azurerm_dns_cname_record" "record" {
+resource "azurerm_dns_a_record" "record" {
+  for_each = {
+    for key, value in var.a : key => value
+    if value.a != ""
+  }
+  name                = each.value["a"]
+  zone_name           = data.azurerm_dns_zone.record.name
+  resource_group_name = data.azurerm_dns_zone.record.resource_group_name
+  ttl                 = 300
+  #records             = local.a_record[0]
+  records = each.value["records"]
+}
 
-  for_each            = var.cname
+resource "azurerm_dns_cname_record" "record" {
+  #for_each            = var.cname
+  for_each = {
+    for key, value in var.cname : key => value
+    if value.cname != ""
+  }
   name                = each.value["cname"]
   zone_name           = data.azurerm_dns_zone.record.name
   resource_group_name = data.azurerm_dns_zone.record.resource_group_name
   ttl                 = 300
-  record              = "${each.value["record"]}.azurewebsites.net"
+  #record              = "${local.cname_record}.azurewebsites.net"
+  record = "${each.value["record"]}.azurewebsites.net"
 }
 
 resource "azurerm_dns_txt_record" "record" {
-  for_each            = var.txt
-  name                = "asuid.${each.value["txt"]}"
+  #for_each            = var.txt
+  for_each = {
+    for key, value in var.txt : key => value
+    if value.txt != ""
+  }
+  name                = each.value["txt"]
   zone_name           = data.azurerm_dns_zone.record.name
   resource_group_name = data.azurerm_dns_zone.record.resource_group_name
   ttl                 = 300
