@@ -24,7 +24,7 @@ resource "azurerm_dns_cname_record" "record" {
   zone_name           = data.azurerm_dns_zone.record.name
   resource_group_name = data.azurerm_dns_zone.record.resource_group_name
   ttl                 = 300
-  record              = "${each.value["record"]}.azurewebsites.net"
+  record              = "${each.value["record"]}"
 }
 
 resource "azurerm_dns_txt_record" "record" {
