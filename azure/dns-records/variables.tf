@@ -3,6 +3,11 @@ variable "dns_zone" {
   type        = string
 }
 
+variable "dns_rg" {
+  description = "Resource Group of the DNS Zone"
+  type        = string
+}
+
 variable "a" {
   description = "A record to be created"
   type        = map(any)

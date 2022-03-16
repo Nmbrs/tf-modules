@@ -1,6 +1,6 @@
 data "azurerm_dns_zone" "record" {
   name                = var.dns_zone
-  resource_group_name = "rg-dnszones"
+  resource_group_name = var.dns_rg
 }
 
 resource "azurerm_dns_a_record" "record" {
