@@ -27,23 +27,23 @@ resource "azurerm_key_vault_access_policy" "default_policy" {
     create_before_destroy = true
   }
 
-  secret_permissions      = var.kv_secret_permissions_full
-  certificate_permissions = var.kv_certificate_permissions_full
+  secret_permissions      = local.secrets_full_permissions
+  certificate_permissions = local.certificates_full_permissions
 }
 
 data "azuread_group" "ad_group" {
-  for_each = toset(concat(var.readers, var.writers))
+  for_each         = toset(concat(var.readers, var.writers))
   display_name     = each.key
   security_enabled = true
 }
 
 resource "azurerm_key_vault_access_policy" "readers_policy" {
-  for_each = toset(var.readers)
+  for_each                = toset(var.readers)
   key_vault_id            = azurerm_key_vault.key_vault.id
   tenant_id               = data.azurerm_client_config.current.tenant_id
   object_id               = data.azuread_group.ad_group[each.key].object_id
-  secret_permissions      = var.kv_secret_permissions_read
-  certificate_permissions = var.kv_certificate_permissions_read  
+  secret_permissions      = local.secrets_full_permissions
+  certificate_permissions = local.certificates_read_permissions
 }
 
 resource "azurerm_key_vault_access_policy" "writers_policy" {
@@ -51,6 +51,6 @@ resource "azurerm_key_vault_access_policy" "writers_policy" {
   key_vault_id            = azurerm_key_vault.key_vault.id
   tenant_id               = data.azurerm_client_config.current.tenant_id
   object_id               = data.azuread_group.ad_group[each.key].object_id
-  secret_permissions      = var.kv_secret_permissions_write
-  certificate_permissions = var.kv_certificate_permissions_write
+  secret_permissions      = local.secrets_write_permissions
+  certificate_permissions = local.certificates_write_permissions
 }
