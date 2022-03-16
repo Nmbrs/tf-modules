@@ -86,7 +86,8 @@ variable "kv_secret_permissions_write" {
     condition     = alltrue([for permission in var.kv_secret_permissions_write : contains(["Backup", "Delete", "Get", "List", "Purge", "Recover", "Restore", "Set"], permission)])
     error_message = "At least one of the elements in the kv_secret_permissions_write list is invalid. Valid options are Backup, Delete, Get, List, Purge, Recover, Restore, Set."
   }
-  default = ["Get", "List", "Set"]
+  default     = ["get", "list", "set", "delete"]
+
 }
 
 variable "kv_certificate_permissions_write" {
@@ -96,5 +97,6 @@ variable "kv_certificate_permissions_write" {
     condition     = alltrue([for permission in var.kv_certificate_permissions_write : contains(["Backup", "Create", "Delete", "DeleteIssuers", "Get", "GetIssuers", "Import", "List", "ListIssuers", "ManageContacts", "ManageIssuers", "Purge", "Recover", "Restore", "SetIssuers", "Update"], permission)])
     error_message = "At least one of the elements in the kv_certificate_permissions_write list is invalid. Valid options are Backup, Create, Delete, DeleteIssuers, Get, GetIssuers, Import, List, ListIssuers, ManageContacts, ManageIssuers, Purge, Recover, Restore, SetIssuers, Update."
   }
-  default = ["Get", "List", "Update"]
+  default     = ["get", "list", "update", "delete"]
 }
+
