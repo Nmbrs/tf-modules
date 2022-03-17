@@ -1,41 +1,36 @@
-data "azurerm_dns_zone" "record" {
-  name                = var.dns_zone
-  resource_group_name = var.dns_rg
-}
-
 resource "azurerm_dns_a_record" "record" {
   for_each = {
     for key, value in var.a : key => value
-    if value.a != ""
+    if value.name != ""
   }
-  name                = each.value["a"]
-  zone_name           = data.azurerm_dns_zone.record.name
-  resource_group_name = data.azurerm_dns_zone.record.resource_group_name
-  ttl                 = 300
+  name                = each.value["name"]
+  zone_name           = var.dns_zone_name
+  resource_group_name = var.dns_zone_rg
+  ttl                 = each.value["ttl"]
   records             = each.value["records"]
 }
 
 resource "azurerm_dns_cname_record" "record" {
   for_each = {
     for key, value in var.cname : key => value
-    if value.cname != ""
+    if value.name != ""
   }
-  name                = each.value["cname"]
-  zone_name           = data.azurerm_dns_zone.record.name
-  resource_group_name = data.azurerm_dns_zone.record.resource_group_name
-  ttl                 = 300
-  record              = "${each.value["record"]}"
+  name                = each.value["name"]
+  zone_name           = var.dns_zone_name
+  resource_group_name = var.dns_zone_rg
+  ttl                 = each.value["ttl"]
+  record              = each.value["record"]
 }
 
 resource "azurerm_dns_txt_record" "record" {
   for_each = {
     for key, value in var.txt : key => value
-    if value.txt != ""
+    if value.name != ""
   }
-  name                = each.value["txt"]
-  zone_name           = data.azurerm_dns_zone.record.name
-  resource_group_name = data.azurerm_dns_zone.record.resource_group_name
-  ttl                 = 300
+  name                = each.value["name"]
+  zone_name           = var.dns_zone_name
+  resource_group_name = var.dns_zone_rg
+  ttl                 = each.value["ttl"]
   dynamic "record" {
     for_each = each.value["record"]
     content {
