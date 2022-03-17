@@ -27,21 +27,30 @@ resource "azurerm_key_vault_access_policy" "default_policy" {
     create_before_destroy = true
   }
 
-  key_permissions         = var.kv_key_permissions_full
-  secret_permissions      = var.kv_secret_permissions_full
-  certificate_permissions = var.kv_certificate_permissions_full
-  storage_permissions     = var.kv_storage_permissions_full
+  secret_permissions      = local.secrets_full_permissions
+  certificate_permissions = local.certificates_full_permissions
 }
 
-# Create an Azure Key Vault access policy
-resource "azurerm_key_vault_access_policy" "policy" {
-  for_each                = var.policies
+data "azuread_group" "ad_group" {
+  for_each         = toset(concat(var.readers, var.writers))
+  display_name     = each.key
+  security_enabled = true
+}
+
+resource "azurerm_key_vault_access_policy" "readers_policy" {
+  for_each                = toset(var.readers)
   key_vault_id            = azurerm_key_vault.key_vault.id
   tenant_id               = data.azurerm_client_config.current.tenant_id
-  object_id               = lookup(each.value, "object_id")
-  key_permissions         = lookup(each.value, "key_permissions")
-  secret_permissions      = lookup(each.value, "secret_permissions")
-  certificate_permissions = lookup(each.value, "certificate_permissions")
-  storage_permissions     = lookup(each.value, "storage_permissions")
+  object_id               = data.azuread_group.ad_group[each.key].object_id
+  secret_permissions      = local.secrets_read_permissions
+  certificate_permissions = local.certificates_read_permissions
+}
 
+resource "azurerm_key_vault_access_policy" "writers_policy" {
+  for_each                = toset(var.writers)
+  key_vault_id            = azurerm_key_vault.key_vault.id
+  tenant_id               = data.azurerm_client_config.current.tenant_id
+  object_id               = data.azuread_group.ad_group[each.key].object_id
+  secret_permissions      = local.secrets_write_permissions
+  certificate_permissions = local.certificates_write_permissions
 }
