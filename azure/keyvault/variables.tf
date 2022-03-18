@@ -34,6 +34,6 @@ variable "readers" {
 }
 
 variable "isProtect" {
-  type = bool
+  type        = bool
   description = "Protects from accidental deletion by enabling keyvault purge setting."
 }
