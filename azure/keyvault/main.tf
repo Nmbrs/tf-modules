@@ -2,11 +2,12 @@ data "azurerm_client_config" "current" {}
 
 # Create the Azure Key Vault
 resource "azurerm_key_vault" "key_vault" {
-  name                = var.name
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  tenant_id           = data.azurerm_client_config.current.tenant_id
-  sku_name            = "standard"
+  name                     = var.name
+  location                 = var.location
+  resource_group_name      = var.resource_group_name
+  tenant_id                = data.azurerm_client_config.current.tenant_id
+  sku_name                 = "standard"
+  purge_protection_enabled = var.isProtect
 
   network_acls {
     default_action = "Deny"
