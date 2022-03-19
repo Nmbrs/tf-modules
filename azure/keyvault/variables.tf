@@ -32,9 +32,3 @@ variable "readers" {
   type        = list(string)
   description = "Define a Azure Key Vault access policy"
 }
-
-variable "isProtect" {
-  type        = bool
-  description = "Protects from accidental deletion by enabling keyvault purge setting."
-  default     = false
-}
