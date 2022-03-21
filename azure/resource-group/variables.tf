@@ -1,15 +1,15 @@
 variable "name" {
-  description = "(Required) The Azure resource group name to be used. The name must follow the CAF naming convention"
+  description = "Name of the resource group. It must follow the CAF naming convention."
   type        = string
 }
 
 variable "product" {
-  description = "Name of the project to which the resources belongs."
+  description = "Name of the product to which the resources belongs."
   type        = string
 
   validation {
     condition     = can(coalesce(var.product))
-    error_message = "The 'project' value is invalid. It must be a non-empty string."
+    error_message = "The 'product' value is invalid. It must be a non-empty string."
   }
 }
 
@@ -50,7 +50,7 @@ variable "tags" {
 
   validation {
     condition     = alltrue([for tag in var.tags : can(coalesce(tag))])
-    error_message = "At least on tag value from 'tags' is invalid. They must be a non-empty string."
+    error_message = "At least on tag value from 'tags' is invalid. They must be non-empty strings."
   }
 }
 
@@ -59,6 +59,7 @@ variable "location" {
   # az account list-locations  --query "[].{displayName:displayName, location:name}" --output table
   description = "The Azure Region where the resource should exist."
   type        = string
+  default     = "westeurope"
 
   validation {
     condition     = can(coalesce(var.location))
