@@ -13,8 +13,12 @@
 
 ## Module Input variables
 
-- `name` - name of the Azure resource group to be created.
+- `name` - Name of the resource group. It must follow the CAF naming convention.
 - `location` - Specifies the Azure Region where the resource should exists.
+- `environment` - The environment in which the resource should be provisioned.
+- `country` - Name of the contry to which the resources belongs.
+- `squad` - Name of the squad to which the resources belongs.
+- `product` - Name of the product to which the resources belongs.
 - `tags` - List of mandatory resource tags.
 
 ## Module Output Variables
@@ -38,8 +42,8 @@ module "resource-group" {
   squad       = "infra"
   product     = "internal"
   tags                      = {
-    datadog : "true"
-    ansible : "true"
+    additional_tag_01 : "value01"
+    additional_tag_03 : "value02"
   }
 }
 ```
