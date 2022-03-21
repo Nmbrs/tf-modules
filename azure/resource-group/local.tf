@@ -1,5 +1,11 @@
 locals {
-  auto_tags = {
-      ManagedBy: "Terraform"
+  default_tags = {
+    ManagedBy   = "Terraform"
+    Country     = var.country
+    Squad       = var.squad
+    Product     = var.product
+    Environment = var.environment
   }
+
+  location = "westeurope"
 }
