@@ -3,22 +3,32 @@ variable "name" {
   type        = string
 }
 
-variable "project" {
-  description = "Name of the project to which the resources should be assigned."
+variable "product" {
+  description = "Name of the project to which the resources belongs."
   type        = string
 
   validation {
-    condition     = can(coalesce(var.project))
+    condition     = can(coalesce(var.product))
     error_message = "The 'project' value is invalid. It must be a non-empty string."
   }
 }
 
 variable "squad" {
-  description = "Name of the project to which the resources should be assigned."
+  description = "Name of the squad to which the resources belongs."
   type        = string
 
   validation {
     condition     = can(coalesce(var.squad))
+    error_message = "The 'squad' value is invalid. It must be a non-empty string."
+  }
+}
+
+variable "country" {
+  description = "Name of the contry to which the resources belongs."
+  type        = string
+
+  validation {
+    condition     = can(coalesce(var.country))
     error_message = "The 'squad' value is invalid. It must be a non-empty string."
   }
 }
@@ -36,6 +46,7 @@ variable "environment" {
 variable "tags" {
   description = "A mapping of tags which should be assigned to the desired resource."
   type        = map(string)
+  default     = {}
 
   validation {
     condition     = alltrue([for tag in var.tags : can(coalesce(tag))])

@@ -4,7 +4,7 @@ locals {
     Country     = var.country
     Squad       = var.squad
     Product     = var.product
-    Environment = var.envrionment
+    Environment = var.environment
   }
 
 }

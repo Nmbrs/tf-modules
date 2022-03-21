@@ -33,11 +33,13 @@ module "resource-group" {
   source                    = "../tf-modules/azure/resource-group"
   name                      = "rg-my_project-dev"
   location                  = "West Europe"
+  environment = "Dev"
+  country     = "nl"
+  squad       = "infra"
+  product     = "internal"
   tags                      = {
-    country : "nl"
-    squad : "infra"
-    product : "test-product"
-    environment : "prod"
+    datadog : "true"
+    ansible : "true"
   }
 }
 ```
