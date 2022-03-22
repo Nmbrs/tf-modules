@@ -24,7 +24,7 @@ variable "squad" {
 }
 
 variable "country" {
-  description = "Name of the contry to which the resources belongs."
+  description = "Name of the country to which the resources belongs."
   type        = string
 
   validation {
@@ -44,13 +44,13 @@ variable "environment" {
 }
 
 variable "extra_tags" {
-  description = "A extra mapping of tags which should be assigned to the desired resource."
+  description = "(Optional) A extra mapping of tags which should be assigned to the desired resource."
   type        = map(string)
   default     = {}
 
   validation {
     condition     = alltrue([for tag in var.tags : can(coalesce(extra_tags))])
-    error_message = "At least on tag value from 'extra_tags' is invalid. They must be non-empty strings."
+    error_message = "At least on tag value from 'extra_tags' is invalid. They must be non-empty string values."
   }
 }
 
