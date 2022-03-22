@@ -14,7 +14,7 @@
 ## Module Input variables
 
 - `name` - Name of the resource group. It must follow the CAF naming convention.
-- `location` - Specifies the Azure Region where the resource should exists.
+- `location` - (Optional) Specifies the Azure Region where the resource should exists.
 - `environment` - The environment in which the resource should be provisioned.
 - `country` - Name of the contry to which the resources belongs.
 - `squad` - Name of the squad to which the resources belongs.

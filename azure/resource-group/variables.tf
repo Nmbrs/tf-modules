@@ -38,31 +38,31 @@ variable "environment" {
   type        = string
 
   validation {
-    condition     = contains(["Dev", "Prod", "Staging", "Test", ], var.environment)
+    condition     = contains(["Dev", "Prod", "Staging", "Test"], var.environment)
     error_message = "The 'environment' value is invalid. Valid options are 'Dev', 'Prod','Staging', 'Test'."
   }
 }
 
-variable "tags" {
-  description = "A mapping of tags which should be assigned to the desired resource."
+variable "extra_tags" {
+  description = "A extra mapping of tags which should be assigned to the desired resource."
   type        = map(string)
   default     = {}
 
   validation {
-    condition     = alltrue([for tag in var.tags : can(coalesce(tag))])
-    error_message = "At least on tag value from 'tags' is invalid. They must be non-empty strings."
+    condition     = alltrue([for tag in var.tags : can(coalesce(extra_tags))])
+    error_message = "At least on tag value from 'extra_tags' is invalid. They must be non-empty strings."
   }
 }
 
 variable "location" {
   # For a complete list of available Azure regions run at cli:  
   # az account list-locations  --query "[].{displayName:displayName, location:name}" --output table
-  description = "The Azure Region where the resource should exist."
+  description = "(Optional) The Azure Region where the resource should exist."
   type        = string
   default     = "westeurope"
 
   validation {
-    condition     = can(coalesce(var.location))
+    condition     = contains(["westeurope", "northeurope"], var.location)
     error_message = "The 'location' value is invalid. It must be a non-empty string."
   }
 }

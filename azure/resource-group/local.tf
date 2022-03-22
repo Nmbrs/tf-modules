@@ -1,5 +1,5 @@
 locals {
-  enforced_tags = {
+  default_tags = {
     ManagedBy   = "Terraform"
     Country     = var.country
     Squad       = var.squad
