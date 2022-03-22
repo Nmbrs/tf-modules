@@ -43,8 +43,8 @@ variable "environment" {
   type        = string
 
   validation {
-    condition     = contains(["Dev", "Kitchen", "Production", "Staging", "Test"], var.environment)
-    error_message = "The 'environment' value is invalid. Valid options are 'Dev', 'Kitchen', 'Production','Staging', 'Test'."
+    condition     = contains(["dev", "kitchen", "production", "staging", "test"], var.environment)
+    error_message = "The 'environment' value is invalid. Valid options are 'dev', 'kitchen', 'production','staging', 'test'."
   }
 }
 
