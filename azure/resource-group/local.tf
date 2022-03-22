@@ -7,5 +7,4 @@ locals {
     Environment = var.environment
   }
 
-  location = "westeurope"
 }
