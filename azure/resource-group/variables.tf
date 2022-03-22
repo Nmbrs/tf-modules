@@ -49,7 +49,7 @@ variable "extra_tags" {
   default     = {}
 
   validation {
-    condition     = alltrue([for tag in var.tags : can(coalesce(var.extra_tags))])
+    condition     = alltrue([for tag in var.extra_tags : can(coalesce(var.extra_tags))])
     error_message = "At least on tag value from 'extra_tags' is invalid. They must be non-empty string values."
   }
 }
