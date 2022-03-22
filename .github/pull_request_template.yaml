@@ -1,53 +1,44 @@
 ## Description
-
 <!--- Please provide a description of your PR -->
 
 ## PR Checklist
 
 Please ensure the following before submitting this PR:
-
 <!-- Please check all the following options that apply using 'X'. -->
 
 - [ ] You complied with the code style of this project.
 - [ ] You formatted all Terraform configuration files to a canonical format (Hint: `terraform fmt`).
 - [ ] You validated all Terraform configuration files (Hint: `terraform validate`).
 - [ ] You executed a speculative plan, showing what actions Terraform would take to apply the current configuration (Hint: `terraform plan`).
-- [ ] Tests for the changes have been added.
-- [ ] The coverage and unit coverage tests were executed without any errors or warnings.
-- [ ] The documentation was updated (`README.md`).
+- [ ] The documentation was updated (`README.md`, `CHANGELOG.md`, etc.).
 - [ ] Whenever possible, the dependencies were updated to the latest compatible versions.
 
 ## PR Type
 
 What kind of change does this PR introduce?
-
 <!-- Please check the one that applies to this PR using "X". -->
 
 - [ ] Bugfix.
 - [ ] Feature
 - [ ] Code style update (formatting, local variables)
-- [ ] Refactoring (no functional changes, no api changes)
+- [ ] Refactoring (no functional changes, no interface changes)
 - [ ] Build related changes
 - [ ] CI related changes
 - [ ] Documentation content changes.
 - [ ] Other... Please describe:
 
 ### What is the new behavior?
-
 <!-- Please describe the behavior that you are modifying / creating. -->
 
 ### How to test it
-
 <!-- Please describe how to test it. -->
 
 ### Does this PR introduce a breaking change?
-
 <!-- Please mark all the following options that apply with a 'X'. -->
 
 - [ ] Yes.
 - [ ] No.
 
 ### Other information
-
 <!-- You can add here any additional information to this PR. -->
 <!-- If this PR contains a breaking change, please describe the impact and migration path for existing applications here. -->
