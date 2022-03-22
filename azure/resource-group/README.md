@@ -15,7 +15,7 @@
 
 - `name` - Name of the resource group. It must follow the CAF naming convention.
 - `location` - (Optional) Specifies the Azure Region where the resource should exists.
-- `environment` - The environment in which the resource should be provisioned. Valid options are 'dev', 'kitchen', 'production','staging', 'test'.
+- `environment` - The environment in which the resource should be provisioned. Valid options are 'Dev', 'Kitchen', 'Production','Staging', 'Test'.
 - `country` - Name of the country to which the resources belongs.
 - `squad` - Name of the squad to which the resources belongs.
 - `product` - Name of the product to which the resources belongs.
