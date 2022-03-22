@@ -1,6 +1,11 @@
 variable "name" {
   description = "Name of the resource group. It must follow the CAF naming convention."
   type        = string
+
+  validation {
+    condition     = can(coalesce(var.name))
+    error_message = "The 'name' value is invalid. It must be a non-empty string."
+  }
 }
 
 variable "product" {
