@@ -63,6 +63,6 @@ variable "location" {
 
   validation {
     condition     = contains(["westeurope", "northeurope"], var.location)
-    error_message = "The 'location' value is invalid. It must be a non-empty string."
+    error_message = "The 'location' value is invalid. Valid options are 'westeurope', 'northeurope'."
   }
 }
