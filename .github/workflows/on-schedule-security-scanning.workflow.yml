@@ -5,7 +5,7 @@ on:
   schedule:
     # For some cron examples, please see: https://crontab.guru/
     # Triggers every day at 02:00
-    - cron: "53 22 * * *"
+    - cron: "0 2 * * *"
 
 jobs:
   # Static analysis security scanning
