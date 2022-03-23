@@ -5,6 +5,8 @@ resource "azurerm_user_assigned_identity" "aks_identity" {
   tags		      = var.tags
 }
 
+#tfsec:ignore:azure-container-limit-authorized-ips
+#tfsec:ignore:azure-container-logging
 resource "azurerm_kubernetes_cluster" "aks_cluster" {
   name                      = var.name
   location                  = var.location
@@ -46,6 +48,7 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
     user_assigned_identity_id = azurerm_user_assigned_identity.aks_identity.id
   }
 
+#tfsec:ignore:azure-container-configured-network-policy
   network_profile {
     docker_bridge_cidr = var.network_docker_bridge_cidr
     dns_service_ip     = var.network_dns_service_ip
@@ -60,6 +63,7 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
 
   lifecycle {
     ignore_changes = [
+      default_node_pool[0].node_count,
       kubernetes_version,
       tags
     ]
