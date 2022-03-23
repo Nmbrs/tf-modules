@@ -34,7 +34,7 @@ variable "country" {
 
   validation {
     condition     = can(coalesce(var.country))
-    error_message = "The 'squad' value is invalid. It must be a non-empty string."
+    error_message = "The 'country' value is invalid. It must be a non-empty string."
   }
 }
 
@@ -43,8 +43,8 @@ variable "environment" {
   type        = string
 
   validation {
-    condition     = contains(["Dev", "Prod", "Staging", "Test"], var.environment)
-    error_message = "The 'environment' value is invalid. Valid options are 'Dev', 'Prod','Staging', 'Test'."
+    condition     = contains(["Dev", "Kitchen", "Production", "Staging", "Test"], var.environment)
+    error_message = "The 'environment' value is invalid. Valid options are 'Dev', 'Kitchen', 'Production','Staging', 'Test'."
   }
 }
 
