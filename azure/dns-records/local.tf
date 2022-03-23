@@ -1,5 +1,5 @@
 locals {
-  default_tags = {
+  auto_tags = {
     ManagedBy : "Terraform"
   }
 }

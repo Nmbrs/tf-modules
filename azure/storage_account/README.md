@@ -17,7 +17,7 @@ Fundamentally, you need to declare the module and pass the following variables i
 module "storage_account" {
   source              = "../tf-modules/azure/storage-account"
   name                = "sauniquename123"
-  location            = "West Europe"
+  location            = "westeurope"
   resource_group_name = "rg-my-resource-group"
   tags = {
     my_tag : "my_tag_value"

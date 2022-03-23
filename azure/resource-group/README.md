@@ -13,9 +13,13 @@
 
 ## Module Input variables
 
-- `name` - name of the Azure resource group to be created.
-- `location` - Specifies the Azure Region where the resource should exists.
-- `tags` - List of mandatory resource tags.
+- `name` - Name of the resource group. It must follow the CAF naming convention.
+- `location` - (Optional) Specifies the Azure Region where the resource should exists.
+- `environment` - The environment in which the resource should be provisioned. Valid options are 'Dev', 'Kitchen', 'Production','Staging', 'Test'.
+- `country` - Name of the country to which the resources belongs.
+- `squad` - Name of the squad to which the resources belongs.
+- `product` - Name of the product to which the resources belongs.
+- `extra_tags` - (Optional) A extra mapping of tags which should be assigned to the desired resource.
 
 ## Module Output Variables
 
@@ -32,12 +36,14 @@ Fundamentally, you need to declare the module and pass the following variables i
 module "resource-group" {
   source                    = "../tf-modules/azure/resource-group"
   name                      = "rg-my_project-dev"
-  location                  = "West Europe"
-  tags                      = {
-    country : "nl"
-    squad : "infra"
-    product : "test-product"
-    environment : "prod"
+  environment               = "Dev"
+  country                   = "nl"
+  squad                     = "infra"
+  product                   = "internal"
+  extra_tags = {
+    extra_tag_01 = "value_01"
+    extra_tag_02 = "value_02"
+    extra_tag_03 = "value_03"
   }
 }
 ```

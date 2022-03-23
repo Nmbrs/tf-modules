@@ -1,6 +1,13 @@
-# Keyvault Module
+# Azure Keyvault Module
 
-## Quick summary
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg" />
+  <a href="LICENSE.md" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg" />
+  </a>
+</p>
+
+---
 
 The keyvault module is an abstraction that implements all the necessary
 Terraform code to provision an Azure Keyvault with success, and accordingly with
@@ -11,6 +18,19 @@ access policies, there's always a default access policy that is assigned to the
 Terraform Azure service principal, which allows the management of the same
 keyvault when need.
 
+## Module Input variables
+
+- `name` - name of the Azure resource group to be created.
+- `location` - Specifies the Azure Region where the resource should exists.
+- `resource_group_name' - Specifies the Azure resource group where the keyvault will be created.
+- `tags` - List of mandatory resource tags.
+
+## Module Output Variables
+
+- `name` - Azure Keyvault name
+- `id` - Azure keyvault ID
+- `uri` - Azure Keyvault URI
+
 ## How to use it?
 
 Here is a sample that helps illustrating how to user the module on a Terraform service
@@ -18,7 +38,7 @@ Here is a sample that helps illustrating how to user the module on a Terraform s
 ```hcl
 module "keyvault" {
     source = "git"
-    name                = "kv-heimdall-dev"
+    name                = "kv-nmbrsheimdall-dev"
     location            = "westeurope"
     resource_group_name = "rg-heimdall-dev"
     tags        = {
@@ -28,40 +48,17 @@ module "keyvault" {
         Environment : "Dev"
     }
 
-    policies = {
-        some_app = {
-            object_id = "083093de-e964-41b7-a075-35c27bf0be00"
-            key_permissions         = ["get", "list"]
-            secret_permissions      = ["get", "list"]
-            certificate_permissions = ["get", "list"]
-            storage_permissions     = ["get", "list"]
-        }
-        some_group = {
-            object_id = "7574db98-72g5-431b-b070-b8769935e81f"
-            key_permissions         = []
-            secret_permissions      = ["get", "list", "set", "delete"]
-            certificate_permissions = ["get", "list", "set", "delete"]
-            storage_permissions     = ["get", "list", "set", "delete"]
-        }
-    }
+    writers = ["some_security_group_name", "some_security_group_name"]
+    readers = ["some_security_group_name", "some_security_group_name", "some_security_group_name"]
 }
 ```
-### Policies
-
-#### Object ID
-
-The `object_id` property is The object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault.
-
-> Note: The object ID must be unique for the list of access policies.
+## Policies
 
 ### Permissions
 
-In the following table are the list of permissions for each keyvault type.
+There're only two access policies: readers and writers, that will be applied to both secrets and certificates.
 
-
-| Type         | Permissions   |
-| ------------ | ------------- |
-| secret       | backup, delete, get, list, purge, recover, restore and set |
-| certificate  | backup, create, decrypt, delete, encrypt, get, import, list, purge, recover, restore, sign, unwrapKey, update, verify and wrapKey |
-| key          | backup, create, delete, deleteissuers, get, getissuers, import, list, listissuers, managecontacts, manageissuers, purge, recover, restore, setissuers and update  |
-| storage      | backup, delete, deletesas, get, getsas, list, listsas, purge, recover, regeneratekey, restore, set, setsas and update  |
+| Type         | Permissions                      |
+| ------------ | -------------------------------- |
+| writers      | get, list, write, update, delete |
+| readers      | get, list                        |
