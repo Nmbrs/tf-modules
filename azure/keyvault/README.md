@@ -21,9 +21,10 @@ keyvault when need.
 ## Module Input variables
 
 - `name` - name of the Azure resource group to be created.
-- `location` - Specifies the Azure Region where the resource should exists.
 - `resource_group_name' - Specifies the Azure resource group where the keyvault will be created.
-- `tags` - List of mandatory resource tags.
+- `extra_tags` - List of mandatory resource tags.
+- `writers` and `readers` - List of Azure AD groups or apps.
+- 
 
 ## Module Output Variables
 
@@ -37,19 +38,15 @@ Here is a sample that helps illustrating how to user the module on a Terraform s
 
 ```hcl
 module "keyvault" {
-    source = "git"
-    name                = "kv-nmbrsheimdall-dev"
-    location            = "westeurope"
-    resource_group_name = "rg-heimdall-dev"
-    tags        = {
-        Country : "NL"
-        Squad : "Infra"
-        Product : "Internal"
-        Environment : "Dev"
-    }
+  source = "git::github.com/Nmbrs/tf-modules//azure/keyvault"
+  name                = "Heimdall"
+  resource_group_name = "rg-heimdall-dev"
+  extra_tags = {
+    Datadog = "Monitored"
+  }
 
-    writers = ["some_security_group_name", "some_security_group_name"]
-    readers = ["some_security_group_name", "some_security_group_name", "some_security_group_name"]
+  writers = ["SG-SquadInfra"]
+  readers = ["SG-SquadCore", "SG-TechPO"]
 }
 ```
 ## Policies

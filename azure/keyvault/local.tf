@@ -1,7 +1,11 @@
 locals {
-  auto_tags = {
-    ManagedBy : "Terraform"
+  default_tags = {
+    ProvisionedBy = "Terraform"
   }
+
+  org         = "nmbrs"
+  environment = data.azurerm_resource_group.rg.tags["Environment"]
+
   secrets_full_permissions       = ["Backup", "Delete", "Get", "List", "Purge", "Recover", "Restore", "Set"]
   certificates_full_permissions  = ["Backup", "Create", "Delete", "Deleteissuers", "Get", "Getissuers", "Import", "List", "Listissuers", "Managecontacts", "Manageissuers", "Purge", "Recover", "Restore", "Setissuers", "Update"]
   secrets_read_permissions       = ["Get", "List"]
