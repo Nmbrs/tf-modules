@@ -18,19 +18,7 @@ data "azurerm_app_service" "binding" {
   resource_group_name = var.resource_group
 }
 
-# resource "azurerm_dns_txt_record" "binding" {
-#   for_each            = var.apps
-#   name                = "asuid.${each.value["name"]}"
-#   zone_name           = data.azurerm_dns_zone.binding.name
-#   resource_group_name = data.azurerm_dns_zone.binding.resource_group_name
-#   ttl                 = 300
-#   record {
-#     value = data.azurerm_app_service.binding[each.key].custom_domain_verification_id
-#   }
-# }
-
 resource "azurerm_app_service_custom_hostname_binding" "binding" {
-  #for_each            = var.apps
   for_each = {
     for key, value in var.apps : key => value
     if value.custom_domain != ""
@@ -56,7 +44,6 @@ data "azurerm_key_vault_certificate" "binding" {
 }
 
 resource "azurerm_app_service_certificate" "binding" {
-  #for_each            = var.apps
   for_each = {
     for key, value in var.apps : key => value
     if value.custom_domain != ""
@@ -68,7 +55,6 @@ resource "azurerm_app_service_certificate" "binding" {
 }
 
 resource "azurerm_app_service_certificate_binding" "binding" {
-  #for_each            = var.apps
   for_each = {
     for key, value in var.apps : key => value
     if value.custom_domain != ""
