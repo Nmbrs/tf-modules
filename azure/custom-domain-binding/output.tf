@@ -7,7 +7,7 @@ output "app_id" {
 }
 
 output "custom_domain" {
-  value= {for k, domain in azurerm_app_service_custom_hostname_binding.custom_domain : k => domain.hostname}
+  value = { for k, domain in azurerm_app_service_custom_hostname_binding.custom_domain : k => domain.hostname }
 }
 
 output "dns_zone_id" {
