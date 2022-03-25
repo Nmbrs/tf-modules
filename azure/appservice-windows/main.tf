@@ -39,6 +39,24 @@ resource "azurerm_app_service" "app" {
   tags = merge(var.tags, local.auto_tags)
 }
 
+module "sslbinding" {
+  source                    = "../../../tf-modules/azure/custom-domain-binding"
+  apps                      = var.apps
+  dns_zone_name             = var.dns_zone_name
+  dns_zone_resource_group   = var.dns_zone_resource_group
+  ttl                       = var.ttl
+  resource_group            = var.resource_group
+  keyvault_name             = var.keyvault_name
+  keyvault_resource_group   = var.keyvault_resource_group
+  certificate_name          = var.certificate_name
+  location                  = var.location
+  app_name                  = { for k, value in azurerm_app_service.app : k => value.name }
+  app_default_site_hostname = { for k, value in azurerm_app_service.app : k => value.default_site_hostname }
+  depends_on = [
+    azurerm_app_service.app
+  ]
+}
+
 resource "azurerm_log_analytics_workspace" "app" {
   name                = "wsp-${var.project}-${var.environment}"
   location            = var.location
@@ -54,7 +72,7 @@ resource "azurerm_application_insights" "app" {
   resource_group_name = var.resource_group
   workspace_id        = azurerm_log_analytics_workspace.app.id
   application_type    = "web"
-  
+
   tags = merge(var.tags, local.auto_tags)
 }
 

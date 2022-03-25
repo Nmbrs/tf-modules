@@ -42,3 +42,34 @@ variable "tags" {
   description = "nmbrs list of mandatory resource tags."
   type        = map(string)
 }
+
+variable "dns_zone_name" {
+  description = "Name of the DNS zone"
+  type        = string
+}
+
+variable "dns_zone_resource_group" {
+  description = "Resource Group of the DNS zone"
+  type        = string
+}
+
+variable "ttl" {
+  description = "Time to live of records"
+  type        = number
+}
+
+variable "keyvault_name" {
+  description = "Name of the key vault where the certificate is"
+  type        = string
+}
+
+variable "keyvault_resource_group" {
+  description = "Resource group of the Keyvault"
+  type        = string
+}
+
+variable "certificate_name" {
+  description = "Name of the certificate to bind"
+  type        = string
+}
+
