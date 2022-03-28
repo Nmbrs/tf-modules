@@ -8,6 +8,12 @@ variable "name" {
   description = "The name of the Azure Key Vault"
 }
 
+variable "external_usage" {
+  description = "(Optional) Determines if the keyvault is for internal or external usage."
+  type        = bool
+  default     = true
+}
+
 variable "extra_tags" {
   description = "(Optional) A extra mapping of tags which should be assigned to the desired resource."
   type        = map(string)

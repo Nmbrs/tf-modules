@@ -5,9 +5,9 @@ data "azurerm_resource_group" "rg" {
 }
 
 resource "azurecaf_name" "caf_name" {
-  name          = lower("${local.org}${var.name}")
+  name          = lower("${local.org}-${var.name}")
   resource_type = "azurerm_key_vault"
-  suffixes      = [lower(local.environment)]
+  suffixes      = [local.internal_external_suffix, lower(local.environment)]
   clean_input   = true
 }
 

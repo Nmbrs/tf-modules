@@ -3,6 +3,8 @@ locals {
     ProvisionedBy = "Terraform"
   }
 
+  internal_external_suffix = var.external_usage ? "e" : "i"
+
   org         = "nmbrs"
   environment = data.azurerm_resource_group.rg.tags["Environment"]
 
