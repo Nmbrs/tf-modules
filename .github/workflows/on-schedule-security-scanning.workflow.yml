@@ -1,0 +1,14 @@
+name: Scheduled Security Scanning
+
+on:
+  # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+  schedule:
+    # For some cron examples, please see: https://crontab.guru/
+    # Triggers every day at 02:00
+    - cron: "0 2 * * *"
+
+jobs:
+  # Static analysis security scanning
+  security-code-scanning:
+    name: Security code scanning
+    uses: nmbrs/reusable-workflows/.github/workflows/tfsec-code-scanning.workflow.yaml@main
