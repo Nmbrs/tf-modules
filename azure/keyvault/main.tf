@@ -1,21 +1,34 @@
 data "azurerm_client_config" "current" {}
 
+data "azurerm_resource_group" "rg" {
+  name = var.resource_group_name
+}
+
+resource "azurecaf_name" "caf_name" {
+  name          = lower("${local.org}-${var.name}")
+  resource_type = "azurerm_key_vault"
+  suffixes      = [local.internal_external_suffix, lower(local.environment)]
+  clean_input   = true
+}
+
 # Create the Azure Key Vault
 resource "azurerm_key_vault" "key_vault" {
-  name                       = var.name
-  location                   = var.location
-  resource_group_name        = var.resource_group_name
+  name                       = azurecaf_name.caf_name.result
+  location                   = data.azurerm_resource_group.rg.location
+  resource_group_name        = data.azurerm_resource_group.rg.name
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   sku_name                   = "standard"
   soft_delete_retention_days = 7
-  purge_protection_enabled   = true
+  #tfsec:ignore:azure-keyvault-no-purge
+  purge_protection_enabled   = var.protection_enabled
 
   network_acls {
     default_action = "Deny"
     bypass         = "AzureServices"
   }
 
-  tags = merge(var.tags, local.auto_tags)
+  // extra_tags is on the end to overwrite incorrect tags that already exists.
+  tags = merge(local.default_tags, data.azurerm_resource_group.rg.tags, var.extra_tags)
 }
 
 # Create a Default Azure Key Vault access policy with Admin permissions

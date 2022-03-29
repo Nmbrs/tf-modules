@@ -3,24 +3,32 @@ variable "resource_group_name" {
   description = "The name of an existing Resource Group"
 }
 
-variable "location" {
-  description = "Azure resource region."
-  type        = string
-}
-
 variable "name" {
   type        = string
   description = "The name of the Azure Key Vault"
+}
+
+variable "external_usage" {
+  description = "(Optional) Determines if the keyvault is for internal or external usage."
+  type        = bool
+  default     = true
+}
+
+variable "extra_tags" {
+  description = "(Optional) A extra mapping of tags which should be assigned to the desired resource."
+  type        = map(string)
+  default     = {}
 
   validation {
-    condition     = length(var.name) <= 24
-    error_message = "The key vault name max lenght is 24."
+    condition     = alltrue([for tag in var.extra_tags : can(coalesce(var.extra_tags))])
+    error_message = "At least on tag value from 'extra_tags' is invalid. They must be non-empty string values."
   }
 }
 
-variable "tags" {
-  type        = any
-  description = "List of azure tag resources."
+variable "protection_enabled" {
+  description = "(Optional) Enables the keyvault purge protection in case of accidental deletion. Default is false."
+  type        = bool
+  default     = false
 }
 
 variable "writers" {
