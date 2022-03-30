@@ -45,16 +45,23 @@ module "keyvault" {
     Datadog = "Monitored"
   }
 
-  writers = {
-    applications = ["my_application_name"],
-    groups       = ["SG-mySecurityGroup", "SG-anotherSecurityGroup"],
-    users        = ["username.surname@domain.com", seconduser.surname@domain.com]
-  }
-  readers = {
-    applications = ["my_application_name"],
-    groups       = ["SG-mySecurityGroup", "SG-anotherSecurityGroup"],
-    users        = ["username.surname@domain.com", seconduser.surname@domain.com]
-  }
+  policies = [
+    {
+      name      = "SquadX"
+      type      = "readers"
+      object_id = "objectID"
+    },
+    {
+      name      = "SquadY"
+      type      = "writers"
+      object_id = "objectID"
+    },
+    {
+      name      = "ManagedIdentityZ"
+      type      = "writers"
+      object_id = "objectID"
+    }
+  ]
 }
 ```
 
