@@ -31,31 +31,13 @@ variable "protection_enabled" {
   default     = false
 }
 
-variable "writers" {
+variable "policies" {
   description = "Define an Azure Key Vault access policy."
-  type = object({
-    users        = list(string)
-    applications = list(string)
-    groups       = list(string)
-  })
-  default = {
-    applications = []
-    groups       = []
-    users        = []
-  }
-
+  type = list(object({
+    name      = string
+    object_id = string
+    type      = string
+  }))
+  default = []
 }
 
-variable "readers" {
-  description = "Define an Azure Key Vault access policy."
-  type = object({
-    users        = list(string)
-    applications = list(string)
-    groups       = list(string)
-  })
-  default = {
-    applications = []
-    groups       = []
-    users        = []
-  }
-}
