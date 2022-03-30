@@ -1,15 +1,15 @@
 variable "resource_group_name" {
   type        = string
-  description = "The name of an existing Resource Group"
+  description = "The name of an existing Resource Group."
 }
 
 variable "name" {
   type        = string
-  description = "The name of the Azure Key Vault"
+  description = "The name of the Azure Key Vault."
 }
 
 variable "external_usage" {
-  description = "(Optional) Determines if the keyvault is for internal or external usage."
+  description = "(Optional) Specifies whether the keyvault is for internal or external use."
   type        = bool
   default     = true
 }
@@ -32,11 +32,30 @@ variable "protection_enabled" {
 }
 
 variable "writers" {
-  type        = list(string)
-  description = "Define a Azure Key Vault access policy"
+  description = "Define an Azure Key Vault access policy."
+  type = object({
+    users        = list(string)
+    applications = list(string)
+    groups       = list(string)
+  })
+  default = {
+    applications = []
+    groups       = []
+    users        = []
+  }
+
 }
 
 variable "readers" {
-  type        = list(string)
-  description = "Define a Azure Key Vault access policy"
+  description = "Define an Azure Key Vault access policy."
+  type = object({
+    users        = list(string)
+    applications = list(string)
+    groups       = list(string)
+  })
+  default = {
+    applications = []
+    groups       = []
+    users        = []
+  }
 }

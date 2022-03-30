@@ -23,8 +23,8 @@ keyvault when need.
 - `name` - name of the Azure resource group to be created.
 - `resource_group_name' - Specifies the Azure resource group where the keyvault will be created.
 - `extra_tags` - List of mandatory resource tags.
-- `writers` and `readers` - List of Azure AD groups or apps.
-- 
+- `external_usage` - (Optional) Specifies whether the keyvault is for internal or external use. Default value is `true`
+- `writers` and `readers` - List of Azure AD groups / apps / users.
 
 ## Module Output Variables
 
@@ -45,17 +45,26 @@ module "keyvault" {
     Datadog = "Monitored"
   }
 
-  writers = ["SG-SquadInfra"]
-  readers = ["SG-SquadCore", "SG-TechPO"]
+  writers = {
+    applications = ["my_application_name"],
+    groups       = ["SG-mySecurityGroup", "SG-anotherSecurityGroup"],
+    users        = ["username.surname@domain.com", seconduser.surname@domain.com]
+  }
+  readers = {
+    applications = ["my_application_name"],
+    groups       = ["SG-mySecurityGroup", "SG-anotherSecurityGroup"],
+    users        = ["username.surname@domain.com", seconduser.surname@domain.com]
+  }
 }
 ```
+
 ## Policies
 
 ### Permissions
 
 There're only two access policies: readers and writers, that will be applied to both secrets and certificates.
 
-| Type         | Permissions                      |
-| ------------ | -------------------------------- |
-| writers      | get, list, write, update, delete |
-| readers      | get, list                        |
+| Type    | Permissions                      |
+| ------- | -------------------------------- |
+| writers | get, list, write, update, delete |
+| readers | get, list                        |
