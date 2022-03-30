@@ -1,3 +1,5 @@
+name: "Pull Request conventional title check"
+
 on:
   pull_request:
     types: [opened, reopened, ready_for_review, unlocked, synchronize]
