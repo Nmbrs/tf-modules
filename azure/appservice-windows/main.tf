@@ -10,7 +10,7 @@ resource "azurerm_app_service_plan" "app" {
     size = var.size
   }
 
-  tags = merge(var.tags, local.auto_tags)
+  tags = merge(var.tags, local.default_tags)
 }
 
 resource "azurerm_app_service" "app" {
@@ -36,11 +36,11 @@ resource "azurerm_app_service" "app" {
     remote_debugging_enabled  = false
   }
 
-  tags = merge(var.tags, local.auto_tags)
+  tags = merge(var.tags, local.default_tags)
 }
 
 module "sslbinding" {
-  source                              = "../../../tf-modules/azure/custom-domain-binding"
+  source                              = "c:/repository/github/tf-modules/azure/custom-domain-binding"
   apps                                = var.apps
   dns_zone_name                       = var.dns_zone_name
   dns_zone_resource_group             = var.dns_zone_resource_group
@@ -50,7 +50,7 @@ module "sslbinding" {
   certificate_keyvault_resource_group = var.certificate_keyvault_resource_group
   certificate_name                    = var.certificate_name
   location                            = var.location
-  tags                                = merge(var.tags, local.auto_tags)
+  tags                                = merge(var.tags, local.default_tags)
   app_name                            = { for k, value in azurerm_app_service.app : k => value.name }
   app_default_site_hostname           = { for k, value in azurerm_app_service.app : k => value.default_site_hostname }
   depends_on = [
@@ -64,7 +64,7 @@ resource "azurerm_log_analytics_workspace" "app" {
   resource_group_name = var.resource_group
   retention_in_days   = 90
 
-  tags = merge(var.tags, local.auto_tags)
+  tags = merge(var.tags, local.default_tags)
 }
 
 resource "azurerm_application_insights" "app" {
@@ -74,7 +74,7 @@ resource "azurerm_application_insights" "app" {
   workspace_id        = azurerm_log_analytics_workspace.app.id
   application_type    = "web"
 
-  tags = merge(var.tags, local.auto_tags)
+  tags = merge(var.tags, local.default_tags)
 }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "app" {
