@@ -9,7 +9,7 @@ variable "name" {
 }
 
 variable "external_usage" {
-  description = "(Optional) Specifies whether the keyvault is for internal or external use."
+  description = "(Optional) Specifies whether the keyvault should be used internally or externally."
   type        = bool
   default     = true
 }
@@ -32,12 +32,26 @@ variable "protection_enabled" {
 }
 
 variable "policies" {
-  description = "Define an Azure Key Vault access policy."
+  description = "(Optional) Access policies created for the Azure Key Vault."
   type = list(object({
     name      = string
     object_id = string
     type      = string
   }))
   default = []
-}
 
+  validation {
+    condition     = alltrue([for policy in var.policies : can(coalesce(policy.name))])
+    error_message = "At least one 'name' property from 'policies' is invalid. They must be non-empty string values."
+  }
+
+  validation {
+    condition     = alltrue([for policy in var.policies : can(coalesce(policy.object_id))])
+    error_message = "At least one 'object_id' property from 'policies' is invalid. They must be non-empty string values."
+  }
+
+  validation {
+    condition     = alltrue([for policy in var.policies : contains(["readers", "writers"], policy.type)])
+    error_message = "At least one 'type' property from 'policies' is invalid. Valid options are 'readers', 'writers'."
+  }
+}
