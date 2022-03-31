@@ -18,7 +18,7 @@ resource "azurerm_key_vault" "key_vault" {
   resource_group_name        = data.azurerm_resource_group.rg.name
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   sku_name                   = "standard"
-  soft_delete_retention_days = 7
+  soft_delete_retention_days = 31
   #tfsec:ignore:azure-keyvault-no-purge
   purge_protection_enabled = var.protection_enabled
 
