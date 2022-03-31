@@ -39,7 +39,7 @@ data "azurerm_key_vault" "binding" {
 }
 
 data "azurerm_key_vault_certificate" "binding" {
-  name         = var.certificate_keyvault_name
+  name         = var.certificate_name
   key_vault_id = data.azurerm_key_vault.binding.id
 }
 
@@ -49,6 +49,7 @@ resource "azurerm_app_service_certificate" "binding" {
     if value.custom_domain != ""
   }
   name                = data.azurerm_key_vault_certificate.binding.name
+  tags                = var.tags
   resource_group_name = var.resource_group
   location            = var.location
   key_vault_secret_id = data.azurerm_key_vault_certificate.binding.secret_id

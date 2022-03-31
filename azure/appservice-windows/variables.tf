@@ -63,7 +63,7 @@ variable "certificate_keyvault_name" {
   type        = string
 }
 
-variable "certificate_resource_group" {
+variable "certificate_keyvault_resource_group" {
   description = "Resource group of the Keyvault"
   type        = string
 }

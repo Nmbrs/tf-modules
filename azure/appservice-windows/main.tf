@@ -50,6 +50,7 @@ module "sslbinding" {
   certificate_keyvault_resource_group = var.certificate_keyvault_resource_group
   certificate_name                    = var.certificate_name
   location                            = var.location
+  tags                                = merge(var.tags, local.auto_tags)
   app_name                            = { for k, value in azurerm_app_service.app : k => value.name }
   app_default_site_hostname           = { for k, value in azurerm_app_service.app : k => value.default_site_hostname }
   depends_on = [

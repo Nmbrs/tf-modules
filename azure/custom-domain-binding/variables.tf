@@ -3,6 +3,11 @@ variable "location" {
   type        = string
 }
 
+variable "tags" {
+  description = "tags of the resource"
+  type        = map(string)
+}
+
 variable "resource_group" {
   description = "azure resource group name."
   type        = string
