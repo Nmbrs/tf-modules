@@ -28,13 +28,13 @@ variable "ttl" {
   type        = number
 }
 
-variable "keyvault_name" {
-  description = "Name of the key vault where the certificate is"
+variable "certificate_keyvault_name" {
+  description = "Certificate Keyvault"
   type        = string
 }
 
-variable "keyvault_resource_group" {
-  description = "Resource group of the Keyvault"
+variable "certificate_keyvault_resource_group" {
+  description = "Resource group of the Certificate Keyvault"
   type        = string
 }
 

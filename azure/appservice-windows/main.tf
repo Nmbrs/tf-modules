@@ -40,18 +40,18 @@ resource "azurerm_app_service" "app" {
 }
 
 module "sslbinding" {
-  source                    = "../../../tf-modules/azure/custom-domain-binding"
-  apps                      = var.apps
-  dns_zone_name             = var.dns_zone_name
-  dns_zone_resource_group   = var.dns_zone_resource_group
-  ttl                       = var.ttl
-  resource_group            = var.resource_group
-  keyvault_name             = var.keyvault_name
-  keyvault_resource_group   = var.keyvault_resource_group
-  certificate_name          = var.certificate_name
-  location                  = var.location
-  app_name                  = { for k, value in azurerm_app_service.app : k => value.name }
-  app_default_site_hostname = { for k, value in azurerm_app_service.app : k => value.default_site_hostname }
+  source                              = "../../../tf-modules/azure/custom-domain-binding"
+  apps                                = var.apps
+  dns_zone_name                       = var.dns_zone_name
+  dns_zone_resource_group             = var.dns_zone_resource_group
+  ttl                                 = var.ttl
+  resource_group                      = var.resource_group
+  certificate_keyvault_name           = var.certificate_keyvault_name
+  certificate_keyvault_resource_group = var.certificate_keyvault_resource_group
+  certificate_name                    = var.certificate_name
+  location                            = var.location
+  app_name                            = { for k, value in azurerm_app_service.app : k => value.name }
+  app_default_site_hostname           = { for k, value in azurerm_app_service.app : k => value.default_site_hostname }
   depends_on = [
     azurerm_app_service.app
   ]

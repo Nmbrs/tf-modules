@@ -29,17 +29,17 @@ resource "azurerm_app_service_custom_hostname_binding" "binding" {
   depends_on          = [azurerm_dns_cname_record.binding]
 
   lifecycle {
-    ignore_changes = [ssl_state, thumbprint]
+    ignore_changes = [thumbprint]
   }
 }
 
 data "azurerm_key_vault" "binding" {
-  name                = var.keyvault_name
-  resource_group_name = var.keyvault_resource_group
+  name                = var.certificate_keyvault_name
+  resource_group_name = var.certificate_keyvault_resource_group
 }
 
 data "azurerm_key_vault_certificate" "binding" {
-  name         = var.certificate_name
+  name         = var.certificate_keyvault_name
   key_vault_id = data.azurerm_key_vault.binding.id
 }
 
