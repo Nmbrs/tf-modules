@@ -1,7 +1,7 @@
 locals {
   location = "westeurope"
 
-   auto_tags = {
-      ManagedBy: "Terraform"
+  default_tags = {
+    ProvisionedBy = "Terraform"
   }
 }
