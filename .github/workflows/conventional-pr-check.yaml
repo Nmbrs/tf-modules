@@ -1,0 +1,17 @@
+name: "Pull Request conventional title check"
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, unlocked, synchronize]
+
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Conventional PR
+        uses: Namchee/conventional-pr@v0.9.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+          issue: false
+          bot: false
+          close: false
