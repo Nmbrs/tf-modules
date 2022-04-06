@@ -1,7 +1,6 @@
 resource "azurecaf_name" "caf_name" {
   name          = lower(var.name)
   resource_type = "azurerm_resource_group"
-  suffixes      = [lower(var.environment)]
   clean_input   = true
 }
 
