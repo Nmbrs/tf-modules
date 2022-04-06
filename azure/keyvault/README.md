@@ -43,7 +43,7 @@ module "keyvault" {
   source = "git::github.com/Nmbrs/tf-modules//azure/keyvault"
   name                = "Heimdall"
   environment         = "Dev"
-  resource_group_name = "rg-heimdall-dev"
+  resource_group_name = "rg-heimdall"
   extra_tags = {
     Datadog = "Monitored"
   }
