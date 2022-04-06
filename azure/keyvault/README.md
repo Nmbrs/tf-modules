@@ -22,7 +22,7 @@ keyvault when need.
 
 - `name` - name of the Azure resource group to be created.
 - `resource_group_name` - Specifies the Azure resource group where the keyvault will be created.
-- `environment` - (Optional) The environment in which the resource should be provisioned.
+- `environment` - (Optional) The environment in which the resource should be provisioned. The default value is Dev.
 - `external_usage` - (Optional) Specifies whether the keyvault is for internal or external use. Default value is `true`.
 - `extra_tags` - List of mandatory resource tags.
 - `protection_enabled` - (Optional) Enables the keyvault purge protection in case of accidental deletion. Default is false.
