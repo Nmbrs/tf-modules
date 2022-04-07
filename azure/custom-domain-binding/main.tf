@@ -44,15 +44,14 @@ data "azurerm_key_vault_certificate" "binding" {
 }
 
 resource "azurerm_app_service_certificate" "binding" {
-  for_each = {
-    for key, value in var.apps : key => value
-    if value.custom_domain != ""
-  }
   name                = data.azurerm_key_vault_certificate.binding.name
   tags                = var.tags
   resource_group_name = var.resource_group
   location            = var.location
   key_vault_secret_id = data.azurerm_key_vault_certificate.binding.secret_id
+  depends_on = [
+    azurerm_app_service_custom_hostname_binding.binding
+  ]
 }
 
 resource "azurerm_app_service_certificate_binding" "binding" {
@@ -61,6 +60,9 @@ resource "azurerm_app_service_certificate_binding" "binding" {
     if value.custom_domain != ""
   }
   hostname_binding_id = azurerm_app_service_custom_hostname_binding.binding[each.key].id
-  certificate_id      = azurerm_app_service_certificate.binding[each.key].id
+  certificate_id      = azurerm_app_service_certificate.binding.id
   ssl_state           = "SniEnabled"
+  depends_on = [
+    azurerm_app_service_certificate.binding
+  ]
 }
