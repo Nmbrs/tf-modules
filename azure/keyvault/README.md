@@ -21,7 +21,8 @@ keyvault when need.
 ## Module Input variables
 
 - `name` - name of the Azure resource group to be created.
-- `resource_group_name' - Specifies the Azure resource group where the keyvault will be created.
+- `resource_group_name` - Specifies the Azure resource group where the keyvault will be created.
+- `environment` - (Optional) The environment in which the resource should be provisioned. The default value is Dev.
 - `external_usage` - (Optional) Specifies whether the keyvault is for internal or external use. Default value is `true`.
 - `extra_tags` - List of mandatory resource tags.
 - `protection_enabled` - (Optional) Enables the keyvault purge protection in case of accidental deletion. Default is false.
@@ -41,7 +42,8 @@ Here is a sample that helps illustrating how to user the module on a Terraform s
 module "keyvault" {
   source = "git::github.com/Nmbrs/tf-modules//azure/keyvault"
   name                = "Heimdall"
-  resource_group_name = "rg-heimdall-dev"
+  environment         = "Dev"
+  resource_group_name = "rg-heimdall"
   extra_tags = {
     Datadog = "Monitored"
   }

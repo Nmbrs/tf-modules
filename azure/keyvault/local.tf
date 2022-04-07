@@ -6,7 +6,7 @@ locals {
   internal_external_suffix = var.external_usage ? "e" : "i"
 
   org         = "nmbrs"
-  environment = data.azurerm_resource_group.rg.tags["Environment"]
+  environment = var.environment
 
   secrets_full_permissions       = ["Backup", "Delete", "Get", "List", "Purge", "Recover", "Restore", "Set"]
   certificates_full_permissions  = ["Backup", "Create", "Delete", "Deleteissuers", "Get", "Getissuers", "Import", "List", "Listissuers", "Managecontacts", "Manageissuers", "Purge", "Recover", "Restore", "Setissuers", "Update"]
