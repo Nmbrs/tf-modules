@@ -34,16 +34,14 @@ Fundamentally, you need to declare the module and pass the following variables i
 
 ```hcl
 module "resource-group" {
-  source                    = "../tf-modules/azure/resource-group"
-  name                      = "rg-my_project-dev"
+  source                    = "git::github.com/Nmbrs/tf-modules//azure/resource-group"
+  name                      = "my_project"
   environment               = "Dev"
   country                   = "nl"
   squad                     = "infra"
   product                   = "internal"
   extra_tags = {
-    extra_tag_01 = "value_01"
-    extra_tag_02 = "value_02"
-    extra_tag_03 = "value_03"
+    Datadog = "Monitored"
   }
 }
 ```

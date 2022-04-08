@@ -10,7 +10,7 @@ resource "azurerm_app_service_plan" "app" {
     size = var.size
   }
 
-  tags = merge(var.tags, local.auto_tags)
+  tags = merge(var.tags, local.default_tags)
 }
 
 resource "azurerm_app_service" "app" {
@@ -24,7 +24,7 @@ resource "azurerm_app_service" "app" {
     type = "SystemAssigned"
   }
 
-  tags = merge(var.tags, local.auto_tags)
+  tags = merge(var.tags, local.default_tags)
 }
 
 resource "azurerm_log_analytics_workspace" "app" {
@@ -33,7 +33,7 @@ resource "azurerm_log_analytics_workspace" "app" {
   resource_group_name = var.resource_group
   retention_in_days   = 90
 
-  tags = merge(var.tags, local.auto_tags)
+  tags = merge(var.tags, local.default_tags)
 }
 
 resource "azurerm_application_insights" "app" {
@@ -43,5 +43,5 @@ resource "azurerm_application_insights" "app" {
   workspace_id        = azurerm_log_analytics_workspace.app.id
   application_type    = "web"
 
-  tags = merge(var.tags, local.auto_tags)
+  tags = merge(var.tags, local.default_tags)
 }

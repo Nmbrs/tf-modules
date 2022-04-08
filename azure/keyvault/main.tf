@@ -1,21 +1,35 @@
 data "azurerm_client_config" "current" {}
 
+data "azurerm_resource_group" "rg" {
+  name = var.resource_group_name
+}
+
+resource "azurecaf_name" "caf_name" {
+  name          = lower("${local.org}-${var.name}")
+  resource_type = "azurerm_key_vault"
+  suffixes      = [local.internal_external_suffix, lower(local.environment)]
+  clean_input   = true
+}
+
 # Create the Azure Key Vault
 resource "azurerm_key_vault" "key_vault" {
-  name                       = var.name
-  location                   = var.location
-  resource_group_name        = var.resource_group_name
+  name                       = azurecaf_name.caf_name.result
+  location                   = data.azurerm_resource_group.rg.location
+  resource_group_name        = data.azurerm_resource_group.rg.name
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   sku_name                   = "standard"
-  soft_delete_retention_days = 7
-  purge_protection_enabled   = true
+  soft_delete_retention_days = 31
+  #tfsec:ignore:azure-keyvault-no-purge
+  purge_protection_enabled = var.protection_enabled
 
   network_acls {
-    default_action = "Deny"
+    #tfsec:ignore:azure-keyvault-specify-network-acl
+    default_action = "Allow"
     bypass         = "AzureServices"
   }
 
-  tags = merge(var.tags, local.auto_tags)
+  // extra_tags is on the end to overwrite incorrect tags that already exists.
+  tags = merge(local.default_tags, data.azurerm_resource_group.rg.tags, var.extra_tags)
 }
 
 # Create a Default Azure Key Vault access policy with Admin permissions
@@ -33,26 +47,27 @@ resource "azurerm_key_vault_access_policy" "default_policy" {
   certificate_permissions = local.certificates_full_permissions
 }
 
-data "azuread_group" "ad_group" {
-  for_each         = toset(concat(var.readers, var.writers))
-  display_name     = each.key
-  security_enabled = true
-}
 
 resource "azurerm_key_vault_access_policy" "readers_policy" {
-  for_each                = toset(var.readers)
+  for_each = {
+    for key, value in var.policies : key => value
+    if value.type == "readers"
+  }
   key_vault_id            = azurerm_key_vault.key_vault.id
   tenant_id               = data.azurerm_client_config.current.tenant_id
-  object_id               = data.azuread_group.ad_group[each.key].object_id
+  object_id               = each.value.object_id
   secret_permissions      = local.secrets_read_permissions
   certificate_permissions = local.certificates_read_permissions
 }
 
 resource "azurerm_key_vault_access_policy" "writers_policy" {
-  for_each                = toset(var.writers)
+  for_each = {
+    for key, value in var.policies : key => value
+    if value.type == "writers"
+  }
   key_vault_id            = azurerm_key_vault.key_vault.id
   tenant_id               = data.azurerm_client_config.current.tenant_id
-  object_id               = data.azuread_group.ad_group[each.key].object_id
+  object_id               = each.value.object_id
   secret_permissions      = local.secrets_write_permissions
   certificate_permissions = local.certificates_write_permissions
 }

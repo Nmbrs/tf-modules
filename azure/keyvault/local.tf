@@ -1,7 +1,13 @@
 locals {
-  auto_tags = {
-    ManagedBy : "Terraform"
+  default_tags = {
+    ProvisionedBy = "Terraform"
   }
+
+  internal_external_suffix = var.external_usage ? "e" : "i"
+
+  org         = "nmbrs"
+  environment = var.environment
+
   secrets_full_permissions       = ["Backup", "Delete", "Get", "List", "Purge", "Recover", "Restore", "Set"]
   certificates_full_permissions  = ["Backup", "Create", "Delete", "Deleteissuers", "Get", "Getissuers", "Import", "List", "Listissuers", "Managecontacts", "Manageissuers", "Purge", "Recover", "Restore", "Setissuers", "Update"]
   secrets_read_permissions       = ["Get", "List"]
