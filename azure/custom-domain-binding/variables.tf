@@ -3,6 +3,11 @@ variable "location" {
   type        = string
 }
 
+variable "tags" {
+  description = "tags of the resource"
+  type        = map(string)
+}
+
 variable "resource_group" {
   description = "azure resource group name."
   type        = string
@@ -13,13 +18,28 @@ variable "apps" {
   type        = map(any)
 }
 
-variable "dns_zone" {
+variable "dns_zone_name" {
   description = "Name of the DNS zone"
   type        = string
 }
 
-variable "keyvault_name" {
-  description = "Name of the key vault where the certificate is"
+variable "dns_zone_resource_group" {
+  description = "Resource Group of the DNS zone"
+  type        = string
+}
+
+variable "ttl" {
+  description = "Time to live of records"
+  type        = number
+}
+
+variable "certificate_keyvault_name" {
+  description = "Certificate Keyvault"
+  type        = string
+}
+
+variable "certificate_keyvault_resource_group" {
+  description = "Resource group of the Certificate Keyvault"
   type        = string
 }
 
@@ -31,4 +51,9 @@ variable "certificate_name" {
 variable "app_name" {
   description = "Name of the apps being binded"
   type        = map(any)
+}
+
+variable "app_default_site_hostname" {
+  description = "Name of the apps being binded"
+  type        = map(string)
 }

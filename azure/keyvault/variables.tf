@@ -8,6 +8,17 @@ variable "name" {
   description = "The name of the Azure Key Vault."
 }
 
+variable "environment" {
+  description = "(Optional) The environment in which the resource should be provisioned."
+  type        = string
+  default     = "Dev"
+
+  validation {
+    condition     = contains(["Dev", "Kitchen", "Production", "Staging", "Test"], var.environment)
+    error_message = "The 'environment' value is invalid. Valid options are 'Dev', 'Kitchen', 'Production','Staging', 'Test'."
+  }
+}
+
 variable "external_usage" {
   description = "(Optional) Specifies whether the keyvault should be used internally or externally."
   type        = bool
