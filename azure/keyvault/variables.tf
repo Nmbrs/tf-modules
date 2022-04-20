@@ -11,11 +11,11 @@ variable "name" {
 variable "environment" {
   description = "(Optional) The environment in which the resource should be provisioned."
   type        = string
-  default     = "Dev"
+  default     = "dev"
 
   validation {
-    condition     = contains(["Dev", "Kitchen", "Production", "Staging", "Test"], var.environment)
-    error_message = "The 'environment' value is invalid. Valid options are 'Dev', 'Kitchen', 'Production','Staging', 'Test'."
+    condition     = contains(["dev", "prod", "stag", "test"], var.environment)
+    error_message = "The 'environment' value is invalid. Valid options are 'dev', 'prod','stag', 'test'."
   }
 }
 
@@ -57,8 +57,8 @@ variable "policies" {
   }
 
   validation {
-    condition     = alltrue([for policy in var.policies : can(coalesce(policy.object_id))])
-    error_message = "At least one 'object_id' property from 'policies' is invalid. They must be non-empty string values."
+    condition     = alltrue([for policy in var.policies : can(regex("^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$", policy.object_id))])
+    error_message = "At least one 'object_id' property from 'policies' is invalid. They must valid UUIDs (32 characters, separated by four hyphens). Valid example: '11111111-1111-1111-1111-111111111111'."
   }
 
   validation {
