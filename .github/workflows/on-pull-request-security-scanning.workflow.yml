@@ -2,7 +2,7 @@ name: "PR Security Scanning"
 
 on:
   pull_request:
-    types: [opened, edited, synchronize, reopened]
+    types: [opened, synchronize, reopened]
 
   push:
     branches:
