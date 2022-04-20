@@ -41,10 +41,11 @@ variable "country" {
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string
+  default     = "dev"
 
   validation {
-    condition     = contains(["Dev", "Kitchen", "Production", "Staging", "Test"], var.environment)
-    error_message = "The 'environment' value is invalid. Valid options are 'Dev', 'Kitchen', 'Production','Staging', 'Test'."
+    condition     = contains(["dev", "prod", "stag", "test"], var.environment)
+    error_message = "The 'environment' value is invalid. Valid options are 'dev', 'prod','stag', 'test'."
   }
 }
 

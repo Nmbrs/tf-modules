@@ -36,7 +36,7 @@ Fundamentally, you need to declare the module and pass the following variables i
 module "resource-group" {
   source                    = "git::github.com/Nmbrs/tf-modules//azure/resource-group"
   name                      = "my_project"
-  environment               = "Dev"
+  environment               = "dev"
   country                   = "nl"
   squad                     = "infra"
   product                   = "internal"
