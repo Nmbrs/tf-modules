@@ -7,5 +7,5 @@ output "app_id" {
 }
 
 output "name" {
-  value = {for k, app in azurerm_app_service.app : k => app.name}
+  value = { for k, app in azurerm_app_service.app : k => app.name }
 }
