@@ -2,12 +2,13 @@ name: "PR Security Scanning"
 
 on:
   pull_request:
-    types: [opened, edited, synchronize, reopened]
+    types: [opened, synchronize, reopened]
 
   push:
     branches:
       - main
-
+    paths-ignore:
+      - '**/*.md'
 jobs:
   # Static analysis security scanning
   security-code-scanning:
