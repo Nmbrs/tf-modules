@@ -1,5 +1,16 @@
 # Changelog
 
+## [5.0.0](https://github.com/Nmbrs/tf-modules/compare/v4.0.0...v5.0.0) (2022-04-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **custom_domain_binding:** fix version custom domain dependency (#106)
+
+### Bug Fixes
+
+* **custom_domain_binding:** fix version custom domain dependency ([#106](https://github.com/Nmbrs/tf-modules/issues/106)) ([6ae0720](https://github.com/Nmbrs/tf-modules/commit/6ae07209bc95d7dfe698f6edae21ffc2432e1516))
+
 ## [4.0.0](https://github.com/Nmbrs/tf-modules/compare/3.1.0...v4.0.0) (2022-04-20)
 
 
