@@ -40,7 +40,7 @@ resource "azurerm_app_service" "app" {
 }
 
 module "sslbinding" {
-  source                              = "git::github.com/Nmbrs/tf-modules/azure/custom_domain_binding"
+  source                              = "git::github.com/Nmbrs/tf-modules//azure/custom_domain_binding?ref=v5.0.0"
   apps                                = var.apps
   dns_zone_name                       = var.dns_zone_name
   dns_zone_resource_group             = var.dns_zone_resource_group
