@@ -14,8 +14,8 @@ variable "environment" {
   default     = "dev"
 
   validation {
-    condition     = contains(["dev", "prod", "stag", "test"], var.environment)
-    error_message = "The 'environment' value is invalid. Valid options are 'dev', 'prod','stag', 'test'."
+    condition     = contains(["dev", "prod", "stag", "test", "sand"], var.environment)
+    error_message = "The 'environment' value is invalid. Valid options are 'dev', 'prod','stag', 'test', 'sand'."
   }
 }
 
