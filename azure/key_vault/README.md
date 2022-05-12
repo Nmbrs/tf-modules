@@ -39,8 +39,8 @@ keyvault when need.
 Here is a sample that helps illustrating how to user the module on a Terraform service
 
 ```hcl
-module "keyvault" {
-  source = "git::github.com/Nmbrs/tf-modules//azure/keyvault"
+module "key_vault" {
+  source = "git::github.com/Nmbrs/tf-modules//azure/key_vault"
   name                = "Heimdall"
   environment         = "dev"
   resource_group_name = "rg-heimdall"
