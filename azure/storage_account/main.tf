@@ -1,14 +1,18 @@
+data "azurerm_resource_group" "rg" {
+  name = var.resource_group_name
+}
+
 resource "azurerm_storage_account" "storage_account" {
   name                      = lower(var.name)
-  resource_group_name       = var.resource_group_name
-  location                  = var.location
+  resource_group_name       = data.azurerm_resource_group.rg.name
+  location                  = data.azurerm_resource_group.rg.location
   account_kind              = var.account_kind
   account_tier              = var.account_tier
   account_replication_type  = var.replication_type
   enable_https_traffic_only = true
   min_tls_version           = "TLS1_2"
 
-  tags = merge(var.tags, local.default_tags)
+  tags = merge(local.default_tags, data.azurerm_resource_group.rg.tags, var.extra_tags)
 
   queue_properties {
     logging {
