@@ -19,8 +19,13 @@ variable "name" {
 }
 
 variable "resource_group_name" {
-  type        = string
   description = "The name of an existing Resource Group."
+  type        = string
+
+  validation {
+    condition     = can(coalesce(var.resource_group_name))
+    error_message = "The 'resource_group_name' value is invalid. It must be a non-empty string."
+  }
 }
 
 variable "extra_tags" {
