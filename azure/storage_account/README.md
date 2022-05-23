@@ -15,11 +15,10 @@ Fundamentally, you need to declare the module and pass the following variables i
 
 ```hcl
 module "storage_account" {
-  source              = "../tf-modules/azure/storage-account"
+  source              = "git::github.com/Nmbrs/tf-modules/azure/storage_account?ref=v5.1.0"
   name                = "sauniquename123"
-  location            = "westeurope"
   resource_group_name = "rg-my-resource-group"
-  tags = {
+  extra_tags = {
     my_tag : "my_tag_value"
   }
   account_kind     = "Storage"
