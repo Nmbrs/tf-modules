@@ -3,7 +3,7 @@ resource "github_repository" "repo" {
   name        = each.value["name"]
   description = each.value["description"]
   visibility  = each.value["visibility"]
-  
+
   template {
     owner      = "nmbrs"
     repository = each.value["repo_template"]
