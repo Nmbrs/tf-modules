@@ -9,39 +9,42 @@
 
 ---
 
-> A terraform module to support the creation of a resource group in Azure.
+> A terraform module to support the creation of a repository in Github.
 
 ## Module Input variables
 
-- `name` - Name of the resource group. It must follow the CAF naming convention.
-- `location` - (Optional) Specifies the Azure Region where the resource should exists.
-- `environment` - The environment in which the resource should be provisioned. Valid options are 'Dev', 'Kitchen', 'Production','Staging', 'Test'.
-- `country` - Name of the country to which the resources belongs.
-- `squad` - Name of the squad to which the resources belongs.
-- `product` - Name of the product to which the resources belongs.
-- `extra_tags` - (Optional) A extra mapping of tags which should be assigned to the desired resource.
-
-## Module Output Variables
-
-- `name` - Name
-- `id` - id
-- `location` - location
-- `tags` - tags
+- `name` - Name of the repository.
+- `description` - Description of the repository
+- `visibility` - Private or public repository
+- `owner` - The owner organization in Github
+- `repository` - The template from which the new repositories will be based on
 
 ## How to use it?
 
 Fundamentally, you need to declare the module and pass the following variables in your Terraform service template:
 
 ```hcl
-module "resource-group" {
-  source                    = "git::github.com/Nmbrs/tf-modules//azure/resource-group"
-  name                      = "my_project"
-  environment               = "dev"
-  country                   = "nl"
-  squad                     = "infra"
-  product                   = "internal"
-  extra_tags = {
-    Datadog = "Monitored"
+module "github_repo" {
+  source = "git::github.com/Nmbrs/tf-modules//github"
+  repos  = var.repos
+}
+
+variable "repos" {
+  type        = map(any)
+  description = "List of repos"
+  default = {
+    repo1 = {
+      name          = "test"
+      description   = "test1 repo"
+      repo_template = "template-repo"
+      visibility    = "private"
+    }
+    repo2 = {
+      name          = "test2"
+      description   = "test2 repo"
+      repo_template = "template-repo"
+      visibility    = "public"
+    }
   }
 }
 ```
