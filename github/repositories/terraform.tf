@@ -8,8 +8,3 @@ terraform {
     }
   }
 }
-
-# provider "github" {
-#   owner = "nmbrs"
-#   token = var.token
-# }
