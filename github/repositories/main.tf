@@ -2,10 +2,10 @@ module "github_repository" {
   source  = "mineiros-io/repository/github"
   version = "~> 0.16.0"
 
-  for_each               = var.repos
-  name                   = each.value["name"]
-  description            = each.value["description"]
-  visibility             = each.value["visibility"]
+  for_each               = { for key, value in var.repositories : key => value }
+  name                   = each.value.name
+  description            = each.value.description
+  visibility             = each.value.visibility
   has_issues             = true
   has_projects           = true
   has_wiki               = false
@@ -17,12 +17,12 @@ module "github_repository" {
   auto_init              = true
   delete_branch_on_merge = true
   license_template       = "mit"
-  topics                 = [each.value["squad"]]
+  topics                 = [each.value.squad]
   vulnerability_alerts   = true
 
   template = {
-    owner      = "nmbrs"
-    repository = each.value["repo_template"]
+    owner      = local.github_owner
+    repository = each.value.template
   }
 
   branch_protections_v3 = [
