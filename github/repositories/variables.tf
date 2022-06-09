@@ -34,3 +34,13 @@ variable "repositories" {
     error_message = "At least one 'squad' property from 'repositories' is invalid. They must be non-empty string values."
   }
 }
+
+variable "github_owner" {
+  type        = string
+  description = "GitHub Nmbrs owner name"
+}
+
+variable "github_token" {
+  type        = string
+  description = "GitHub Nmbrs token to provision and configure resources."
+}
