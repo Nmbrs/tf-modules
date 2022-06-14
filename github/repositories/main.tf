@@ -21,7 +21,7 @@ module "github_repository" {
   vulnerability_alerts   = true
 
   template = {
-    owner      = "nmbrs"
+    owner      = var.github_owner
     repository = each.value.template
   }
 
