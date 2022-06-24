@@ -1,5 +1,18 @@
 # Changelog
 
+## [6.1.0](https://github.com/Nmbrs/tf-modules/compare/v6.0.0...v6.1.0) (2022-06-14)
+
+
+### Features
+
+* **githubrepo:** Added module to create repos ([#120](https://github.com/Nmbrs/tf-modules/issues/120)) ([01fa1ed](https://github.com/Nmbrs/tf-modules/commit/01fa1ed7306697b4c6b11af5656a22ab4322fc93))
+* replaced with mineiros module ([#123](https://github.com/Nmbrs/tf-modules/issues/123)) ([a140f36](https://github.com/Nmbrs/tf-modules/commit/a140f3667d3c13a644404219a224644b543f2f4b))
+
+
+### Bug Fixes
+
+* **githubrepo:** Removed provider github ([#122](https://github.com/Nmbrs/tf-modules/issues/122)) ([7e6a5c1](https://github.com/Nmbrs/tf-modules/commit/7e6a5c137f8d48f5b56a282135cc3b268ffae4bc))
+
 ## [6.0.0](https://github.com/Nmbrs/tf-modules/compare/v5.1.0...v6.0.0) (2022-05-23)
 
 
