@@ -2,10 +2,7 @@
 # the repo. Unless a later match takes precedence,
 # @squad-infra will be requested for
 # review when someone opens a pull request.
-*       @Nmbrs/squad-infra
+*       @Nmbrs/devops
 
 # Any documentation update must be reviewed by the product owner
 *.md    @fargozhu
-
-# Any code to production must be reviewed by the @squad-infra
-prod/   @Nmbrs/squad-infra
