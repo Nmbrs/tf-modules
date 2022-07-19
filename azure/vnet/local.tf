@@ -1,4 +1,9 @@
 locals {
+  default_tags = {
+    ProvisionedBy = "Terraform"
+  }
+  environment = var.environment
+  
   service_delegation_actions = {
     "Microsoft.ApiManagement/service"                 = ["virtualNetworks/subnets/join/action", "virtualNetworks/subnets/prepareNetworkPolicies/action"]
     "Microsoft.AzureCosmosDB/clusters"                = ["virtualNetworks/subnets/join/action"]
@@ -24,9 +29,5 @@ locals {
     "Microsoft.Synapse/workspaces"                    = ["virtualNetworks/subnets/join/action"]
     "Microsoft.Web/hostingEnvironments"               = ["virtualNetworks/subnets/action"]
     "Microsoft.Web/serverFarms"                       = ["virtualNetworks/subnets/action"]
-  }
-
-  auto_tags = {
-    ManagedBy : "Terraform"
   }
 }
