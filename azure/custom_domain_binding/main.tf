@@ -12,7 +12,7 @@ resource "azurerm_dns_cname_record" "binding" {
   record              = var.app_default_site_hostname[each.key]
 }
 
-data "azurerm_app_service" "binding" {
+data "azurerm_windows_web_app" "binding" {
   for_each            = var.app_name
   name                = each.value
   resource_group_name = var.resource_group
@@ -24,7 +24,7 @@ resource "azurerm_app_service_custom_hostname_binding" "binding" {
     if value.custom_domain != ""
   }
   hostname            = each.value["custom_domain"]
-  app_service_name    = data.azurerm_app_service.binding[each.key].name
+  app_service_name    = data.azurerm_windows_web_app.binding[each.key].name
   resource_group_name = var.resource_group
   depends_on          = [azurerm_dns_cname_record.binding]
 

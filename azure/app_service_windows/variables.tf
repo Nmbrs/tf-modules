@@ -14,12 +14,12 @@ variable "location" {
 }
 
 variable "plan" {
-  description = "defines the app service plan type (i.e: Standard, Premium)."
+  description = "defines the app service size type (i.e: S1, P1V2 etc)."
   type        = string
 }
 
-variable "size" {
-  description = "defines the app service size type (i.e: S1, P1V2 etc)."
+variable "stack" {
+  description = "defines the stack for the webapp (i.e dotnet, dotnetcore, node, python, php, and java)"
   type        = string
 }
 
