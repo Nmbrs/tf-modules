@@ -3,7 +3,7 @@ resource "azurerm_service_plan" "app" {
   location            = var.location
   resource_group_name = var.resource_group
   os_type             = "Windows"
-  sku_name            = var.plan
+  sku_name            = var.sku
 
   tags = merge(var.tags, local.default_tags)
 }
@@ -50,7 +50,7 @@ module "sslbinding" {
   location                            = var.location
   tags                                = merge(var.tags, local.default_tags)
   app_name                            = { for k, value in azurerm_windows_web_app.app : k => value.name }
-  app_default_site_hostname           = { for k, value in azurerm_windows_web_app.app : k => value.default_site_hostname }
+  app_default_site_hostname           = { for k, value in azurerm_windows_web_app.app : k => value.default_hostname }
   depends_on = [
     azurerm_windows_web_app.app
   ]

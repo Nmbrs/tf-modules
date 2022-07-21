@@ -13,7 +13,7 @@ variable "location" {
   type        = string
 }
 
-variable "plan" {
+variable "sku" {
   description = "defines the app service size type (i.e: S1, P1V2 etc)."
   type        = string
 }
@@ -24,7 +24,7 @@ variable "stack" {
 }
 
 variable "dotnetVersion" {
-  description = "defines the dotnet framework version for app service (i.e: v2.0 v4.0 v5.0 v6.0)."
+  description = "defines the dotnet framework version for app service (i.e: v3.0 v4.0 v5.0 v6.0)."
   type        = string
 }
 
