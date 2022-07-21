@@ -3,7 +3,7 @@ locals {
     ProvisionedBy = "Terraform"
   }
   environment = var.environment
-  
+
   service_delegation_actions = {
     "Microsoft.ApiManagement/service"                 = ["virtualNetworks/subnets/join/action", "virtualNetworks/subnets/prepareNetworkPolicies/action"]
     "Microsoft.AzureCosmosDB/clusters"                = ["virtualNetworks/subnets/join/action"]
