@@ -14,7 +14,6 @@ resource "azurerm_virtual_network" "vnet" {
 
 resource "azurerm_subnet" "subnet" {
   for_each = { for key, value in var.subnets : key => value }
-  # for subnet in var.subnets : subnet.name => subnet }
 
   name                                           = each.value.name
   resource_group_name                            = data.azurerm_resource_group.rg.name
@@ -24,16 +23,14 @@ resource "azurerm_subnet" "subnet" {
   enforce_private_link_service_network_policies  = lookup(each.value, "enforce_private_link_service_network_policies", false)
   enforce_private_link_endpoint_network_policies = lookup(each.value, "enforce_private_link_endpoint_network_policies", false)
 
-  #   dynamic "delegation" {
-  #     # for subnet in var.subnets : subnet.name => subnet }
-  #     for_each = lookup(each.value, "delegation", null) != null ? [""] : []
-  #     content {
-  #       name = each.value.delegation
-  #       service_delegation {
-  #         name    = each.value.delegation
-  #         actions = formatlist("Microsoft.Network/%s", local.service_delegation_actions[each.value.delegation])
-  #       }
-  #     }
-  #   }
+  dynamic "delegation" {
+    for_each = each.value.delegations
+    content {
+      name = delegation.value
+      service_delegation {
+        name    = delegation.value
+        actions = local.service_delegation_actions[delegation.value]
+      }
+    }
+  }
 }
-

@@ -25,7 +25,7 @@ variable "extra_tags" {
 
   validation {
     condition     = alltrue([for tag in var.extra_tags : can(coalesce(tag))])
-    error_message = "At least on tag value from 'extra_tags' is invalid. They must be non-empty string values."
+    error_message = "At least one tag value from 'extra_tags' is invalid. They must be non-empty string values."
   }
 }
 
@@ -47,12 +47,12 @@ variable "address_spaces" {
 
 variable "subnets" {
   type = list(object({
-    name              = string
-    address_prefixes  = list(string)
-    service_endpoints = list(string)
-    enforce_private_link_service_network_policies = bool
+    name                                           = string
+    address_prefixes                               = list(string)
+    service_endpoints                              = list(string)
+    enforce_private_link_service_network_policies  = bool
     enforce_private_link_endpoint_network_policies = bool
-    delegations = list(any)
+    delegations                                    = list(string)
 
   }))
   description = "List of objects that represent the configuration of each subnet."
@@ -81,12 +81,83 @@ variable "subnets" {
   validation {
     condition = alltrue([
       for subnet in var.subnets : alltrue([
-        for service_endpoint in subnet.service_endpoints : contains([
-          "Microsoft.AzureActiveDirectory", "Microsoft.AzureCosmosDB", "Microsoft.ContainerRegistry", "Microsoft.EventHub", "Microsoft.KeyVault", "Microsoft.ServiceBus", "Microsoft.Sql", "Microsoft.Storage", "Microsoft.Web"
-        ], service_endpoint)
+        for service_endpoint in subnet.service_endpoints : contains(
+          [
+            "Microsoft.AzureActiveDirectory",
+            "Microsoft.AzureCosmosDB",
+            "Microsoft.ContainerRegistry",
+            "Microsoft.EventHub",
+            "Microsoft.KeyVault",
+            "Microsoft.ServiceBus",
+            "Microsoft.Sql",
+            "Microsoft.Storage",
+            "Microsoft.Web"
+          ],
+        service_endpoint)
       ])
     ])
     error_message = "At least one of the values from 'service_endpoint' property from one of the 'subnets' is invalid. Valid options are 'Microsoft.AzureActiveDirectory', 'Microsoft.AzureCosmosDB', 'Microsoft.ContainerRegistry', 'Microsoft.EventHub', 'Microsoft.KeyVault', 'Microsoft.ServiceBus', 'Microsoft.Sql', 'Microsoft.Storage', 'Microsoft.Web'."
+  }
+
+  validation {
+    condition = alltrue([
+      for subnet in var.subnets : alltrue([
+        for delegation in subnet.delegations : contains(
+          [
+            "Microsoft.AISupercomputer/accounts/jobs",
+            "Microsoft.AISupercomputer/accounts/models",
+            "Microsoft.AISupercomputer/accounts/npu",
+            "Microsoft.AVS/PrivateClouds",
+            "Microsoft.ApiManagement/service",
+            "Microsoft.Apollo/npu",
+            "Microsoft.AzureCosmosDB/clusters",
+            "Microsoft.BareMetal/AzureHostedService",
+            "Microsoft.BareMetal/AzureVMware",
+            "Microsoft.BareMetal/CrayServers",
+            "Microsoft.Batch/batchAccounts",
+            "Microsoft.CloudTest/hostedpools",
+            "Microsoft.CloudTest/images",
+            "Microsoft.CloudTest/pools",
+            "Microsoft.Codespaces/plans",
+            "Microsoft.ContainerInstance/containerGroups",
+            "Microsoft.ContainerService/managedClusters",
+            "Microsoft.DBforMySQL/flexibleServers",
+            "Microsoft.DBforMySQL/serversv2",
+            "Microsoft.DBforPostgreSQL/flexibleServers",
+            "Microsoft.DBforPostgreSQL/serversv2",
+            "Microsoft.DBforPostgreSQL/singleServers",
+            "Microsoft.Databricks/workspaces",
+            "Microsoft.DelegatedNetwork/controller",
+            "Microsoft.DevCenter/networkConnection",
+            "Microsoft.DocumentDB/cassandraClusters",
+            "Microsoft.Fidalgo/networkSettings",
+            "Microsoft.HardwareSecurityModules/dedicatedHSMs",
+            "Microsoft.Kusto/clusters",
+            "Microsoft.LabServices/labplans",
+            "Microsoft.Logic/integrationServiceEnvironments",
+            "Microsoft.MachineLearningServices/workspaces",
+            "Microsoft.Netapp/volumes",
+            "Microsoft.Network/dnsResolvers",
+            "Microsoft.Orbital/orbitalGateways",
+            "Microsoft.PowerPlatform/enterprisePolicies",
+            "Microsoft.PowerPlatform/vnetaccesslinks",
+            "Microsoft.ServiceFabricMesh/networks",
+            "Microsoft.Singularity/accounts/jobs",
+            "Microsoft.Singularity/accounts/models",
+            "Microsoft.Singularity/accounts/npu",
+            "Microsoft.Sql/managedInstances",
+            "Microsoft.StoragePool/diskPools",
+            "Microsoft.StreamAnalytics/streamingJobs",
+            "Microsoft.Synapse/workspaces",
+            "Microsoft.Web/hostingEnvironments",
+            "Microsoft.Web/serverFarms",
+            "NGINX.NGINXPLUS/nginxDeployments",
+            "PaloAltoNetworks.Cloudngfw/firewalls"
+          ],
+        delegation)
+      ])
+    ])
+    error_message = "At least one of the values from 'delegations' property from one of the 'subnets' is invalid. Valid options are 'Microsoft.AISupercomputer/accounts/jobs', 'Microsoft.AISupercomputer/accounts/models', 'Microsoft.AISupercomputer/accounts/npu', 'Microsoft.AVS/PrivateClouds', 'Microsoft.ApiManagement/service', 'Microsoft.Apollo/npu', 'Microsoft.AzureCosmosDB/clusters', 'Microsoft.BareMetal/AzureHostedService', 'Microsoft.BareMetal/AzureVMware', 'Microsoft.BareMetal/CrayServers', 'Microsoft.Batch/batchAccounts', 'Microsoft.CloudTest/hostedpools', 'Microsoft.CloudTest/images', 'Microsoft.CloudTest/pools', 'Microsoft.Codespaces/plans', 'Microsoft.ContainerInstance/containerGroups', 'Microsoft.ContainerService/managedClusters', 'Microsoft.DBforMySQL/flexibleServers', 'Microsoft.DBforMySQL/serversv2', 'Microsoft.DBforPostgreSQL/flexibleServers', 'Microsoft.DBforPostgreSQL/serversv2', 'Microsoft.DBforPostgreSQL/singleServers', 'Microsoft.Databricks/workspaces', 'Microsoft.DelegatedNetwork/controller', 'Microsoft.DevCenter/networkConnection', 'Microsoft.DocumentDB/cassandraClusters', 'Microsoft.Fidalgo/networkSettings', 'Microsoft.HardwareSecurityModules/dedicatedHSMs', 'Microsoft.Kusto/clusters', 'Microsoft.LabServices/labplans', 'Microsoft.Logic/integrationServiceEnvironments', 'Microsoft.MachineLearningServices/workspaces', 'Microsoft.Netapp/volumes', 'Microsoft.Network/dnsResolvers', 'Microsoft.Orbital/orbitalGateways', 'Microsoft.PowerPlatform/enterprisePolicies', 'Microsoft.PowerPlatform/vnetaccesslinks', 'Microsoft.ServiceFabricMesh/networks', 'Microsoft.Singularity/accounts/jobs', 'Microsoft.Singularity/accounts/models', 'Microsoft.Singularity/accounts/npu', 'Microsoft.Sql/managedInstances', 'Microsoft.StoragePool/diskPools', 'Microsoft.StreamAnalytics/streamingJobs', 'Microsoft.Synapse/workspaces', 'Microsoft.Web/hostingEnvironments', 'Microsoft.Web/serverFarms', 'NGINX.NGINXPLUS/nginxDeployments', 'PaloAltoNetworks.Cloudngfw/firewalls'."
   }
 
 }
