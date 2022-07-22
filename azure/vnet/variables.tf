@@ -1,6 +1,6 @@
 variable "resource_group_name" {
-  type        = string
   description = "The name of the resource group in which to create the virtual network."
+  type        = string
 }
 
 variable "name" {
@@ -51,6 +51,7 @@ variable "address_spaces" {
 }
 
 variable "subnets" {
+  description = "List of objects that represent the configuration of each subnet."
   type = list(object({
     name                                           = string
     address_prefixes                               = list(string)
@@ -60,8 +61,7 @@ variable "subnets" {
     delegations                                    = list(string)
 
   }))
-  description = "List of objects that represent the configuration of each subnet."
-  default     = []
+  default = []
 
   validation {
     condition     = alltrue([for subnet in var.subnets : can(coalesce(subnet.name))])
