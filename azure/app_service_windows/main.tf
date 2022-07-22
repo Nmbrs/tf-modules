@@ -1,24 +1,19 @@
-resource "azurerm_app_service_plan" "app" {
+resource "azurerm_service_plan" "app" {
   name                = "asp-${var.project}-${var.environment}"
   location            = var.location
   resource_group_name = var.resource_group
-  kind                = "Windows"
-  reserved            = false
-
-  sku {
-    tier = var.plan
-    size = var.size
-  }
+  os_type             = "Windows"
+  sku_name            = var.sku
 
   tags = merge(var.tags, local.default_tags)
 }
 
-resource "azurerm_app_service" "app" {
+resource "azurerm_windows_web_app" "app" {
   for_each            = var.apps
   name                = "as-${var.project}-${each.value["name"]}-${var.environment}"
   location            = var.location
   resource_group_name = var.resource_group
-  app_service_plan_id = azurerm_app_service_plan.app.id
+  service_plan_id     = azurerm_service_plan.app.id
   https_only          = true
 
   identity {
@@ -26,21 +21,24 @@ resource "azurerm_app_service" "app" {
   }
 
   site_config {
-    always_on                 = true
-    dotnet_framework_version  = var.dotnetVersion
-    ftps_state                = "FtpsOnly"
-    http2_enabled             = true
-    managed_pipeline_mode     = "Integrated"
-    use_32_bit_worker_process = false
-    websockets_enabled        = false
-    remote_debugging_enabled  = false
+    always_on                = true
+    ftps_state               = "FtpsOnly"
+    http2_enabled            = true
+    managed_pipeline_mode    = "Integrated"
+    use_32_bit_worker        = false
+    websockets_enabled       = false
+    remote_debugging_enabled = false
+    application_stack {
+      current_stack  = var.stack
+      dotnet_version = var.dotnetVersion
+    }
   }
 
   tags = merge(var.tags, local.default_tags)
 }
 
 module "sslbinding" {
-  source                              = "git::github.com/Nmbrs/tf-modules//azure/custom_domain_binding?ref=v5.0.0"
+  source                              = "git::github.com/Nmbrs/tf-modules//azure/custom_domain_binding?ref=v7.0.0"
   apps                                = var.apps
   dns_zone_name                       = var.dns_zone_name
   dns_zone_resource_group             = var.dns_zone_resource_group
@@ -51,10 +49,10 @@ module "sslbinding" {
   certificate_name                    = var.certificate_name
   location                            = var.location
   tags                                = merge(var.tags, local.default_tags)
-  app_name                            = { for k, value in azurerm_app_service.app : k => value.name }
-  app_default_site_hostname           = { for k, value in azurerm_app_service.app : k => value.default_site_hostname }
+  app_name                            = { for k, value in azurerm_windows_web_app.app : k => value.name }
+  app_default_site_hostname           = { for k, value in azurerm_windows_web_app.app : k => value.default_hostname }
   depends_on = [
-    azurerm_app_service.app
+    azurerm_windows_web_app.app
   ]
 }
 
@@ -79,6 +77,6 @@ resource "azurerm_application_insights" "app" {
 
 resource "azurerm_app_service_virtual_network_swift_connection" "app" {
   for_each       = var.apps
-  app_service_id = azurerm_app_service.app[each.value["name"]].id
+  app_service_id = azurerm_windows_web_app.app[each.value["name"]].id
   subnet_id      = each.value["subnet"]
 }
