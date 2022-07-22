@@ -3,7 +3,7 @@ output "name" {
   value       = azurerm_virtual_network.vnet.name
 }
 
-output "vnet_id" {
+output "id" {
   description = "Specifies the resource id of the virtual network"
   value       = azurerm_virtual_network.vnet.id
 }
