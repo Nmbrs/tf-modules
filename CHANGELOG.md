@@ -1,5 +1,22 @@
 # Changelog
 
+## [7.0.0](https://github.com/Nmbrs/tf-modules/compare/v6.1.0...v7.0.0) (2022-07-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* **webapp_module_update:** update modules (#128)
+* **vnet:** update vnet module (#127)
+
+### Features
+
+* **vnet:** update vnet module ([#127](https://github.com/Nmbrs/tf-modules/issues/127)) ([92f95b9](https://github.com/Nmbrs/tf-modules/commit/92f95b9a4c583719346e3579a7e625e7e08b92d1))
+
+
+### Bug Fixes
+
+* **webapp_module_update:** update modules ([#128](https://github.com/Nmbrs/tf-modules/issues/128)) ([c649d03](https://github.com/Nmbrs/tf-modules/commit/c649d034ed91999662eef35746179d8e5849d118))
+
 ## [6.1.0](https://github.com/Nmbrs/tf-modules/compare/v6.0.0...v6.1.0) (2022-06-14)
 
 
