@@ -57,8 +57,8 @@ module "app_service_plan" {
   }
 }
   environment                         = "stage"
-  plan                                = "Standard"
-  size                                = "S1"
+  sku                                 = "P1v2"
+  stack                               = "dotnet"
   dotnetVersion                       = "v4.0"
   tags                                = module.resource_group.tags
   location                            = module.resource_group.location
