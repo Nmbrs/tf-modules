@@ -15,6 +15,11 @@ variable "repositories" {
   }
 
   validation {
+    condition     = length([for repository in var.repositories : repository.name]) == length(distinct([for repository in var.repositories : repository.name]))
+    error_message = "At least one 'name' property from 'repositories' is duplicated. They must be unique."
+  }
+
+  validation {
     condition     = alltrue([for repository in var.repositories : can(coalesce(repository.description))])
     error_message = "At least one 'description' property from 'repositories' is invalid.  They must be non-empty string values."
   }
