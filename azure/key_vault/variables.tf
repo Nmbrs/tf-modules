@@ -57,7 +57,7 @@ variable "policies" {
   }
 
     validation {
-    condition     = length([for policy in var.policy : subnet.name]) == length(distinct([for policy in var.policy : policy.name]))
+    condition     = length([for policy in var.policies : policy.name]) == length(distinct([for policy in var.policies : policy.name]))
     error_message = "At least one 'name' property from one of the 'policies' is duplicated. They must be unique."
   }
 
