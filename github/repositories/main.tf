@@ -1,6 +1,6 @@
 module "github_repository" {
   source                 = "mineiros-io/repository/github"
-  version                = "~> 0.16.0"  
+  version                = "~> 0.16.0"
   for_each               = { for repository in var.repositories : repository.name => repository }
   name                   = each.value.name
   description            = each.value.description
@@ -12,6 +12,7 @@ module "github_repository" {
   allow_rebase_merge     = false
   allow_squash_merge     = true
   allow_auto_merge       = false
+  archive_on_destroy     = false
   has_downloads          = false
   auto_init              = true
   delete_branch_on_merge = true
