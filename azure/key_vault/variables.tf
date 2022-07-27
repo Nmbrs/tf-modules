@@ -56,6 +56,11 @@ variable "policies" {
     error_message = "At least one 'name' property from 'policies' is invalid. They must be non-empty string values."
   }
 
+    validation {
+    condition     = length([for policy in var.policy : subnet.name]) == length(distinct([for policy in var.policy : policy.name]))
+    error_message = "At least one 'name' property from one of the 'policies' is duplicated. They must be unique."
+  }
+
   validation {
     condition     = alltrue([for policy in var.policies : can(regex("^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$", policy.object_id))])
     error_message = "At least one 'object_id' property from 'policies' is invalid. They must valid UUIDs (32 characters, separated by four hyphens). Valid example: '11111111-1111-1111-1111-111111111111'."
