@@ -4,9 +4,18 @@ data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
 }
 
-resource "azurecaf_name" "caf_name" {
+resource "azurecaf_name" "vm_windows_caf_name" {
+  count         = locals.os_type == "windows" ? 1 : 0
   name          = lower(var.name)
   resource_type = "azurerm_windows_virtual_machine"
+  suffixes      = [lower(var.environment)]
+  clean_input   = true
+}
+
+resource "azurecaf_name" "vm_linux_caf_name" {
+  count         = locals.os_type == "linux" ? 1 : 0
+  name          = lower(var.name)
+  resource_type = "azurerm_linux_virtual_machine"
   suffixes      = [lower(var.environment)]
   clean_input   = true
 }
@@ -24,3 +33,4 @@ resource "azurerm_network_interface" "nic" {
     private_ip_address_allocation = "Dynamic"
   }
 }
+
