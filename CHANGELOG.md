@@ -1,5 +1,19 @@
 # Changelog
 
+## [7.1.0](https://github.com/Nmbrs/tf-modules/compare/v7.0.0...v7.1.0) (2022-07-27)
+
+
+### Features
+
+* **repositories:** add github repositories name uniqueness validation ([#133](https://github.com/Nmbrs/tf-modules/issues/133)) ([c6fe9e8](https://github.com/Nmbrs/tf-modules/commit/c6fe9e837f0f31e02964b7d504ee8f1b4bd47b0e))
+
+
+### Bug Fixes
+
+* **github:** change module indexes in tf state ([#131](https://github.com/Nmbrs/tf-modules/issues/131)) ([ea5c69c](https://github.com/Nmbrs/tf-modules/commit/ea5c69cc3eacfce79fc0208f13a850682ba12d9d))
+* **key_vault:** update policies index based references in tfstate ([#136](https://github.com/Nmbrs/tf-modules/issues/136)) ([b2d89b1](https://github.com/Nmbrs/tf-modules/commit/b2d89b1f31d274a4b9fd2cf403e92587b3cfcabc))
+* **virtual_netowrk:** update subnet index based references in tfstate ([#135](https://github.com/Nmbrs/tf-modules/issues/135)) ([d5cbe58](https://github.com/Nmbrs/tf-modules/commit/d5cbe5826c8bddef0b9be6e074b7e4e66e122ceb))
+
 ## [7.0.0](https://github.com/Nmbrs/tf-modules/compare/v6.1.0...v7.0.0) (2022-07-22)
 
 
