@@ -1,5 +1,5 @@
 output "repositories" {
-  description = "List of values github repositories"
+  description = "List of github repositories maps"
   value = [
     for repository in module.github_repository : {
       name           = repository.repository.name
