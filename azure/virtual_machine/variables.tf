@@ -64,8 +64,8 @@ variable "os_type" {
   type        = string
 
   validation {
-    condition     = contains(["ubuntu 22.04 lts", "ubuntu 18.04 lts", "ubuntu 18.04 lts", "debian 10", "debian 11", "windows server 2016", "windows server 2019", "windows server 2022", "sql server 2017", "sql server 2019", "sql server 2022"], lower(var.os_type))
-    error_message = "The 'os_type' value is invalid. Valid options are 'ubuntu 22.04 lts', 'ubuntu 18.04 lts', 'ubuntu 18.04 lts', 'debian 10', 'debian 11', 'windows server 2016', 'windows server 2019', 'windows server 2022', 'sql server 2017', 'sql server 2019', 'sql server 2022'."
+    condition     = contains(["ubuntu 22.04 lts", "ubuntu 18.04 lts", "debian 10", "debian 11", "windows server 2019", "windows server 2022", "sql server 2019", "sql server 2022"], lower(var.os_type))
+    error_message = "The 'os_type' value is invalid. Valid options are 'ubuntu 22.04 lts', 'ubuntu 20.04 lts', 'debian 10', 'debian 11', 'windows server 2019', 'windows server 2022', 'sql server 2019', 'sql server 2022'."
   }
 }
 

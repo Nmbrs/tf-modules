@@ -5,10 +5,8 @@ locals {
 
   os_type = contains(
     [
-      "windows server 2016",
       "windows server 2019",
       "windows server 2022",
-      "sql server 2017",
       "sql server 2019",
       "sql server 2022"
     ], lower(var.os_type)
@@ -27,12 +25,6 @@ locals {
       sku       = "20_04-lts-gen2"
       version   = "latest"
     },
-    "ubuntu 18.04 lts" = {
-      publisher = "Canonical"
-      offer     = "UbuntuServer"
-      sku       = "18_04-lts-gen2"
-      version   = "latest"
-    },
     "debian 11" = {
       publisher = "Debian"
       offer     = "debian-11"
@@ -43,12 +35,6 @@ locals {
       publisher = "Debian"
       offer     = "debian-10"
       sku       = "10-gen2"
-      version   = "latest"
-    },
-    "windows server 2016" = {
-      publisher = "MicrosoftWindowsServer"
-      offer     = "WindowsServer"
-      sku       = "2016-datacenter-gensecond"
       version   = "latest"
     },
     "windows server 2019" = {
