@@ -64,7 +64,7 @@ variable "os_type" {
   type        = string
 
   validation {
-    condition     = contains(["ubuntu 22.04 lts", "ubuntu 18.04 lts", "debian 10", "debian 11", "windows server 2019", "windows server 2022", "sql server 2019", "sql server 2022"], lower(var.os_type))
+    condition     = contains(["ubuntu 22.04 lts", "ubuntu 20.04 lts", "debian 10", "debian 11", "windows server 2019", "windows server 2022", "sql server 2019", "sql server 2022"], lower(var.os_type))
     error_message = "The 'os_type' value is invalid. Valid options are 'ubuntu 22.04 lts', 'ubuntu 20.04 lts', 'debian 10', 'debian 11', 'windows server 2019', 'windows server 2022', 'sql server 2019', 'sql server 2022'."
   }
 }
@@ -75,13 +75,24 @@ variable "ssh_public_key" {
 }
 
 variable "admin_username" {
-  description = "Specifies The administrator username for which the SSH Key should be configured."
+  description = "(Optional) Specifies The administrator username for which the SSH Key should be configured."
   type        = string
   default     = "automation"
 }
 
 
-variable "vnet_subnet_id" {
+variable "subnet_id" {
   description = "The ID of a Subnet where the Kubernetes Node Pool should exist. Changing this forces a new resource to be created."
   type        = string
+
+  validation {
+    condition     = can(coalesce(var.subnet_id))
+    error_message = "The 'subnet_id' value is invalid. It must be a non-empty string value."
+  }
+}
+
+variable "allow_auto_restart" {
+  description = "(Optional) Allow the virtual machine to be auto-restarted by automated tasks / tools."
+  type        = bool
+  default     = false
 }
