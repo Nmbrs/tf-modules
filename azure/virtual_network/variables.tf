@@ -69,6 +69,11 @@ variable "subnets" {
   }
 
   validation {
+    condition     = length([for subnet in var.subnets : subnet.name]) == length(distinct([for subnet in var.subnets : subnet.name]))
+    error_message = "At least one 'name' property from one of the 'subnets' is duplicated. They must be unique."
+  }
+
+  validation {
     condition     = alltrue([for subnet in var.subnets : alltrue([for address_prefix in subnet.address_prefixes : can(cidrhost(address_prefix, 0))])])
     error_message = "At least one of the values from 'address_prefixes' property from one of the 'subnets' is invalid. They must be valid CIDR blocks."
   }
