@@ -10,6 +10,9 @@ resource "azurerm_resource_group" "rg" {
   tags     = merge(var.extra_tags, local.default_tags)
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [
+      tags["created_at"],
+      tags["updated_at"]
+    ]
   }
 }
