@@ -5,7 +5,7 @@ data "azurerm_resource_group" "rg" {
 }
 
 resource "azurecaf_name" "caf_name_windows_vm" {
-  count         = locals.os_type == "windows" ? 1 : 0
+  //count         = local.os_type == "windows" ? 1 : 0
   name          = lower(var.name)
   resource_type = "azurerm_windows_virtual_machine"
   suffixes      = [lower(var.environment)]
@@ -13,7 +13,7 @@ resource "azurecaf_name" "caf_name_windows_vm" {
 }
 
 resource "azurecaf_name" "caf_name_linux_vm" {
-  count         = locals.os_type == "linux" ? 1 : 0
+  //count         = 0 //local.os_type == "linux" ? 1 : 0
   name          = lower(var.name)
   resource_type = "azurerm_linux_virtual_machine"
   suffixes      = [lower(var.environment)]
@@ -21,7 +21,7 @@ resource "azurecaf_name" "caf_name_linux_vm" {
 }
 
 
-resource "random_string" "vm_unique_id" {
+resource "random_string" "nic_unique_id" {
   length  = 4
   special = false
   upper   = false
@@ -32,7 +32,7 @@ resource "random_string" "vm_unique_id" {
 }
 
 resource "azurecaf_name" "caf_name_nic" {
-  name          = azurecaf_name.caf_name_vm.result
+  name          = azurecaf_name.caf_name_windows_vm.result
   resource_type = "azurerm_network_interface"
   suffixes      = [random_string.nic_unique_id.result]
   clean_input   = true
@@ -46,14 +46,14 @@ resource "azurerm_network_interface" "main_nic" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = var.vnet_subnet_id
+    subnet_id                     = var.subnet_id
     private_ip_address_allocation = "Dynamic"
   }
 }
 
 resource "azurerm_linux_virtual_machine" "linux_vm" {
-  count               = var.os_type == "linux" ? 1 : 0
-  name                = azurecaf_name.caf_name_vm.result
+  count               = local.os_type == "linux" ? 1 : 0
+  name                = azurecaf_name.caf_name_linux_vm.result
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
   tags                = merge(local.default_tags, data.azurerm_resource_group.rg.tags, var.extra_tags)
