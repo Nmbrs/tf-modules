@@ -8,35 +8,35 @@ variable "name" {
   }
 }
 
-variable "product" {
-  description = "Name of the product to which the resources belongs."
-  type        = string
+# variable "product" {
+#   description = "Name of the product to which the resources belongs."
+#   type        = string
 
-  validation {
-    condition     = can(coalesce(var.product))
-    error_message = "The 'product' value is invalid. It must be a non-empty string."
-  }
-}
+#   validation {
+#     condition     = can(coalesce(var.product))
+#     error_message = "The 'product' value is invalid. It must be a non-empty string."
+#   }
+# }
 
-variable "squad" {
-  description = "Name of the squad to which the resources belongs."
-  type        = string
+# variable "squad" {
+#   description = "Name of the squad to which the resources belongs."
+#   type        = string
 
-  validation {
-    condition     = can(coalesce(var.squad))
-    error_message = "The 'squad' value is invalid. It must be a non-empty string."
-  }
-}
+#   validation {
+#     condition     = can(coalesce(var.squad))
+#     error_message = "The 'squad' value is invalid. It must be a non-empty string."
+#   }
+# }
 
-variable "country" {
-  description = "Name of the country to which the resources belongs."
-  type        = string
+# variable "country" {
+#   description = "Name of the country to which the resources belongs."
+#   type        = string
 
-  validation {
-    condition     = can(coalesce(var.country))
-    error_message = "The 'country' value is invalid. It must be a non-empty string."
-  }
-}
+#   validation {
+#     condition     = can(coalesce(var.country))
+#     error_message = "The 'country' value is invalid. It must be a non-empty string."
+#   }
+# }
 
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
@@ -70,5 +70,16 @@ variable "location" {
   validation {
     condition     = contains(["westeurope", "northeurope"], var.location)
     error_message = "The 'location' value is invalid. Valid options are 'westeurope', 'northeurope'."
+  }
+}
+
+variable "status" {
+  description = "(Optional) Indicates the resource state that can lead to post actions (either manually or automatically)."
+  type        = string
+  default     = "life_cycle"
+
+  validation {
+    condition     = contains(["life_cycle", "not_compliant", "suspicious", "temporary", "to_delete", "to _review"], var.status)
+    error_message = "The 'status' value is invalid. Valid options are 'life_cycle', 'not_compliant', 'suspicious', 'temporary', 'to_delete', 'to _review'."
   }
 }
