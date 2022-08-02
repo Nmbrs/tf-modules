@@ -1,6 +1,7 @@
 locals {
   default_tags = {
-    ProvisionedBy = "Terraform"
+    managed_by = "Terraform"
+    auto_restart = var.allow_auto_restart
   }
 
   os_type = contains(
@@ -47,12 +48,6 @@ locals {
       publisher = "MicrosoftWindowsServer"
       offer     = "WindowsServer"
       sku       = "2022-datacenter-g2"
-      version   = "latest"
-    }
-    "sql server 2016" = {
-      publisher = "MicrosoftSQLServer"
-      offer     = "sql2017-ws2019"
-      sku       = "sqldev-gen2"
       version   = "latest"
     },
     "sql server 2019" = {
