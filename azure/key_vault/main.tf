@@ -50,7 +50,7 @@ resource "azurerm_key_vault_access_policy" "default_policy" {
 
 resource "azurerm_key_vault_access_policy" "readers_policy" {
   for_each = {
-    for policy in var.policies : policy.name => policy
+    for policy in var.policies : trimspace(lower(policy.name)) => policy
     if policy.type == "readers"
   }
   key_vault_id            = azurerm_key_vault.key_vault.id
@@ -62,7 +62,7 @@ resource "azurerm_key_vault_access_policy" "readers_policy" {
 
 resource "azurerm_key_vault_access_policy" "writers_policy" {
   for_each = {
-    for policy in var.policies : policy.name => policy
+    for policy in var.policies : trimspace(lower(policy.name)) => policy
     if policy.type == "writers"
   }
   key_vault_id            = azurerm_key_vault.key_vault.id
