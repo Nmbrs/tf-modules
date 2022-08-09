@@ -44,7 +44,7 @@ variable "product" {
 }
 
 variable "category" {
-  description = "(Optional) High level identification name that supports product componets."
+  description = "(Optional) High-level identification name that supports product components."
   type        = string
   default     = "not_applicable"
 
