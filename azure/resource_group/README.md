@@ -15,10 +15,12 @@
 
 - `name` - Name of the resource group. It must follow the CAF naming convention.
 - `location` - (Optional) Specifies the Azure Region where the resource should exists.
-- `environment` - The environment in which the resource should be provisioned. Valid options are 'Dev', 'Kitchen', 'Production','Staging', 'Test'.
-- `country` - Name of the country to which the resources belongs.
-- `squad` - Name of the squad to which the resources belongs.
-- `product` - Name of the product to which the resources belongs.
+- `environment` - The environment in which the resource should be provisioned.
+- `product` - Name of the product to which the resources belongs. Default value: "not_applicable"
+- `category`- (Optional) High level identification name that supports product componets. Default value: "not_applicable"
+- `owner` - (Optional) Name of the owner to which the resource belongs. Default value: "not_applicable"
+- `country` - Name of the country to which the resources belongs. Default value: "global"
+- `status` - (Optional) Indicates the resource state that can lead to post actions (either manually or automatically). Default value: "life_cycle"
 - `extra_tags` - (Optional) A extra mapping of tags which should be assigned to the desired resource.
 
 ## Module Output Variables
@@ -36,12 +38,14 @@ Fundamentally, you need to declare the module and pass the following variables i
 module "resource-group" {
   source                    = "git::github.com/Nmbrs/tf-modules//azure/resource-group"
   name                      = "my_project"
+  location                  = "westeurope"
   environment               = "dev"
-  country                   = "nl"
-  squad                     = "infra"
   product                   = "internal"
+  category                  = "monolith"
+  owner                     = "infra"
+  country                   = "nl" 
   extra_tags = {
-    Datadog = "Monitored"
+    datadog = "monitored"
   }
 }
 ```
