@@ -1,5 +1,20 @@
 # Changelog
 
+## [7.2.0](https://github.com/Nmbrs/tf-modules/compare/v7.1.0...v7.2.0) (2022-08-09)
+
+
+### Features
+
+* **key_vault:** add readers and writers polcies to kv outputs ([#142](https://github.com/Nmbrs/tf-modules/issues/142)) ([28aedf3](https://github.com/Nmbrs/tf-modules/commit/28aedf38b98f557392127c2820993597f3660ecd))
+* **key_vault:** trim spaces and lower case acess policies indexes ([#140](https://github.com/Nmbrs/tf-modules/issues/140)) ([ed61323](https://github.com/Nmbrs/tf-modules/commit/ed6132342d9b663a541592e610329da053cd3743))
+* **repositories:** add github repositories output ([#137](https://github.com/Nmbrs/tf-modules/issues/137)) ([247e7bc](https://github.com/Nmbrs/tf-modules/commit/247e7bc35a4042a1502f15be0b90ec5208aed9ea))
+* **resource_group:** update resource group tags to adhere to azure policy ([#139](https://github.com/Nmbrs/tf-modules/issues/139)) ([a0f273b](https://github.com/Nmbrs/tf-modules/commit/a0f273b70d33bc61903053602ca115f5cae68077))
+
+
+### Bug Fixes
+
+* **github:** trim spaces and lower case repository indexes ([#141](https://github.com/Nmbrs/tf-modules/issues/141)) ([01db6f7](https://github.com/Nmbrs/tf-modules/commit/01db6f76f436572743254dcea07d9baa311f5648))
+
 ## [7.1.0](https://github.com/Nmbrs/tf-modules/compare/v7.0.0...v7.1.0) (2022-07-27)
 
 
