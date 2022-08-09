@@ -15,7 +15,7 @@ variable "repositories" {
   }
 
   validation {
-    condition     = length([for repository in var.repositories : repository.name]) == length(distinct([for repository in var.repositories : repository.name]))
+    condition     = length([for repository in var.repositories : repository.name]) == length(distinct([for repository in var.repositories : trimspace(lower(repository.name))]))
     error_message = "At least one 'name' property from 'repositories' is duplicated. They must be unique."
   }
 
