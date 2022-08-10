@@ -12,6 +12,7 @@ module "github_repository" {
   allow_rebase_merge     = false
   allow_squash_merge     = true
   allow_auto_merge       = false
+  archive_on_destroy     = false
   has_downloads          = false
   auto_init              = true
   delete_branch_on_merge = true
