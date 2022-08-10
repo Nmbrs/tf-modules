@@ -1,7 +1,7 @@
 module "github_repository" {
   source                 = "mineiros-io/repository/github"
-  version                = "~> 0.16.0"
-  for_each               = { for repository in var.repositories : repository.name => repository }
+  version                = "~> 0.16.0"  
+  for_each               = { for repository in var.repositories : trimspace(lower(repository.name)) => repository }
   name                   = each.value.name
   description            = each.value.description
   visibility             = each.value.visibility
