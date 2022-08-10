@@ -39,14 +39,15 @@ resource "azurerm_key_vault_access_policy" "default_policy" {
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = data.azurerm_client_config.current.object_id
 
+  certificate_permissions = local.certificates_full_permissions
+  key_permissions         = []
+  secret_permissions      = local.secrets_full_permissions
+  storage_permissions     = []
+
   lifecycle {
     create_before_destroy = true
   }
-
-  secret_permissions      = local.secrets_full_permissions
-  certificate_permissions = local.certificates_full_permissions
 }
-
 
 resource "azurerm_key_vault_access_policy" "readers_policy" {
   for_each = {
@@ -56,8 +57,10 @@ resource "azurerm_key_vault_access_policy" "readers_policy" {
   key_vault_id            = azurerm_key_vault.key_vault.id
   tenant_id               = data.azurerm_client_config.current.tenant_id
   object_id               = each.value.object_id
-  secret_permissions      = local.secrets_read_permissions
   certificate_permissions = local.certificates_read_permissions
+  key_permissions         = []
+  secret_permissions      = local.secrets_read_permissions
+  storage_permissions     = []
 }
 
 resource "azurerm_key_vault_access_policy" "writers_policy" {
@@ -68,6 +71,8 @@ resource "azurerm_key_vault_access_policy" "writers_policy" {
   key_vault_id            = azurerm_key_vault.key_vault.id
   tenant_id               = data.azurerm_client_config.current.tenant_id
   object_id               = each.value.object_id
-  secret_permissions      = local.secrets_write_permissions
   certificate_permissions = local.certificates_write_permissions
+  key_permissions         = []
+  secret_permissions      = local.secrets_write_permissions
+  storage_permissions     = []
 }
