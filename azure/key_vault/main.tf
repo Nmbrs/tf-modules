@@ -30,6 +30,13 @@ resource "azurerm_key_vault" "key_vault" {
 
   // extra_tags is on the end to overwrite incorrect tags that already exists.
   tags = merge(local.default_tags, data.azurerm_resource_group.rg.tags, var.extra_tags)
+
+  lifecycle {
+    ignore_changes = [
+      tags["created_at"],
+      tags["updated_at"]
+    ]
+  }
 }
 
 # Create a Default Azure Key Vault access policy with Admin permissions
