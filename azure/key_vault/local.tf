@@ -1,6 +1,6 @@
 locals {
   default_tags = {
-    ProvisionedBy = "Terraform"
+    managed_by = "terraform"
   }
 
   internal_external_suffix = var.external_usage ? "e" : "i"
