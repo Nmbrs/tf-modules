@@ -1,5 +1,20 @@
 # Changelog
 
+## [7.3.0](https://github.com/Nmbrs/tf-modules/compare/v7.2.0...v7.3.0) (2022-08-24)
+
+
+### Features
+
+* **key_vault:** add key and storage permissions to access policies ([#147](https://github.com/Nmbrs/tf-modules/issues/147)) ([22d4c30](https://github.com/Nmbrs/tf-modules/commit/22d4c30ce3ef8f35599c5b4cc68af9ef548c7909))
+* **key_vault:** add managed_by tag ([#148](https://github.com/Nmbrs/tf-modules/issues/148)) ([f72c23c](https://github.com/Nmbrs/tf-modules/commit/f72c23c95814087f6d2b87b7d0eda43a05048484))
+* **key_vault:** ignore updated_at and created_at tags ([#145](https://github.com/Nmbrs/tf-modules/issues/145)) ([04245c1](https://github.com/Nmbrs/tf-modules/commit/04245c11d4ae02143cbf3f21fa0961a5d0d38dd7))
+* **repository:** remove archive_on_destroy behavior ([#138](https://github.com/Nmbrs/tf-modules/issues/138)) ([fd72f4d](https://github.com/Nmbrs/tf-modules/commit/fd72f4dd76e9b1afbe704e32192708d94b8e4039))
+
+
+### Bug Fixes
+
+* **provider:** update modules ([#146](https://github.com/Nmbrs/tf-modules/issues/146)) ([64e38c5](https://github.com/Nmbrs/tf-modules/commit/64e38c5479524801bf10981f16c4b0c93ddcd18c))
+
 ## [7.2.0](https://github.com/Nmbrs/tf-modules/compare/v7.1.0...v7.2.0) (2022-08-09)
 
 
