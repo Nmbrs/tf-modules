@@ -12,18 +12,3 @@ output "txt_fqdn" {
   description = "The FQDN of the TXT record"
   value       = { for k, fqdn in azurerm_dns_txt_record.record : k => fqdn.fqdn }
 }
-
-output "a_record" {
-  description = "The A record"
-  value       = { for k, record in azurerm_dns_a_record.record : k => record.record }
-}
-
-output "cname_record" {
-  description = "The CNAME record"
-  value       = { for k, record in azurerm_dns_cname_record.record : k => record.record }
-}
-
-output "txt_record" {
-  description = "The TXT record"
-  value       = { for k, record in azurerm_dns_txt_record.record : k => record.record }
-}
