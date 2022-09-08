@@ -1,5 +1,5 @@
 locals {
   default_tags = {
-    ProvisionedBy : "Terraform"
+    managed_by = "terraform"
   }
 }
