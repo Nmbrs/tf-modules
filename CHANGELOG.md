@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.4.0](https://github.com/Nmbrs/tf-modules/compare/v7.3.0...v7.4.0) (2022-09-09)
+
+
+### Features
+
+* **dns_records:** update dns_records module ([#149](https://github.com/Nmbrs/tf-modules/issues/149)) ([7cc7b35](https://github.com/Nmbrs/tf-modules/commit/7cc7b35b7fe903238c22b6729b7c5d4ec17a6c24))
+
+
+### Bug Fixes
+
+* **storage_account:** modified the default tag to be aligned with nmbrs tag strategy. ([#150](https://github.com/Nmbrs/tf-modules/issues/150)) ([2833ef2](https://github.com/Nmbrs/tf-modules/commit/2833ef263a246bd95f4c053209b74c4c4149204e))
+
 ## [7.3.0](https://github.com/Nmbrs/tf-modules/compare/v7.2.0...v7.3.0) (2022-08-24)
 
 
