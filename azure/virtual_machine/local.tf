@@ -1,6 +1,6 @@
 locals {
   default_tags = {
-    managed_by = "Terraform"
+    managed_by   = "terraform"
     auto_restart = var.allow_auto_restart
   }
 
