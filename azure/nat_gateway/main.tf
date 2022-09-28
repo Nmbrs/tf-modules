@@ -4,7 +4,7 @@ resource "azurerm_public_ip" "natgw" {
   resource_group_name = var.natgw_resource_group
   allocation_method   = "Static"
   sku                 = "Standard"
-  availability_zone   = "1"
+  zones               = ["1"]
 }
 
 resource "azurerm_nat_gateway" "natgw" {

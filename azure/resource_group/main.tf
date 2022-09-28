@@ -8,4 +8,11 @@ resource "azurerm_resource_group" "rg" {
   name     = azurecaf_name.caf_name.result
   location = var.location
   tags     = merge(var.extra_tags, local.default_tags)
+
+  lifecycle {
+    ignore_changes = [
+      tags["created_at"],
+      tags["updated_at"]
+    ]
+  }
 }

@@ -10,30 +10,30 @@ variable "dns_zone_rg" {
 
 variable "a" {
   description = "A record to be created"
-  type = map(object({
+  type = list(object({
     name    = string
     records = list(string)
     ttl     = number
   }))
-  default = {}
+  default = []
 }
 
 variable "cname" {
   description = "CNAME record to be created"
-  type = map(object({
+  type = list(object({
     name   = string
     record = string
     ttl    = number
   }))
-  default = {}
+  default = []
 }
 
 variable "txt" {
   description = "TXT record to be created"
-  type = map(object({
+  type = list(object({
     name   = string
-    record = list(string)
+    records = list(string)
     ttl    = number
   }))
-  default = {}
+  default = []
 }
