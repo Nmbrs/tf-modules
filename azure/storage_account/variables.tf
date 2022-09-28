@@ -18,6 +18,12 @@ variable "name" {
   }
 }
 
+variable "environment" {
+  description = "(Optional) The environment in which the resource should be provisioned."
+  type        = string
+  default     = "dev"
+}
+
 variable "resource_group_name" {
   description = "The name of an existing Resource Group."
   type        = string
