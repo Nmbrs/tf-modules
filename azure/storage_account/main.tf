@@ -2,8 +2,17 @@ data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
 }
 
+resource "azurecaf_name" "caf_name" {
+  name          = lower(var.name)
+  resource_type = "azurerm_storage_account"
+  prefixes      = ["sanmbrs"]
+  suffixes      = [lower("${var.environment}")]
+  clean_input   = true
+  use_slug      = false
+}
+
 resource "azurerm_storage_account" "storage_account" {
-  name                      = lower(var.name)
+  name                      = azurecaf_name.caf_name.result
   resource_group_name       = data.azurerm_resource_group.rg.name
   location                  = data.azurerm_resource_group.rg.location
   account_kind              = var.account_kind
