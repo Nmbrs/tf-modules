@@ -7,7 +7,7 @@ terraform {
 
     azurecaf = {
       source  = "aztfmod/azurecaf"
-      version = "2.0.0-preview-3"
+      version = "1.2.23"
     }
   }
 
