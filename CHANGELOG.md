@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.5.0](https://github.com/Nmbrs/tf-modules/compare/v7.4.0...v7.5.0) (2022-12-13)
+
+
+### Features
+
+* **key_vault:** update kv documetation ([#153](https://github.com/Nmbrs/tf-modules/issues/153)) ([d23d498](https://github.com/Nmbrs/tf-modules/commit/d23d498b702afe91a01caa29a1090415da3fa097))
+
 ## [7.4.0](https://github.com/Nmbrs/tf-modules/compare/v7.3.0...v7.4.0) (2022-09-09)
 
 
