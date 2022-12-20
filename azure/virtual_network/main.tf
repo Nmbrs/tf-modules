@@ -9,7 +9,7 @@ resource "azurerm_virtual_network" "vnet" {
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
   address_space       = var.address_spaces
-  tags                = merge(local.default_tags, data.azurerm_resource_group.rg.tags, var.extra_tags)
+  tags = merge(data.azurerm_resource_group.rg.tags, local.default_tags, var.extra_tags)
 }
 
 resource "azurerm_subnet" "subnet" {
