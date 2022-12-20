@@ -1,7 +1,8 @@
 locals {
   default_tags = {
-    ProvisionedBy = "Terraform"
+    managed_by = "terraform"
   }
+  
   environment = var.environment
 
   # The exact list of actions needs to be retrieved using the Azure CLI command:
