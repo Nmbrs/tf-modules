@@ -21,7 +21,7 @@ resource "azurerm_storage_account" "storage_account" {
   enable_https_traffic_only = true
   min_tls_version           = "TLS1_2"
 
-  tags = merge(local.default_tags, data.azurerm_resource_group.rg.tags, var.extra_tags)
+  tags = merge(data.azurerm_resource_group.rg.tags, local.default_tags, var.extra_tags)  
 
   queue_properties {
     logging {
