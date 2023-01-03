@@ -53,12 +53,12 @@ variable "address_spaces" {
 variable "subnets" {
   description = "List of objects that represent the configuration of each subnet."
   type = list(object({
-    name                                           = string
-    address_prefixes                               = list(string)
-    service_endpoints                              = list(string)
-    enforce_private_link_service_network_policies  = bool
-    enforce_private_link_endpoint_network_policies = bool
-    delegations                                    = list(string)
+    name                                          = string
+    address_prefixes                              = list(string)
+    delegations                                   = list(string)
+    private_link_service_network_policies_enabled = bool
+    private_endpoint_network_policies_enabled     = bool
+    service_endpoints                             = list(string)
 
   }))
   default = []
@@ -122,9 +122,11 @@ variable "subnets" {
             "Microsoft.AISupercomputer/accounts/jobs",
             "Microsoft.AISupercomputer/accounts/models",
             "Microsoft.AISupercomputer/accounts/npu",
-            "Microsoft.AVS/PrivateClouds",
             "Microsoft.ApiManagement/service",
             "Microsoft.Apollo/npu",
+            "Microsoft.App/environments",
+            "Microsoft.App/testClients",
+            "Microsoft.AVS/PrivateClouds",
             "Microsoft.AzureCosmosDB/clusters",
             "Microsoft.BareMetal/AzureHostedService",
             "Microsoft.BareMetal/AzureVMware",
@@ -167,7 +169,8 @@ variable "subnets" {
             "Microsoft.Web/hostingEnvironments",
             "Microsoft.Web/serverFarms",
             "NGINX.NGINXPLUS/nginxDeployments",
-            "PaloAltoNetworks.Cloudngfw/firewalls"
+            "PaloAltoNetworks.Cloudngfw/firewalls",
+            "Qumulo.Storage/fileSystems"
           ],
         delegation)
       ])
