@@ -40,10 +40,6 @@ No resources.
 
 A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
 
-### General usage
-
-### Injecting the environment variable in a `resource_group` module
-
 ```hcl
 module "environment" {
   source = "./environment"
