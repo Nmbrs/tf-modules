@@ -42,7 +42,7 @@ A number of code snippets demonstrating different use cases for the module have 
 
 ```hcl
 module "environment" {
-  source = "./environment"
+  source = "git::github.com/Nmbrs/tf-modules//general/environment"
   environment = var.environment
 }
 ```
