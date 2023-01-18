@@ -59,7 +59,7 @@ A number of code snippets demonstrating different use cases for the module have 
 
 ```hcl
 module "resource-group" {
-  source                    = "git::github.com/Nmbrs/tf-modules//azure/resource-group"
+  source                    = "git::github.com/Nmbrs/tf-modules//azure/resource_group"
   name                      = "my_project"
   location                  = "westeurope"
   environment               = "dev"
