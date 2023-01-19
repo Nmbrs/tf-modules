@@ -4,7 +4,7 @@ data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
 }
 
-resource "azurerm_cosmosdb_account" "cosmo_db" {
+resource "azurerm_cosmodb_account" "cosmo_db" {
   access_key_metadata_writes_enabled    = true
   analytical_storage_enabled            = false
   default_identity_type                 = "FirstPartyIdentity"
