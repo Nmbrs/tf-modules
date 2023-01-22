@@ -28,14 +28,8 @@ resource "azurerm_key_vault" "key_vault" {
     bypass         = "AzureServices"
   }
 
-  // extra_tags is on the end to overwrite incorrect tags that already exists.
-  tags = merge(data.azurerm_resource_group.rg.tags, local.default_tags, var.extra_tags)
-
   lifecycle {
-    ignore_changes = [
-      tags["created_at"],
-      tags["updated_at"]
-    ]
+    ignore_changes = [tags]
   }
 }
 
