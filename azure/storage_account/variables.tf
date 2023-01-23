@@ -34,17 +34,6 @@ variable "resource_group_name" {
   }
 }
 
-variable "extra_tags" {
-  description = "(Optional) A extra mapping of tags which should be assigned to the desired resource."
-  type        = map(string)
-  default     = {}
-
-  validation {
-    condition     = alltrue([for tag in var.extra_tags : can(coalesce(var.extra_tags))])
-    error_message = "At least on tag value from 'extra_tags' is invalid. They must be non-empty string values."
-  }
-}
-
 variable "account_kind" {
   description = "Defines the Kind of storage account."
   type        = string
