@@ -9,27 +9,13 @@ variable "name" {
 }
 
 variable "location" {
-  # For a complete list of available Azure regions run at cli:  
-  # az account list-locations  --query "[].{displayName:displayName, location:name}" --output table
-  description = "(Optional) The Azure Region where the resource should exist."
+  description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
   type        = string
-  default     = "westeurope"
-
-  validation {
-    condition     = contains(["westeurope", "northeurope"], var.location)
-    error_message = "The 'location' value is invalid. Valid options are 'westeurope', 'northeurope'."
-  }
 }
 
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string
-  default     = "dev"
-
-  validation {
-    condition     = contains(["dev", "prod", "stag", "test", "sand"], var.environment)
-    error_message = "The 'environment' value is invalid. Valid options are 'dev', 'prod','stag', 'test', 'sand'."
-  }
 }
 
 variable "product" {
