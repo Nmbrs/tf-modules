@@ -1,42 +1,61 @@
-# Azure DNS Zone Module
+# DNS Zone Module
 
-<p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg" />
-  <a href="LICENSE.md" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg" />
-  </a>
-</p>
+## Sumary
 
----
+The `dns_zone` module is an abstraction that implements all the necessary
+Terraform code to provision an Azure Keyvault with success, and accordingly with
+Visma Nmbrs policies.
 
-> A terraform module to support the creation of a DNS Zone in Azure.
+## Requirements
 
-## Module Input variables
+| Name                                                                     | Version           |
+| ------------------------------------------------------------------------ | ----------------- |
+| <a name="requirement_terraform"></a> [terraform](#requirement_terraform) | >= 1.3.0, < 2.0.0 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement_azurerm)       | ~> 3.6            |
 
-- `name` - Name of the resource group. It must follow the CAF naming convention.
-- `resource_group_name` - The name of an existing Resource Group.
-- `tags` - A mapping of tags which should be assigned to the desired resource.
+## Providers
 
-## Module Output Variables
+| Name                                                         | Version |
+| ------------------------------------------------------------ | ------- |
+| <a name="provider_azurerm"></a> [azurerm](#provider_azurerm) | ~> 3.6  |
 
-- `name` - The name of the DNS Zone. Must be a valid domain name.
-- `id` - The DNS Zone name.
-- `max_number_of_record_sets` - Maximum number of Records in the zone.
-- `number_of_record_sets` - The number of records already in the zone.
-- `name_servers` - A list of values that make up the NS record for the zone.
+## Modules
+
+No modules.
+
+## Resources
+
+| Name                                                                                                                  | Type     |
+| --------------------------------------------------------------------------------------------------------------------- | -------- |
+| [azurerm_dns_zone.dns_zone](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_zone) | resource |
+
+## Inputs
+
+| Name                                                                                       | Description                                                         | Type          | Default | Required |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------- | ------- | :------: |
+| <a name="input_name"></a> [name](#input_name)                                              | The name of the DNS Zone. Must be a valid domain name.              | `string`      | n/a     |   yes    |
+| <a name="input_resource_group_name"></a> [resource_group_name](#input_resource_group_name) | The name of an existing Resource Group.                             | `string`      | n/a     |   yes    |
+| <a name="input_tags"></a> [tags](#input_tags)                                              | A mapping of tags which should be assigned to the desired resource. | `map(string)` | n/a     |   yes    |
+
+## Outputs
+
+| Name                                                                                                           | Description                                               |
+| -------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| <a name="output_id"></a> [id](#output_id)                                                                      | The DNS Zone ID.                                          |
+| <a name="output_max_number_of_record_sets"></a> [max_number_of_record_sets](#output_max_number_of_record_sets) | Maximum number of Records in the zone.                    |
+| <a name="output_name"></a> [name](#output_name)                                                                | The DNS Zone name.                                        |
+| <a name="output_name_servers"></a> [name_servers](#output_name_servers)                                        | A list of values that make up the NS record for the zone. |
+| <a name="output_number_of_record_sets"></a> [number_of_record_sets](#output_number_of_record_sets)             | The number of records already in the zone.                |
 
 ## How to use it?
 
-Fundamentally, you need to declare the module and pass the following variables in your Terraform service template:
+A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
 
 ```hcl
 module "dns_zone" {
-  source              = "../tf-modules/azure/dns_zone"
-  name                = "my.domain.com"
+  source              = "git::github.com/Nmbrs/tf-modules//azure/dns_zone"
+  name                = "contoso.com.dev"
   resource_group_name = "rg-demo-staging"
-  tags                = {
-    my_tags: "value"
-  }
 }
 ```
 
@@ -51,5 +70,4 @@ The following rules should be applied when defining a name for the DNS Zone:
 ### Valid Examples
 
 - subomain1.sudomain2.com
-- contoso.co.uk
 - example.com
