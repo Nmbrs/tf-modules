@@ -11,14 +11,14 @@ Terraform code to provision an Azure Storage account with success, and according
 | ------------------------------------------------------------------------ | ----------------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement_terraform) | >= 1.3.0, < 2.0.0 |
 | <a name="requirement_azurecaf"></a> [azurecaf](#requirement_azurecaf)    | 2.0.0-preview3    |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement_azurerm)       | ~> 3.40           |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement_azurerm)       | ~> 3.6            |
 
 ## Providers
 
 | Name                                                            | Version        |
 | --------------------------------------------------------------- | -------------- |
 | <a name="provider_azurecaf"></a> [azurecaf](#provider_azurecaf) | 2.0.0-preview3 |
-| <a name="provider_azurerm"></a> [azurerm](#provider_azurerm)    | 3.40.0         |
+| <a name="provider_azurerm"></a> [azurerm](#provider_azurerm)    | 3.6            |
 
 ## Modules
 
