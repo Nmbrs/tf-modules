@@ -31,9 +31,9 @@ variable "cname" {
 variable "txt" {
   description = "TXT record to be created"
   type = list(object({
-    name   = string
+    name    = string
     records = list(string)
-    ttl    = number
+    ttl     = number
   }))
   default = []
 }
