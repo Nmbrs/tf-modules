@@ -13,17 +13,6 @@ variable "environment" {
   type        = string
 }
 
-variable "extra_tags" {
-  description = "(Optional) A extra mapping of tags which should be assigned to the desired resource."
-  type        = map(string)
-  default     = {}
-
-  validation {
-    condition     = alltrue([for tag in var.extra_tags : can(coalesce(tag))])
-    error_message = "At least one tag value from 'extra_tags' is invalid. They must be non-empty string values."
-  }
-}
-
 variable "address_spaces" {
   description = "The address space that is used the virtual network."
   type        = list(string)
@@ -177,5 +166,4 @@ variable "subnets" {
     condition     = alltrue([for subnet in var.subnets : length(subnet.delegations) == length(distinct(subnet.delegations))])
     error_message = "At least one of the values from 'delegations' list from one of the 'subnets' is duplicated. All elements must be unique."
   }
-
 }
