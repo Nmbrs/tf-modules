@@ -5,6 +5,10 @@ resource "azurerm_public_ip" "natgw" {
   allocation_method   = "Static"
   sku                 = "Standard"
   zones               = ["1"]
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
 
 resource "azurerm_nat_gateway" "natgw" {
@@ -14,6 +18,10 @@ resource "azurerm_nat_gateway" "natgw" {
   sku_name                = "Standard"
   idle_timeout_in_minutes = 10
   zones                   = ["1"]
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
 
 resource "azurerm_nat_gateway_public_ip_association" "natgw" {
