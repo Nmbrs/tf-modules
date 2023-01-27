@@ -7,11 +7,11 @@ terraform {
 
     azurecaf = {
       source  = "aztfmod/azurecaf"
-      version = "2.0.0-preview-3"
+      version = "2.0.0-preview3"
     }
   }
 
-  required_version = ">= 1.0.0, < 2.0.0"
+  required_version = ">= 1.3.0, < 2.0.0"
 }
 
 provider "azurerm" {

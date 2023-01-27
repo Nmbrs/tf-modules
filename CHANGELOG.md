@@ -1,5 +1,30 @@
 # Changelog
 
+## [7.6.0](https://github.com/Nmbrs/tf-modules/compare/v7.5.0...v7.6.0) (2022-12-20)
+
+
+### Features
+
+* **dns_zone:** update caf provider ([#157](https://github.com/Nmbrs/tf-modules/issues/157)) ([ae7467a](https://github.com/Nmbrs/tf-modules/commit/ae7467a6b62e0d3e35d25bc124838ad166ede723))
+* **resource_group:** update caf provider ([#156](https://github.com/Nmbrs/tf-modules/issues/156)) ([6f7f7b6](https://github.com/Nmbrs/tf-modules/commit/6f7f7b67e8dd2757d05ac641fda8de18b9f96bf4))
+* **storage_account:** update caf provider ([#158](https://github.com/Nmbrs/tf-modules/issues/158)) ([1f5835d](https://github.com/Nmbrs/tf-modules/commit/1f5835d70ac8715679d44b900be71a3662693349))
+* **virtual_network:** update caf provider ([#155](https://github.com/Nmbrs/tf-modules/issues/155)) ([ca9a90f](https://github.com/Nmbrs/tf-modules/commit/ca9a90f60d28003a9089bc9ae57184f3d661f0a1))
+
+
+### Bug Fixes
+
+* **key_vault:** update default tags precedence ([#160](https://github.com/Nmbrs/tf-modules/issues/160)) ([d4fb56e](https://github.com/Nmbrs/tf-modules/commit/d4fb56e2f18c32ec65afded98d17facb126172fa))
+* **resource_group:** update default tags precedence ([#162](https://github.com/Nmbrs/tf-modules/issues/162)) ([a191381](https://github.com/Nmbrs/tf-modules/commit/a19138120c720fd2a55f2fa7ef0183aba14e8944))
+* **storage_account:** update default tags precedence ([#161](https://github.com/Nmbrs/tf-modules/issues/161)) ([b174aa9](https://github.com/Nmbrs/tf-modules/commit/b174aa95eca972f16d7e0ef377da6ccf8a83b156))
+* **virtual_network:** update tag precedence vnet ([#163](https://github.com/Nmbrs/tf-modules/issues/163)) ([f498333](https://github.com/Nmbrs/tf-modules/commit/f49833319647c5637d57d546b76f63f178eb9204))
+
+## [7.5.0](https://github.com/Nmbrs/tf-modules/compare/v7.4.0...v7.5.0) (2022-12-13)
+
+
+### Features
+
+* **key_vault:** update kv documetation ([#153](https://github.com/Nmbrs/tf-modules/issues/153)) ([d23d498](https://github.com/Nmbrs/tf-modules/commit/d23d498b702afe91a01caa29a1090415da3fa097))
+
 ## [7.4.0](https://github.com/Nmbrs/tf-modules/compare/v7.3.0...v7.4.0) (2022-09-09)
 
 

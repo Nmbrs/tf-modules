@@ -9,24 +9,8 @@ variable "name" {
 }
 
 variable "environment" {
-  description = "(Optional) The environment in which the resource should be provisioned."
+  description = "The environment in which the resource should be provisioned."
   type        = string
-
-  validation {
-    condition     = contains(["dev", "prod", "stag", "test", "sand"], var.environment)
-    error_message = "The 'environment' value is invalid. Valid options are 'dev', 'prod','stag', 'test', 'sand'."
-  }
-}
-
-variable "extra_tags" {
-  description = "(Optional) A extra mapping of tags which should be assigned to the desired resource."
-  type        = map(string)
-  default     = {}
-
-  validation {
-    condition     = alltrue([for tag in var.extra_tags : can(coalesce(tag))])
-    error_message = "At least one tag value from 'extra_tags' is invalid. They must be non-empty string values."
-  }
 }
 
 variable "address_spaces" {
@@ -53,12 +37,12 @@ variable "address_spaces" {
 variable "subnets" {
   description = "List of objects that represent the configuration of each subnet."
   type = list(object({
-    name                                           = string
-    address_prefixes                               = list(string)
-    service_endpoints                              = list(string)
-    enforce_private_link_service_network_policies  = bool
-    enforce_private_link_endpoint_network_policies = bool
-    delegations                                    = list(string)
+    name                                          = string
+    address_prefixes                              = list(string)
+    delegations                                   = list(string)
+    private_link_service_network_policies_enabled = bool
+    private_endpoint_network_policies_enabled     = bool
+    service_endpoints                             = list(string)
 
   }))
   default = []
@@ -122,9 +106,11 @@ variable "subnets" {
             "Microsoft.AISupercomputer/accounts/jobs",
             "Microsoft.AISupercomputer/accounts/models",
             "Microsoft.AISupercomputer/accounts/npu",
-            "Microsoft.AVS/PrivateClouds",
             "Microsoft.ApiManagement/service",
             "Microsoft.Apollo/npu",
+            "Microsoft.App/environments",
+            "Microsoft.App/testClients",
+            "Microsoft.AVS/PrivateClouds",
             "Microsoft.AzureCosmosDB/clusters",
             "Microsoft.BareMetal/AzureHostedService",
             "Microsoft.BareMetal/AzureVMware",
@@ -167,7 +153,8 @@ variable "subnets" {
             "Microsoft.Web/hostingEnvironments",
             "Microsoft.Web/serverFarms",
             "NGINX.NGINXPLUS/nginxDeployments",
-            "PaloAltoNetworks.Cloudngfw/firewalls"
+            "PaloAltoNetworks.Cloudngfw/firewalls",
+            "Qumulo.Storage/fileSystems"
           ],
         delegation)
       ])
@@ -179,5 +166,4 @@ variable "subnets" {
     condition     = alltrue([for subnet in var.subnets : length(subnet.delegations) == length(distinct(subnet.delegations))])
     error_message = "At least one of the values from 'delegations' list from one of the 'subnets' is duplicated. All elements must be unique."
   }
-
 }

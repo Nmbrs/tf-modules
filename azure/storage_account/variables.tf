@@ -18,6 +18,12 @@ variable "name" {
   }
 }
 
+variable "environment" {
+  description = "(Optional) The environment in which the resource should be provisioned."
+  type        = string
+  default     = "dev"
+}
+
 variable "resource_group_name" {
   description = "The name of an existing Resource Group."
   type        = string
@@ -25,17 +31,6 @@ variable "resource_group_name" {
   validation {
     condition     = can(coalesce(var.resource_group_name))
     error_message = "The 'resource_group_name' value is invalid. It must be a non-empty string."
-  }
-}
-
-variable "extra_tags" {
-  description = "(Optional) A extra mapping of tags which should be assigned to the desired resource."
-  type        = map(string)
-  default     = {}
-
-  validation {
-    condition     = alltrue([for tag in var.extra_tags : can(coalesce(var.extra_tags))])
-    error_message = "At least on tag value from 'extra_tags' is invalid. They must be non-empty string values."
   }
 }
 

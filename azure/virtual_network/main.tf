@@ -9,19 +9,22 @@ resource "azurerm_virtual_network" "vnet" {
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
   address_space       = var.address_spaces
-  tags                = merge(local.default_tags, data.azurerm_resource_group.rg.tags, var.extra_tags)
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
 
 resource "azurerm_subnet" "subnet" {
   for_each = { for subnet in var.subnets : subnet.name => subnet }
 
-  name                                           = each.value.name
-  resource_group_name                            = data.azurerm_resource_group.rg.name
-  virtual_network_name                           = azurerm_virtual_network.vnet.name
-  address_prefixes                               = each.value.address_prefixes
-  service_endpoints                              = lookup(each.value, "service_endpoints", [])
-  enforce_private_link_service_network_policies  = lookup(each.value, "enforce_private_link_service_network_policies", false)
-  enforce_private_link_endpoint_network_policies = lookup(each.value, "enforce_private_link_endpoint_network_policies", false)
+  name                                          = each.value.name
+  resource_group_name                           = data.azurerm_resource_group.rg.name
+  virtual_network_name                          = azurerm_virtual_network.vnet.name
+  address_prefixes                              = each.value.address_prefixes
+  service_endpoints                             = lookup(each.value, "service_endpoints", [])
+  private_endpoint_network_policies_enabled     = lookup(each.value, "private_link_service_network_policies_enabled", true)
+  private_link_service_network_policies_enabled = lookup(each.value, "private_endpoint_network_policies_enabled", true)
 
   dynamic "delegation" {
     for_each = each.value.delegations
