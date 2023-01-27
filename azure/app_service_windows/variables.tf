@@ -38,11 +38,6 @@ variable "apps" {
   type        = map(any)
 }
 
-variable "tags" {
-  description = "nmbrs list of mandatory resource tags."
-  type        = map(string)
-}
-
 variable "dns_zone_name" {
   description = "Name of the DNS zone"
   type        = string

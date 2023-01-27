@@ -10,6 +10,11 @@ resource "azurerm_dns_cname_record" "binding" {
   resource_group_name = data.azurerm_dns_zone.binding.resource_group_name
   ttl                 = var.ttl
   record              = var.app_default_site_hostname[each.key]
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
+
 }
 
 data "azurerm_windows_web_app" "binding" {
@@ -26,7 +31,8 @@ resource "azurerm_app_service_custom_hostname_binding" "binding" {
   hostname            = each.value["custom_domain"]
   app_service_name    = data.azurerm_windows_web_app.binding[each.key].name
   resource_group_name = var.resource_group
-  depends_on          = [azurerm_dns_cname_record.binding]
+
+  depends_on = [azurerm_dns_cname_record.binding]
 
   lifecycle {
     ignore_changes = [thumbprint]
@@ -45,13 +51,17 @@ data "azurerm_key_vault_certificate" "binding" {
 
 resource "azurerm_app_service_certificate" "binding" {
   name                = data.azurerm_key_vault_certificate.binding.name
-  tags                = var.tags
   resource_group_name = var.resource_group
   location            = var.location
   key_vault_secret_id = data.azurerm_key_vault_certificate.binding.secret_id
+
   depends_on = [
     azurerm_app_service_custom_hostname_binding.binding
   ]
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
 
 resource "azurerm_app_service_certificate_binding" "binding" {
@@ -62,6 +72,7 @@ resource "azurerm_app_service_certificate_binding" "binding" {
   hostname_binding_id = azurerm_app_service_custom_hostname_binding.binding[each.key].id
   certificate_id      = azurerm_app_service_certificate.binding.id
   ssl_state           = "SniEnabled"
+
   depends_on = [
     azurerm_app_service_certificate.binding
   ]

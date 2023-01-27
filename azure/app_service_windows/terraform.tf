@@ -5,5 +5,11 @@ terraform {
       version = "~> 3.6"
     }
   }
-  required_version = ">= 1.0.0"
+
+  required_version = ">= 1.3.0, < 2.0.0"
+}
+
+provider "azurerm" {
+  features {
+  }
 }
