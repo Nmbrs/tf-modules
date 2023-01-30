@@ -1,98 +1,144 @@
 variable "resource_group_name" {
-  description = "The name of the resource group in which to create the virtual machine."
   type        = string
+  description = "The name of an existing Resource Group."
 }
 
-variable "name" {
+variable "vm_name" {
   description = "The name of the virtual machine."
   type        = string
 }
 
-# variable "product" {
-#   description = "Name of the product to which the resources belongs."
-#   type        = string
-
-#   validation {
-#     condition     = can(coalesce(var.product))
-#     error_message = "The 'product' value is invalid. It must be a non-empty string."
-#   }
-# }
-
-# variable "squad" {
-#   description = "Name of the squad to which the resources belongs."
-#   type        = string
-
-#   validation {
-#     condition     = can(coalesce(var.squad))
-#     error_message = "The 'squad' value is invalid. It must be a non-empty string."
-#   }
-# }
-
-# variable "country" {
-#   description = "Name of the country to which the resources belongs."
-#   type        = string
-
-#   validation {
-#     condition     = can(coalesce(var.country))
-#     error_message = "The 'country' value is invalid. It must be a non-empty string."
-#   }
-# }
-
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string
-
-  validation {
-    condition     = contains(["dev", "prod", "stag", "test", "sand"], var.environment)
-    error_message = "The 'environment' value is invalid. Valid options are 'dev', 'prod','stag', 'test', 'sand'."
-  }
 }
 
-variable "extra_tags" {
-  description = "(Optional) A extra mapping of tags which should be assigned to the desired resource."
-  type        = map(string)
-  default     = {}
+variable "vm_size" {
+  description = "The SKU which should be used for this Virtual Machine. For an exaustive list of virtual, please use the command 'az vm list-sizes --location 'your-location''."
+  type        = string
+  default     = "Standard_D2s_v3"
 
   validation {
-    condition     = alltrue([for tag in var.extra_tags : can(coalesce(tag))])
-    error_message = "At least one tag value from 'extra_tags' is invalid. They must be non-empty string values."
+    condition     = contains(["Standard_D2s_v3"], var.vm_size)
+    error_message = format("Invalid value '%s' for variable 'vm_size', valid options are 'Standard_D2s_v3'.", var.vm_size)
   }
 }
-
 variable "os_type" {
-  description = "The environment in which the resource should be provisioned."
+  description = "Type of virtual machine to be created. Acceptable values are 'dev', 'test', 'prod' or 'sand'."
   type        = string
 
   validation {
-    condition     = contains(["ubuntu 22.04 lts", "ubuntu 20.04 lts", "debian 10", "debian 11", "windows server 2019", "windows server 2022", "sql server 2019", "sql server 2022"], lower(var.os_type))
-    error_message = "The 'os_type' value is invalid. Valid options are 'ubuntu 22.04 lts', 'ubuntu 20.04 lts', 'debian 10', 'debian 11', 'windows server 2019', 'windows server 2022', 'sql server 2019', 'sql server 2022'."
+    condition     = contains(["linux", "windows"], var.os_type)
+    error_message = format("Invalid value '%s' for variable 'os_type', valid options are 'linux', 'windows'.", var.os_type)
   }
 }
 
-variable "ssh_public_key" {
-  description = "Specifies the SSH public key used to access the virtual_machine."
-  type        = string
+variable "os_image" {
+  description = "The operating system image for a virtual machine."
+  type = object({
+    publisher = string
+    offer     = string
+    sku       = string
+    version   = string
+  })
+
+  validation {
+    condition     = can(coalesce(trimspace(var.os_image.publisher)))
+    error_message = format("Invalid value '%s' for variable 'os_image.publisher', It must be non-empty string values.", var.os_image.publisher)
+  }
+
+  validation {
+    condition     = can(coalesce(trimspace(var.os_image.offer)))
+    error_message = format("Invalid value '%s' for variable 'os_image.offer', It must be non-empty string values.", var.os_image.offer)
+  }
+
+  validation {
+    condition     = can(coalesce(trimspace(var.os_image.sku)))
+    error_message = format("Invalid value '%s' for variable 'os_image.sku', It must be non-empty string values.", var.os_image.publisher)
+  }
+
+  validation {
+    condition     = can(coalesce(trimspace(var.os_image.version)))
+    error_message = format("Invalid value '%s' for variable 'os_image.version', It must be non-empty string values.", var.os_image.version)
+  }
+
 }
 
 variable "admin_username" {
-  description = "(Optional) Specifies The administrator username for which the SSH Key should be configured."
+  description = "(Optional) Specifies The administrator username for which the SSH Key or password should be configured."
   type        = string
   default     = "automation"
 }
 
-
-variable "subnet_id" {
-  description = "The ID of a Subnet where the Kubernetes Node Pool should exist. Changing this forces a new resource to be created."
-  type        = string
+variable "network_interfaces" {
+  description = "A list of network interface objects, each containing information about a network interface to be created in the deployment."
+  type = list(object({
+    name                     = string
+    vnet_resource_group_name = string
+    vnet_name                = string
+    subnet_name              = string
+  }))
+  default = []
 
   validation {
-    condition     = can(coalesce(var.subnet_id))
-    error_message = "The 'subnet_id' value is invalid. It must be a non-empty string value."
+    condition     = alltrue([for nic in var.network_interfaces : can(coalesce(trimspace(nic.name)))])
+    error_message = "At least one 'name' property from 'network_interfaces' is invalid. They must be non-empty string values."
   }
+
+  validation {
+    condition     = length([for nic in var.network_interfaces : nic.name]) == length(distinct([for nic in var.network_interfaces : trimspace(lower(nic.name))]))
+    error_message = "At least one 'name' property from one of the 'network_interfaces' is duplicated. They must be unique."
+  }
+
+  validation {
+    condition     = alltrue([for nic in var.network_interfaces : can(coalesce(nic.vnet_resource_group_name))])
+    error_message = "At least one 'vnet_resource_group_name' property from 'network_interfaces' is invalid. They must be non-empty string values."
+  }
+
+  validation {
+    condition     = alltrue([for nic in var.network_interfaces : can(coalesce(nic.vnet_name))])
+    error_message = "At least one 'vnet_name' property from 'network_interfaces' is invalid. They must be non-empty string values."
+  }
+
+  validation {
+    condition     = alltrue([for nic in var.network_interfaces : can(coalesce(nic.subnet_name))])
+    error_message = "At least one 'subnet_name' property from 'network_interfaces' is invalid. They must be non-empty string values."
+  }
+
 }
 
-variable "allow_auto_restart" {
-  description = "(Optional) Allow the virtual machine to be auto-restarted by automated tasks / tools."
-  type        = bool
-  default     = false
+variable "data_disks" {
+  description = "A list of data disk objects, each containing information about a data disk to be attached to the deployment."
+  type = list(object({
+    name                 = string
+    storage_account_type = string
+    disk_size_gb         = number
+    caching              = string
+  }))
+  default = []
+
+  validation {
+    condition     = alltrue([for disk in var.data_disks : can(trimspace(disk.name))])
+    error_message = "At least one 'name' property from 'data_disks' is invalid. They must be non-empty string values."
+  }
+
+  validation {
+    condition     = length([for disk in var.data_disks : disk.name]) == length(distinct([for disk in var.data_disks : trimspace(lower(disk.name))]))
+    error_message = "At least one 'name' property from one of the 'data_disks' is duplicated. They must be unique."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.data_disks : contains(["Standard_LRS", "StandardSSD_ZRS", "Premium_LRS", "PremiumV2_LRS", "Premium_ZRS", "StandardSSD_LRS", "UltraSSD_LRS"], disk.storage_account_type)])
+    error_message = "At least one 'storage_account_type' property from 'data_disks' is invalid. Valid options are 'Standard_LRS', 'StandardSSD_ZRS','Premium_LRS', 'PremiumV2_LRS','Premium_ZRS', 'StandardSSD_LRS','UltraSSD_LRS'."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.data_disks : disk.disk_size_gb >= 1 && disk.disk_size_gb <= 1000])
+    error_message = "At least one 'disk_size_gb' property from 'data_disks' is invalid. They must be must be between 1 and 1000 GB."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.data_disks : contains(["None", "ReadOnly", "ReadWrite"], disk.caching)])
+    error_message = "At least one 'caching' property from 'data_disks' is invalid. Valid options are 'None', 'ReadOnly','ReadWrite'."
+  }
 }
