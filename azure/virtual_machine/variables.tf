@@ -23,6 +23,7 @@ variable "vm_size" {
     error_message = format("Invalid value '%s' for variable 'vm_size', valid options are 'Standard_D2s_v3'.", var.vm_size)
   }
 }
+
 variable "os_type" {
   description = "Type of virtual machine to be created. Acceptable values are 'dev', 'test', 'prod' or 'sand'."
   type        = string
@@ -105,6 +106,30 @@ variable "network_interfaces" {
     error_message = "At least one 'subnet_name' property from 'network_interfaces' is invalid. They must be non-empty string values."
   }
 
+}
+
+variable "os_disk" {
+  description = "O.S. disk to be attached to the deployment."
+  type = object({
+    name                 = string
+    storage_account_type = string
+    caching              = string
+  })
+
+  validation {
+    condition     = can(coalesce(trimspace(var.os_disk.name)))
+    error_message = format("Invalid value '%s' for variable 'os_disk.name)', It must be non-empty string values.", var.os_disk.name)
+  }
+
+  validation {
+    condition     = contains(["Standard_LRS", "StandardSSD_LRS", "Premium_LRS", "StandardSSD_ZRS", "Premium_ZRS"], var.os_disk.storage_account_type)
+    error_message = format("Invalid value '%s' for variable 'os_disk.storage_account_type', Valid options are 'Standard_LRS', 'StandardSSD_LRS','Premium_LRS', 'StandardSSD_ZRS','Premium_ZRS'.", var.os_disk.storage_account_type)
+  }
+
+  validation {
+    condition     = contains(["None", "ReadOnly", "ReadWrite"], var.os_disk.caching)
+    error_message = format("Invalid value '%s' for variable 'os_disk.caching'. Valid options are 'None', 'ReadOnly','ReadWrite'.", var.os_disk.caching)
+  }
 }
 
 variable "data_disks" {
