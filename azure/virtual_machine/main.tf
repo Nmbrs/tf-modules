@@ -1,117 +1,169 @@
 data "azurerm_client_config" "current" {}
 
-data "azurerm_resource_group" "rg" {
+data "azurerm_resource_group" "vm_rg" {
   name = var.resource_group_name
 }
 
-resource "azurecaf_name" "caf_name_vm" {
-  name          = lower(var.name)
-  resource_type = "azurerm_virtual_machine"
-  suffixes      = [lower(var.environment)]
-  clean_input   = true
-}
-
 resource "tls_private_key" "ssh" {
+  count     = var.os_type == "linux" ? 1 : 0
   algorithm = "RSA"
   rsa_bits  = "4096"
 }
 
 resource "azurerm_ssh_public_key" "ssh_public_key" {
-  name                = azurecaf_name.caf_name_vm.result
-  resource_group_name = data.azurerm_resource_group.rg.name
-  location            = data.azurerm_resource_group.rg.location
-  tags                = data.azurerm_resource_group.rg.tags
-  public_key          = tls_private_key.ssh.public_key_openssh
+  count               = var.os_type == "linux" ? 1 : 0
+  name                = "ssh-${var.vm_name}"
+  resource_group_name = data.azurerm_resource_group.vm_rg.name
+  location            = data.azurerm_resource_group.vm_rg.location
+  public_key          = tls_private_key.ssh[0].public_key_openssh
 
   lifecycle {
-    ignore_changes = [
-      tags["created_at"],
-      tags["updated_at"]
-    ]
+    ignore_changes = [tags]
   }
-}
-
-resource "random_string" "nic_unique_id" {
-  length  = 4
-  special = false
-  upper   = false
-
-  keepers = {
-    vm_name = lower(var.name)
-  }
-}
-
-resource "azurecaf_name" "caf_name_nic" {
-  name          = azurecaf_name.caf_name_vm.result
-  resource_type = "azurerm_network_interface"
-  suffixes      = [random_string.nic_unique_id.result]
-  clean_input   = true
 }
 
 resource "random_password" "password" {
+  count   = var.os_type == "windows" ? 1 : 0
   length  = 32
   special = true
   keepers = {
-    vm_name = lower(var.name)
+    vm_name = lower(var.vm_name)
   }
 }
 
+## Network interafaces
+data "azurerm_subnet" "nic_subnet" {
+  for_each = {
+    # Create a mapping of the nic name to its settings
+    for nic_settings in local.network_interfaces_settings : trimspace(lower(nic_settings.name)) => nic_settings
+  }
 
-resource "azurerm_network_interface" "main_nic" {
-  name                = azurecaf_name.caf_name_nic.result
-  location            = data.azurerm_resource_group.rg.location
-  resource_group_name = data.azurerm_resource_group.rg.name
-  tags                = data.azurerm_resource_group.rg.tags
+  name                 = each.value.subnet_name
+  virtual_network_name = each.value.vnet_name
+  resource_group_name  = each.value.vnet_resource_group_name
+}
+
+resource "azurerm_network_interface" "nic" {
+  # Create a mapping of the nic name to its settings
+  for_each = { for nic_settings in local.network_interfaces_settings : trimspace(lower(nic_settings.name)) => nic_settings }
+
+  name                = each.value.name
+  location            = data.azurerm_resource_group.vm_rg.location
+  resource_group_name = data.azurerm_resource_group.vm_rg.name
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = var.subnet_id
+    subnet_id                     = data.azurerm_subnet.nic_subnet[each.key].id
     private_ip_address_allocation = "Dynamic"
   }
 
   lifecycle {
-    ignore_changes = [
-      tags["created_at"],
-      tags["updated_at"]
-    ]
+    ignore_changes = [tags]
   }
 }
 
 
-
+## Linux virtual machine
 resource "azurerm_linux_virtual_machine" "linux_vm" {
-  count               = local.os_type == "linux" ? 1 : 0
-  name                = azurecaf_name.caf_name_vm.result
-  location            = data.azurerm_resource_group.rg.location
-  resource_group_name = data.azurerm_resource_group.rg.name
-  tags                = merge(local.default_tags, data.azurerm_resource_group.rg.tags, var.extra_tags)
-  size                = "Standard_D2s_v3"
-  admin_username      = var.admin_username
-  network_interface_ids = [
-    azurerm_network_interface.main_nic.id,
-  ]
+  count                           = var.os_type == "linux" ? 1 : 0
+  name                            = var.vm_name
+  computer_name                   = var.vm_name
+  location                        = data.azurerm_resource_group.vm_rg.location
+  resource_group_name             = data.azurerm_resource_group.vm_rg.name
+  size                            = var.vm_size
+  admin_username                  = var.admin_username
+  disable_password_authentication = true
+
+  network_interface_ids = [for nic in azurerm_network_interface.nic : nic.id]
+
 
   admin_ssh_key {
     username   = var.admin_username
-    public_key = tls_private_key.ssh.public_key_openssh
+    public_key = tls_private_key.ssh[0].public_key_openssh
   }
 
   os_disk {
+    name                 = "dsk-${var.vm_name}-os-001"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
 
   source_image_reference {
-    publisher = local.os_image[var.os_type].publisher
-    offer     = local.os_image[var.os_type].offer
-    sku       = local.os_image[var.os_type].sku
-    version   = local.os_image[var.os_type].version
+    publisher = var.os_image.publisher
+    offer     = var.os_image.offer
+    sku       = var.os_image.sku
+    version   = var.os_image.version
   }
 
   lifecycle {
-    ignore_changes = [
-      tags["created_at"],
-      tags["updated_at"]
-    ]
+    ignore_changes = [tags]
   }
+}
+
+## Windows virtual machine
+resource "azurerm_windows_virtual_machine" "windows_vm" {
+  count               = var.os_type == "windows" ? 1 : 0
+  name                = var.vm_name
+  computer_name       = var.vm_name
+  location            = data.azurerm_resource_group.vm_rg.location
+  resource_group_name = data.azurerm_resource_group.vm_rg.name
+  size                = var.vm_size
+  admin_username      = var.admin_username
+  admin_password      = random_password.password[0].result
+
+  network_interface_ids = [for nic in azurerm_network_interface.nic : nic.id]
+
+
+  os_disk {
+    name                 = "dsk-${var.vm_name}-os-001"
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = var.os_image.publisher
+    offer     = var.os_image.offer
+    sku       = var.os_image.sku
+    version   = var.os_image.version
+  }
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
+}
+
+
+## Data Disks
+resource "azurerm_managed_disk" "data_disks" {
+  for_each = {
+    # Create a mapping of the disk name to its settings
+    for disk_settings in local.data_disks_settings : trimspace(lower(disk_settings.name)) => disk_settings
+  }
+
+  # Use the disk name as the name of the managed disk
+  name                 = each.value.name
+  location             = data.azurerm_resource_group.vm_rg.location
+  resource_group_name  = data.azurerm_resource_group.vm_rg.name
+  storage_account_type = each.value.storage_account_type
+  create_option        = "Empty"
+  disk_size_gb         = each.value.disk_size_gb
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "data_disks" {
+  for_each = {
+    # Create a mapping of the disk name to its settings
+    for disk_settings in local.data_disks_settings : trimspace(lower(disk_settings.name)) => disk_settings
+  }
+
+  # Use the ID of the corresponding managed disk
+  managed_disk_id = azurerm_managed_disk.data_disks[each.key].id
+  # Choose the virtual machine based on the OS type
+  virtual_machine_id = var.os_type == "linux" ? azurerm_linux_virtual_machine.linux_vm[0].id : azurerm_windows_virtual_machine.windows_vm[0].id
+  # Assign a unique LUN number to each disk, starting from #1
+  lun     = index(local.data_disks_settings, each.value) + 1
+  caching = each.value.caching
 }
