@@ -5,11 +5,6 @@ terraform {
       version = "~> 3.6"
     }
 
-    azurecaf = {
-      source  = "aztfmod/azurecaf"
-      version = "2.0.0-preview3"
-    }
-
     tls = {
       source  = "hashicorp/tls"
       version = "~> 4.0.4"
