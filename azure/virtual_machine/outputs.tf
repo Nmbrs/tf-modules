@@ -22,7 +22,6 @@ output "os_disk" {
   description = "The details of the virtual machine's operating system disk."
   value = {
     name                 = local.os_disk_settings.name
-    caching              = local.os_disk_settings.caching
     storage_account_type = local.os_disk_settings.storage_account_type
   }
 }
@@ -33,7 +32,6 @@ output "data_disk" {
     name                 = disk.name
     storage_account_type = disk.storage_account_type
     disk_size_gb         = disk.disk_size_gb
-    caching              = disk.caching
     }
   ]
 }
@@ -45,7 +43,6 @@ output "network_interfaces" {
     id                 = nic.id
     private_ip_address = nic.private_ip_address
     mac_address        = nic.mac_address
-    subnet_id          = nic.subnet_id
     }
   ]
 }
