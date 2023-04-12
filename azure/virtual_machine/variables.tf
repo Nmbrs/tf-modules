@@ -16,11 +16,11 @@ variable "environment" {
 variable "vm_size" {
   description = "The SKU which should be used for this Virtual Machine. For an exaustive list of virtual, please use the command 'az vm list-sizes --location 'your-location''."
   type        = string
-  default     = "Standard_D2s_v3"
+  default     = "Standard_DS2_v2"
 
   validation {
-    condition     = contains(["Standard_D2s_v3"], var.vm_size)
-    error_message = format("Invalid value '%s' for variable 'vm_size', valid options are 'Standard_D2s_v3'.", var.vm_size)
+    condition     = contains(["Standard_DS2_v2", "Standard_D4as_v5", "Standard_D8as_v5", "Standard_F4s_v2", "Standard_F8s_v2", "Standard_F16s_v2"], var.vm_size)
+    error_message = format("Invalid value '%s' for variable 'vm_size', valid options are 'Standard_D2s_v3', 'Standard_D4as_v5', 'Standard_D8as_v5','Standard_F4s_v2', 'Standard_F8s_v2', 'Standard_F16s_v2'.", var.vm_size)
   }
 }
 
