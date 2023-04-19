@@ -51,3 +51,17 @@ No modules.
 | <a name="output_secondary_access_key"></a> [secondary\_access\_key](#output\_secondary\_access\_key) | The secondary access key for  the Redis Instance. |
 | <a name="output_secondary_connection_string"></a> [secondary\_connection\_string](#output\_secondary\_connection\_string) | The primary connection string of the Redis Instance. |
 | <a name="output_ssl_port"></a> [ssl\_port](#output\_ssl\_port) | ssl\_port - The SSL Port of the Redis Instance. |
+
+## How to use it?
+
+A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
+
+```hcl
+module "redis_cache" {
+  source              = "git::github.com/Nmbrs/tf-modules//azure/redis_cache"
+  name                = "my-redis-cache"
+  resource_group_name = "rg-my-resource-group"
+  environment         = "dev"
+  cache_size_gb       = 6
+}
+```
