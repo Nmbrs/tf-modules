@@ -36,7 +36,6 @@ variable "name" {
     error_message = format("Invalid value '%s' for variable 'name', The following list of reserved zone names are blocked from creation to prevent disruption of services:INVALID options are 'azclient.ms', 'azure.com', 'cloudapp.net', 'core.windows.net', 'microsoft.com', 'msidentity.com', 'trafficmanager.net', 'windows.net', 'azclient.us', 'azure.us', 'usgovcloudapp.net', 'core.usgovcloudapi.net', 'microsoft.us', 'msidentity.us', 'usgovtrafficmanager.net', 'usgovcloudapi.net', 'azclient.cn', 'azure.cn', 'chinacloudapp.cn', 'core.chinacloudapi.cn', 'microsoft.cn', 'msidentity.cn', 'trafficmanager.cn', 'chinacloudapi.cn'.", var.name)
   }
 
-
   # ICAAN rule and limit imposed by Microsoft on Azure Portal 
   # For more information, see: https://learn.microsoft.com/en-us/azure/dns/private-dns-privatednszone#restrictions
   validation {
