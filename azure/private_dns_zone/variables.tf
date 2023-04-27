@@ -33,7 +33,7 @@ variable "name" {
         "chinacloudapi.cn"
       ],
     var.name)
-    error_message = format("Invalid value '%s' for variable 'name', The following list of reserved zone names are blocked from creation to prevent disruption of services:INVALID options are 'azclient.ms', 'azure.com', 'cloudapp.net', 'core.windows.net', 'microsoft.com', 'msidentity.com', 'trafficmanager.net', 'windows.net', 'azclient.us', 'azure.us', 'usgovcloudapp.net', 'core.usgovcloudapi.net', 'microsoft.us', 'msidentity.us', 'usgovtrafficmanager.net', 'usgovcloudapi.net', 'azclient.cn', 'azure.cn', 'chinacloudapp.cn', 'core.chinacloudapi.cn', 'microsoft.cn', 'msidentity.cn', 'trafficmanager.cn', 'chinacloudapi.cn'.", var.name)
+    error_message = format("Invalid value '%s' for variable 'name', The following list of reserved zone names are blocked from creation to prevent disruption of services: 'azclient.ms', 'azure.com', 'cloudapp.net', 'core.windows.net', 'microsoft.com', 'msidentity.com', 'trafficmanager.net', 'windows.net', 'azclient.us', 'azure.us', 'usgovcloudapp.net', 'core.usgovcloudapi.net', 'microsoft.us', 'msidentity.us', 'usgovtrafficmanager.net', 'usgovcloudapi.net', 'azclient.cn', 'azure.cn', 'chinacloudapp.cn', 'core.chinacloudapi.cn', 'microsoft.cn', 'msidentity.cn', 'trafficmanager.cn', 'chinacloudapi.cn'.", var.name)
   }
 
   # ICAAN rule and limit imposed by Microsoft on Azure Portal 
@@ -65,7 +65,20 @@ variable "name" {
   # Validating top level domain (rightmost label of a domain) according to ICANN Application Guidebook
   validation {
     condition     = can(regex("^[a-zA-Z0-9](?:[a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])", split(".", var.name)[length(split(".", var.name)) - 1]))
-    error_message = format("Invalid value '%s' for variable 'name'. The TLD (rightmost label of a domain name) Each label must consist of letters, numbers, or hyphens, and must not start or end with a hyphen. It must also be between 2 and 63 characters long.", var.name)
+    error_message = format("Invalid value '%s' for variable 'name'. The TLD (rightmost label of a domain name) each label must consist of letters, numbers, or hyphens, and must not start or end with a hyphen. It must also be between 2 and 63 characters long.", var.name)
+  }
+
+  # Validating top level domains (rightmost label of a domain) against the RFC2606 list of reserved names
+  validation {
+    condition = !contains(
+      [
+        "test",
+        "example",
+        "invalid",
+        "localhost"
+      ], split(".", var.name)[length(split(".", var.name)) - 1]
+    )
+    error_message = format("Invalid value '%s' for variable 'name', The following list of reserved zone names are blocked from creation to prevent disruption of services: 'test', 'example', 'invalid', 'localhost'.", var.name)
   }
 }
 
