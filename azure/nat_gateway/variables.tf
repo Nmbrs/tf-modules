@@ -14,12 +14,12 @@ variable "environment" {
 }
 
 
-variable "vnet" {
+variable "subnets" {
+  description = "Subnets to be added to the NAT gateway"
   type = map(object({
     name                 = string
     virtual_network_name = string
     resource_group_name  = string
     })
   )
-  description = "Subnet to be added to the NAT gateway"
 }
