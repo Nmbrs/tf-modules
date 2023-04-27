@@ -38,7 +38,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="name"></a> [name](#input\_name) | (Optional) Specifies the name for the NAT gateway. | `string` | `"automation"` | no |
-| <a name="subnets"></a> [subnets](#input\_subnets) | A list of subnets to be added to the app gw. | <pre>list(object({<br>    name                 = string<br>    storage_account_type = string<br>    disk_size_gb         = number<br>    caching              = string<br>  }))</pre> | `[]` | no |
+| <a name="subnets"></a> [subnets](#input\_subnets) | A list of subnets to be added to the app gw. | <pre>map(object({<br>    name                 = string<br>    virtual_network_name = string<br>    resource_group_name         = string<br>    }))</pre> | `[]` | no |
 | <a name="environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="natgw_resource_group"></a> [natgw\_resource\_group](#input\_natgw\_resource\_group) | Where the NAT gateway should be provisioned. | <pre>list(object({<br>    name                     = string<br>    vnet_resource_group_name = string<br>    vnet_name                = string<br>    subnet_name              = string<br>  }))</pre> | `[]` | no |
 | <a name="input_os_disk"></a> [os\_disk](#input\_os\_disk) | O.S. disk to be attached to the deployment. | <pre>object({<br>    name                 = string<br>    storage_account_type = string<br>    caching              = string<br>  })</pre> | n/a | yes |
