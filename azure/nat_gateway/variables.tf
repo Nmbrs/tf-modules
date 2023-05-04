@@ -25,4 +25,5 @@ variable "vnet_resource_group" {
 
 variable "subnets" {
   type = list(any)
+  description = "Subnets to be included in the NAT gateway"
 }
