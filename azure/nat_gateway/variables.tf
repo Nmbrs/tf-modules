@@ -5,7 +5,7 @@ variable "name" {
 
 variable "natgw_resource_group" {
   type        = string
-  description = "NAT gateway resource group name"
+  description = "Resource group name for where the NAT gateway will be created"
 }
 
 variable "environment" {
@@ -13,13 +13,16 @@ variable "environment" {
   description = "Defines the environment to provision the resources."
 }
 
+variable "vnet_name" {
+  type        = string
+  description = "Name of the Vnet that will be added to the NAT gateway"
+}
+
+variable "vnet_resource_group" {
+  type        = string
+  description = "Resource group of the Vnet that will be added to the NAT gateway"
+}
 
 variable "subnets" {
-  description = "Subnets to be added to the NAT gateway"
-  type = map(object({
-    name                 = string
-    virtual_network_name = string
-    resource_group_name  = string
-    })
-  )
+  type = list(any)
 }

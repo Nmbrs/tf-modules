@@ -1,8 +1,8 @@
 data "azurerm_subnet" "vnet" {
-  for_each             = var.subnets
-  name                 = each.value.name
-  virtual_network_name = each.value.virtual_network_name
-  resource_group_name  = each.value.resource_group_name
+  for_each             = toset(var.subnets)
+  name                 = each.value
+  virtual_network_name = var.vnet_name
+  resource_group_name  = var.vnet_resource_group
 }
 
 resource "azurerm_public_ip" "natgw" {
@@ -37,7 +37,7 @@ resource "azurerm_nat_gateway_public_ip_association" "natgw" {
 }
 
 resource "azurerm_subnet_nat_gateway_association" "natgw" {
-  for_each       = var.subnets
+  for_each       = toset(var.subnets)
   subnet_id      = data.azurerm_subnet.vnet[each.key].id
   nat_gateway_id = azurerm_nat_gateway.natgw.id
 }
