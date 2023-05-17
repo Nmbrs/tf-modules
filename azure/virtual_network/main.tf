@@ -23,8 +23,8 @@ resource "azurerm_subnet" "subnet" {
   virtual_network_name                          = azurerm_virtual_network.vnet.name
   address_prefixes                              = each.value.address_prefixes
   service_endpoints                             = lookup(each.value, "service_endpoints", [])
-  private_endpoint_network_policies_enabled     = lookup(each.value, "private_link_service_network_policies_enabled", true)
-  private_link_service_network_policies_enabled = lookup(each.value, "private_endpoint_network_policies_enabled", true)
+  private_endpoint_network_policies_enabled     = lookup(each.value, "private_endpoint_network_policies_enabled", true)
+  private_link_service_network_policies_enabled = lookup(each.value, "private_link_service_network_policies_enabled", true)
 
   dynamic "delegation" {
     for_each = each.value.delegations
