@@ -5,16 +5,20 @@
 The `private_dns_zone` module is a Terraform abstraction that that implements all the necessary
 Terraform code to create and manage private DNS zones in Azure, providing a reliable and secure DNS service for virtual networks. By using a custom domain name, the module can tailor the virtual network architecture to meet your Visma Nmbrs's specific needs.
 
+## Requirements
+
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, < 2.0.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.6 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.2 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.6 |
+| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.2 |
 
 ## Modules
 
@@ -25,6 +29,9 @@ No modules.
 | Name | Type |
 |------|------|
 | [azurerm_private_dns_zone.private_dns_zone](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone) | resource |
+| [azurerm_private_dns_zone_virtual_network_link.vnet_link](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone_virtual_network_link) | resource |
+| [random_id.vnet_link](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
+| [azurerm_virtual_network.vnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/virtual_network) | data source |
 
 ## Inputs
 
@@ -32,6 +39,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_name"></a> [name](#input\_name) | The name of the DNS Zone. Must be a valid domain name. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
+| <a name="input_vnet_links"></a> [vnet\_links](#input\_vnet\_links) | List of objects that represent the configuration of each virtual network link. | <pre>list(object({<br>    vnet_name            = string<br>    vnet_resource_group  = string<br>    registration_enabled = bool<br>  }))</pre> | `[]` | no |
 
 ## Outputs
 
@@ -53,6 +61,13 @@ module "private_dns_zone" {
   source              = "git::github.com/Nmbrs/tf-modules//azure/private_dns_zone"
   name                = "contoso.com.dev"
   resource_group_name = "rg-demo"
+    vnet_links = [
+    {
+      vnet_name            = "my-linked-vnet"
+      vnet_resource_group  = "rg-vnet"
+      registration_enabled = true
+    }
+  ]
 }
 ```
 
