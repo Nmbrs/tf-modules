@@ -62,13 +62,15 @@ module "virtual_network" {
   name                = "vnet-dev-westeu-1000"
   address_spaces      = ["10.150.0.0/16"]
   environment         = "dev"
-  subnets = [{
-    name                                           = "snet-dev-westeu-1000"
-    address_prefixes                               = ["10.150.100.0/24"]
-    delegations                                    = ["Microsoft.ContainerInstance/containerGroups", "Microsoft.Web/serverFarms", "Microsoft.Databricks/workspaces"]
-    private_link_service_network_policies_enabled  = false
-    private_endpoint_network_policies_enabled      = false
-    service_endpoints                              = ["Microsoft.EventHub", "Microsoft.Web", "Microsoft.Sql"]
-
-  }]
+  subnets = [
+    {
+      name                                           = "snet-dev-westeu-1000"
+      address_prefixes                               = ["10.150.100.0/24"]
+      delegations                                    = ["Microsoft.ContainerInstance/containerGroups", "Microsoft.Web/serverFarms", "Microsoft.Databricks/workspaces"]
+      private_link_service_network_policies_enabled  = false
+      private_endpoint_network_policies_enabled      = false
+      service_endpoints                              = ["Microsoft.EventHub", "Microsoft.Web", "Microsoft.Sql"]
+    }
+  ]
+}
 ```
