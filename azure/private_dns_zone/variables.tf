@@ -91,3 +91,33 @@ variable "resource_group_name" {
     error_message = "The 'resource_group_name' value is invalid. It must be a non-empty string."
   }
 }
+
+variable "vnet_links" {
+  description = "List of objects that represent the configuration of each virtual network link."
+  type = list(object({
+    vnet_name            = string
+    vnet_resource_group  = string
+    registration_enabled = bool
+  }))
+  default = []
+
+  validation {
+    condition     = alltrue([for vnet_link in var.vnet_links : can(coalesce(vnet_link.vnet_name))])
+    error_message = "At least one 'vnet_name' property from 'vnet_links' is invalid. They must be non-empty string values."
+  }
+
+  validation {
+    condition     = length([for vnet_link in var.vnet_links : vnet_link.vnet_name]) == length(distinct([for vnet_link in var.vnet_links : vnet_link.vnet_name]))
+    error_message = "At least one 'vnet_name' property from one of the 'vnet_links' is duplicated. They must be unique."
+  }
+
+  validation {
+    condition     = alltrue([for vnet_link in var.vnet_links : can(coalesce(vnet_link.vnet_resource_group))])
+    error_message = "At least one 'vnet_resource_group' property from 'vnet_links' is invalid. They must be non-empty string values."
+  }
+
+  validation {
+    condition     = length([for vnet_link in var.vnet_links : vnet_link.vnet_resource_group]) == length(distinct([for vnet_link in var.vnet_links : vnet_link.vnet_resource_group]))
+    error_message = "At least one 'vnet_resource_group' property from one of the 'vnet_links' is duplicated. They must be unique."
+  }
+}
