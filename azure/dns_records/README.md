@@ -4,7 +4,7 @@
 
 The dns_records module is a Terraform module that allows for the management of DNS A Records, C Records, and TXT Records within Azure DNS. It ensures compliance with Visma Nmbrs policies and implements the necessary Terraform code to provision DNS records in an existing DNS Zone.
 
-> Keep in mind that due to a limitation of the Azure DNS API, which has a throttle limit of 500 read (GET) operations per 5 minutes, this module is designed to be used with a small list of records. In larger configurations, the operation may time out by default.
+> Keep in mind that due to a limitation of the Azure DNS API, which has a throttle limit of 500 read (GET) operations per 5 minutes, this module was designed to be used with a small list of records. In larger configurations, the operation may time out by default.
 
 ## Requirements
 
