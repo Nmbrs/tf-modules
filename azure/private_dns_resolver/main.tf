@@ -15,31 +15,22 @@ resource "azurerm_private_dns_resolver" "resolver" {
 }
 
 data "azurerm_subnet" "inbound_endpoint" {
-  for_each = { for endpoint in var.inbound_endpoints : endpoint.subnet_name => endpoint }
+  for_each = toset(var.inbound_endpoints)
 
-  name                 = each.value.subnet_name
+  name                 = each.value
   virtual_network_name = var.vnet_name
   resource_group_name  = var.vnet_resource_group_name
 }
 
-resource "random_id" "inbound_endpoint" {
-  for_each = { for endpoint in var.inbound_endpoints : endpoint.subnet_name => endpoint }
-
-  byte_length = 4
-  keepers = {
-    vnet_name = lower(each.value.subnet_name)
-  }
-}
-
 resource "azurerm_private_dns_resolver_inbound_endpoint" "inbound_endpoint" {
-  for_each = { for endpoint in var.inbound_endpoints : endpoint.subnet_name => endpoint }
+  for_each = toset(var.inbound_endpoints)
 
-  name                    = "inedp-${each.value.subnet_name}-${random_id.inbound_endpoint[each.key].hex}"
+  name                    = each.value
   private_dns_resolver_id = azurerm_private_dns_resolver.resolver.id
   location                = azurerm_private_dns_resolver.resolver.location
   ip_configurations {
     private_ip_allocation_method = "Dynamic"
-    subnet_id                    = data.azurerm_subnet.inbound_endpoint[each.key].id
+    subnet_id                    = data.azurerm_subnet.inbound_endpoint[each.value].id
   }
 
   lifecycle {
@@ -48,29 +39,20 @@ resource "azurerm_private_dns_resolver_inbound_endpoint" "inbound_endpoint" {
 }
 
 data "azurerm_subnet" "outbound_endpoint" {
-  for_each = { for endpoint in var.outbound_endpoints : endpoint.subnet_name => endpoint }
+  for_each = toset(var.outbound_endpoints)
 
-  name                 = each.value.subnet_name
+  name                 = each.value
   virtual_network_name = var.vnet_name
   resource_group_name  = var.vnet_resource_group_name
 }
 
-resource "random_id" "outbound_endpoint" {
-  for_each = { for endpoint in var.outbound_endpoints : endpoint.subnet_name => endpoint }
-
-  byte_length = 4
-  keepers = {
-    vnet_name = lower(each.value.subnet_name)
-  }
-}
-
 resource "azurerm_private_dns_resolver_outbound_endpoint" "outbound_endpoint" {
-  for_each = { for endpoint in var.outbound_endpoints : endpoint.subnet_name => endpoint }
+  for_each = toset(var.outbound_endpoints)
 
-  name                    = "outedp-${each.value.subnet_name}-${random_id.outbound_endpoint[each.key].hex}"
+  name                    = each.value
   private_dns_resolver_id = azurerm_private_dns_resolver.resolver.id
   location                = azurerm_private_dns_resolver.resolver.location
-  subnet_id               = data.azurerm_subnet.outbound_endpoint[each.key].id
+  subnet_id               = data.azurerm_subnet.outbound_endpoint[each.value].id
 
   lifecycle {
     ignore_changes = [tags]

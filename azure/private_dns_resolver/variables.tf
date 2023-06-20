@@ -29,36 +29,32 @@ variable "vnet_resource_group_name" {
 
 variable "inbound_endpoints" {
   description = "List of objects that represent the configuration of each inbound endpoint."
-  type = list(object({
-    subnet_name = string
-  }))
-  default = []
+  type        = list(string)
+  default     = []
 
   validation {
-    condition     = alltrue([for endpoint in var.inbound_endpoints : can(coalesce(endpoint.subnet_name))])
-    error_message = "At least one 'subnet_name' property from 'inbound_endpoints' is invalid. They must be non-empty string values."
+    condition     = alltrue([for endpoint in var.inbound_endpoints : can(coalesce(endpoint))])
+    error_message = "At least one element from the 'inbound_endpoints' list is invalid. They must be non-empty string values."
   }
 
   validation {
-    condition     = length([for endpoint in var.inbound_endpoints : endpoint.subnet_name]) == length(distinct([for endpoint in var.inbound_endpoints : endpoint.subnet_name]))
-    error_message = "At least one 'subnet_name' property from one of the 'inbound_endpoints' is duplicated. They must be unique."
+    condition     = length(var.inbound_endpoints) == length(distinct(var.inbound_endpoints))
+    error_message = "At least one element from the 'inbound_endpoints' list is duplicated. They must be unique."
   }
 }
 
 variable "outbound_endpoints" {
   description = "List of objects that represent the configuration of each outbound endpoint."
-  type = list(object({
-    subnet_name = string
-  }))
-  default = []
+  type        = list(string)
+  default     = []
 
   validation {
-    condition     = alltrue([for endpoint in var.outbound_endpoints : can(coalesce(endpoint.subnet_name))])
-    error_message = "At least one 'subnet_name' property from 'outbound_endpoints' is invalid. They must be non-empty string values."
+    condition     = alltrue([for endpoint in var.outbound_endpoints : can(coalesce(endpoint))])
+    error_message = "At least one element from 'outbound_endpoints' list is invalid. They must be non-empty string values."
   }
 
   validation {
-    condition     = length([for endpoint in var.outbound_endpoints : endpoint.subnet_name]) == length(distinct([for endpoint in var.outbound_endpoints : endpoint.subnet_name]))
-    error_message = "At least one 'subnet_name' property from one of the 'outbound_endpoints' is duplicated. They must be unique."
+    condition     = length(var.outbound_endpoints) == length(distinct(var.outbound_endpoints))
+    error_message = "At least one element from the 'outbound_endpoints' list is duplicated. They must be unique."
   }
 }
