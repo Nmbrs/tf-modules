@@ -10,14 +10,12 @@ The private DNS resolver module simplifies the creation and management of privat
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, < 2.0.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.6 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.2 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.59.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.5.1 |
 
 ## Modules
 
@@ -30,8 +28,6 @@ No modules.
 | [azurerm_private_dns_resolver.resolver](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver) | resource |
 | [azurerm_private_dns_resolver_inbound_endpoint.inbound_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_inbound_endpoint) | resource |
 | [azurerm_private_dns_resolver_outbound_endpoint.outbound_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_outbound_endpoint) | resource |
-| [random_id.inbound_endpoint](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
-| [random_id.outbound_endpoint](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [azurerm_subnet.inbound_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subnet) | data source |
 | [azurerm_subnet.outbound_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subnet) | data source |
 | [azurerm_virtual_network.vnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/virtual_network) | data source |
@@ -41,10 +37,10 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
-| <a name="input_inbound_endpoints"></a> [inbound\_endpoints](#input\_inbound\_endpoints) | List of objects that represent the configuration of each inbound endpoint. | <pre>list(object({<br>    subnet_name = string<br>  }))</pre> | `[]` | no |
+| <a name="input_inbound_endpoints"></a> [inbound\_endpoints](#input\_inbound\_endpoints) | List of objects that represent the configuration of each inbound endpoint. | `list(string)` | `[]` | no |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Specifies the name which should be used for this Private DNS Resolver. | `string` | n/a | yes |
-| <a name="input_outbound_endpoints"></a> [outbound\_endpoints](#input\_outbound\_endpoints) | List of objects that represent the configuration of each outbound endpoint. | <pre>list(object({<br>    subnet_name = string<br>  }))</pre> | `[]` | no |
+| <a name="input_outbound_endpoints"></a> [outbound\_endpoints](#input\_outbound\_endpoints) | List of objects that represent the configuration of each outbound endpoint. | `list(string)` | `[]` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Specifies the name of the Resource Group where the Private DNS Resolver should exist. | `string` | n/a | yes |
 | <a name="input_vnet_name"></a> [vnet\_name](#input\_vnet\_name) | Specifies the name of the VNET associated with the Private DNS Resolver. | `string` | n/a | yes |
 | <a name="input_vnet_resource_group_name"></a> [vnet\_resource\_group\_name](#input\_vnet\_resource\_group\_name) | Specifies the name of the VNET name associated with the Private DNS Resolver. | `string` | n/a | yes |
@@ -76,14 +72,7 @@ module "private_dns_resolver" {
   environment              = "dev"
   vnet_name                = "my-vnet"
   vnet_resource_group_name = "rg-vnets"
-  inbound_endpoints = [
-    {
-      subnet_name = "snet-inboundprivatedns-001"
-    },
-    {
-      subnet_name = "snet-inboundprivatedns-002"
-    }
-  ]
+  inbound_endpoints        = ["snet-inboundprivatedns-001", "snet-inboundprivatedns-002"]
 }
 ```
 
@@ -99,14 +88,7 @@ module "private_dns_resolver" {
   environment              = "dev"
   vnet_name                = "my-vnet"
   vnet_resource_group_name = "rg-vnets"
-  outbound_endpoints = [
-    {
-      subnet_name = "snet-outboundprivatedns-001"
-    },
-    {
-      subnet_name = "snet-outboundprivatedns-002"
-    }
-  ]
+  outbound_endpoints       = ["snet-outboundprivatedns-001", "snet-outboundprivatedns-002"]
 }
 ```
 
@@ -121,21 +103,7 @@ module "private_dns_resolver" {
   environment              = "dev"
   vnet_name                = "my-vnet"
   vnet_resource_group_name = "rg-vnets"
-  inbound_endpoints = [
-    {
-      subnet_name = "snet-inboundprivatedns-001"
-    },
-    {
-      subnet_name = "snet-inboundprivatedns-002"
-    }
-  ]
-  outbound_endpoints = [
-    {
-      subnet_name = "snet-outboundprivatedns-001"
-    },
-    {
-      subnet_name = "snet-outboundprivatedns-002"
-    }
-  ]
+  inbound_endpoints        = ["snet-inboundprivatedns-001", "snet-inboundprivatedns-002"]
+  outbound_endpoints       = ["snet-outboundprivatedns-001", "snet-outboundprivatedns-002"]
 }
 ```
