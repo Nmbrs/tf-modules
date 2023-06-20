@@ -1,5 +1,38 @@
 # Changelog
 
+## [7.7.0](https://github.com/Nmbrs/tf-modules/compare/v7.6.0...v7.7.0) (2023-06-20)
+
+
+### Features
+
+* **cosmo_db:** create new cosmo db module ([#172](https://github.com/Nmbrs/tf-modules/issues/172)) ([5541101](https://github.com/Nmbrs/tf-modules/commit/55411011e83ff7bfb444f9ea00a80d28e9ef76f4))
+* **dns_records:** remove tag logic from terraform ([#179](https://github.com/Nmbrs/tf-modules/issues/179)) ([31542fb](https://github.com/Nmbrs/tf-modules/commit/31542fb3fd0d455b231ebf804e84c6d605961f10))
+* **dns_zone:** add validation against ICAAN rules ([#187](https://github.com/Nmbrs/tf-modules/issues/187)) ([821bd7d](https://github.com/Nmbrs/tf-modules/commit/821bd7d32af1cf20de2664d9e115c56714b3d25c))
+* **dns_zone:** remove tag logic from terraform ([#175](https://github.com/Nmbrs/tf-modules/issues/175)) ([5e22761](https://github.com/Nmbrs/tf-modules/commit/5e22761d5e5449ca410d88f640282390d004dc3e))
+* **dns-records:** update  documentation to include Azure's API limitation ([#188](https://github.com/Nmbrs/tf-modules/issues/188)) ([248f439](https://github.com/Nmbrs/tf-modules/commit/248f439de31bc15a723bcb5c45bbc995620d1133))
+* **environment:** create environment module ([#167](https://github.com/Nmbrs/tf-modules/issues/167)) ([22b9fbb](https://github.com/Nmbrs/tf-modules/commit/22b9fbb0107efce5c3091557e26b9d222eb6cc29))
+* **key_vault:** remove environment validation ([#170](https://github.com/Nmbrs/tf-modules/issues/170)) ([72b4261](https://github.com/Nmbrs/tf-modules/commit/72b4261714e63012c03648e083d4d72405bf124d))
+* **key_vault:** remove provider configs to allow the use of for_each loops ([#190](https://github.com/Nmbrs/tf-modules/issues/190)) ([0508e38](https://github.com/Nmbrs/tf-modules/commit/0508e380790115905929f8ba59f38fd3a73b6161))
+* **location:** create location module ([#168](https://github.com/Nmbrs/tf-modules/issues/168)) ([c71263d](https://github.com/Nmbrs/tf-modules/commit/c71263d1905754a33eb700518a8ef7e250d4cf2a))
+* **nat_gateway:** remove tag logic from terraform ([#176](https://github.com/Nmbrs/tf-modules/issues/176)) ([cbab401](https://github.com/Nmbrs/tf-modules/commit/cbab40175ab4c89981e41339a659ca1f55c43d7a))
+* **private_dns_zone:** add vnet links ([#185](https://github.com/Nmbrs/tf-modules/issues/185)) ([895564d](https://github.com/Nmbrs/tf-modules/commit/895564d497eb59f61a17b6fa1a2cd8ef8236c7e9))
+* **private_dns_zone:** create private DNS Zone module ([#181](https://github.com/Nmbrs/tf-modules/issues/181)) ([ebde5c2](https://github.com/Nmbrs/tf-modules/commit/ebde5c2ed802f74d03629185de64f2f0f57b43db))
+* **redis_cache:** add redis cache module ([#182](https://github.com/Nmbrs/tf-modules/issues/182)) ([00f1577](https://github.com/Nmbrs/tf-modules/commit/00f1577511b30a68c861e94eccd1883044d8d1bd))
+* **resource_group:** remove environment and location validations ([#169](https://github.com/Nmbrs/tf-modules/issues/169)) ([25fc358](https://github.com/Nmbrs/tf-modules/commit/25fc3583cae3bdc4955d5f5fbd8830da3b391d7b))
+* **storage_account:** remove tag logic ([#174](https://github.com/Nmbrs/tf-modules/issues/174)) ([f9ec3e7](https://github.com/Nmbrs/tf-modules/commit/f9ec3e7cee62fc2dcb3d37862ba7dfb6800e7d7e))
+* **virtual_machine:** add virtual machine module ([#180](https://github.com/Nmbrs/tf-modules/issues/180)) ([02bc55b](https://github.com/Nmbrs/tf-modules/commit/02bc55bc4dacef431ca2ffefd0a7521276f2e9c4))
+* **virtual_network:** remove environment validation ([#171](https://github.com/Nmbrs/tf-modules/issues/171)) ([38bd1d1](https://github.com/Nmbrs/tf-modules/commit/38bd1d1a42f459866563c64d72270392d909421d))
+* **virtual_network:** remove tag logic from terraform ([#178](https://github.com/Nmbrs/tf-modules/issues/178)) ([063ca25](https://github.com/Nmbrs/tf-modules/commit/063ca25e7f932fb9c2d7c1b541a64e942375bfd2))
+* **virtual_network:** update subnet parameters to prevent future deprecation ([#165](https://github.com/Nmbrs/tf-modules/issues/165)) ([34bfdb6](https://github.com/Nmbrs/tf-modules/commit/34bfdb6410dd82f54a044c8f19c2806767f98cea))
+
+
+### Bug Fixes
+
+* **cosmos_db:** removal old module cosmos db ([#177](https://github.com/Nmbrs/tf-modules/issues/177)) ([6a2dac2](https://github.com/Nmbrs/tf-modules/commit/6a2dac2a153479d7a60b355dd52280dc5720d404))
+* **natgateway:** create nat gw module ([#183](https://github.com/Nmbrs/tf-modules/issues/183)) ([ec7ad66](https://github.com/Nmbrs/tf-modules/commit/ec7ad668a739ad15597305e057106236320c7c49))
+* **virtual_network:** fix private_endpoint_network_policies_enabled misplacement ([#184](https://github.com/Nmbrs/tf-modules/issues/184)) ([c605af9](https://github.com/Nmbrs/tf-modules/commit/c605af945a0fe5dd2bdbad1ed29244aded393adb))
+* **virtual_network:** update service delegation acitons ([#164](https://github.com/Nmbrs/tf-modules/issues/164)) ([4f961bc](https://github.com/Nmbrs/tf-modules/commit/4f961bc5865720f6d6f90eca56a25ebef500cc87))
+
 ## [7.6.0](https://github.com/Nmbrs/tf-modules/compare/v7.5.0...v7.6.0) (2022-12-20)
 
 
