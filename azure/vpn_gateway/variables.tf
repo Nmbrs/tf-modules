@@ -3,6 +3,11 @@ variable "name" {
   description = "This variable defines the name of the virtual gateway."
 }
 
+variable "location" {
+  description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
+  type        = string
+}
+
 variable "vg_resource_group" {
   type        = string
   description = "Resource group name for where the virtual gateway will be created"
