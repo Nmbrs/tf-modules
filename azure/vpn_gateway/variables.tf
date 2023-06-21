@@ -1,6 +1,6 @@
 variable "name" {
   type        = string
-  description = "This variable defines the name of the NAT gateway."
+  description = "This variable defines the name of the virtual gateway."
 }
 
 variable "vg_resource_group" {
