@@ -6,7 +6,7 @@ data "azurerm_subnet" "vnet" {
 
 resource "azurerm_public_ip" "vg" {
   name                = "pip-vg-${var.name}-${var.environment}-ip"
-  location            = local.location
+  location            = var.location
   resource_group_name = var.vg_resource_group
   allocation_method   = "Static"
   sku                 = "Standard"
@@ -18,7 +18,7 @@ resource "azurerm_public_ip" "vg" {
 
 resource "azurerm_virtual_network_gateway" "vg" {
   name                = "vg-${var.name}-${var.environment}"
-  location            = local.location
+  location            = var.location
   resource_group_name = var.vnet_resource_group
 
   type     = "Vpn"
