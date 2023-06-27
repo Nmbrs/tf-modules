@@ -5,10 +5,10 @@ data "azurerm_resource_group" "redis_rg" {
 }
 
 resource "azurerm_redis_cache" "redis" {
-  name                          = var.name
+  name                          = "redis-${var.name}-${var.environment}"
   location                      = data.azurerm_resource_group.redis_rg.location
   resource_group_name           = data.azurerm_resource_group.redis_rg.name
-  capacity                      = local.premium_tier_capacity[local.cache_size_gb]
+  capacity                      = local.premium_tier_capacity[var.cache_size_gb]
   redis_version                 = 6
   family                        = "P"
   sku_name                      = "Premium"
@@ -18,11 +18,14 @@ resource "azurerm_redis_cache" "redis" {
   zones                         = []
   tenant_settings               = {}
 
+  shard_count = var.shard_count
+
   redis_configuration {
     enable_authentication = true
     aof_backup_enabled    = false
     rdb_backup_enabled    = false
-    maxmemory_policy      = "volatile-lru"
+    # Removes the least recently used key out of all the keys with an expiration set.
+    maxmemory_policy = "volatile-lru"
   }
 
   # Maintenance schedule

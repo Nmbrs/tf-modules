@@ -18,6 +18,12 @@ variable "environment" {
   type        = string
 }
 
+variable "shard_count" {
+  description = "The number of shards for the Redis cluster."
+  type        = number
+  default     = 0
+}
+
 variable "cache_size_gb" {
   description = "The size of the Redis cache per instance in gigabytes (GB)"
   type        = number
