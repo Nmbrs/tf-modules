@@ -15,7 +15,7 @@ The Azure Redis cache module is a Terraform module that provides an easy and con
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.6 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.61.0 |
 
 ## Modules
 
@@ -37,6 +37,7 @@ No modules.
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name of the  Redis instance. It must follow the CAF naming convention. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
+| <a name="input_shard_count"></a> [shard\_count](#input\_shard\_count) | The number of shards for the Redis cluster. | `number` | `0` | no |
 
 ## Outputs
 
@@ -56,6 +57,7 @@ No modules.
 
 A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
 
+## Cache with no cluster configuration
 ```hcl
 module "redis_cache" {
   source              = "git::github.com/Nmbrs/tf-modules//azure/redis_cache"
@@ -63,5 +65,18 @@ module "redis_cache" {
   resource_group_name = "rg-my-resource-group"
   environment         = "dev"
   cache_size_gb       = 6
+}
+````
+
+## Cache with cluster configuration
+```hcl
+module "redis_cache" {
+  source              = "git::github.com/Nmbrs/tf-modules//azure/redis_cache"
+  name                = "my-redis-cache"
+  resource_group_name = "rg-my-resource-group"
+  environment         = "dev"
+  cache_size_gb       = 6
+  create_cluster      = true
+  shard_count         = 2
 }
 ```
