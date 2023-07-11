@@ -1,5 +1,18 @@
 # Changelog
 
+## [7.9.0](https://github.com/Nmbrs/tf-modules/compare/v7.8.0...v7.9.0) (2023-07-04)
+
+
+### Features
+
+* **storage-account:** remove queue properties ([#209](https://github.com/Nmbrs/tf-modules/issues/209)) ([add69c4](https://github.com/Nmbrs/tf-modules/commit/add69c41ab5951bdaa2922c787f5cea32d4ea1a8))
+* **vnet:** update delegations list ([#204](https://github.com/Nmbrs/tf-modules/issues/204)) ([efe5810](https://github.com/Nmbrs/tf-modules/commit/efe58100820ffcd942c6d95a234b4ec61b369763))
+
+
+### Reverts
+
+* "feature(vnet): update delegations list ([#204](https://github.com/Nmbrs/tf-modules/issues/204))" ([#208](https://github.com/Nmbrs/tf-modules/issues/208)) ([36e2d53](https://github.com/Nmbrs/tf-modules/commit/36e2d5378d7c27c249c790418989e81a14bea671))
+
 ## [7.8.0](https://github.com/Nmbrs/tf-modules/compare/v7.7.0...v7.8.0) (2023-06-28)
 
 
