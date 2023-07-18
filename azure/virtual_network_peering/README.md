@@ -40,3 +40,29 @@ No modules.
 ## Outputs
 
 No outputs.
+
+## How to use it?
+
+A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
+
+```hcl
+module "virtual_network_peering" {
+  source = "git::github.com/Nmbrs/tf-modules//azure/virtual_network_peering"
+  vnet_source = {
+    name                         = "vnet-dev-westeu-1000"
+    resource_group_name          = "rg-vnet-01"
+    allow_forwarded_traffic      = true
+    allow_gateway_transit        = true
+    allow_virtual_network_access = true
+    use_remote_gateways          = true
+  }
+  vnet_destination = {
+    name                         = "vnet-dev-westeu-1001"
+    resource_group_name          = "rg-vnet-01"
+    allow_forwarded_traffic      = true
+    allow_gateway_transit        = true
+    allow_virtual_network_access = true
+    use_remote_gateways          = false
+  }
+}
+```
