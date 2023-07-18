@@ -15,41 +15,6 @@ resource "azurerm_virtual_network" "vnet" {
   }
 }
 
-#VNET peering
-data "azurerm_virtual_network" "vnet_destiny" {
-  for_each = { for peering in var.vnet_peerings : peering.vnet_name => peering }
-
-  name                = each.value.vnet_name
-  resource_group_name = each.value.vnet_resource_group_name
-}
-
-resource "azurerm_virtual_network_peering" "vnet_source" {
-  for_each = { for peering in var.vnet_peerings : peering.vnet_name => peering }
-
-  name                         = "peering-${azurerm_virtual_network.vnet.name}-to-${each.value.vnet_name}"
-  resource_group_name          = data.azurerm_resource_group.rg.name
-  virtual_network_name         = azurerm_virtual_network.vnet.name
-  remote_virtual_network_id    = data.azurerm_virtual_network.vnet_destiny[each.key].id
-  use_remote_gateways          = each.value.use_remote_gateways
-  allow_gateway_transit        = each.value.allow_gateway_transit
-  allow_forwarded_traffic      = each.value.allow_forwarded_traffic
-  allow_virtual_network_access = each.value.allow_virtual_network_access
-}
-
-resource "azurerm_virtual_network_peering" "vnet_destiny" {
-  for_each = { for peering in var.vnet_peerings : peering.vnet_name => peering }
-
-  name                         = "peering-${each.value.vnet_name}-to-${azurerm_virtual_network.vnet.name}"
-  resource_group_name          = data.azurerm_virtual_network.vnet_destiny[each.key].resource_group_name
-  virtual_network_name         = data.azurerm_virtual_network.vnet_destiny[each.key].name
-  remote_virtual_network_id    = azurerm_virtual_network.vnet.id
-  use_remote_gateways          = false # Controls if remote gateways can be used on the local virtual network. Only one peering can have this flag set to true
-  allow_gateway_transit        = each.value.allow_gateway_transit
-  allow_forwarded_traffic      = each.value.allow_forwarded_traffic
-  allow_virtual_network_access = each.value.allow_virtual_network_access
-}
-
-# Subnets
 resource "azurerm_subnet" "subnet" {
   for_each = { for subnet in var.subnets : subnet.name => subnet }
 

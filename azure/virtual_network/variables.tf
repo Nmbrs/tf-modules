@@ -167,32 +167,3 @@ variable "subnets" {
     error_message = "At least one of the values from 'delegations' list from one of the 'subnets' is duplicated. All elements must be unique."
   }
 }
-
-variable "vnet_peerings" {
-  description = "List of objects that represent the configuration of each vnet peering."
-  type = list(object({
-    vnet_name                    = string
-    vnet_resource_group_name     = string
-    use_remote_gateways          = bool
-    allow_forwarded_traffic      = bool
-    allow_gateway_transit        = bool
-    allow_virtual_network_access = bool
-  }))
-
-  default = []
-
-  validation {
-    condition     = alltrue([for peering in var.vnet_peerings : can(coalesce(peering.vnet_name))])
-    error_message = "At least one 'vnet_name' property from 'vnet_peerings' is invalid. They must be non-empty string values."
-  }
-
-  validation {
-    condition     = length([for peering in var.vnet_peerings : peering.vnet_name]) == length(distinct([for peering in var.vnet_peerings : peering.vnet_name]))
-    error_message = "At least one 'peering' property from one of the 'vnet_peerings' is duplicated. They must be unique."
-  }
-
-  validation {
-    condition     = alltrue([for peering in var.vnet_peerings : can(coalesce(peering.vnet_resource_group_name))])
-    error_message = "At least one 'vnet_resource_group_name' property from 'vnet_peerings' is invalid. They must be non-empty string values."
-  }
-}
