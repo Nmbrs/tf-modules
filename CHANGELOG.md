@@ -1,5 +1,37 @@
 # Changelog
 
+## [7.9.0](https://github.com/Nmbrs/tf-modules/compare/v7.8.0...v7.9.0) (2023-07-04)
+
+
+### Features
+
+* **storage-account:** remove queue properties ([#209](https://github.com/Nmbrs/tf-modules/issues/209)) ([add69c4](https://github.com/Nmbrs/tf-modules/commit/add69c41ab5951bdaa2922c787f5cea32d4ea1a8))
+* **vnet:** update delegations list ([#204](https://github.com/Nmbrs/tf-modules/issues/204)) ([efe5810](https://github.com/Nmbrs/tf-modules/commit/efe58100820ffcd942c6d95a234b4ec61b369763))
+
+
+### Reverts
+
+* "feature(vnet): update delegations list ([#204](https://github.com/Nmbrs/tf-modules/issues/204))" ([#208](https://github.com/Nmbrs/tf-modules/issues/208)) ([36e2d53](https://github.com/Nmbrs/tf-modules/commit/36e2d5378d7c27c249c790418989e81a14bea671))
+
+## [7.8.0](https://github.com/Nmbrs/tf-modules/compare/v7.7.0...v7.8.0) (2023-06-28)
+
+
+### Features
+
+* **cosmos_db:** remove provider configs to allow the use of for_each loops ([#198](https://github.com/Nmbrs/tf-modules/issues/198)) ([f4d460d](https://github.com/Nmbrs/tf-modules/commit/f4d460d53a03041c2e70b611c9eb117832bd0d0e))
+* **dns_records:** remove provider configs to allow the use of for_each loops ([#199](https://github.com/Nmbrs/tf-modules/issues/199)) ([590bb7e](https://github.com/Nmbrs/tf-modules/commit/590bb7eedaf5e26fc86ae38375efd6e20cd556f7))
+* **dns_zone:** remove provider configs to allow the use of for_each loops ([#197](https://github.com/Nmbrs/tf-modules/issues/197)) ([d5995e5](https://github.com/Nmbrs/tf-modules/commit/d5995e549a2aee4cb71eee0d18b733a189348b9b))
+* **location:** remove provider configs to allow the use of for_each loops ([#196](https://github.com/Nmbrs/tf-modules/issues/196)) ([e8366b8](https://github.com/Nmbrs/tf-modules/commit/e8366b85f9f400da2a7cfab3b169fa521c312bc0))
+* **private_dns_resolver:** add private dns resolver module ([#189](https://github.com/Nmbrs/tf-modules/issues/189)) ([7e50b91](https://github.com/Nmbrs/tf-modules/commit/7e50b91e15a60dface58b7819a178dc143071769))
+* **private_dns_zone:** remove provider configs to allow the use of for_each loops ([#195](https://github.com/Nmbrs/tf-modules/issues/195)) ([0d36a71](https://github.com/Nmbrs/tf-modules/commit/0d36a71663f69bb49eb5fd797699ad7f80ac9216))
+* **redis:** add sharding support to premium tier ([#206](https://github.com/Nmbrs/tf-modules/issues/206)) ([cc4d479](https://github.com/Nmbrs/tf-modules/commit/cc4d479bf5715a1e202df855bd1dca2229570db6))
+* **resource_group:** remove caf dependency ([#201](https://github.com/Nmbrs/tf-modules/issues/201)) ([76884ac](https://github.com/Nmbrs/tf-modules/commit/76884aca1b13230b69646bf16eea95ec836aa4ad))
+* **storage_account:** remove provider configs to allow the use of for_each loops ([#194](https://github.com/Nmbrs/tf-modules/issues/194)) ([e3e168b](https://github.com/Nmbrs/tf-modules/commit/e3e168b88c8753b7e48d125a56faa42f481dd828))
+* **virtual_machine:** remove provider configs to allow the use of for_each loops ([#193](https://github.com/Nmbrs/tf-modules/issues/193)) ([4a02763](https://github.com/Nmbrs/tf-modules/commit/4a027636e13497c304c17ed27831f47e3bf7e3ca))
+* **virtual_network:** remove provider configs to allow the use of for_each loops ([#200](https://github.com/Nmbrs/tf-modules/issues/200)) ([2c8aa2f](https://github.com/Nmbrs/tf-modules/commit/2c8aa2ffb4f5b03cfff0dd7aed4d3ca8a099fdd5))
+* **vnet:** remove caf resource reference ([#205](https://github.com/Nmbrs/tf-modules/issues/205)) ([d2146e9](https://github.com/Nmbrs/tf-modules/commit/d2146e9d39bfd6d6cb3b6a0e3eecc0300ba2a298))
+* **windows_scaleset:** remove provider configs to allow the use of for_each loops ([#192](https://github.com/Nmbrs/tf-modules/issues/192)) ([4c55137](https://github.com/Nmbrs/tf-modules/commit/4c551377459257b5c8a81676c5bc8d2e7b7b6137))
+
 ## [7.7.0](https://github.com/Nmbrs/tf-modules/compare/v7.6.0...v7.7.0) (2023-06-20)
 
 
