@@ -1,75 +1,126 @@
+variable "service_plan_name" {
+  description = "The name which should be used for this Service Plan."
+  type        = string
+}
+
 variable "environment" {
   description = "defines the environment to provision the resources."
   type        = string
 }
 
-variable "project" {
-  description = "project name. It will be used by some resources."
+variable "resource_group_name" {
   type        = string
+  description = "The name of an existing Resource Group."
 }
 
-variable "location" {
-  description = "location of the resource"
+
+variable "os_type" {
+  description = "The O/S type for the App Services to be hosted in this plan. Changing this forces a new AppService to be created."
   type        = string
+  default     = "Windows"
+
+  validation {
+    condition     = contains(["Linux", "Windows", "WindowsContainer"], var.os_type)
+    error_message = format("Invalid value '%s' for variable 'os_type', valid options are 'Linux', 'Windows', 'WindowsContainer'.", var.os_type)
+  }
 }
 
-variable "sku" {
-  description = "defines the app service size type (i.e: S1, P1V2 etc)."
+variable "sku_name" {
+  description = "Defines the The SKU for the plan. (i.e: S1, P1V2 etc)."
   type        = string
+
+  validation {
+    condition     = contains(["B1", "B2", "B3", "I1", "I2", "I3", "I1v2", "I2v2", "I3v2", "I4v2", "I5v2", "I6v2", "P1v2", "P2v2", "P3v2", "P0v3", "P1v3", "P2v3", "P3v3", "P1Mv3", "P2Mv3", "P3Mv3", "P4Mv3", "P5Mv3", "S1", "S2", "S3", "WS1", "WS2", "WS3"], var.sku_name)
+    error_message = format("Invalid value '%s' for variable 'sku', valid options are 'B1', 'B2', 'B3', 'I1', 'I2', 'I3', 'I1v2', 'I2v2', 'I3v2', 'I4v2', 'I5v2', 'I6v2', 'P1v2', 'P2v2', 'P3v2', 'P0v3', 'P1v3', 'P2v3', 'P3v3', 'P1Mv3', 'P2Mv3', 'P3Mv3', 'P4Mv3', 'P5Mv3', 'S1', 'S2', 'S3', 'WS1', 'WS2', 'WS3'.", var.sku_name)
+  }
 }
 
 variable "stack" {
   description = "defines the stack for the webapp (i.e dotnet, dotnetcore, node, python, php, and java)"
   type        = string
+
 }
 
-variable "dotnetVersion" {
+variable "dotnet_version" {
   description = "defines the dotnet framework version for app service (i.e: v3.0 v4.0 v5.0 v6.0)."
   type        = string
 }
 
-variable "resource_group" {
-  description = "azure resource group name."
+variable "load_balancing_mode" {
+  description = "The O/S type for the App Services to be hosted in this plan. Changing this forces a new AppService to be created."
   type        = string
+  default     = "LeastResponseTime"
+
+  validation {
+    condition     = contains(["WeightedRoundRobin", "LeastRequests", "LeastResponseTime", "WeightedTotalTraffic", "RequestHash", "PerSiteRoundRobin"], var.load_balancing_mode)
+    error_message = format("Invalid value '%s' for variable 'os_type', valid options are 'WeightedRoundRobin', 'LeastRequests', 'LeastResponseTime', 'WeightedTotalTraffic', 'RequestHash', 'PerSiteRoundRobin'.", var.load_balancing_mode)
+  }
 }
 
-variable "apps" {
+
+variable "app_services" {
   description = "List of desired applications to be deployed on Azure app service resource (webapp, mobile, identity, others)."
-  type        = map(any)
+  type = list(object({
+    name = string
+    custom_domains = optional(list(object(
+      {
+        cname_record_name       = string
+        dns_zone_name           = string
+        dns_zone_resource_group = string
+        # certificate = optional(object({
+        #   name                          = string
+        #   key_vault_name                = string
+        #   key_vault_resource_group_name = string
+        # }), {})
+        certificate_name           = string
+        certificate_resource_group = string
+        key_vault_name             = string
+        key_vault_secret_name      = string
+        # key_vault_certificate_id   = string
+      }
+    )), [])
+  }))
 }
 
-variable "tags" {
-  description = "nmbrs list of mandatory resource tags."
-  type        = map(string)
+variable "network_settings" {
+  type = object(
+    {
+      subnet_name              = string
+      vnet_name                = string
+      vnet_resource_group_name = string
+    }
+  )
 }
 
-variable "dns_zone_name" {
-  description = "Name of the DNS zone"
-  type        = string
-}
 
-variable "dns_zone_resource_group" {
-  description = "Resource Group of the DNS zone"
-  type        = string
-}
 
-variable "ttl" {
-  description = "Time to live of records"
-  type        = number
-}
+# variable "dns_zone_name" {
+#   description = "Name of the DNS zone"
+#   type        = string
+# }
 
-variable "certificate_keyvault_name" {
-  description = "Name of the key vault where the certificate is"
-  type        = string
-}
+# variable "dns_zone_resource_group" {
+#   description = "Resource Group of the DNS zone"
+#   type        = string
+# }
 
-variable "certificate_keyvault_resource_group" {
-  description = "Resource group of the Keyvault"
-  type        = string
-}
+# variable "ttl" {
+#   description = "Time to live of records"
+#   type        = number
+# }
 
-variable "certificate_name" {
-  description = "Name of the certificate to bind"
-  type        = string
-}
+# variable "certificate_keyvault_name" {
+#   description = "Name of the key vault where the certificate is"
+#   type        = string
+# }
+
+# variable "certificate_keyvault_resource_group" {
+#   description = "Resource group of the Keyvault"
+#   type        = string
+# }
+
+# variable "certificate_name" {
+#   description = "Name of the certificate to bind"
+#   type        = string
+# }
 
