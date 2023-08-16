@@ -57,29 +57,9 @@ variable "load_balancing_mode" {
   }
 }
 
-
-variable "app_services" {
+variable "app_service_names" {
   description = "List of desired applications to be deployed on Azure app service resource (webapp, mobile, identity, others)."
-  type = list(object({
-    name = string
-    custom_domains = optional(list(object(
-      {
-        cname_record_name       = string
-        dns_zone_name           = string
-        dns_zone_resource_group = string
-        # certificate = optional(object({
-        #   name                          = string
-        #   key_vault_name                = string
-        #   key_vault_resource_group_name = string
-        # }), {})
-        certificate_name           = string
-        certificate_resource_group = string
-        key_vault_name             = string
-        key_vault_secret_name      = string
-        # key_vault_certificate_id   = string
-      }
-    )), [])
-  }))
+  type        = list(string)
 }
 
 variable "network_settings" {
@@ -91,36 +71,3 @@ variable "network_settings" {
     }
   )
 }
-
-
-
-# variable "dns_zone_name" {
-#   description = "Name of the DNS zone"
-#   type        = string
-# }
-
-# variable "dns_zone_resource_group" {
-#   description = "Resource Group of the DNS zone"
-#   type        = string
-# }
-
-# variable "ttl" {
-#   description = "Time to live of records"
-#   type        = number
-# }
-
-# variable "certificate_keyvault_name" {
-#   description = "Name of the key vault where the certificate is"
-#   type        = string
-# }
-
-# variable "certificate_keyvault_resource_group" {
-#   description = "Resource group of the Keyvault"
-#   type        = string
-# }
-
-# variable "certificate_name" {
-#   description = "Name of the certificate to bind"
-#   type        = string
-# }
-
