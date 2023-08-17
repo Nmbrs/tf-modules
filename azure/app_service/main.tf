@@ -53,7 +53,6 @@ resource "azurerm_windows_web_app" "web_app" {
     type = "SystemAssigned"
   }
 
-
   site_config {
     always_on                = true
     minimum_tls_version      = "1.2"
