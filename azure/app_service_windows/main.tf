@@ -1,4 +1,3 @@
-## Data Read - Resource Group
 data "azurerm_resource_group" "service_plan" {
   name = var.resource_group_name
 }
