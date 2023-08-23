@@ -30,7 +30,7 @@ resource "azurerm_virtual_network_gateway" "vpn_gateway" {
 
   active_active = false
   enable_bgp    = false
-  sku           = var.sku
+  sku           = var.sku_name
   generation    = var.generation
 
   ip_configuration {
@@ -41,12 +41,16 @@ resource "azurerm_virtual_network_gateway" "vpn_gateway" {
   }
 
   vpn_client_configuration {
-    address_space        = var.address_space
+    address_space        = var.address_spaces
     vpn_client_protocols = ["OpenVPN"]
 
     # Learn more about Azure AD authentication https://learn.microsoft.com/en-us/azure/vpn-gateway/openvpn-azure-ad-tenant
     aad_tenant   = local.aad_tenant_url
     aad_audience = local.vpn_enterprise_app_id
     aad_issuer   = local.aad_issuer_url
+  }
+
+  lifecycle {
+    ignore_changes = [tags]
   }
 }
