@@ -43,13 +43,16 @@ No modules.
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | This variable defines the name of the virtual gateway. For an exaustive list of skus, please use the command 'az account list-locations' | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Resource group name for where the virtual gateway will be created | `string` | n/a | yes |
-| <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | Configuration of the size and capacity of the virtual network gateway. | `string` | `"VpnGw1"` | no |
+| <a name="input_sku"></a> [sku](#input\_sku) | Configuration of the size and capacity of the virtual network gateway. | `string` | `"VpnGw1"` | no |
 | <a name="input_vnet_name"></a> [vnet\_name](#input\_vnet\_name) | Name of the Vnet that will be added to the virtual gateway | `string` | n/a | yes |
 | <a name="input_vnet_resource_group_name"></a> [vnet\_resource\_group\_name](#input\_vnet\_resource\_group\_name) | Resource group of the Vnet that will be added to the virtual gateway | `string` | n/a | yes |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_id"></a> [id](#output\_id) | The ID of the VPN Gateway. |
+| <a name="output_name"></a> [name](#output\_name) | The name of the VPN Gateway. |
 
 ## How to use it?
 
