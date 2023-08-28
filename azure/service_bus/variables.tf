@@ -3,8 +3,8 @@ variable "resource_group_name" {
   description = "The name of an existing Resource Group."
 }
 
-variable "name" {
-  description = "The name of the service bus namespace."
+variable "workload" {
+  description = "The workload name of the service bus namespace."
   type        = string
 }
 
