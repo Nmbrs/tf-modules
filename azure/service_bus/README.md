@@ -71,7 +71,7 @@ module "service_bus" {
 module "service_bus" {
   source = "git::github.com/Nmbrs/tf-modules//azure/service_bus"
 
-  name                = "test"
+  workload            = "app1"
   environment         = "dev"
   location            = "westeurope"
   resource_group_name = "rg-service-bus"
