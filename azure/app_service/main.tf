@@ -42,8 +42,7 @@ resource "azurerm_application_insights" "service_plan" {
 ## App Service
 resource "azurerm_windows_web_app" "web_app" {
   for_each = toset(var.app_service_names)
-
-  name                = "as-${var.service_plan_name}-${each.key}-${var.environment}"
+  name                = "as-${each.key}-${var.environment}"
   resource_group_name = data.azurerm_resource_group.service_plan.name
   location            = data.azurerm_resource_group.service_plan.location
   service_plan_id     = azurerm_service_plan.service_plan.id
