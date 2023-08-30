@@ -30,7 +30,7 @@ variable "os_type" {
   }
 }
 
-variable "sku_name" {
+variable "sku" {
   description = "Defines the The SKU for the plan. (i.e: S1, P1V2 etc)."
   type        = string
 

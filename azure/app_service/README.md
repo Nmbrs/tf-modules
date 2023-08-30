@@ -45,7 +45,7 @@ No modules.
 | <a name="input_os_type"></a> [os\_type](#input\_os\_type) | The O/S type for the App Services to be hosted in this plan. Changing this forces a new AppService to be created. | `string` | `"Windows"` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 | <a name="input_service_plan_name"></a> [service\_plan\_name](#input\_service\_plan\_name) | The name which should be used for this Service Plan. | `string` | n/a | yes |
-| <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | Defines the The SKU for the plan. (i.e: S1, P1V2 etc). | `string` | n/a | yes |
+| <a name="input_sku"></a> [sku](#input\_sku) | Defines the The SKU for the plan. (i.e: S1, P1V2 etc). | `string` | n/a | yes |
 | <a name="input_stack"></a> [stack](#input\_stack) | defines the stack for the webapp (i.e dotnet, dotnetcore, node, python, php, and java) | `string` | n/a | yes |
 
 ## Outputs
@@ -55,7 +55,7 @@ No modules.
 | <a name="output_app_services"></a> [app\_services](#output\_app\_services) | List of Azure Windows Web Apps with their respective names and IDs. |
 | <a name="output_service_plan_id"></a> [service\_plan\_id](#output\_service\_plan\_id) | The ID of the Azure Service Plan. |
 | <a name="output_service_plan_os_type"></a> [service\_plan\_os\_type](#output\_service\_plan\_os\_type) | The operating system type associated with the Azure Service Plan. |
-| <a name="output_service_plan_sku_name"></a> [service\_plan\_sku\_name](#output\_service\_plan\_sku\_name) | The SKU name associated with the Azure Service Plan. |
+| <a name="output_service_plan_sku"></a> [service\_plan\_sku](#output\_service\_plan\_sku\_name) | The SKU name associated with the Azure Service Plan. |
 
 ## How to use it?
 
@@ -70,7 +70,7 @@ module "app_service_plan" {
   resource_group_name = "rg-myapp"
   environment         = "dev"
   location            = "westeurope"
-  sku_name            = "P2v3"
+  sku            = "P2v3"
   stack               = "dotnet"
   dotnet_version      = "v4.0"
 
@@ -93,7 +93,7 @@ module "app_service_plan" {
   resource_group_name = "rg-myapp"
   environment         = "dev"
   location            = "westeurope"
-  sku_name            = "P2v3"
+  sku            = "P2v3"
   stack               = "dotnet"
   dotnet_version      = "v4.0"
 
