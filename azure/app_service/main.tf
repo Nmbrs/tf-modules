@@ -13,7 +13,7 @@ resource "azurerm_service_plan" "service_plan" {
 
 ## App Service
 resource "azurerm_windows_web_app" "web_app" {
-  for_each = toset(var.app_service_names)
+  for_each            = toset(var.app_service_names)
   name                = "as-${each.key}-${var.environment}"
   resource_group_name = var.resource_group_name
   location            = var.location
