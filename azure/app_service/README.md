@@ -52,8 +52,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_app_insights_id"></a> [app\_insights\_id](#output\_app\_insights\_id) | The Application ID (App ID) of the Azure Application Insights associated with the service plan. |
-| <a name="output_app_insights_instrumentation_key"></a> [app\_insights\_instrumentation\_key](#output\_app\_insights\_instrumentation\_key) | The Instrumentation Key for the Azure Application Insights associated with the service plan. |
 | <a name="output_app_services"></a> [app\_services](#output\_app\_services) | List of Azure Windows Web Apps with their respective names and IDs. |
 | <a name="output_service_plan_id"></a> [service\_plan\_id](#output\_service\_plan\_id) | The ID of the Azure Service Plan. |
 | <a name="output_service_plan_os_type"></a> [service\_plan\_os\_type](#output\_service\_plan\_os\_type) | The operating system type associated with the Azure Service Plan. |

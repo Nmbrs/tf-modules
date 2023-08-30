@@ -1,14 +1,3 @@
-output "app_insights_instrumentation_key" {
-  description = "The Instrumentation Key for the Azure Application Insights associated with the service plan."
-  value       = azurerm_application_insights.service_plan.instrumentation_key
-  sensitive   = true
-}
-
-output "app_insights_id" {
-  description = "The Application ID (App ID) of the Azure Application Insights associated with the service plan."
-  value       = azurerm_application_insights.service_plan.app_id
-}
-
 output "service_plan_id" {
   description = "The ID of the Azure Service Plan."
   value       = azurerm_service_plan.service_plan.id
