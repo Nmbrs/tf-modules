@@ -6,7 +6,6 @@ The `app_service` module provides a comprehensive Terraform solution for setting
 
 This module streamlines the process of creating and configuring Azure Web App instances. It handles essential tasks such as provisioning the necessary infrastructure, defining deployment configurations, and establishing platform-specific settings. By abstracting these complexities, the module ensures consistent and efficient deployment of web apps, regardless of the underlying operating system.
 
-
 ## Requirements
 
 | Name | Version |
@@ -29,11 +28,8 @@ No modules.
 | Name | Type |
 |------|------|
 | [azurerm_app_service_virtual_network_swift_connection.web_app](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_virtual_network_swift_connection) | resource |
-| [azurerm_application_insights.service_plan](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_insights) | resource |
-| [azurerm_log_analytics_workspace.service_plan](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) | resource |
 | [azurerm_service_plan.service_plan](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/service_plan) | resource |
 | [azurerm_windows_web_app.web_app](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_web_app) | resource |
-| [azurerm_resource_group.service_plan](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) | data source |
 | [azurerm_subnet.service_plan](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subnet) | data source |
 
 ## Inputs
@@ -44,6 +40,7 @@ No modules.
 | <a name="input_dotnet_version"></a> [dotnet\_version](#input\_dotnet\_version) | defines the dotnet framework version for app service (i.e: v3.0 v4.0 v5.0 v6.0). | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | defines the environment to provision the resources. | `string` | n/a | yes |
 | <a name="input_load_balancing_mode"></a> [load\_balancing\_mode](#input\_load\_balancing\_mode) | The O/S type for the App Services to be hosted in this plan. Changing this forces a new AppService to be created. | `string` | `"LeastResponseTime"` | no |
+| <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
 | <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | n/a | <pre>object(<br>    {<br>      subnet_name              = string<br>      vnet_name                = string<br>      vnet_resource_group_name = string<br>    }<br>  )</pre> | n/a | yes |
 | <a name="input_os_type"></a> [os\_type](#input\_os\_type) | The O/S type for the App Services to be hosted in this plan. Changing this forces a new AppService to be created. | `string` | `"Windows"` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
@@ -74,6 +71,7 @@ module "app_service_plan" {
   service_plan_name   = "myserviceplan"
   resource_group_name = "rg-myapp"
   environment         = "dev"
+  location            = "westeurope"
   sku_name            = "P2v3"
   stack               = "dotnet"
   dotnet_version      = "v4.0"
@@ -96,6 +94,7 @@ module "app_service_plan" {
   service_plan_name   = "myserviceplan"
   resource_group_name = "rg-myapp"
   environment         = "dev"
+  location            = "westeurope"
   sku_name            = "P2v3"
   stack               = "dotnet"
   dotnet_version      = "v4.0"

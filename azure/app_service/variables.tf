@@ -3,6 +3,11 @@ variable "service_plan_name" {
   type        = string
 }
 
+variable "location" {
+  description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
+  type        = string
+}
+
 variable "environment" {
   description = "defines the environment to provision the resources."
   type        = string

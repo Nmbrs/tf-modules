@@ -1,38 +1,10 @@
-data "azurerm_resource_group" "service_plan" {
-  name = var.resource_group_name
-}
-
 ## App Service plan
 resource "azurerm_service_plan" "service_plan" {
   name                = "asp-${var.service_plan_name}-${var.environment}"
-  resource_group_name = data.azurerm_resource_group.service_plan.name
-  location            = data.azurerm_resource_group.service_plan.location
+  resource_group_name = var.resource_group_name
+  location            = var.location
   os_type             = var.os_type
   sku_name            = var.sku_name
-
-  lifecycle {
-    ignore_changes = [tags]
-  }
-}
-
-## Logging
-resource "azurerm_log_analytics_workspace" "service_plan" {
-  name                = "wsp-${var.service_plan_name}-${var.environment}"
-  resource_group_name = data.azurerm_resource_group.service_plan.name
-  location            = data.azurerm_resource_group.service_plan.location
-  retention_in_days   = 90
-
-  lifecycle {
-    ignore_changes = [tags]
-  }
-}
-
-resource "azurerm_application_insights" "service_plan" {
-  name                = "appins-${var.service_plan_name}-${var.environment}"
-  resource_group_name = data.azurerm_resource_group.service_plan.name
-  location            = data.azurerm_resource_group.service_plan.location
-  workspace_id        = azurerm_log_analytics_workspace.service_plan.id
-  application_type    = "web"
 
   lifecycle {
     ignore_changes = [tags]
@@ -43,8 +15,8 @@ resource "azurerm_application_insights" "service_plan" {
 resource "azurerm_windows_web_app" "web_app" {
   for_each = toset(var.app_service_names)
   name                = "as-${each.key}-${var.environment}"
-  resource_group_name = data.azurerm_resource_group.service_plan.name
-  location            = data.azurerm_resource_group.service_plan.location
+  resource_group_name = var.resource_group_name
+  location            = var.location
   service_plan_id     = azurerm_service_plan.service_plan.id
   https_only          = true
 
