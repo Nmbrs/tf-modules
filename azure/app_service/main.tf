@@ -1,6 +1,6 @@
 ## App Service plan
 resource "azurerm_service_plan" "service_plan" {
-  name                = "asp-${var.service_plan_name}-${var.environment}"
+  name                = local.service_plan_name
   resource_group_name = var.resource_group_name
   location            = var.location
   os_type             = var.os_type
@@ -13,8 +13,10 @@ resource "azurerm_service_plan" "service_plan" {
 
 ## App Service
 resource "azurerm_windows_web_app" "web_app" {
-  for_each            = toset(var.app_service_names)
-  name                = "as-${each.key}-${var.environment}"
+  for_each = toset(var.app_service_names)
+
+  name                = local.app_service_names[index(var.app_service_names, each.key)]
+  # name                = local.app_service_names[0]
   resource_group_name = var.resource_group_name
   location            = var.location
   service_plan_id     = azurerm_service_plan.service_plan.id
@@ -43,7 +45,7 @@ resource "azurerm_windows_web_app" "web_app" {
   }
 
   lifecycle {
-    ignore_changes = [tags, virtual_network_subnet_id]
+    ignore_changes = [tags, virtual_network_subnet_id, identity]
   }
 }
 

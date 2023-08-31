@@ -36,17 +36,19 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_app_service_names"></a> [app\_service\_names](#input\_app\_service\_names) | List of desired applications to be deployed on Azure app service resource (webapp, mobile, identity, others). | `list(string)` | n/a | yes |
-| <a name="input_dotnet_version"></a> [dotnet\_version](#input\_dotnet\_version) | defines the dotnet framework version for app service (i.e: v3.0 v4.0 v5.0 v6.0). | `string` | n/a | yes |
+| <a name="input_app_service_name"></a> [app\_service\_name](#input\_app\_service\_name) | List of desired applications to be deployed on app service plan resource (webapp, mobile, identity, others). | `list(string)` | n/a | yes |
+| <a name="input_country"></a> [country](#input\_country) | Specifies the country for the app services and service plan names. | `string` | n/a | yes |
+| <a name="input_dotnet_version"></a> [dotnet\_version](#input\_dotnet\_version) | defines the dotnet framework version for the all app services. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | defines the environment to provision the resources. | `string` | n/a | yes |
 | <a name="input_load_balancing_mode"></a> [load\_balancing\_mode](#input\_load\_balancing\_mode) | The O/S type for the App Services to be hosted in this plan. Changing this forces a new AppService to be created. | `string` | `"LeastResponseTime"` | no |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | n/a | <pre>object(<br>    {<br>      subnet_name              = string<br>      vnet_name                = string<br>      vnet_resource_group_name = string<br>    }<br>  )</pre> | n/a | yes |
+| <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | Defines the network settings for the resources, specifying the subnet, virtual network name, and the resource group for the virtual network. | <pre>object(<br>    {<br>      subnet_name              = string<br>      vnet_name                = string<br>      vnet_resource_group_name = string<br>    }<br>  )</pre> | n/a | yes |
+| <a name="input_node_number"></a> [node\_number](#input\_node\_number) | Specifies the node number for the resources. | `number` | n/a | yes |
 | <a name="input_os_type"></a> [os\_type](#input\_os\_type) | The O/S type for the App Services to be hosted in this plan. Changing this forces a new AppService to be created. | `string` | `"Windows"` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 | <a name="input_service_plan_name"></a> [service\_plan\_name](#input\_service\_plan\_name) | The name which should be used for this Service Plan. | `string` | n/a | yes |
-| <a name="input_sku"></a> [sku](#input\_sku) | Defines the The SKU for the plan. (i.e: S1, P1V2 etc). | `string` | n/a | yes |
-| <a name="input_stack"></a> [stack](#input\_stack) | defines the stack for the webapp (i.e dotnet, dotnetcore, node, python, php, and java) | `string` | n/a | yes |
+| <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | Defines the The SKU name for the plan. (i.e: S1, P1V2 etc). | `string` | n/a | yes |
+| <a name="input_stack"></a> [stack](#input\_stack) | defines the stack for the webapp. | `string` | n/a | yes |
 
 ## Outputs
 
@@ -55,7 +57,7 @@ No modules.
 | <a name="output_app_services"></a> [app\_services](#output\_app\_services) | List of Azure Windows Web Apps with their respective names and IDs. |
 | <a name="output_service_plan_id"></a> [service\_plan\_id](#output\_service\_plan\_id) | The ID of the Azure Service Plan. |
 | <a name="output_service_plan_os_type"></a> [service\_plan\_os\_type](#output\_service\_plan\_os\_type) | The operating system type associated with the Azure Service Plan. |
-| <a name="output_service_plan_sku"></a> [service\_plan\_sku](#output\_service\_plan\_sku\_name) | The SKU name associated with the Azure Service Plan. |
+| <a name="output_service_plan_sku_name"></a> [service\_plan\_sku\_name](#output\_service\_plan\_sku\_name) | The SKU name associated with the Azure Service Plan. |
 
 ## How to use it?
 
@@ -84,7 +86,7 @@ module "app_service_plan" {
 }
 ```
 
-## App Service Plan With Multiple WebApp
+## App Service Plan With Multiple WebApps
 
 ```hcl
 module "app_service_plan" {

@@ -8,7 +8,7 @@ output "service_plan_os_type" {
   value       = azurerm_service_plan.service_plan.os_type
 }
 
-output "service_plan_sku" {
+output "service_plan_sku_name" {
   description = "The SKU name associated with the Azure Service Plan."
   value       = azurerm_service_plan.service_plan.sku_name
 }
