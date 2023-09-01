@@ -1,5 +1,14 @@
 # Changelog
 
+## [7.10.0](https://github.com/Nmbrs/tf-modules/compare/v7.9.0...v7.10.0) (2023-09-01)
+
+
+### Features
+
+* **service_bus:** update service bus validation and add naming concatenation ([#215](https://github.com/Nmbrs/tf-modules/issues/215)) ([9f3187c](https://github.com/Nmbrs/tf-modules/commit/9f3187ca4c08de007018b7875c3f573ab7613ccb))
+* **virtual_network:** add subnet name output ([#210](https://github.com/Nmbrs/tf-modules/issues/210)) ([16b6cbd](https://github.com/Nmbrs/tf-modules/commit/16b6cbddb0d9d528fbbb78964f07652c4feb3cf1))
+* **virtual_network:** add vnet peering ([#212](https://github.com/Nmbrs/tf-modules/issues/212)) ([cabff77](https://github.com/Nmbrs/tf-modules/commit/cabff77d7443682b2942ae10bb736e4f0e0c3bd8))
+
 ## [7.9.0](https://github.com/Nmbrs/tf-modules/compare/v7.8.0...v7.9.0) (2023-07-04)
 
 
