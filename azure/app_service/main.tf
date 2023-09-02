@@ -45,7 +45,7 @@ resource "azurerm_windows_web_app" "web_app" {
   }
 
   lifecycle {
-    ignore_changes = [tags, virtual_network_subnet_id, identity]
+    ignore_changes = [tags, virtual_network_subnet_id, identity, app_settings, sticky_settings]
   }
 }
 
