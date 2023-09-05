@@ -1,5 +1,25 @@
+variable "resource_group_name" {
+  type        = string
+  description = "The name of an existing Resource Group."
+}
+
+variable "name" {
+  description = "(Required) Specifies the name of the resource."
+  type        = string
+}
+
+variable "environment" {
+  description = "The environment in which the resource should be provisioned."
+  type        = string
+}
+
+variable "location" {
+  description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
+  type        = string
+}
+
 variable "kind" {
-  description = "defines the Kind of CosmosDB to create - possible values are GlobalDocumentDB, MongoDB and Parse."
+  description = "defines the Kind of CosmosDB to create."
   type        = string
 
   validation {
@@ -15,26 +35,5 @@ variable "mongo_db_version" {
   validation {
     condition     = contains(["4.2", "4.0", "3.6", "3.2"], var.mongo_db_version)
     error_message = format("Invalid value '%s' for variable 'mongo_db_version', Valid options are '4.2', '4.0', '3.6' and '3.2'.", var.mongo_db_version)
-  }
-}
-
-variable "resource_group_name" {
-  description = "(Required) Specifies the name of the resource group."
-  type        = string
-}
-
-variable "name" {
-  description = "(Required) Specifies the name of the resource"
-  type        = string
-}
-
-variable "extra_tags" {
-  description = "(Optional) A extra mapping of tags which should be assigned to the desired resource."
-  type        = map(string)
-  default     = {}
-
-  validation {
-    condition     = alltrue([for tag in var.extra_tags : can(coalesce(var.extra_tags))])
-    error_message = "At least on tag value from 'extra_tags' is invalid. They must be non-empty string values."
   }
 }
