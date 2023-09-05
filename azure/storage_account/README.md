@@ -65,5 +65,7 @@ module "storage_account" {
   account_kind     = "Storage"
   account_tier     = "Standard"
   replication_type = "GRS"
+  environment         = "dev"
+  location            = "westeurope"
 }
 ```
