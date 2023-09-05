@@ -8,16 +8,16 @@ The dns_records module is a Terraform module that allows for the management of D
 
 ## Requirements
 
-| Name                                                                     | Version           |
-| ------------------------------------------------------------------------ | ----------------- |
-| <a name="requirement_terraform"></a> [terraform](#requirement_terraform) | >= 1.3.0, < 2.0.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement_azurerm)       | ~> 3.6            |
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.70 |
 
 ## Providers
 
-| Name                                                         | Version |
-| ------------------------------------------------------------ | ------- |
-| <a name="provider_azurerm"></a> [azurerm](#provider_azurerm) | 3.6.0   |
+| Name | Version |
+|------|---------|
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.70 |
 
 ## Modules
 
@@ -25,29 +25,29 @@ No modules.
 
 ## Resources
 
-| Name                                                                                                                                | Type     |
-| ----------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| [azurerm_dns_a_record.record](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_a_record)         | resource |
+| Name | Type |
+|------|------|
+| [azurerm_dns_a_record.record](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_a_record) | resource |
 | [azurerm_dns_cname_record.record](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_cname_record) | resource |
-| [azurerm_dns_txt_record.record](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_txt_record)     | resource |
+| [azurerm_dns_txt_record.record](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_txt_record) | resource |
 
 ## Inputs
 
-| Name                                                                     | Description                    | Type                                                                                           | Default | Required |
-| ------------------------------------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------------------------------- | ------- | :------: |
-| <a name="input_a"></a> [a](#input_a)                                     | A record to be created         | <pre>list(object({<br> name = string<br> records = list(string)<br> ttl = number<br> }))</pre> | `[]`    |    no    |
-| <a name="input_cname"></a> [cname](#input_cname)                         | CNAME record to be created     | <pre>list(object({<br> name = string<br> record = string<br> ttl = number<br> }))</pre>        | `[]`    |    no    |
-| <a name="input_dns_zone_name"></a> [dns_zone_name](#input_dns_zone_name) | Name of the DNS zone           | `string`                                                                                       | n/a     |   yes    |
-| <a name="input_dns_zone_rg"></a> [dns_zone_rg](#input_dns_zone_rg)       | Resource Group of the DNS Zone | `string`                                                                                       | n/a     |   yes    |
-| <a name="input_txt"></a> [txt](#input_txt)                               | TXT record to be created       | <pre>list(object({<br> name = string<br> records = list(string)<br> ttl = number<br> }))</pre> | `[]`    |    no    |
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_a"></a> [a](#input\_a) | A record to be created | <pre>list(object({<br>    name    = string<br>    records = list(string)<br>    ttl     = number<br>  }))</pre> | `[]` | no |
+| <a name="input_cname"></a> [cname](#input\_cname) | CNAME record to be created | <pre>list(object({<br>    name   = string<br>    record = string<br>    ttl    = number<br>  }))</pre> | `[]` | no |
+| <a name="input_dns_zone_name"></a> [dns\_zone\_name](#input\_dns\_zone\_name) | Name of the DNS zone | `string` | n/a | yes |
+| <a name="input_dns_zone_rg"></a> [dns\_zone\_rg](#input\_dns\_zone\_rg) | Resource Group of the DNS Zone | `string` | n/a | yes |
+| <a name="input_txt"></a> [txt](#input\_txt) | TXT record to be created | <pre>list(object({<br>    name    = string<br>    records = list(string)<br>    ttl     = number<br>  }))</pre> | `[]` | no |
 
 ## Outputs
 
-| Name                                                              | Description                  |
-| ----------------------------------------------------------------- | ---------------------------- |
-| <a name="output_a_fqdn"></a> [a_fqdn](#output_a_fqdn)             | The FQDN of the A record     |
-| <a name="output_cname_fqdn"></a> [cname_fqdn](#output_cname_fqdn) | The FQDN of the CNAME record |
-| <a name="output_txt_fqdn"></a> [txt_fqdn](#output_txt_fqdn)       | The FQDN of the TXT record   |
+| Name | Description |
+|------|-------------|
+| <a name="output_a_fqdn"></a> [a\_fqdn](#output\_a\_fqdn) | The FQDN of the A record |
+| <a name="output_cname_fqdn"></a> [cname\_fqdn](#output\_cname\_fqdn) | The FQDN of the CNAME record |
+| <a name="output_txt_fqdn"></a> [txt\_fqdn](#output\_txt\_fqdn) | The FQDN of the TXT record |
 
 ## How to use it?
 
