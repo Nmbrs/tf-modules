@@ -2,7 +2,7 @@
 
 ## Sumary
 
-The `keyvault` module is an abstraction that implements all the necessary
+The `keyv_ault` module is an abstraction that implements all the necessary
 Terraform code to provision an Azure Keyvault with success, and accordingly with
 Visma Nmbrs policies.
 
@@ -13,18 +13,18 @@ keyvault when need.
 
 ## Requirements
 
-| Name                                                                     | Version           |
-| ------------------------------------------------------------------------ | ----------------- |
-| <a name="requirement_terraform"></a> [terraform](#requirement_terraform) | >= 1.3.0, < 2.0.0 |
-| <a name="requirement_azurecaf"></a> [azurecaf](#requirement_azurecaf)    | 2.0.0-preview3    |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement_azurerm)       | ~> 3.6            |
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
+| <a name="requirement_azurecaf"></a> [azurecaf](#requirement\_azurecaf) | 2.0.0-preview3 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.70 |
 
 ## Providers
 
-| Name                                                            | Version         |
-| --------------------------------------------------------------- | --------------- |
-| <a name="provider_azurecaf"></a> [azurecaf](#provider_azurecaf) | 2.0.0-preview-3 |
-| <a name="provider_azurerm"></a> [azurerm](#provider_azurerm)    | ~> 3.6          |
+| Name | Version |
+|------|---------|
+| <a name="provider_azurecaf"></a> [azurecaf](#provider\_azurecaf) | 2.0.0-preview3 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.70 |
 
 ## Modules
 
@@ -32,37 +32,36 @@ No modules.
 
 ## Resources
 
-| Name                                                                                                                                                      | Type        |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| [azurecaf_name.caf_name](https://registry.terraform.io/providers/aztfmod/azurecaf/2.0.0-preview3/docs/resources/name)                                     | resource    |
-| [azurerm_key_vault.key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault)                                  | resource    |
-| [azurerm_key_vault_access_policy.default_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource    |
-| [azurerm_key_vault_access_policy.readers_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource    |
-| [azurerm_key_vault_access_policy.writers_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource    |
-| [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config)                         | data source |
-| [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group)                            | data source |
+| Name | Type |
+|------|------|
+| [azurecaf_name.caf_name](https://registry.terraform.io/providers/aztfmod/azurecaf/2.0.0-preview3/docs/resources/name) | resource |
+| [azurerm_key_vault.key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault) | resource |
+| [azurerm_key_vault_access_policy.default_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
+| [azurerm_key_vault_access_policy.readers_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
+| [azurerm_key_vault_access_policy.writers_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
+| [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) | data source |
 
 ## Inputs
 
-| Name                                                                                       | Description                                                                                        | Type                                                                                        | Default | Required |
-| ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------- | :------: |
-| <a name="input_environment"></a> [environment](#input_environment)                         | The environment in which the resource should be provisioned.                                       | `string`                                                                                    | n/a     |   yes    |
-| <a name="input_external_usage"></a> [external_usage](#input_external_usage)                | (Optional) Specifies whether the keyvault should be used internally or externally.                 | `bool`                                                                                      | `true`  |    no    |
-| <a name="input_extra_tags"></a> [extra_tags](#input_extra_tags)                            | (Optional) A extra mapping of tags which should be assigned to the desired resource.               | `map(string)`                                                                               | `{}`    |    no    |
-| <a name="input_name"></a> [name](#input_name)                                              | The name of the Azure Key Vault.                                                                   | `string`                                                                                    | n/a     |   yes    |
-| <a name="input_policies"></a> [policies](#input_policies)                                  | (Optional) Access policies created for the Azure Key Vault.                                        | <pre>list(object({<br> name = string<br> object_id = string<br> type = string<br> }))</pre> | `[]`    |    no    |
-| <a name="input_protection_enabled"></a> [protection_enabled](#input_protection_enabled)    | (Optional) Enables the keyvault purge protection in case of accidental deletion. Default is false. | `bool`                                                                                      | `false` |    no    |
-| <a name="input_resource_group_name"></a> [resource_group_name](#input_resource_group_name) | The name of an existing Resource Group.                                                            | `string`                                                                                    | n/a     |   yes    |
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
+| <a name="input_external_usage"></a> [external\_usage](#input\_external\_usage) | (Optional) Specifies whether the keyvault should be used internally or externally. | `bool` | `true` | no |
+| <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
+| <a name="input_name"></a> [name](#input\_name) | The name of the Azure Key Vault. | `string` | n/a | yes |
+| <a name="input_policies"></a> [policies](#input\_policies) | (Optional) Access policies created for the Azure Key Vault. | <pre>list(object({<br>    name      = string<br>    object_id = string<br>    type      = string<br>  }))</pre> | `[]` | no |
+| <a name="input_protection_enabled"></a> [protection\_enabled](#input\_protection\_enabled) | (Optional) Enables the keyvault purge protection in case of accidental deletion. Default is false. | `bool` | `false` | no |
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 
 ## Outputs
 
-| Name                                                                                | Description                                                                   |
-| ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| <a name="output_id"></a> [id](#output_id)                                           | The Key Vault Key ID.                                                         |
-| <a name="output_name"></a> [name](#output_name)                                     | The Key Vault Key name.                                                       |
-| <a name="output_readers_policies"></a> [readers_policies](#output_readers_policies) | List of readers access policies.                                              |
-| <a name="output_uri"></a> [uri](#output_uri)                                        | The URI of the Key Vault, used for performing operations on keys and secrets. |
-| <a name="output_writers_policies"></a> [writers_policies](#output_writers_policies) | List of writers access policies.                                              |
+| Name | Description |
+|------|-------------|
+| <a name="output_id"></a> [id](#output\_id) | The Key Vault Key ID. |
+| <a name="output_name"></a> [name](#output\_name) | The Key Vault Key name. |
+| <a name="output_readers_policies"></a> [readers\_policies](#output\_readers\_policies) | List of readers access policies. |
+| <a name="output_uri"></a> [uri](#output\_uri) | The URI of the Key Vault, used for performing operations on keys and secrets. |
+| <a name="output_writers_policies"></a> [writers\_policies](#output\_writers\_policies) | List of writers access policies. |
 
 ## How to use it?
 
@@ -73,10 +72,8 @@ module "key_vault" {
   source = "git::github.com/Nmbrs/tf-modules//azure/key_vault"
   name                = "Heimdall"
   environment         = "dev"
+  location            = "westeurope"
   resource_group_name = "rg-heimdall"
-  extra_tags = {
-    Datadog = "Monitored"
-  }
 
   policies = [
     {

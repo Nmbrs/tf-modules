@@ -8,6 +8,11 @@ variable "name" {
   description = "The name of the Azure Key Vault."
 }
 
+variable "location" {
+  description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
+  type        = string
+}
+
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string
@@ -17,17 +22,6 @@ variable "external_usage" {
   description = "(Optional) Specifies whether the keyvault should be used internally or externally."
   type        = bool
   default     = true
-}
-
-variable "extra_tags" {
-  description = "(Optional) A extra mapping of tags which should be assigned to the desired resource."
-  type        = map(string)
-  default     = {}
-
-  validation {
-    condition     = alltrue([for tag in var.extra_tags : can(coalesce(var.extra_tags))])
-    error_message = "At least on tag value from 'extra_tags' is invalid. They must be non-empty string values."
-  }
 }
 
 variable "protection_enabled" {
