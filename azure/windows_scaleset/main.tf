@@ -1,5 +1,3 @@
-data "azurerm_client_config" "current" {}
-
 resource "random_password" "scaleset" {
   length  = 16
   special = true
@@ -19,7 +17,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
   name                 = "${var.project}-${var.environment}"
   computer_name_prefix = "vmss"
   resource_group_name  = var.vm_resource_group
-  location             = local.location
+  location             = var.location
   sku                  = var.vm_size
   instances            = var.vm_count
   admin_username       = "adminuser"
@@ -52,6 +50,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
   }
   SETTINGS
   }
+
   network_interface {
     name    = "vmss-${var.project}-nic"
     primary = true
@@ -61,5 +60,9 @@ resource "azurerm_windows_virtual_machine_scale_set" "scaleset" {
       primary   = true
       subnet_id = data.azurerm_subnet.scaleset.id
     }
+  }
+
+  lifecycle {
+    ignore_changes = [tags]
   }
 }
