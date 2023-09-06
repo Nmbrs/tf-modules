@@ -14,8 +14,8 @@ resource "tls_private_key" "ssh" {
 resource "azurerm_ssh_public_key" "ssh_public_key" {
   count               = var.os_type == "linux" ? 1 : 0
   name                = "ssh-${var.vm_name}"
-  resource_group_name = data.azurerm_resource_group.vm_rg.name
-  location            = data.azurerm_resource_group.vm_rg.location
+  resource_group_name = var.resource_group_name
+  location            = var.location
   public_key          = tls_private_key.ssh[0].public_key_openssh
 
   lifecycle {
@@ -50,8 +50,8 @@ resource "azurerm_network_interface" "nics" {
   for_each = { for nic_settings in local.network_interfaces_settings : trimspace(lower(nic_settings.name)) => nic_settings }
 
   name                = each.value.name
-  location            = data.azurerm_resource_group.vm_rg.location
-  resource_group_name = data.azurerm_resource_group.vm_rg.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
 
   ip_configuration {
     name                          = "internal"
@@ -73,8 +73,8 @@ resource "azurerm_managed_disk" "data_disks" {
 
   # Use the disk name as the name of the managed disk
   name                 = each.value.name
-  location             = data.azurerm_resource_group.vm_rg.location
-  resource_group_name  = data.azurerm_resource_group.vm_rg.name
+  location             = var.location
+  resource_group_name  = var.resource_group_name
   storage_account_type = each.value.storage_account_type
   create_option        = "Empty"
   disk_size_gb         = each.value.disk_size_gb
@@ -104,8 +104,8 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
   count                           = var.os_type == "linux" ? 1 : 0
   name                            = var.vm_name
   computer_name                   = var.vm_name
-  location                        = data.azurerm_resource_group.vm_rg.location
-  resource_group_name             = data.azurerm_resource_group.vm_rg.name
+  location                        = var.location
+  resource_group_name             = var.resource_group_name
   size                            = var.vm_size
   admin_username                  = var.admin_username
   disable_password_authentication = true
@@ -140,8 +140,8 @@ resource "azurerm_windows_virtual_machine" "windows_vm" {
   count                 = var.os_type == "windows" ? 1 : 0
   name                  = var.vm_name
   computer_name         = var.vm_name
-  location              = data.azurerm_resource_group.vm_rg.location
-  resource_group_name   = data.azurerm_resource_group.vm_rg.name
+  location              = var.location
+  resource_group_name   = var.resource_group_name
   size                  = var.vm_size
   admin_username        = var.admin_username
   admin_password        = random_password.password[0].result

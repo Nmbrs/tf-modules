@@ -2,24 +2,24 @@
 
 ## Summary
 
-The virtual machine module is a Terraform module that provides a convenient way to create virtual machines in Azure, both for Windows and Linux operating systems. The module includes all necessary configurations to provision and manage the virtual machine, including network interfaces, storage, and operating system. The module ensures compliance with specified policies and implements the Terraform code to provision virtual machines with ease, making it an ideal solution for those who want to streamline Nmbrs virtual machine infrastructure.
+The `virtual_machine` module is a Terraform module that provides a convenient way to create virtual machines in Azure, both for Windows and Linux operating systems. The module includes all necessary configurations to provision and manage the virtual machine, including network interfaces, storage, and operating system. The module ensures compliance with specified policies and implements the Terraform code to provision virtual machines with ease, making it an ideal solution for those who want to streamline Nmbrs virtual machine infrastructure.
 
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, < 2.0.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.6 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.2.0 |
-| <a name="requirement_tls"></a> [tls](#requirement\_tls) | ~> 4.0.4 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.70 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.5 |
+| <a name="requirement_tls"></a> [tls](#requirement\_tls) | ~> 4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.6 |
-| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.2.0 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | ~> 4.0.4 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.71.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.5.1 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | 4.0.4 |
 
 ## Modules
 
@@ -48,13 +48,14 @@ No modules.
 | <a name="input_admin_username"></a> [admin\_username](#input\_admin\_username) | (Optional) Specifies The administrator username for which the SSH Key or password should be configured. | `string` | `"automation"` | no |
 | <a name="input_data_disks"></a> [data\_disks](#input\_data\_disks) | A list of data disk objects, each containing information about a data disk to be attached to the deployment. | <pre>list(object({<br>    name                 = string<br>    storage_account_type = string<br>    disk_size_gb         = number<br>    caching              = string<br>  }))</pre> | `[]` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
+| <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
 | <a name="input_network_interfaces"></a> [network\_interfaces](#input\_network\_interfaces) | A list of network interface objects, each containing information about a network interface to be created in the deployment. | <pre>list(object({<br>    name                     = string<br>    vnet_resource_group_name = string<br>    vnet_name                = string<br>    subnet_name              = string<br>  }))</pre> | `[]` | no |
 | <a name="input_os_disk"></a> [os\_disk](#input\_os\_disk) | O.S. disk to be attached to the deployment. | <pre>object({<br>    name                 = string<br>    storage_account_type = string<br>    caching              = string<br>  })</pre> | n/a | yes |
 | <a name="input_os_image"></a> [os\_image](#input\_os\_image) | The operating system image for a virtual machine. | <pre>object({<br>    publisher = string<br>    offer     = string<br>    sku       = string<br>    version   = string<br>  })</pre> | n/a | yes |
 | <a name="input_os_type"></a> [os\_type](#input\_os\_type) | Type of virtual machine to be created. Acceptable values are 'dev', 'test', 'prod' or 'sand'. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 | <a name="input_vm_name"></a> [vm\_name](#input\_vm\_name) | The name of the virtual machine. | `string` | n/a | yes |
-| <a name="input_vm_size"></a> [vm\_size](#input\_vm\_size) | The SKU which should be used for this Virtual Machine. For an exaustive list of virtual, please use the command 'az vm list-sizes --location 'your-location''. | `string` | `"Standard_D2s_v3"` | no |
+| <a name="input_vm_size"></a> [vm\_size](#input\_vm\_size) | The SKU which should be used for this Virtual Machine. For an exaustive list of virtual, please use the command 'az vm list-sizes --location 'your-location''. | `string` | `"Standard_DS2_v2"` | no |
 
 ## Outputs
 
@@ -83,6 +84,7 @@ module "virtual_machine_windows" {
 
   vm_name             = "vmwindows01"
   environment         = "dev"
+  location            = "westeurope"
   resource_group_name = "rg-virtual-machines"
   vm_size             = "Standard_D2s_v3"
   os_type             = "windows"
@@ -118,6 +120,7 @@ module "virtual_machine_linux" {
 
   vm_name             = "vmlinux01"
   environment         = "dev"
+  location            = "westeurope
   resource_group_name = "rg-virtual-machines"
   vm_size             = "Standard_D2s_v3"
   os_type             = "linux"
@@ -153,6 +156,7 @@ module "virtual_machine_linux" {
 
   vm_name             = "vmlinux02"
   environment         = "dev"
+  location            = "westeurope
   resource_group_name = "rg-virtual-machines"
   vm_size             = "Standard_D2s_v3"
   os_type             = "linux"
@@ -195,6 +199,7 @@ module "virtual_machine_linux" {
 
   vm_name             = "vmlinux03"
   environment         = "dev"
+  location            = "westeurope
   resource_group_name = "rg-virtual-machines"
   vm_size             = "Standard_D2s_v3"
   os_type             = "linux"
