@@ -1,14 +1,8 @@
-data "azurerm_client_config" "current" {}
-
-data "azurerm_resource_group" "redis_rg" {
-  name = var.resource_group_name
-}
-
 resource "azurerm_redis_cache" "redis" {
   name                          = "redis-${var.name}-${var.environment}"
-  location                      = data.azurerm_resource_group.redis_rg.location
-  resource_group_name           = data.azurerm_resource_group.redis_rg.name
-  capacity                      = local.premium_tier_capacity[var.cache_size_gb]
+  location                      = var.location
+  resource_group_name           = var.resource_group_name
+  capacity                      = local.premium_tier_capacity[var.cache_size_in_gb]
   redis_version                 = 6
   family                        = "P"
   sku_name                      = "Premium"
