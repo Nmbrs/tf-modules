@@ -1,7 +1,3 @@
-data "azurerm_resource_group" "rg" {
-  name = var.resource_group_name
-}
-
 resource "azurecaf_name" "caf_name" {
   name          = lower(var.name)
   resource_type = "azurerm_storage_account"
@@ -13,8 +9,8 @@ resource "azurecaf_name" "caf_name" {
 
 resource "azurerm_storage_account" "storage_account" {
   name                      = azurecaf_name.caf_name.result
-  resource_group_name       = data.azurerm_resource_group.rg.name
-  location                  = data.azurerm_resource_group.rg.location
+  resource_group_name       = var.resource_group_name
+  location                  = var.location
   account_kind              = var.account_kind
   account_tier              = var.account_tier
   account_replication_type  = var.replication_type
