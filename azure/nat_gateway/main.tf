@@ -2,13 +2,13 @@ data "azurerm_subnet" "vnet" {
   for_each             = toset(var.subnets)
   name                 = each.value
   virtual_network_name = var.vnet_name
-  resource_group_name  = var.vnet_resource_group
+  resource_group_name  = var.vnet_resource_group_name
 }
 
 resource "azurerm_public_ip" "natgw" {
   name                = "pip-ngw-${var.name}-${var.environment}-ip"
-  location            = local.location
-  resource_group_name = var.natgw_resource_group
+  location            = var.location
+  resource_group_name = var.resource_group_name
   allocation_method   = "Static"
   sku                 = "Standard"
   zones               = ["1"]
@@ -20,8 +20,8 @@ resource "azurerm_public_ip" "natgw" {
 
 resource "azurerm_nat_gateway" "natgw" {
   name                    = "ngw-${var.name}-${var.environment}"
-  location                = local.location
-  resource_group_name     = var.natgw_resource_group
+  location                = var.location
+  resource_group_name     = var.resource_group_name
   sku_name                = "Standard"
   idle_timeout_in_minutes = 10
   zones                   = ["1"]
