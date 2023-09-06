@@ -1,10 +1,4 @@
-data "azurerm_client_config" "current" {}
-
-data "azurerm_resource_group" "rg" {
-  name = var.resource_group_name
-}
-
-resource "azurerm_cosmodb_account" "cosmo_db" {
+resource "azurerm_cosmosdb_account" "cosmo_db" {
   access_key_metadata_writes_enabled    = true
   analytical_storage_enabled            = false
   default_identity_type                 = "FirstPartyIdentity"
@@ -20,9 +14,8 @@ resource "azurerm_cosmodb_account" "cosmo_db" {
   network_acl_bypass_ids                = []
   offer_type                            = "Standard"
   public_network_access_enabled         = true
-  location                              = data.azurerm_resource_group.rg.location
-  resource_group_name                   = data.azurerm_resource_group.rg.name
-  tags                                  = merge(data.azurerm_resource_group.rg.tags, local.default_tags, var.extra_tags)
+  location                              = var.location
+  resource_group_name                   = var.resource_group_name
 
   backup {
     interval_in_minutes = 240
@@ -39,7 +32,11 @@ resource "azurerm_cosmodb_account" "cosmo_db" {
 
   geo_location {
     failover_priority = 0
-    location          = data.azurerm_resource_group.rg.location
+    location          = var.location
     zone_redundant    = false
+  }
+
+  lifecycle {
+    ignore_changes = [tags]
   }
 }
