@@ -1,14 +1,14 @@
 output "name" {
-  value       = azurerm_servicebus_namespace.main.name
-  description = "The namespace name."
+  value       = azurerm_servicebus_namespace.service_bus.name
+  description = "The servicebus namespace name."
 }
 
 output "id" {
-  value       = azurerm_servicebus_namespace.main.id
-  description = "The namespace ID."
+  value       = azurerm_servicebus_namespace.service_bus.id
+  description = "The servicebus namespace ID."
 }
 
 output "default_connection_string" {
   description = "The primary connection string for the authorization rule RootManageSharedAccessKey which is created automatically by Azure."
-  value       = azurerm_servicebus_namespace.main.default_primary_connection_string
+  value       = azurerm_servicebus_namespace.service_bus.default_primary_connection_string
 }
