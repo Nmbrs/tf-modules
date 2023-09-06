@@ -97,7 +97,7 @@ variable "node_number" {
 
   validation {
     condition     = alltrue([try(var.node_number > 0, false), try(var.node_number == floor(var.node_number), false)])
-    error_message = format("Invalid value '%s' for variable 'node_number'. It must be an number and greater than 0.", var.node_number)
+    error_message = format("Invalid value '%s' for variable 'node_number'. It must be an integer number and greater than 0.", var.node_number)
   }
 }
 
