@@ -2,20 +2,20 @@
 
 ## Summary
 
-The private DNS resolver module simplifies the creation and management of private DNS resolvers within virtual networks. With this module, users can effortlessly configure and provision private DNS resolvers, enabling the resolution of private domain names within their Azure environments. By abstracting away complexities, the module offers a streamlined interface for defining desired resolver settings, such as virtual network associations, subnet configurations, and forwarding options.
+The `private_dns_resolver`` module simplifies the creation and management of private DNS resolvers within virtual networks. With this module, users can effortlessly configure and provision private DNS resolvers, enabling the resolution of private domain names within their Azure environments. By abstracting away complexities, the module offers a streamlined interface for defining desired resolver settings, such as virtual network associations, subnet configurations, and forwarding options.
 
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, < 2.0.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.6 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.70 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.59.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.70 |
 
 ## Modules
 
