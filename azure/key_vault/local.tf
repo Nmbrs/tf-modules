@@ -1,8 +1,4 @@
 locals {
-  default_tags = {
-    managed_by = "terraform"
-  }
-
   internal_external_suffix = var.external_usage ? "e" : "i"
 
   org         = "nmbrs"
