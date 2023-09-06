@@ -30,7 +30,7 @@ resource "azurerm_virtual_network_gateway" "vpn_gateway" {
 
   active_active = false
   enable_bgp    = false
-  sku           = var.sku
+  sku           = var.sku_name
   generation    = var.generation
 
   ip_configuration {
