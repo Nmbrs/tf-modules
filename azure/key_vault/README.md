@@ -2,7 +2,7 @@
 
 ## Sumary
 
-The `keyv_ault` module is an abstraction that implements all the necessary
+The `key_vault` module is an abstraction that implements all the necessary
 Terraform code to provision an Azure Keyvault with success, and accordingly with
 Visma Nmbrs policies.
 
