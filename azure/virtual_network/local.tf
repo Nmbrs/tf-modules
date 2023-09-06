@@ -1,6 +1,4 @@
 locals {
-  environment = var.environment
-
   # The exact list of actions needs to be retrieved using the Azure CLI command:
   # az network vnet subnet list-available-delegations --location [LOCATION]
   service_delegation_actions = {

@@ -8,6 +8,11 @@ variable "vm_name" {
   type        = string
 }
 
+variable "location" {
+  description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
+  type        = string
+}
+
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string

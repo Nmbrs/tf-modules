@@ -9,13 +9,13 @@ The Azure Redis cache module is a Terraform module that provides an easy and con
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, < 2.0.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.6 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.70 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.61.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.70 |
 
 ## Modules
 
@@ -26,15 +26,14 @@ No modules.
 | Name | Type |
 |------|------|
 | [azurerm_redis_cache.redis](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/redis_cache) | resource |
-| [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) | data source |
-| [azurerm_resource_group.redis_rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_cache_size_gb"></a> [cache\_size\_gb](#input\_cache\_size\_gb) | The size of the Redis cache per instance in gigabytes (GB) | `number` | n/a | yes |
+| <a name="input_cache_size_in_gb"></a> [cache\_size\_in\_gb](#input\_cache\_size\_in\_gb) | The size of the Redis cache per instance in gigabytes (GB) | `number` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
+| <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name of the  Redis instance. It must follow the CAF naming convention. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 | <a name="input_shard_count"></a> [shard\_count](#input\_shard\_count) | The number of shards for the Redis cluster. | `number` | `0` | no |
@@ -64,9 +63,10 @@ module "redis_cache" {
   name                = "my-redis-cache"
   resource_group_name = "rg-my-resource-group"
   environment         = "dev"
-  cache_size_gb       = 6
+  location            = "westeurope"
+  cache_size_in_gb    = 6
 }
-````
+```
 
 ## Cache with cluster configuration
 ```hcl
@@ -75,7 +75,8 @@ module "redis_cache" {
   name                = "my-redis-cache"
   resource_group_name = "rg-my-resource-group"
   environment         = "dev"
-  cache_size_gb       = 6
+  location            = "westeurope"
+  cache_size_in_gb    = 6
   create_cluster      = true
   shard_count         = 2
 }
