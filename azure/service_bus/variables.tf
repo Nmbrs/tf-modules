@@ -18,13 +18,13 @@ variable "location" {
   type        = string
 }
 
-variable "sku" {
+variable "sku_name" {
   description = "Configuration of the size and capacity of the virtual network gateway."
   type        = string
 
   validation {
-    condition     = contains(["Basic", "Standard", "Premium"], var.sku)
-    error_message = format("Invalid value '%s' for variable 'sku', valid options are 'Basic', 'Standard', 'Premium'.", var.sku)
+    condition     = contains(["Basic", "Standard", "Premium"], var.sku_name)
+    error_message = format("Invalid value '%s' for variable 'sku_name', valid options are 'Basic', 'Standard', 'Premium'.", var.sku_name)
   }
 }
 
