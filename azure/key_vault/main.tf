@@ -1,9 +1,5 @@
 data "azurerm_client_config" "current" {}
 
-data "azurerm_resource_group" "rg" {
-  name = var.resource_group_name
-}
-
 resource "azurecaf_name" "caf_name" {
   name          = lower("${local.org}-${var.name}")
   resource_type = "azurerm_key_vault"
@@ -14,8 +10,8 @@ resource "azurecaf_name" "caf_name" {
 # Create the Azure Key Vault
 resource "azurerm_key_vault" "key_vault" {
   name                       = azurecaf_name.caf_name.result
-  location                   = data.azurerm_resource_group.rg.location
-  resource_group_name        = data.azurerm_resource_group.rg.name
+  location                   = var.location
+  resource_group_name        = var.resource_group_name
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   sku_name                   = "standard"
   soft_delete_retention_days = 31
@@ -28,14 +24,8 @@ resource "azurerm_key_vault" "key_vault" {
     bypass         = "AzureServices"
   }
 
-  // extra_tags is on the end to overwrite incorrect tags that already exists.
-  tags = merge(data.azurerm_resource_group.rg.tags, local.default_tags, var.extra_tags)
-
   lifecycle {
-    ignore_changes = [
-      tags["created_at"],
-      tags["updated_at"]
-    ]
+    ignore_changes = [tags]
   }
 }
 

@@ -34,9 +34,9 @@ No modules.
 | <a name="input_capacity"></a> [capacity](#input\_capacity) | The number of message units (resource isolation at the CPU and memory level so that each customer workload runs in isolation). | `number` | `0` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_workload"></a> [name](#input\_workload) | The workload name of the service bus namespace. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
-| <a name="input_sku"></a> [sku](#input\_sku) | Configuration of the size and capacity of the virtual network gateway. | `string` | n/a | yes |
+| <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | Configuration of the size and capacity of the virtual network gateway. | `string` | n/a | yes |
+| <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the service bus namespace. | `string` | n/a | yes |
 
 ## Outputs
 
@@ -60,7 +60,7 @@ module "service_bus" {
   environment         = "dev"
   location            = "westeurope"
   resource_group_name = "rg-service-bus"
-  sku                 = "Basic"
+  sku_name            = "Basic"
   capacity            = 0
 }
 ```
@@ -75,7 +75,7 @@ module "service_bus" {
   environment         = "dev"
   location            = "westeurope"
   resource_group_name = "rg-service-bus"
-  sku                 = "Premium"
+  sku_name            = "Premium"
   capacity            = 1
 }
 ```

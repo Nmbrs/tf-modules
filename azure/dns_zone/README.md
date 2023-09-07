@@ -3,21 +3,20 @@
 ## Sumary
 
 The `dns_zone` module is an abstraction that implements all the necessary
-Terraform code to provision an Azure Keyvault with success, and accordingly with
-Visma Nmbrs policies.
+Terraform code to provision an Azure Keyvault with success, and accordingly with Visma Nmbrs policies.
 
 ## Requirements
 
-| Name                                                                     | Version           |
-| ------------------------------------------------------------------------ | ----------------- |
-| <a name="requirement_terraform"></a> [terraform](#requirement_terraform) | >= 1.3.0, < 2.0.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement_azurerm)       | ~> 3.6            |
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.70 |
 
 ## Providers
 
-| Name                                                         | Version |
-| ------------------------------------------------------------ | ------- |
-| <a name="provider_azurerm"></a> [azurerm](#provider_azurerm) | ~> 3.6  |
+| Name | Version |
+|------|---------|
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.70 |
 
 ## Modules
 
@@ -25,27 +24,27 @@ No modules.
 
 ## Resources
 
-| Name                                                                                                                  | Type     |
-| --------------------------------------------------------------------------------------------------------------------- | -------- |
+| Name | Type |
+|------|------|
 | [azurerm_dns_zone.dns_zone](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_zone) | resource |
 
 ## Inputs
 
-| Name                                                                                       | Description                                                         | Type          | Default | Required |
-| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------- | ------- | :------: |
-| <a name="input_name"></a> [name](#input_name)                                              | The name of the DNS Zone. Must be a valid domain name.              | `string`      | n/a     |   yes    |
-| <a name="input_resource_group_name"></a> [resource_group_name](#input_resource_group_name) | The name of an existing Resource Group.                             | `string`      | n/a     |   yes    |
-| <a name="input_tags"></a> [tags](#input_tags)                                              | A mapping of tags which should be assigned to the desired resource. | `map(string)` | n/a     |   yes    |
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_name"></a> [name](#input\_name) | The name of the DNS Zone. Must be a valid domain name. | `string` | n/a | yes |
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 
 ## Outputs
 
-| Name                                                                                                           | Description                                               |
-| -------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| <a name="output_id"></a> [id](#output_id)                                                                      | The DNS Zone ID.                                          |
-| <a name="output_max_number_of_record_sets"></a> [max_number_of_record_sets](#output_max_number_of_record_sets) | Maximum number of Records in the zone.                    |
-| <a name="output_name"></a> [name](#output_name)                                                                | The DNS Zone name.                                        |
-| <a name="output_name_servers"></a> [name_servers](#output_name_servers)                                        | A list of values that make up the NS record for the zone. |
-| <a name="output_number_of_record_sets"></a> [number_of_record_sets](#output_number_of_record_sets)             | The number of records already in the zone.                |
+| Name | Description |
+|------|-------------|
+| <a name="output_id"></a> [id](#output\_id) | The DNS Zone ID. |
+| <a name="output_max_number_of_record_sets"></a> [max\_number\_of\_record\_sets](#output\_max\_number\_of\_record\_sets) | Maximum number of Records in the zone. |
+| <a name="output_name"></a> [name](#output\_name) | The DNS Zone name. |
+| <a name="output_name_servers"></a> [name\_servers](#output\_name\_servers) | A list of values that make up the NS record for the zone. |
+| <a name="output_number_of_record_sets"></a> [number\_of\_record\_sets](#output\_number\_of\_record\_sets) | The number of records already in the zone. |
+
 
 ## How to use it?
 
