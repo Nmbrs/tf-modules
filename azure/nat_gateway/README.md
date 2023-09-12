@@ -38,6 +38,7 @@ No modules.
 | <a name="input_environment"></a> [environment](#input\_environment) | Defines the environment to provision the resources. | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | This variable defines the name of the NAT gateway. | `string` | n/a | yes |
+| <a name="input_name_sequence_number"></a> [name\_sequence\_number](#input\_name\_sequence\_number) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention. | `number` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 | <a name="input_subnets"></a> [subnets](#input\_subnets) | Subnets to be included in the NAT gateway | `list(string)` | n/a | yes |
 | <a name="input_vnet_name"></a> [vnet\_name](#input\_vnet\_name) | Name of the Vnet that will be added to the NAT gateway | `string` | n/a | yes |
@@ -58,7 +59,8 @@ A number of code snippets demonstrating different use cases for the module have 
 ```hcl 
 module "nat_gateway" { 
     source                   = "git::github.com/Nmbrs/tf-modules//azure/nat_gateway"
-    name                     = "public"
+    name                     = "myapp"
+    name_sequence_number     = 1
     vnet_resource_group_name = "rg-myrg-dev"
     vnet_name                = "vnet-westeu-001-dev"
     subnets                  = ["default","internal"]
