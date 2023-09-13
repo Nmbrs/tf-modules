@@ -6,7 +6,7 @@ data "azurerm_subnet" "vnet" {
 }
 
 resource "azurerm_public_ip" "natgw" {
-  name                = "pip-ngw-${var.name}-${var.environment}-ip"
+  name                = local.public_ip_name
   location            = var.location
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
@@ -19,7 +19,7 @@ resource "azurerm_public_ip" "natgw" {
 }
 
 resource "azurerm_nat_gateway" "natgw" {
-  name                    = "ngw-${var.name}-${var.environment}"
+  name                    = local.nat_gateway_name
   location                = var.location
   resource_group_name     = var.resource_group_name
   sku_name                = "Standard"
