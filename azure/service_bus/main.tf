@@ -15,12 +15,12 @@ resource "azurerm_servicebus_namespace" "service_bus" {
 
     precondition {
       condition     = (var.sku_name == "Basic" && var.capacity == 0) || var.sku_name == "Standard" || var.sku_name == "Premium"
-      error_message = format("Invalid value '%s' for variable 'capacity' (message units) when using the 'Basic' SKU, It must be 0.", var.capacity)
+      error_message = format("Invalid value '%s' for variable 'capacity' (message units) when using the 'Basic' SKU, it must be 0.", var.capacity)
     }
 
     precondition {
       condition     = (var.sku_name == "Standard" && var.capacity == 0) || var.sku_name == "Basic" || var.sku_name == "Premium"
-      error_message = format("Invalid value '%s' for variable 'capacity' (message units) when using the 'Standard' SKU, It must be 0.", var.capacity)
+      error_message = format("Invalid value '%s' for variable 'capacity' (message units) when using the 'Standard' SKU, it must be 0.", var.capacity)
     }
 
     precondition {
