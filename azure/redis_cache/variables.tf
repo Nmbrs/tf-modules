@@ -34,7 +34,17 @@ variable "cache_size_in_gb" {
   type        = number
 
   validation {
-    condition     = contains([6, 13, 26, 53, 120], var.cache_size_in_gb)
-    error_message = format("Invalid value '%s' for variable 'cache_size_in_gb', valid options are 6, 13, 26, 53, 120 (GB).", var.cache_size_in_gb)
+    condition     = contains([0.25, 1, 2.5, 6, 13, 26, 53, 120], var.cache_size_in_gb)
+    error_message = format("Invalid value '%s' for variable 'cache_size_in_gb', valid options are 0.25, 1, 2.5, 6, 13, 26, 53, 120 (GB).", var.cache_size_in_gb)
+  }
+}
+
+variable "sku_name" {
+  description = "Configuration of the size and capacity of the virtual network gateway."
+  type        = string
+
+  validation {
+    condition     = contains(["Basic", "Standard", "Premium"], var.sku_name)
+    error_message = format("Invalid value '%s' for variable 'sku_name', valid options are 'Basic', 'Standard', 'Premium'.", var.sku_name)
   }
 }
