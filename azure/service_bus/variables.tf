@@ -19,7 +19,7 @@ variable "location" {
 }
 
 variable "sku_name" {
-  description = "Configuration of the size and capacity of the virtual network gateway."
+  description = "Configuration of the size and capacity of the service bus."
   type        = string
 
   validation {
