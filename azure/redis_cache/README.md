@@ -37,7 +37,7 @@ No modules.
 | <a name="input_name"></a> [name](#input\_name) | Name of the  Redis instance. It must follow the CAF naming convention. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 | <a name="input_shard_count"></a> [shard\_count](#input\_shard\_count) | The number of shards for the Redis cluster. | `number` | `0` | no |
-| <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | Configuration of the size and capacity of the virtual network gateway. | `string` | n/a | yes |
+| <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | Configuration of the size and capacity of the redis cache. | `string` | n/a | yes |
 
 ## Outputs
 
