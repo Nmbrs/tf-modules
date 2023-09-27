@@ -40,7 +40,7 @@ variable "cache_size_in_gb" {
 }
 
 variable "sku_name" {
-  description = "Configuration of the size and capacity of the virtual network gateway."
+  description = "Configuration of the size and capacity of the redis cache."
   type        = string
 
   validation {
