@@ -38,3 +38,10 @@ variable "capacity" {
     error_message = format("Invalid value '%s' for variable 'capacity', valid options are 0, 1, 2, 4, 8, 16.", var.capacity)
   }
 }
+
+variable "zone_redundant" {
+  description = "Defines whether or not this resource is zone redundant. The required sku to enable it needs to be 'Premium'."
+  type        = bool
+  default     = true
+}
+
