@@ -40,6 +40,7 @@ No modules.
 | <a name="input_inbound_endpoints"></a> [inbound\_endpoints](#input\_inbound\_endpoints) | List of objects that represent the configuration of each inbound endpoint. | `list(string)` | `[]` | no |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Specifies the name which should be used for this Private DNS Resolver. | `string` | n/a | yes |
+| <a name="input_name_sequence_number"></a> [name\_sequence\_number](#input\_name\_sequence\_number) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention. | `number` | n/a | yes |
 | <a name="input_outbound_endpoints"></a> [outbound\_endpoints](#input\_outbound\_endpoints) | List of objects that represent the configuration of each outbound endpoint. | `list(string)` | `[]` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Specifies the name of the Resource Group where the Private DNS Resolver should exist. | `string` | n/a | yes |
 | <a name="input_vnet_name"></a> [vnet\_name](#input\_vnet\_name) | Specifies the name of the VNET associated with the Private DNS Resolver. | `string` | n/a | yes |
@@ -67,6 +68,7 @@ module "private_dns_resolver" {
   source = "git::github.com/Nmbrs/tf-modules//azure/private_dns_resolver"
 
   name                     = "my-resolver"
+  name_sequence_number     = 1
   resource_group_name      = "rg-private-resolver"
   location                 = "westeurope"
   environment              = "dev"
@@ -83,6 +85,7 @@ module "private_dns_resolver" {
   source = "git::github.com/Nmbrs/tf-modules//azure/private_dns_resolver"
 
   name                     = "my-resolver"
+  name_sequence_number     = 2
   resource_group_name      = "rg-private-resolver"
   location                 = "westeurope"
   environment              = "dev"
@@ -98,6 +101,7 @@ module "private_dns_resolver" {
   source = "git::github.com/Nmbrs/tf-modules//azure/private_dns_resolver"
 
   name                     = "my-resolver"
+  name_sequence_number     = 3
   resource_group_name      = "rg-private-resolver"
   location                 = "westeurope"
   environment              = "dev"

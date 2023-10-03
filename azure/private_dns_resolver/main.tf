@@ -5,7 +5,7 @@ data "azurerm_virtual_network" "vnet" {
 
 resource "azurerm_private_dns_resolver" "resolver" {
   location            = var.location
-  name                = "dnsres-${lower(var.name)}-${var.environment}"
+  name                = local.dns_resolver_name
   resource_group_name = var.resource_group_name
   virtual_network_id  = data.azurerm_virtual_network.vnet.id
 
