@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.13.0](https://github.com/Nmbrs/tf-modules/compare/v7.12.0...v7.13.0) (2023-10-03)
+
+
+### Features
+
+* **private_dns_resolver:** update module naming logic ([#246](https://github.com/Nmbrs/tf-modules/issues/246)) ([af1cbaf](https://github.com/Nmbrs/tf-modules/commit/af1cbaf7aa0bc1822d961c2d0a4d6a616e850f4d))
+
 ## [7.12.0](https://github.com/Nmbrs/tf-modules/compare/v7.11.0...v7.12.0) (2023-09-29)
 
 
