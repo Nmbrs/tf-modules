@@ -39,11 +39,11 @@ variable "resource_group_name_private_dns_zone_group" {
 }
 
 
-variable "resource_type_id" {
+variable "resource_type" {
   description = "The type of resource (e.g., app_service, storage_account, database, virtual_machine)"
 }
 
-variable "resource_name_id" {
+variable "resource_name" {
   description = "The name of the resource the private endpoint will connect to"
 }
 
