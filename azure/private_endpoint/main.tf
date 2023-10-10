@@ -5,11 +5,11 @@ resource "azurerm_private_endpoint" "endpoint" {
   subnet_id           = data.azurerm_subnet.subnet.id
 
   dynamic "private_service_connection" {
-    for_each = local.resource_data_blocks[var.resource_type_id] != null ? [1] : []
+    for_each = local.resource_data_blocks[var.resource_type] != null ? [1] : []
     content {
       name                           = ("${var.private_endpoint_name}-private-service-connection")
-      private_connection_resource_id = local.resource_data_blocks[var.resource_type_id][0].id
-      subresource_names              = tolist([lookup(local.subresource_names, var.resource_type_id, null)])
+      private_connection_resource_id = local.resource_data_blocks[var.resource_type][0].id
+      subresource_names              = tolist([lookup(local.subresource_names, var.resource_type, null)])
       is_manual_connection           = false
     }
   }
@@ -34,5 +34,13 @@ resource "azurerm_private_dns_zone_virtual_network_link" "virtual_network_link" 
     ignore_changes = [tags]
   }
 }
+
+# resource "azurerm_private_dns_a_record" "endpoint" {
+#   name                = local.resource_data_blocks[var.resource_type][0].name
+#   zone_name           = data.azurerm_private_dns_zone.private_dns_zone.name
+#   resource_group_name = var.resource_group_name_private_dns_zone_group
+#   ttl                 = 300
+#   records             = [azurerm_private_endpoint.endpoint.private_service_connection.0.private_ip_address]
+# }
 
 #add validations on subnames
