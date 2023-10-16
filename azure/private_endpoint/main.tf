@@ -1,5 +1,5 @@
 resource "azurerm_private_endpoint" "endpoint" {
-  name                = ("${var.private_endpoint_name}-private-endpoint") #name of the NIC, set it for the service name
+  name                = local.private_endpoint_name
   location            = var.location
   resource_group_name = var.resource_group_name
   subnet_id           = data.azurerm_subnet.subnet.id
@@ -14,7 +14,7 @@ resource "azurerm_private_endpoint" "endpoint" {
     }
   }
   private_dns_zone_group {
-    name                 = var.private_dns_zone_group
+    name                 = data.azurerm_private_dns_zone.private_dns_zone.name
     private_dns_zone_ids = tolist([data.azurerm_private_dns_zone.private_dns_zone.id])
   }
 
@@ -22,25 +22,3 @@ resource "azurerm_private_endpoint" "endpoint" {
     ignore_changes = [tags]
   }
 }
-
-resource "azurerm_private_dns_zone_virtual_network_link" "virtual_network_link" {
-  name                  = ("link-${var.virtual_network}")
-  resource_group_name   = var.resource_group_name_private_dns_zone_group
-  private_dns_zone_name = data.azurerm_private_dns_zone.private_dns_zone.name
-  virtual_network_id    = data.azurerm_virtual_network.vnet.id
-  registration_enabled  = true
-
-  lifecycle {
-    ignore_changes = [tags]
-  }
-}
-
-# resource "azurerm_private_dns_a_record" "endpoint" {
-#   name                = local.resource_data_blocks[var.resource_type][0].name
-#   zone_name           = data.azurerm_private_dns_zone.private_dns_zone.name
-#   resource_group_name = var.resource_group_name_private_dns_zone_group
-#   ttl                 = 300
-#   records             = [azurerm_private_endpoint.endpoint.private_service_connection.0.private_ip_address]
-# }
-
-#add validations on subnames

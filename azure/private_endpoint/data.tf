@@ -10,27 +10,30 @@ data "azurerm_subnet" "subnet" {
 }
 
 data "azurerm_private_dns_zone" "private_dns_zone" {
-  name                = var.private_dns_zone_group
+  name                = lookup(local.private_dns_zones, var.resource_type, null)
   resource_group_name = var.resource_group_name_private_dns_zone_group
 }
 
 data "azurerm_windows_web_app" "app_service" {
   count               = var.resource_type == "app_service" ? 1 : 0
   name                = var.resource_name
-  resource_group_name = var.resource_group_name_id
-  # Add other app_service-specific attributes here
+  resource_group_name = var.resource_group_name
 }
 
 data "azurerm_storage_account" "storage_account" {
   count               = var.resource_type == "storage_account" ? 1 : 0
   name                = var.resource_name
-  resource_group_name = var.resource_group_name_id
-  # Add other storage_account-specific attributes here
+  resource_group_name = var.resource_group_name
 }
 
 data "azurerm_mssql_server" "sql_server" {
   count               = var.resource_type == "sql_server" ? 1 : 0
   name                = var.resource_name
-  resource_group_name = var.resource_group_name_id
-  # Add other sql_server-specific attributes here
+  resource_group_name = var.resource_group_name
+}
+
+data "azurerm_key_vault" "key_vault" {
+  count               = var.resource_type == "key_vault" ? 1 : 0
+  name                = var.resource_name
+  resource_group_name = var.resource_group_name
 }
