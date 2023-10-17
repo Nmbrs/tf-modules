@@ -46,6 +46,10 @@ variable "resource_name" {
 
 variable "resource_type" {
   description = "The type of resource (e.g., app_service, storage_account, database, key_vault)"
+  validation {
+    condition     = contains(["app_service", "storage_account_blob", "storage_account_table", "storage_account_file", "sql_server", "key_vault", "service_bus", "eventgrid_domain", "eventgrid_topic", "container_registry"], var.resource_type)
+    error_message = format("Invalid value '%s' for variable 'resource_type', valid options are 'app_service', 'storage_account_blob', 'storage_account_table', 'storage_account_file', 'sql_server', 'key_vault', 'service_bus', 'eventgrid_domain', 'eventgrid_topic', 'container_registry'.", var.resource_type)
+  }
 }
 
 variable "private_endpoint_name" {
