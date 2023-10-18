@@ -106,7 +106,7 @@ variable "country" {
   type        = string
 
   validation {
-    condition     = contains(["se", "nl"], var.country)
-    error_message = format("Invalid value '%s' for variable 'country', valid options are 'se', 'nl'.", var.country)
+    condition     = contains(["se", "nl", "global"], var.country)
+    error_message = format("Invalid value '%s' for variable 'country', valid options are 'se', 'nl', 'global'.", var.country)
   }
 }
