@@ -1,13 +1,11 @@
 variable "location" {
   description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
   type        = string
-  default     = "westeurope"
 }
 
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string
-  default     = "prod"
 }
 
 variable "instance_count" {
@@ -52,12 +50,12 @@ variable "resource_type" {
   }
 }
 
-variable "private_endpoint_name" {
+variable "workload" {
   description = "Name of the private endpoint"
   type        = string
 }
 
-variable "resource_group_name_private_dns_zone_group" {
+variable "resource_group_name_private_dns_zone" {
   description = "Resource group where the private dns zone exists"
   type        = string
 }

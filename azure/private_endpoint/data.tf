@@ -11,7 +11,7 @@ data "azurerm_subnet" "subnet" {
 
 data "azurerm_private_dns_zone" "private_dns_zone" {
   name                = lookup(local.private_dns_zones, var.resource_type, null)
-  resource_group_name = var.resource_group_name_private_dns_zone_group
+  resource_group_name = var.resource_group_name_private_dns_zone
 }
 
 data "azurerm_windows_web_app" "app_service" {

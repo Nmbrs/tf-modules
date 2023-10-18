@@ -7,7 +7,7 @@ resource "azurerm_private_endpoint" "endpoint" {
   dynamic "private_service_connection" {
     for_each = local.resource_data_blocks[var.resource_type] != null ? [1] : []
     content {
-      name                           = ("${var.private_endpoint_name}-private-service-connection")
+      name                           = ("${var.workload}-private-service-connection")
       private_connection_resource_id = local.resource_data_blocks[var.resource_type][0].id
       subresource_names              = tolist([lookup(local.subresource_names, var.resource_type, null)])
       is_manual_connection           = false
