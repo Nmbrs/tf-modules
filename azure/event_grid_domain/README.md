@@ -15,7 +15,7 @@ The `event_grid_domain` module is a Terraform abstraction that simplifies the ma
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.70 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.76.0 |
 
 ## Modules
 
@@ -26,19 +26,16 @@ No modules.
 | Name | Type |
 |------|------|
 | [azurerm_eventgrid_domain.domain](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/eventgrid_domain) | resource |
-| [azurerm_eventgrid_domain_topic.topic](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/eventgrid_domain_topic) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
-| <a name="input_instance_count"></a> [instance\_count](#input\_instance\_count) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention. | `number` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Specifies the name which should be used for this Private DNS Resolver. | `string` | n/a | yes |
 | <a name="input_public_network_access_enabled"></a> [public\_network\_access\_enabled](#input\_public\_network\_access\_enabled) | Whether or not public network access is allowed for this resource | `bool` | n/a | yes |
-| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Specifies the name of the Resource Group where the Private DNS Resolver should exist. | `string` | n/a | yes |
-| <a name="input_topics"></a> [topics](#input\_topics) | List of event grid domain topics. | `list(string)` | n/a | yes |
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Specifies the name of the Resource Group where the resource should exist. | `string` | n/a | yes |
 
 ## Outputs
 
@@ -49,7 +46,6 @@ No modules.
 | <a name="output_name"></a> [name](#output\_name) | The event grid domain name. |
 | <a name="output_primary_access_key"></a> [primary\_access\_key](#output\_primary\_access\_key) | The primary access key associated with the event grid domain. |
 | <a name="output_secondary_access_key"></a> [secondary\_access\_key](#output\_secondary\_access\_key) | The second access key associated with the event grid domain. |
-| <a name="output_topics"></a> [topics](#output\_topics) | The details of the inbound endpoints. |
 
 ## How to use it?
 
@@ -63,6 +59,5 @@ module "event_grid_domain" {
   environment                   = "dev"
   location                      = "westeurope"
   public_network_access_enabled = false
-  topics                        = ["a", "b", "c", "d"]
 }
 ```

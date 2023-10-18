@@ -25,11 +25,3 @@ output "secondary_access_key" {
   sensitive   = true
 }
 
-output "topics" {
-  description = "The details of the inbound endpoints."
-  value = [for topic in azurerm_eventgrid_domain_topic.topic : {
-    name = topic.name
-    id   = topic.id
-    }
-  ]
-}

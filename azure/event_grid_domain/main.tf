@@ -12,10 +12,3 @@ resource "azurerm_eventgrid_domain" "domain" {
     ignore_changes = [tags]
   }
 }
-
-resource "azurerm_eventgrid_domain_topic" "topic" {
-  for_each            = toset(var.topics)
-  name                = "evgt-${each.key}"
-  domain_name         = azurerm_eventgrid_domain.domain.name
-  resource_group_name = var.resource_group_name
-}
