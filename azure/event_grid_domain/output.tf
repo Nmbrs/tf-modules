@@ -1,6 +1,11 @@
 output "name" {
-  description = "The event grid domain name."
+  description = "The event grid domain full name."
   value       = azurerm_eventgrid_domain.domain.name
+}
+
+output "workload" {
+  description = "The event grid domain workload name."
+  value       = var.workload
 }
 
 output "id" {
