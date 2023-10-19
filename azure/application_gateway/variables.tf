@@ -28,6 +28,12 @@ variable "location" {
   type        = string
 }
 
+# variable "application_name" {
+#   description = "The name of the application"
+#   type        = list(any)
+#   default     = "pingaccountant"
+# }
+
 variable "application_name" {
   type = map(object({
     name     = string
@@ -35,7 +41,6 @@ variable "application_name" {
     priority = number
     protocol = string
   }))
-
 }
 
 # variable "host_name" {

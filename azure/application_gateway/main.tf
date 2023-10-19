@@ -2,6 +2,9 @@ resource "azurerm_application_gateway" "app_gw" {
   name                = "agw-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.instance_count)}"
   location            = var.location
   resource_group_name = var.resource_group_name
+  lifecycle {
+    ignore_changes = [tags]
+  }
 
   sku {
     name = "WAF_v2"
@@ -70,10 +73,10 @@ resource "azurerm_application_gateway" "app_gw" {
   dynamic "request_routing_rule" {
     for_each = var.application_name
     content {
-      name     = request_routing_rule.value.name #local.request_routing_rule_name
-      priority = request_routing_rule.value.priority
-      #rule_type                  = "Basic"
-      rule_type                  = request_routing_rule.value.protocol == "Http" ? "PathBasedRouting" : "Basic"
+      name      = request_routing_rule.value.name #local.request_routing_rule_name
+      priority  = request_routing_rule.value.priority
+      rule_type = "Basic"
+      #rule_type                  = request_routing_rule.value.protocol == "Http" ? "PathBasedRouting" : "Basic"
       http_listener_name         = request_routing_rule.value.protocol == "Https" ? request_routing_rule.value.name : "${request_routing_rule.value.name}-http"
       backend_address_pool_name  = request_routing_rule.value.name
       backend_http_settings_name = request_routing_rule.value.name
