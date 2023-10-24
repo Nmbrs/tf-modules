@@ -20,7 +20,7 @@ resource "azurerm_windows_web_app" "web_app" {
   client_affinity_enabled = var.client_affinity_enabled
   location                = var.location
   service_plan_id         = azurerm_service_plan.service_plan.id
-  https_only              = tru
+  https_only              = true
 
   identity {
     type = "SystemAssigned"
