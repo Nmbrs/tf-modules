@@ -19,8 +19,13 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   gateway_ip_configuration {
-    name      = "my-gateway-ip-configuration"
+    name      = "app-gateway-ip-configuration"
     subnet_id = data.azurerm_subnet.app_gw.id
+  }
+
+  ssl_policy {
+    policy_type = "Predefined"
+    policy_name = "AppGwSslPolicy20220101"
   }
 
   frontend_port {
@@ -60,24 +65,22 @@ resource "azurerm_application_gateway" "app_gw" {
   dynamic "http_listener" {
     for_each = var.application_name
     content {
-      name                           = http_listener.value.protocol == "Https" ? http_listener.value.name : "${http_listener.value.name}-http" #local.listener_name
+      name                           = http_listener.value.protocol == "Https" ? "${http_listener.value.name}-https" : "${http_listener.value.name}-http"
       frontend_ip_configuration_name = local.frontend_ip_configuration_name
       frontend_port_name             = http_listener.value.protocol == "Https" ? "https-frontend-port" : "http-frontend-port"
       host_name                      = http_listener.value.fqdn
       protocol                       = http_listener.value.protocol
       ssl_certificate_name           = http_listener.value.protocol == "Https" ? var.ssl_certificate_name : null
-      #ssl_certificate_name           = var.ssl_certificate_name
     }
   }
 
   dynamic "request_routing_rule" {
     for_each = var.application_name
     content {
-      name      = request_routing_rule.value.name #local.request_routing_rule_name
+      name      = request_routing_rule.value.name 
       priority  = request_routing_rule.value.priority
       rule_type = "Basic"
-      #rule_type                  = request_routing_rule.value.protocol == "Http" ? "PathBasedRouting" : "Basic"
-      http_listener_name         = request_routing_rule.value.protocol == "Https" ? request_routing_rule.value.name : "${request_routing_rule.value.name}-http"
+      http_listener_name         = request_routing_rule.value.protocol == "Https" ? "${request_routing_rule.value.name}-https" : "${request_routing_rule.value.name}-http"
       backend_address_pool_name  = request_routing_rule.value.name
       backend_http_settings_name = request_routing_rule.value.name
     }

@@ -8,11 +8,6 @@ variable "resource_group_name" {
   description = "The name of an existing Resource Group."
 }
 
-variable "name" {
-  description = "The workload name of the app insights component."
-  type        = string
-}
-
 variable "instance_count" {
   description = ""
   type        = string
@@ -28,12 +23,6 @@ variable "location" {
   type        = string
 }
 
-# variable "application_name" {
-#   description = "The name of the application"
-#   type        = list(any)
-#   default     = "pingaccountant"
-# }
-
 variable "application_name" {
   type = map(object({
     name     = string
@@ -42,10 +31,6 @@ variable "application_name" {
     protocol = string
   }))
 }
-
-# variable "host_name" {
-#   description = "Hostname the listener will be waiting for e.g. test.contoso.com"
-# }
 
 variable "subnet_name" {
   description = "The name of the subnet"
