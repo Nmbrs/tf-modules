@@ -1,5 +1,5 @@
 variable "workload" {
-  description = "value"
+  description = "The workload destined for the app gateway"
   type        = string
 }
 
@@ -9,7 +9,7 @@ variable "resource_group_name" {
 }
 
 variable "instance_count" {
-  description = ""
+  description = "The number of the app gw in case you have more than one"
   type        = string
 }
 
@@ -24,6 +24,7 @@ variable "location" {
 }
 
 variable "application_name" {
+  description = "The values of the application that the application gateway will serve"
   type = map(object({
     name     = string
     fqdn     = string
@@ -33,22 +34,22 @@ variable "application_name" {
 }
 
 variable "subnet_name" {
-  description = "The name of the subnet"
+  description = "The name of the subnet used for the application gateway"
   type        = string
 }
 
 variable "virtual_network_name" {
-  description = "The name of the virtual network"
+  description = "The name of the virtual network used for the application gateway"
   type        = string
 }
 
 variable "rg_network" {
-  description = "The name of the resource group for the network"
+  description = "The name of the resource group for the network used for the application gateway"
   type        = string
 }
 
 variable "public_ip_name" {
-  description = "The name of the public IP"
+  description = "The name of the public IP used for the application gateway"
   type        = string
 }
 
@@ -58,7 +59,7 @@ variable "rg_public_ip" {
 }
 
 variable "key_vault_name" {
-  description = "The name of the key vault"
+  description = "The name of the key vault used for the application gateway listener"
   type        = string
 }
 
@@ -68,7 +69,7 @@ variable "rg_key_vault" {
 }
 
 variable "ssl_certificate_name" {
-  description = "Name to give to the certificate applied on the app gw"
+  description = "Name to give to the certificate applied on the application gateway"
   type        = string
 }
 
@@ -78,7 +79,7 @@ variable "secret_certificate_name" {
 }
 
 variable "managed_identity" {
-  description = "The name of the managed identity"
+  description = "The name of the managed identity used to access the key vault"
   type        = string
 }
 
