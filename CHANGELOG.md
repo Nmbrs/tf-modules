@@ -1,5 +1,21 @@
 # Changelog
 
+## [7.13.0](https://github.com/Nmbrs/tf-modules/compare/v7.12.0...v7.13.0) (2023-10-03)
+
+
+### Features
+
+* **private_dns_resolver:** update module naming logic ([#246](https://github.com/Nmbrs/tf-modules/issues/246)) ([af1cbaf](https://github.com/Nmbrs/tf-modules/commit/af1cbaf7aa0bc1822d961c2d0a4d6a616e850f4d))
+
+## [7.12.0](https://github.com/Nmbrs/tf-modules/compare/v7.11.0...v7.12.0) (2023-09-29)
+
+
+### Features
+
+* **redis_cache:** add basic and standard tier support ([#241](https://github.com/Nmbrs/tf-modules/issues/241)) ([9897907](https://github.com/Nmbrs/tf-modules/commit/98979070548333342185c95e8fd1c2b28ca15206))
+* **resource_group:** remove mandatory tags ([#243](https://github.com/Nmbrs/tf-modules/issues/243)) ([3eeff8e](https://github.com/Nmbrs/tf-modules/commit/3eeff8e8bb2d3a7545acf32e42d569bd1c2295e9))
+* **service_bus:** add zone redundancy capability ([#245](https://github.com/Nmbrs/tf-modules/issues/245)) ([7e1acfd](https://github.com/Nmbrs/tf-modules/commit/7e1acfd773edd97e97e59a8bc25570dd132901ec))
+
 ## [7.11.0](https://github.com/Nmbrs/tf-modules/compare/v7.10.0...v7.11.0) (2023-09-13)
 
 

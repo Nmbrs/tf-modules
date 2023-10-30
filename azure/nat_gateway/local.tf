@@ -1,5 +1,5 @@
 locals {
-  nat_gateway_name = "ng-${var.name}-${var.environment}-${var.location}-${format("%03d", var.name_sequence_number)}"
+  nat_gateway_name = "ng-${var.name}-${var.environment}-${var.location}-${format("%03d", var.instance_count)}"
 
-  public_ip_name = "pip-${var.name}-${var.environment}-${var.location}-${format("%03d", var.name_sequence_number)}"
+  public_ip_name = "pip-ng-${var.name}-${var.environment}-${var.location}-${format("%03d", var.instance_count)}"
 }

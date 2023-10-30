@@ -58,3 +58,13 @@ variable "outbound_endpoints" {
     error_message = "At least one element from the 'outbound_endpoints' list is duplicated. They must be unique."
   }
 }
+
+variable "name_sequence_number" {
+  type        = number
+  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention."
+
+  validation {
+    condition     = var.name_sequence_number >= 1 && var.name_sequence_number <= 999
+    error_message = format("Invalid value '%s' for variable 'name'. It must be between 1 and 999.", var.name_sequence_number)
+  }
+}

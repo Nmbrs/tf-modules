@@ -2,22 +2,24 @@ resource "azurerm_redis_cache" "redis" {
   name                          = "redis-${var.name}-${var.environment}"
   location                      = var.location
   resource_group_name           = var.resource_group_name
-  capacity                      = local.premium_tier_capacity[var.cache_size_in_gb]
+  capacity                      = var.sku_name == "Premium" ? local.premium_tier_capacity[var.cache_size_in_gb] : local.basic_standard_tier_capacity[var.cache_size_in_gb]
   redis_version                 = 6
-  family                        = "P"
-  sku_name                      = "Premium"
+  family                        = var.sku_name == "Premium" ? "P" : "C"
+  sku_name                      = var.sku_name
   enable_non_ssl_port           = false
   minimum_tls_version           = "1.2"
   public_network_access_enabled = true
   zones                         = []
   tenant_settings               = {}
 
-  shard_count = var.shard_count
+  shard_count = var.sku_name == "Premium" ? var.shard_count : 0 # Sharding is only supported in the "Premium" rier
 
   redis_configuration {
     enable_authentication = true
-    aof_backup_enabled    = false
-    rdb_backup_enabled    = false
+    # This needs to be refacored after being solved in newer versios of the azurerm provider
+    # For more information see: https://github.com/hashicorp/terraform-provider-azurerm/pull/22309
+    aof_backup_enabled = var.sku_name == "Premium" ? false : null
+    rdb_backup_enabled = false
     # Removes the least recently used key out of all the keys with an expiration set.
     maxmemory_policy = "volatile-lru"
   }
@@ -31,5 +33,33 @@ resource "azurerm_redis_cache" "redis" {
 
   lifecycle {
     ignore_changes = [tags]
+
+    ## cache_size_in_gb validation 
+    precondition {
+      condition     = (var.sku_name == "Basic" && contains([0.25, 1, 2.5, 6, 13, 26, 53], var.cache_size_in_gb)) || var.sku_name == "Standard" || var.sku_name == "Premium"
+      error_message = format("Invalid value '%s' for variable 'cache_size_in_gb' when using the 'Basic' SKU, valid options are 0.25, 1, 2.5, 6, 13, 26, 53.", var.cache_size_in_gb)
+    }
+
+    precondition {
+      condition     = (var.sku_name == "Standard" && contains([0.25, 1, 2.5, 6, 13, 26, 53], var.cache_size_in_gb)) || var.sku_name == "Basic" || var.sku_name == "Premium"
+      error_message = format("Invalid value '%s' for variable 'cache_size_in_gb'when using the 'Standard' SKU, valid options are 0.25, 1, 2.5, 6, 13, 26, 53.", var.cache_size_in_gb)
+    }
+
+    precondition {
+      condition     = (var.sku_name == "Premium" && contains([6, 13, 26, 53, 120], var.cache_size_in_gb)) || var.sku_name == "Basic" || var.sku_name == "Standard"
+      error_message = format("Invalid value '%s' for variable 'cache_size_in_gb'when using the 'Premium' SKU, valid options are 6, 13, 26, 53, 120.", var.cache_size_in_gb)
+    }
+
+
+    ## shard_count validation
+    precondition {
+      condition     = (var.sku_name == "Basic" && var.shard_count == 0) || var.sku_name == "Standard" || var.sku_name == "Premium"
+      error_message = format("Invalid value '%s' for variable 'shard_count' when using the 'Basic' SKU, it must be 0.", var.shard_count)
+    }
+
+    precondition {
+      condition     = (var.sku_name == "Standard" && var.shard_count == 0) || var.sku_name == "Basic" || var.sku_name == "Premium"
+      error_message = format("Invalid value '%s' for variable 'shard_count' when using the 'Standard' SKU, it must be 0.", var.shard_count)
+    }
   }
 }
