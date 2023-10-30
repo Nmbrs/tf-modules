@@ -77,9 +77,9 @@ resource "azurerm_application_gateway" "app_gw" {
   dynamic "request_routing_rule" {
     for_each = var.application_name
     content {
-      name      = request_routing_rule.value.name 
-      priority  = request_routing_rule.value.priority
-      rule_type = "Basic"
+      name                       = request_routing_rule.value.protocol == "Https" ? "${request_routing_rule.value.name}-https" : "${request_routing_rule.value.name}-http"
+      priority                   = request_routing_rule.value.priority
+      rule_type                  = "Basic"
       http_listener_name         = request_routing_rule.value.protocol == "Https" ? "${request_routing_rule.value.name}-https" : "${request_routing_rule.value.name}-http"
       backend_address_pool_name  = request_routing_rule.value.name
       backend_http_settings_name = request_routing_rule.value.name
