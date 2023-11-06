@@ -59,12 +59,13 @@ variable "outbound_endpoints" {
   }
 }
 
-variable "name_sequence_number" {
+variable "instance_count" {
   type        = number
   description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention."
 
   validation {
-    condition     = var.name_sequence_number >= 1 && var.name_sequence_number <= 999
-    error_message = format("Invalid value '%s' for variable 'name'. It must be between 1 and 999.", var.name_sequence_number)
+    condition     = var.instance_count >= 1 && var.instance_count <= 999
+    error_message = format("Invalid value '%s' for variable 'instance_count'. It must be between 1 and 999.", var.instance_count)
   }
 }
+
