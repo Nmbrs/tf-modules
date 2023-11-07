@@ -65,7 +65,8 @@ A number of code snippets demonstrating different use cases for the module have 
 ```hcl
 module "vpn_gateway" {
   source                   = "git::github.com/Nmbrs/tf-modules//azure/vpn_gateway?ref=main"
-  name                     = "testvpn"
+  workload                 = "testvpn"
+  instance_count           = 1
   environment              = "dev"
   location                 = "westeurope"
   resource_group_name      = rg-virtualgateway
