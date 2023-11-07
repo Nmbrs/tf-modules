@@ -1,10 +1,15 @@
 output "name" {
-  description = "Specifies the name of the virtual network"
+  description = "The virtual network full name."
   value       = azurerm_virtual_network.vnet.name
 }
 
+output "workload" {
+  description = "The virtual network workload name."
+  value       = var.workload
+}
+
 output "id" {
-  description = "Specifies the resource id of the virtual network"
+  description = "The virtual network ID."
   value       = azurerm_virtual_network.vnet.id
 }
 

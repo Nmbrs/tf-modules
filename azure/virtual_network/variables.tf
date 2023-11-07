@@ -3,8 +3,8 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "name" {
-  description = "The name of the virtual network."
+variable "workload" {
+  description = "The workload name of the virtual network."
   type        = string
 }
 
