@@ -1,3 +1,5 @@
+data "azurerm_client_config" "current" {}
+
 data "azurerm_subnet" "subnet" {
   # The ID of the gateway subnet of a virtual network in which the virtual network gateway will be created. It is mandatory that the associated subnet is named GatewaySubnet. 
   # Therefore, each virtual network can contain at most a single Virtual Network Gateway.
@@ -7,7 +9,7 @@ data "azurerm_subnet" "subnet" {
 }
 
 resource "azurerm_public_ip" "vpn_gateway" {
-  name                = "pip-vpng-${var.name}-${var.environment}"
+  name                = local.public_ip_name
   location            = var.location
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
@@ -19,7 +21,7 @@ resource "azurerm_public_ip" "vpn_gateway" {
 }
 
 resource "azurerm_virtual_network_gateway" "vpn_gateway" {
-  name                = "vpng-${var.name}-${var.environment}"
+  name                = local.vpn_gateway_name
   location            = var.location
   resource_group_name = var.vnet_resource_group_name
 
