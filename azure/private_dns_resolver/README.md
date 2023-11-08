@@ -44,7 +44,7 @@ No modules.
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Specifies the name of the Resource Group where the Private DNS Resolver should exist. | `string` | n/a | yes |
 | <a name="input_vnet_name"></a> [vnet\_name](#input\_vnet\_name) | Specifies the name of the VNET associated with the Private DNS Resolver. | `string` | n/a | yes |
 | <a name="input_vnet_resource_group_name"></a> [vnet\_resource\_group\_name](#input\_vnet\_resource\_group\_name) | Specifies the name of the VNET name associated with the Private DNS Resolver. | `string` | n/a | yes |
-| <a name="input_workload"></a> [workload](#input\_workload) | Specifies the name which should be used for this Private DNS Resolver. | `string` | n/a | yes |
+| <a name="input_workload"></a> [workload](#input\_workload) | Specifies the workload name which should be used for this Private DNS Resolver. | `string` | n/a | yes |
 
 ## Outputs
 

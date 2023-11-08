@@ -1,5 +1,5 @@
 variable "workload" {
-  description = "Specifies the name which should be used for this Private DNS Resolver."
+  description = "Specifies the workload name which should be used for this Private DNS Resolver."
   type        = string
 }
 
