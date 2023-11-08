@@ -3,9 +3,9 @@ variable "resource_group_name" {
   description = "The name of an existing Resource Group."
 }
 
-variable "name" {
+variable "workload" {
+  description = "Specifies the workload name which should be used for this NAT gateway."
   type        = string
-  description = "This variable defines the name of the NAT gateway."
 }
 
 variable "location" {
