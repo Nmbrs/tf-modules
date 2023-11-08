@@ -1,6 +1,11 @@
 output "name" {
-  description = "The private DNS resolver name."
+  description = "The private DNS resolver full name."
   value       = azurerm_private_dns_resolver.resolver.name
+}
+
+output "workload" {
+  description = "The private DNS resolver workload name."
+  value       = var.workload
 }
 
 output "id" {
