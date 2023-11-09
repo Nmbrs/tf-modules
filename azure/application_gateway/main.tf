@@ -1,17 +1,27 @@
-resource "azurerm_application_gateway" "app_gw" {
-  name                = "agw-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.instance_count)}"
+resource "azurerm_public_ip" "app_gw" {
+  name                = local.public_ip_name
+  domain_name_label   = local.app_gateway_name
   location            = var.location
   resource_group_name = var.resource_group_name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+  zones               = ["1"]
+
   lifecycle {
     ignore_changes = [tags]
   }
+}
+
+resource "azurerm_application_gateway" "app_gw" {
+  name                = local.app_gateway_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  enable_http2        = true
 
   sku {
     name = "WAF_v2"
     tier = "WAF_v2"
   }
-
-  enable_http2 = true
 
   autoscale_configuration {
     min_capacity = var.min_capacity
@@ -39,8 +49,37 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   frontend_ip_configuration {
-    name                 = local.frontend_ip_configuration_name
-    public_ip_address_id = data.azurerm_public_ip.app_gw.id
+    name                 = azurerm_public_ip.app_gw.name
+    public_ip_address_id = azurerm_public_ip.app_gw.id
+  }
+
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [data.azurerm_user_assigned_identity.certificate.id]
+  }
+
+  ssl_certificate {
+    name                = var.certificate_display_name
+    key_vault_secret_id = data.azurerm_key_vault_secret.certificate.id
+  }
+
+  waf_configuration {
+    enabled          = true
+    firewall_mode    = "Prevention"
+    rule_set_version = 3.2
+  }
+
+
+  dynamic "http_listener" {
+    for_each = var.application_name
+    content {
+      name                           = http_listener.value.protocol == "Https" ? "${http_listener.value.name}-https" : "${http_listener.value.name}-http"
+      frontend_ip_configuration_name = azurerm_public_ip.app_gw.name
+      frontend_port_name             = http_listener.value.protocol == "Https" ? "https-frontend-port" : "http-frontend-port"
+      host_name                      = http_listener.value.fqdn
+      protocol                       = http_listener.value.protocol
+      ssl_certificate_name           = http_listener.value.protocol == "Https" ? var.certificate_display_name : null
+    }
   }
 
   dynamic "backend_address_pool" {
@@ -62,17 +101,6 @@ resource "azurerm_application_gateway" "app_gw" {
     }
   }
 
-  dynamic "http_listener" {
-    for_each = var.application_name
-    content {
-      name                           = http_listener.value.protocol == "Https" ? "${http_listener.value.name}-https" : "${http_listener.value.name}-http"
-      frontend_ip_configuration_name = local.frontend_ip_configuration_name
-      frontend_port_name             = http_listener.value.protocol == "Https" ? "https-frontend-port" : "http-frontend-port"
-      host_name                      = http_listener.value.fqdn
-      protocol                       = http_listener.value.protocol
-      ssl_certificate_name           = http_listener.value.protocol == "Https" ? var.ssl_certificate_name : null
-    }
-  }
 
   dynamic "request_routing_rule" {
     for_each = var.application_name
@@ -85,19 +113,8 @@ resource "azurerm_application_gateway" "app_gw" {
       backend_http_settings_name = request_routing_rule.value.name
     }
   }
-  identity {
-    type         = "UserAssigned"
-    identity_ids = [data.azurerm_user_assigned_identity.certificate.id]
-  }
 
-  ssl_certificate {
-    name                = var.ssl_certificate_name
-    key_vault_secret_id = data.azurerm_key_vault_secret.certificate.id
-  }
-
-  waf_configuration {
-    enabled          = true
-    firewall_mode    = "Prevention"
-    rule_set_version = 3.2
+  lifecycle {
+    ignore_changes = [tags]
   }
 }
