@@ -36,22 +36,17 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_application_name"></a> [application\_name](#input\_application\_name) | The values of the application that the application gateway will serve | <pre>list(object({<br>    name     = string<br>    fqdn     = string<br>    priority = number<br>    protocol = string<br>  }))</pre> | `[]` | no |
-| <a name="input_certificate_display_name"></a> [certificate\_display\_name](#input\_certificate\_display\_name) | Name to give to the certificate applied on the application gateway | `string` | n/a | yes |
+| <a name="input_application_settings"></a> [application\_settings](#input\_application\_settings) | The values of the application that the application gateway will serve | <pre>list(object({<br>    listener_fqdn    = string<br>    backend_fqdn     = string<br>    rule_priority    = number<br>    protocol         = string<br>    certificate_name = optional(string, null)<br>    health_probe = object({<br>      timeout_in_seconds             = number<br>      evaluation_interval_in_seconds = number<br>      unhealthy_treshold_count       = number<br>      path                           = string<br>      port                           = number<br>      protocol                       = string<br>    })<br>  }))</pre> | `[]` | no |
+| <a name="input_certificates"></a> [certificates](#input\_certificates) | n/a | <pre>list(object({<br>    name                          = string<br>    key_vault_name                = string<br>    key_vault_resource_group_name = string<br>    key_vault_certificate_name    = string<br>  }))</pre> | `[]` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_instance_count"></a> [instance\_count](#input\_instance\_count) | The number of the app gw in case you have more than one | `string` | n/a | yes |
-| <a name="input_key_vault_certificate_name"></a> [key\_vault\_certificate\_name](#input\_key\_vault\_certificate\_name) | The name of the secret certificate in the key vault | `string` | n/a | yes |
-| <a name="input_key_vault_name"></a> [key\_vault\_name](#input\_key\_vault\_name) | The name of the key vault used for the application gateway listener | `string` | n/a | yes |
-| <a name="input_key_vault_resource_group_name"></a> [key\_vault\_resource\_group\_name](#input\_key\_vault\_resource\_group\_name) | The resource group where the key vault is located | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_managed_identity_name"></a> [managed\_identity\_name](#input\_managed\_identity\_name) | The name of the managed identity used to access the key vault | `string` | n/a | yes |
-| <a name="input_managed_identity_resource_group_name"></a> [managed\_identity\_resource\_group\_name](#input\_managed\_identity\_resource\_group\_name) | The resource group where the managed identity is located | `string` | n/a | yes |
-| <a name="input_max_capacity"></a> [max\_capacity](#input\_max\_capacity) | Maximum value of instances the application gateway will have | `number` | `10` | no |
-| <a name="input_min_capacity"></a> [min\_capacity](#input\_min\_capacity) | Minimum value of instances the application gateway will have | `number` | `2` | no |
+| <a name="input_managed_identity_settings"></a> [managed\_identity\_settings](#input\_managed\_identity\_settings) | n/a | <pre>object({<br>    name                = string<br>    resource_group_name = string<br>  })</pre> | n/a | yes |
+| <a name="input_max_instance_count"></a> [max\_instance\_count](#input\_max\_instance\_count) | Maximum value of instances the application gateway will have | `number` | `10` | no |
+| <a name="input_min_instance_count"></a> [min\_instance\_count](#input\_min\_instance\_count) | Minimum value of instances the application gateway will have | `number` | `2` | no |
+| <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | n/a | <pre>object({<br>    vnet_name                = string<br>    vnet_resource_group_name = string<br>    subnet_name              = string<br>  })</pre> | n/a | yes |
+| <a name="input_redirect_settings"></a> [redirect\_settings](#input\_redirect\_settings) | The values of the application that the application gateway will serve | <pre>list(object({<br>    listener_fqdn    = string<br>    target_url       = string<br>    rule_priority    = number<br>    protocol         = string<br>    certificate_name = optional(string, null)<br>  }))</pre> | `[]` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
-| <a name="input_subnet_name"></a> [subnet\_name](#input\_subnet\_name) | The name of the subnet used for the application gateway | `string` | n/a | yes |
-| <a name="input_vnet_name"></a> [vnet\_name](#input\_vnet\_name) | Name of the VNET that will be added to the application gateway | `string` | n/a | yes |
-| <a name="input_vnet_resource_group_name"></a> [vnet\_resource\_group\_name](#input\_vnet\_resource\_group\_name) | Resource group of the VNET that will be added to the application gateway | `string` | n/a | yes |
 | <a name="input_workload"></a> [workload](#input\_workload) | The workload destined for the app gateway | `string` | n/a | yes |
 
 ## Outputs
@@ -63,12 +58,11 @@ No modules.
 | <a name="output_public_ip_address"></a> [public\_ip\_address](#output\_public\_ip\_address) | Output of the public IP address |
 | <a name="output_public_ip_fqdn"></a> [public\_ip\_fqdn](#output\_public\_ip\_fqdn) | Output of the public IP FQDN |
 | <a name="output_workload"></a> [workload](#output\_workload) | The application gateway workload name. |
-
 ## How to use it?
 
 A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
 
-## Virtual Gateway
+## Application Gateway with multiple applications
 
 ```hcl
 module "application_gateway" {
@@ -78,37 +72,161 @@ module "application_gateway" {
   instance_count      = "1"
   environment         = "dev"
   location            = "westeurope"
-  application_name = [
-    {
-        name     = "app_name_1"
-        fqdn     = "application_1_fqdn"
-        priority = 1
-        protocol = "https"
-    },
-    {
-        name     = "app_name_2"
-        fqdn     = "application_2_fqdn"
-        priority = 2
-        protocol = "https"
-    },
-    {
-        name     = "app_name_2"
-        fqdn     = "application_2_fqdn"
-        priority = 2
-        protocol = "http"
-     }
-    ]
-    vnet_resource_group_name               = "network_of_the_vnet"
-    vnet_name                              = "virtual_network_name"
-    subnet_name                            = "subnet_name"
-    key_vault_resource_group_name          = "rg_key_vault"
-    key_vault_name                         = "key_vault_name"
-    key_vault_certificate_name             = "certificate_secret_name"
-    certificate_display_name               = "certificate_name_on_app_gw"
-    managed_identity_resource_group_name   = "rg_managed_identity"
-    managmanaged_identity_name             = "mi-tester"
-    min_capacity                           = "2"
-    max_capacity                           = "10"
-}
+  min_instance_count  = "2"
+  max_instance_count  = "10"
 
+  network_settings = {
+    vnet_name                = "virtual_network_name"
+    vnet_resource_group_name = "rg-vnet-001"
+    subnet_name              = "snet-appgateway-001"
+  }
+
+  managed_identity_settings = {
+    name                = "my-managed-identity"
+    resource_group_name = "rg-managed-identity"
+  }
+
+  certificates = [
+    {
+      key_vault_resource_group_name = "rg-kv-001"
+      key_vault_name                = "kv-001"
+      key_vault_certificate_name    = "wildcard-contoso-com"
+      name                          = "contoso-com"
+    }
+  ]
+
+  application_settings = [
+    {
+      listener_fqdn    = "app1.contoso.com"
+      backend_fqdn     = "app1.azurewebsites.net"
+      rule_priority    = 1
+      protocol         = "https"
+      certificate_name = "contoso-com"
+      health_probe = {
+        timeout_in_seconds             = 30
+        evaluation_interval_in_seconds = 30
+        unhealthy_treshold_count       = 3
+        path                           = "/health"
+        port                           = 443
+        protocol                       = "https"
+      }
+    },
+    {
+      listener_fqdn    = "app2.contoso.com"
+      backend_fqdn     = "app2.azurewebsites.net"
+      rule_priority    = 1
+      protocol         = "https"
+      certificate_name = "contoso-com"
+      health_probe = {
+        timeout_in_seconds             = 30
+        evaluation_interval_in_seconds = 30
+        unhealthy_treshold_count       = 3
+        path                           = "/health"
+        port                           = 443
+        protocol                       = "https"
+      }
+    }
+  ]
+}
+```
+
+## Application Gateway with URL redirects
+
+```hcl
+module "application_gateway" {
+  source              = "./azure/application_gateway"
+  workload            = "your_workload"
+  resource_group_name = "resource-group"
+  instance_count      = "1"
+  environment         = "dev"
+  location            = "westeurope"
+  min_instance_count  = "2"
+  max_instance_count  = "10"
+
+  network_settings = {
+    vnet_name                = "virtual_network_name"
+    vnet_resource_group_name = "rg-vnet-001"
+    subnet_name              = "snet-appgateway-001"
+  }
+
+  managed_identity_settings = {
+    name                = "my-managed-identity"
+    resource_group_name = "rg-managed-identity"
+  }
+
+  certificates = [
+    {
+      key_vault_resource_group_name = "rg-kv-001"
+      key_vault_name                = "kv-001"
+      key_vault_certificate_name    = "wildcard-contoso-com"
+      name                          = "contoso-com"
+    }
+  ]
+
+  redirect_settings = [
+    {
+      listener_fqdn    = "www.contoso.com"
+      target_url       = "https://contoso.com/business"
+      rule_priority    = 1
+      protocol         = "https"
+      certificate_name = "contoso-com"
+    },
+    {
+      listener_fqdn    = "mail.contoso.com"
+      target_url       = "https://www.mail.contoso.com"
+      rule_priority    = 2
+      protocol         = "https"
+      certificate_name = "contoso-com"
+    },
+        {
+      listener_fqdn    = "*.contoso.com"
+      target_url       = "https://app.contoso.com"
+      rule_priority    = 20000
+      protocol         = "https"
+    certificate_name = "contoso-com"
+    }
+  ]
+}
+```
+
+## Applicaton Gateway with multiple certificates configured
+
+
+```hcl
+module "application_gateway" {
+  source              = "./azure/application_gateway"
+  workload            = "your_workload"
+  resource_group_name = "resource-group"
+  instance_count      = "1"
+  environment         = "dev"
+  location            = "westeurope"
+  min_instance_count  = "2"
+  max_instance_count  = "10"
+
+  network_settings = {
+    vnet_name                = "virtual_network_name"
+    vnet_resource_group_name = "rg-vnet-001"
+    subnet_name              = "snet-appgateway-001"
+  }
+
+  managed_identity_settings = {
+    name                = "my-managed-identity"
+    resource_group_name = "rg-managed-identity"
+  }
+
+  certificates = [
+    {
+      key_vault_resource_group_name = "rg-kv-001"
+      key_vault_name                = "kv-001"
+      key_vault_certificate_name    = "wildcard-contoso-com"
+      name                          = "contoso-com"
+    },
+        {
+      key_vault_resource_group_name = "rg-kv-002"
+      key_vault_name                = "kv-002"
+      key_vault_certificate_name    = "wildcard-mydomain-com"
+      name                          = "mydomain-com"
+    }
+  ]
+}
 ```
