@@ -1,5 +1,5 @@
 variable "workload" {
-  description = "The workload destined for the app gateway"
+  description = "The workload name of the virtual gateway."
   type        = string
 }
 
@@ -9,7 +9,7 @@ variable "resource_group_name" {
 }
 
 variable "instance_count" {
-  description = "The number of the app gw in case you have more than one"
+  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention."
   type        = string
 }
 
@@ -23,41 +23,77 @@ variable "location" {
   type        = string
 }
 
-variable "application_settings" {
-  description = "The values of the application that the application gateway will serve"
+variable "application_backend_settings" {
+  description = "A list of settings for the application backends that the app gateway will serve."
   type = list(object({
-    listener_fqdn    = string
-    backend_fqdn     = string
-    rule_priority    = number
-    protocol         = string
-    certificate_name = optional(string, null)
-    health_probe = object({
-      timeout_in_seconds             = number
-      evaluation_interval_in_seconds = number
-      unhealthy_treshold_count       = number
-      path                           = string
-      port                           = number
-      protocol                       = string
+    routing_rule = object({
+      priority = number
+    })
+    listener = object({
+      fqdn             = string
+      protocol         = string
+      certificate_name = optional(string, null)
+    })
+    backend = object({
+      fqdn     = string
+      port     = number
+      protocol = string
+      health_probe = optional(object({
+        timeout_in_seconds             = number
+        evaluation_interval_in_seconds = number
+        unhealthy_treshold_count       = number
+        path                           = string
+      }))
+    })
+
+  }))
+
+  default = []
+}
+
+variable "redirect_url_settings" {
+  description = "A list of settings for the URL redirection that the app gateway will serve."
+  type = list(object({
+    routing_rule = object({
+      priority = number
+    })
+    listener = object({
+      fqdn             = string
+      protocol         = string
+      certificate_name = optional(string, null)
+    })
+    target = object({
+      url                  = string
+      include_path         = optional(bool, false)
+      include_query_string = optional(bool, false)
     })
   }))
 
   default = []
 }
 
-variable "redirect_settings" {
-  description = "The values of the application that the application gateway will serve"
+variable "redirect_listener_settings" {
+  description = "A list of settings for the listeners redirection that the app gateway will serve."
   type = list(object({
-    listener_fqdn    = string
-    target_url       = string
-    rule_priority    = number
-    protocol         = string
-    certificate_name = optional(string, null)
+    routing_rule = object({
+      priority = number
+    })
+    listener = object({
+      fqdn             = string
+      protocol         = string
+      certificate_name = optional(string, null)
+    })
+    target = object({
+      listener_name        = string
+      include_path         = optional(bool, false)
+      include_query_string = optional(bool, false)
+    })
   }))
-
   default = []
 }
 
 variable "network_settings" {
+  description = "A list of settings related to the app gateway network connectivity."
   type = object({
     vnet_name                = string
     vnet_resource_group_name = string
@@ -66,14 +102,15 @@ variable "network_settings" {
 }
 
 variable "managed_identity_settings" {
+  description = "A list of settings related to the app gateway managed identity used to retrieve SSL certificates"
   type = object({
     name                = string
     resource_group_name = string
   })
-
 }
 
-variable "certificates" {
+variable "ssl_certificates" {
+  description = "A list of settings related to SSL certificates that will be installed in the application gateway."
   type = list(object({
     name                          = string
     key_vault_name                = string
@@ -86,13 +123,13 @@ variable "certificates" {
 }
 
 variable "min_instance_count" {
-  description = "Minimum value of instances the application gateway will have"
+  description = "Minimum value of instances the application gateway will have."
   type        = number
   default     = 2
 }
 
 variable "max_instance_count" {
-  description = "Maximum value of instances the application gateway will have"
+  description = "Maximum value  of instances the application gateway will have."
   type        = number
   default     = 10
 }

@@ -36,18 +36,19 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_application_settings"></a> [application\_settings](#input\_application\_settings) | The values of the application that the application gateway will serve | <pre>list(object({<br>    listener_fqdn    = string<br>    backend_fqdn     = string<br>    rule_priority    = number<br>    protocol         = string<br>    certificate_name = optional(string, null)<br>    health_probe = object({<br>      timeout_in_seconds             = number<br>      evaluation_interval_in_seconds = number<br>      unhealthy_treshold_count       = number<br>      path                           = string<br>      port                           = number<br>      protocol                       = string<br>    })<br>  }))</pre> | `[]` | no |
-| <a name="input_certificates"></a> [certificates](#input\_certificates) | n/a | <pre>list(object({<br>    name                          = string<br>    key_vault_name                = string<br>    key_vault_resource_group_name = string<br>    key_vault_certificate_name    = string<br>  }))</pre> | `[]` | no |
+| <a name="input_application_backend_settings"></a> [application\_backend\_settings](#input\_application\_backend\_settings) | A list of settings for the application backends that the app gateway will serve. | <pre>list(object({<br>    routing_rule = object({<br>      priority = number<br>    })<br>    listener = object({<br>      fqdn             = string<br>      protocol         = string<br>      certificate_name = optional(string, null)<br>    })<br>    backend = object({<br>      fqdn     = string<br>      port     = number<br>      protocol = string<br>      health_probe = optional(object({<br>        timeout_in_seconds             = number<br>        evaluation_interval_in_seconds = number<br>        unhealthy_treshold_count       = number<br>        path                           = string<br>      }))<br>    })<br><br>  }))</pre> | `[]` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
-| <a name="input_instance_count"></a> [instance\_count](#input\_instance\_count) | The number of the app gw in case you have more than one | `string` | n/a | yes |
+| <a name="input_instance_count"></a> [instance\_count](#input\_instance\_count) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention. | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_managed_identity_settings"></a> [managed\_identity\_settings](#input\_managed\_identity\_settings) | n/a | <pre>object({<br>    name                = string<br>    resource_group_name = string<br>  })</pre> | n/a | yes |
-| <a name="input_max_instance_count"></a> [max\_instance\_count](#input\_max\_instance\_count) | Maximum value of instances the application gateway will have | `number` | `10` | no |
-| <a name="input_min_instance_count"></a> [min\_instance\_count](#input\_min\_instance\_count) | Minimum value of instances the application gateway will have | `number` | `2` | no |
-| <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | n/a | <pre>object({<br>    vnet_name                = string<br>    vnet_resource_group_name = string<br>    subnet_name              = string<br>  })</pre> | n/a | yes |
-| <a name="input_redirect_settings"></a> [redirect\_settings](#input\_redirect\_settings) | The values of the application that the application gateway will serve | <pre>list(object({<br>    listener_fqdn    = string<br>    target_url       = string<br>    rule_priority    = number<br>    protocol         = string<br>    certificate_name = optional(string, null)<br>  }))</pre> | `[]` | no |
+| <a name="input_managed_identity_settings"></a> [managed\_identity\_settings](#input\_managed\_identity\_settings) | A list of settings related to the app gateway managed identity used to retrieve SSL certificates | <pre>object({<br>    name                = string<br>    resource_group_name = string<br>  })</pre> | n/a | yes |
+| <a name="input_max_instance_count"></a> [max\_instance\_count](#input\_max\_instance\_count) | Maximum value  of instances the application gateway will have. | `number` | `10` | no |
+| <a name="input_min_instance_count"></a> [min\_instance\_count](#input\_min\_instance\_count) | Minimum value of instances the application gateway will have. | `number` | `2` | no |
+| <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | A list of settings related to the app gateway network connectivity. | <pre>object({<br>    vnet_name                = string<br>    vnet_resource_group_name = string<br>    subnet_name              = string<br>  })</pre> | n/a | yes |
+| <a name="input_redirect_listener_settings"></a> [redirect\_listener\_settings](#input\_redirect\_listener\_settings) | A list of settings for the listeners redirection that the app gateway will serve. | <pre>list(object({<br>    routing_rule = object({<br>      priority = number<br>    })<br>    listener = object({<br>      fqdn             = string<br>      protocol         = string<br>      certificate_name = optional(string, null)<br>    })<br>    target = object({<br>      listener_name        = string<br>      include_path         = optional(bool, false)<br>      include_query_string = optional(bool, false)<br>    })<br>  }))</pre> | `[]` | no |
+| <a name="input_redirect_url_settings"></a> [redirect\_url\_settings](#input\_redirect\_url\_settings) | A list of settings for the URL redirection that the app gateway will serve. | <pre>list(object({<br>    routing_rule = object({<br>      priority = number<br>    })<br>    listener = object({<br>      fqdn             = string<br>      protocol         = string<br>      certificate_name = optional(string, null)<br>    })<br>    target = object({<br>      url                  = string<br>      include_path         = optional(bool, false)<br>      include_query_string = optional(bool, false)<br>    })<br>  }))</pre> | `[]` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
-| <a name="input_workload"></a> [workload](#input\_workload) | The workload destined for the app gateway | `string` | n/a | yes |
+| <a name="input_ssl_certificates"></a> [ssl\_certificates](#input\_ssl\_certificates) | A list of settings related to SSL certificates that will be installed in the application gateway. | <pre>list(object({<br>    name                          = string<br>    key_vault_name                = string<br>    key_vault_resource_group_name = string<br>    key_vault_certificate_name    = string<br>  }))</pre> | `[]` | no |
+| <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the virtual gateway. | `string` | n/a | yes |
 
 ## Outputs
 
@@ -58,11 +59,12 @@ No modules.
 | <a name="output_public_ip_address"></a> [public\_ip\_address](#output\_public\_ip\_address) | Output of the public IP address |
 | <a name="output_public_ip_fqdn"></a> [public\_ip\_fqdn](#output\_public\_ip\_fqdn) | Output of the public IP FQDN |
 | <a name="output_workload"></a> [workload](#output\_workload) | The application gateway workload name. |
+
 ## How to use it?
 
 A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
 
-## Application Gateway with multiple applications
+## Configuring application backends
 
 ```hcl
 module "application_gateway" {
@@ -86,7 +88,7 @@ module "application_gateway" {
     resource_group_name = "rg-managed-identity"
   }
 
-  certificates = [
+  ssl_certificates = [
     {
       key_vault_resource_group_name = "rg-kv-001"
       key_vault_name                = "kv-001"
@@ -95,42 +97,54 @@ module "application_gateway" {
     }
   ]
 
-  application_settings = [
+  application_backend_settings = [
     {
-      listener_fqdn    = "app1.contoso.com"
-      backend_fqdn     = "app1.azurewebsites.net"
-      rule_priority    = 1
-      protocol         = "https"
-      certificate_name = "contoso-com"
-      health_probe = {
-        timeout_in_seconds             = 30
-        evaluation_interval_in_seconds = 30
-        unhealthy_treshold_count       = 3
-        path                           = "/health"
-        port                           = 443
-        protocol                       = "https"
+      routing_rule = {
+        priority = 1
+      }
+      listener = {
+        fqdn             = "app1.contoso.com"
+        protocol         = "https"
+        certificate_name = "contoso-com"
+      }
+      backend = {
+        fqdn     = "app1.azurewebsites.net"
+        port     = 443
+        protocol = "https"
+        health_probe = {
+          timeout_in_seconds             = 30
+          evaluation_interval_in_seconds = 30
+          unhealthy_treshold_count       = 3
+          path                           = "/health"
+        }
       }
     },
     {
-      listener_fqdn    = "app2.contoso.com"
-      backend_fqdn     = "app2.azurewebsites.net"
-      rule_priority    = 1
-      protocol         = "https"
-      certificate_name = "contoso-com"
-      health_probe = {
-        timeout_in_seconds             = 30
-        evaluation_interval_in_seconds = 30
-        unhealthy_treshold_count       = 3
-        path                           = "/health"
-        port                           = 443
-        protocol                       = "https"
+      routing_rule = {
+        priority = 2
+      }
+      listener = {
+        fqdn             = "app2.contoso.com"
+        protocol         = "https"
+        certificate_name = "contoso-com"
+      }
+      backend = {
+        fqdn     = "app2.azurewebsites.net"
+        port     = 443
+        protocol = "https"
+        health_probe = {
+          timeout_in_seconds             = 30
+          evaluation_interval_in_seconds = 30
+          unhealthy_treshold_count       = 3
+          path                           = "/health"
+        }
       }
     }
   ]
 }
 ```
 
-## Application Gateway with URL redirects
+## Configuring URL redirects
 
 ```hcl
 module "application_gateway" {
@@ -154,7 +168,7 @@ module "application_gateway" {
     resource_group_name = "rg-managed-identity"
   }
 
-  certificates = [
+  ssl_certificates = [
     {
       key_vault_resource_group_name = "rg-kv-001"
       key_vault_name                = "kv-001"
@@ -163,33 +177,110 @@ module "application_gateway" {
     }
   ]
 
-  redirect_settings = [
+  redirect_url_settings = [
     {
-      listener_fqdn    = "www.contoso.com"
-      target_url       = "https://contoso.com/business"
-      rule_priority    = 1
-      protocol         = "https"
-      certificate_name = "contoso-com"
+      routing_rule = {
+        priority = 3
+      }
+      listener = {
+        fqdn             = "www.contoso.com"
+        protocol         = "https"
+        certificate_name = "contoso-com"
+      }
+      target = {
+        url                  = "https://contoso.com/business"
+        include_path         = true
+        include_query_string = true
+      }
     },
     {
-      listener_fqdn    = "mail.contoso.com"
-      target_url       = "https://www.mail.contoso.com"
-      rule_priority    = 2
-      protocol         = "https"
-      certificate_name = "contoso-com"
+      routing_rule = {
+        priority = 4
+      }
+      listener = {
+        fqdn             = "mail.contoso.com"
+        protocol         = "https"
+        certificate_name = "contoso-com"
+      }
+      target = {
+        url                  = "https://www.mail.contoso.com"
+        include_path         = true
+        include_query_string = true
+      }
+    },
+  ]
+}
+```
+
+## Configuring listener redirects
+
+```hcl
+module "application_gateway" {
+  source              = "./azure/application_gateway"
+  workload            = "your_workload"
+  resource_group_name = "resource-group"
+  instance_count      = "1"
+  environment         = "dev"
+  location            = "westeurope"
+  min_instance_count  = "2"
+  max_instance_count  = "10"
+
+  network_settings = {
+    vnet_name                = "virtual_network_name"
+    vnet_resource_group_name = "rg-vnet-001"
+    subnet_name              = "snet-appgateway-001"
+  }
+
+  managed_identity_settings = {
+    name                = "my-managed-identity"
+    resource_group_name = "rg-managed-identity"
+  }
+
+  ssl_certificates = [
+    {
+      key_vault_resource_group_name = "rg-kv-001"
+      key_vault_name                = "kv-001"
+      key_vault_certificate_name    = "wildcard-contoso-com"
+      name                          = "contoso-com"
+    }
+  ]
+
+  redirect_listener_settings = [
+    {
+      routing_rule = {
+        priority = 1000
+      }
+      listener = {
+        fqdn             = "*.contoso.com"
+        protocol         = "http"
+      }
+      target = {
+        listener_name        = "some-existing-listener"
+        include_path         = true
+        include_query_string = true
+      }
     },
         {
-      listener_fqdn    = "*.contoso.com"
-      target_url       = "https://app.contoso.com"
-      rule_priority    = 20000
-      protocol         = "https"
-    certificate_name = "contoso-com"
-    }
+      routing_rule = {
+        priority = 1001
+      }
+      listener = {
+        fqdn             = "*.contoso.com"
+        protocol         = "https"
+        certificate_name = "contoso-com"
+      }
+      target = {
+        listener_name        = "some-existing-listener"
+        include_path         = true
+        include_query_string = true
+      }
+    },
+    
   ]
 }
 ```
 
-## Applicaton Gateway with multiple certificates configured
+## Adding multiple certificates configured
 
 
 ```hcl
@@ -214,7 +305,7 @@ module "application_gateway" {
     resource_group_name = "rg-managed-identity"
   }
 
-  certificates = [
+  ssl_certificates = [
     {
       key_vault_resource_group_name = "rg-kv-001"
       key_vault_name                = "kv-001"

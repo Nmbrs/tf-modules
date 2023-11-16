@@ -5,13 +5,13 @@ data "azurerm_subnet" "app_gw" {
 }
 
 data "azurerm_key_vault" "certificate" {
-  for_each            = { for certificate in var.certificates : certificate.name => certificate }
+  for_each            = { for certificate in var.ssl_certificates : certificate.name => certificate }
   name                = each.value.key_vault_name
   resource_group_name = each.value.key_vault_resource_group_name
 }
 
 data "azurerm_key_vault_secret" "certificate" {
-  for_each     = { for certificate in var.certificates : certificate.name => certificate }
+  for_each     = { for certificate in var.ssl_certificates : certificate.name => certificate }
   name         = each.value.key_vault_certificate_name
   key_vault_id = data.azurerm_key_vault.certificate[each.key].id
 }
