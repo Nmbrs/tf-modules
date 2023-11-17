@@ -34,8 +34,8 @@ variable "application_backend_settings" {
       protocol         = string
       certificate_name = optional(string, null)
     })
-    backend = list(object({
-      fqdn       = string
+    backend = object({
+      fqdns      = list(string)
       port       = number
       protocol   = string
       probe_host = string
@@ -45,7 +45,7 @@ variable "application_backend_settings" {
         unhealthy_treshold_count       = number
         path                           = string
       }))
-    }))
+    })
   }))
 
   default = []

@@ -5,7 +5,6 @@
 The `application_gateway` module enables users to easily provision and configure Azure Application Gateway resources for entry points of traffic and load balancing to the apps. It simplifies the process of setting up Application Gateway, allowing you to define key parameters such as resource name, location, etc all while maintaining infrastructure as code.
 
 ## Requirements
-
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
@@ -36,7 +35,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_application_backend_settings"></a> [application\_backend\_settings](#input\_application\_backend\_settings) | A list of settings for the application backends that the app gateway will serve. | <pre>list(object({<br>    routing_rule = object({<br>      priority = number<br>    })<br>    listener = object({<br>      fqdn             = string<br>      protocol         = string<br>      certificate_name = optional(string, null)<br>    })<br>    backend = object({<br>      fqdn     = string<br>      port     = number<br>      protocol = string<br>      health_probe = optional(object({<br>        timeout_in_seconds             = number<br>        evaluation_interval_in_seconds = number<br>        unhealthy_treshold_count       = number<br>        path                           = string<br>      }))<br>    })<br><br>  }))</pre> | `[]` | no |
+| <a name="input_application_backend_settings"></a> [application\_backend\_settings](#input\_application\_backend\_settings) | A list of settings for the application backends that the app gateway will serve. | <pre>list(object({<br>    routing_rule = object({<br>      priority = number<br>    })<br>    listener = object({<br>      fqdn             = string<br>      protocol         = string<br>      certificate_name = optional(string, null)<br>    })<br>    backend = object({<br>      fqdns      = list(string)<br>      port       = number<br>      protocol   = string<br>      probe_host = string<br>      health_probe = optional(object({<br>        timeout_in_seconds             = number<br>        evaluation_interval_in_seconds = number<br>        unhealthy_treshold_count       = number<br>        path                           = string<br>      }))<br>    })<br>  }))</pre> | `[]` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_instance_count"></a> [instance\_count](#input\_instance\_count) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention. | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
@@ -59,10 +58,6 @@ No modules.
 | <a name="output_public_ip_address"></a> [public\_ip\_address](#output\_public\_ip\_address) | Output of the public IP address |
 | <a name="output_public_ip_fqdn"></a> [public\_ip\_fqdn](#output\_public\_ip\_fqdn) | Output of the public IP FQDN |
 | <a name="output_workload"></a> [workload](#output\_workload) | The application gateway workload name. |
-
-## How to use it?
-
-A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
 
 ## Configuring application backends
 
@@ -109,7 +104,7 @@ module "application_gateway" {
       }
       backend = [
         {
-          fqdn     = "app1.azurewebsites.net"
+          fqdns    = ["app1.azurewebsites.net", "app1.myotherdomain.com"]
           port     = 443
           protocol = "https"
           health_probe = {
@@ -132,7 +127,7 @@ module "application_gateway" {
       }
       backend = [
         {
-          fqdn     = "app2.azurewebsites.net"
+          fqdns    = ["app2.azurewebsites.net"]
           port     = 443
           protocol = "https"
           health_probe = {
@@ -284,8 +279,7 @@ module "application_gateway" {
 }
 ```
 
-## Adding multiple certificates configured
-
+## Adding multiple SSL certificates
 
 ```hcl
 module "application_gateway" {
