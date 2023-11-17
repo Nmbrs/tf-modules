@@ -92,10 +92,11 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   dynamic "backend_address_pool" {
-    for_each = var.application_backend_settings != [] ? var.application_backend_settings : []
+    for_each = var.application_backend_settings != [] ? var.application_backend_settings : local.default_application_settings
     content {
       name  = "backend-${local.application_names[backend_address_pool.key]}"
-      fqdns = [backend_address_pool.value.backend.fqdn]
+      fqdns = [for backend in backend_address_pool.value.backend : backend.fqdn]
+      #fqdns = [backend_address_pool.value.backend.fqdn]
     }
   }
 
@@ -103,17 +104,17 @@ resource "azurerm_application_gateway" "app_gw" {
     for_each = var.application_backend_settings != [] ? var.application_backend_settings : []
     content {
       name                                      = "probe-${local.application_names[probe.key]}"
-      protocol                                  = title(probe.value.backend.protocol)
-      path                                      = probe.value.backend.health_probe.path
-      port                                      = title(probe.value.backend.port)
+      protocol                                  = title(probe.value.backend[0].protocol)
+      path                                      = probe.value.backend[0].health_probe.path
+      port                                      = title(probe.value.backend[0].port)
       pick_host_name_from_backend_http_settings = false
-      host                                      = probe.value.backend.fqdn
-      timeout                                   = probe.value.backend.health_probe.timeout_in_seconds
-      interval                                  = probe.value.backend.health_probe.evaluation_interval_in_seconds
-      unhealthy_threshold                       = probe.value.backend.health_probe.unhealthy_treshold_count
+      host                                      = probe.value.backend[0].probe_host
+      timeout                                   = probe.value.backend[0].health_probe.timeout_in_seconds
+      interval                                  = probe.value.backend[0].health_probe.evaluation_interval_in_seconds
+      unhealthy_threshold                       = probe.value.backend[0].health_probe.unhealthy_treshold_count
 
       match {
-        status_code = ["200-299"]
+        status_code = ["200-299", "503"]
       }
     }
   }
@@ -123,8 +124,8 @@ resource "azurerm_application_gateway" "app_gw" {
     content {
       name                                = "settings-${local.application_names[backend_http_settings.key]}"
       cookie_based_affinity               = "Disabled"
-      port                                = backend_http_settings.value.backend.port
-      protocol                            = title(backend_http_settings.value.backend.protocol)
+      port                                = backend_http_settings.value.backend[0].port
+      protocol                            = title(backend_http_settings.value.backend[0].protocol)
       request_timeout                     = 230
       probe_name                          = "probe-${local.application_names[backend_http_settings.key]}"
       pick_host_name_from_backend_address = false

@@ -34,18 +34,18 @@ variable "application_backend_settings" {
       protocol         = string
       certificate_name = optional(string, null)
     })
-    backend = object({
-      fqdn     = string
-      port     = number
-      protocol = string
+    backend = list(object({
+      fqdn       = string
+      port       = number
+      protocol   = string
+      probe_host = string
       health_probe = optional(object({
         timeout_in_seconds             = number
         evaluation_interval_in_seconds = number
         unhealthy_treshold_count       = number
         path                           = string
       }))
-    })
-
+    }))
   }))
 
   default = []

@@ -58,18 +58,20 @@ locals {
         fqdn     = "contoso.com"
         protocol = "http"
       }
-      backend = {
-        fqdn     = "contoso.com"
-        port     = 80
-        protocol = "http"
-        health_probe = {
-          timeout_in_seconds             = 30
-          evaluation_interval_in_seconds = 30
-          unhealthy_treshold_count       = 3
-          path                           = "/"
+      backend = [
+        {
+          fqdn     = "contoso.com"
+          port     = 80
+          protocol = "http"
+          probe_host     = "contoso.com"
+          health_probe = {
+            timeout_in_seconds             = 30
+            evaluation_interval_in_seconds = 30
+            unhealthy_treshold_count       = 3
+            path                           = "/"
+          }
         }
-      }
+      ]
     }
   ]
-
 }
