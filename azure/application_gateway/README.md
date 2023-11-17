@@ -107,17 +107,19 @@ module "application_gateway" {
         protocol         = "https"
         certificate_name = "contoso-com"
       }
-      backend = {
-        fqdn     = "app1.azurewebsites.net"
-        port     = 443
-        protocol = "https"
-        health_probe = {
-          timeout_in_seconds             = 30
-          evaluation_interval_in_seconds = 30
-          unhealthy_treshold_count       = 3
-          path                           = "/health"
+      backend = [
+        {
+          fqdn     = "app1.azurewebsites.net"
+          port     = 443
+          protocol = "https"
+          health_probe = {
+            timeout_in_seconds             = 30
+            evaluation_interval_in_seconds = 30
+            unhealthy_treshold_count       = 3
+            path                           = "/health"
+          }
         }
-      }
+      ]
     },
     {
       routing_rule = {
@@ -128,17 +130,19 @@ module "application_gateway" {
         protocol         = "https"
         certificate_name = "contoso-com"
       }
-      backend = {
-        fqdn     = "app2.azurewebsites.net"
-        port     = 443
-        protocol = "https"
-        health_probe = {
-          timeout_in_seconds             = 30
-          evaluation_interval_in_seconds = 30
-          unhealthy_treshold_count       = 3
-          path                           = "/health"
+      backend = [
+        {
+          fqdn     = "app2.azurewebsites.net"
+          port     = 443
+          protocol = "https"
+          health_probe = {
+            timeout_in_seconds             = 30
+            evaluation_interval_in_seconds = 30
+            unhealthy_treshold_count       = 3
+            path                           = "/health"
+          }
         }
-      }
+      ]
     }
   ]
 }
