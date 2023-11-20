@@ -95,8 +95,7 @@ resource "azurerm_application_gateway" "app_gw" {
     for_each = length(var.application_backend_settings) != 0 ? var.application_backend_settings : local.default_application_settings
 
     content {
-      name = "backend-${local.application_names[backend_address_pool.key]}"
-      #fqdns = [for backend in backend_address_pool.value.backend : backend.fqdn]
+      name  = "backend-${local.application_names[backend_address_pool.key]}"
       fqdns = backend_address_pool.value.backend.fqdns
     }
   }
@@ -110,13 +109,13 @@ resource "azurerm_application_gateway" "app_gw" {
       port                                      = title(probe.value.backend.port)
       pick_host_name_from_backend_http_settings = false
       #host                                      = probe.value.listener.fqdn
-      host                = probe.value.backend.probe_host
+      host                = probe.value.backend.health_probe.fqdn
       timeout             = probe.value.backend.health_probe.timeout_in_seconds
       interval            = probe.value.backend.health_probe.evaluation_interval_in_seconds
       unhealthy_threshold = probe.value.backend.health_probe.unhealthy_treshold_count
 
       match {
-        status_code = var.status_code
+        status_code = probe.value.backend.health_probe.status_codes
       }
     }
   }
@@ -125,10 +124,10 @@ resource "azurerm_application_gateway" "app_gw" {
     for_each = length(var.application_backend_settings) != 0 ? var.application_backend_settings : local.default_application_settings
     content {
       name                                = "settings-${local.application_names[backend_http_settings.key]}"
-      cookie_based_affinity               = var.cookie_based_affinity
+      cookie_based_affinity               = backend_http_settings.value.backend.cookie_based_affinity_enabled ? "Enabled" : "Disabled"
       port                                = backend_http_settings.value.backend.port
       protocol                            = title(backend_http_settings.value.backend.protocol)
-      request_timeout                     = 230
+      request_timeout                     = backend_http_settings.value.backend.request_timeout_in_seconds
       probe_name                          = "probe-${local.application_names[backend_http_settings.key]}"
       pick_host_name_from_backend_address = false
     }
@@ -191,39 +190,39 @@ resource "azurerm_application_gateway" "app_gw" {
   ##################################
   #Redirect listener configurations
   ##################################
-  dynamic "http_listener" {
-    for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
-    content {
-      name                           = "listener-${local.redirect_listener_names[http_listener.key]}"
-      frontend_ip_configuration_name = azurerm_public_ip.app_gw.name
-      frontend_port_name             = http_listener.value.listener.protocol == "https" ? local.https_frontend_port_name : local.http_frontend_port_name
-      host_names                     = [http_listener.value.listener.fqdn]
-      protocol                       = title(http_listener.value.listener.protocol)
-      ssl_certificate_name           = http_listener.value.listener.certificate_name
-    }
-  }
+  # dynamic "http_listener" {
+  #   for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
+  #   content {
+  #     name                           = "listener-${local.redirect_listener_names[http_listener.key]}"
+  #     frontend_ip_configuration_name = azurerm_public_ip.app_gw.name
+  #     frontend_port_name             = http_listener.value.listener.protocol == "https" ? local.https_frontend_port_name : local.http_frontend_port_name
+  #     host_names                     = [http_listener.value.listener.fqdn]
+  #     protocol                       = title(http_listener.value.listener.protocol)
+  #     ssl_certificate_name           = http_listener.value.listener.certificate_name
+  #   }
+  # }
 
-  dynamic "redirect_configuration" {
-    for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
-    content {
-      name                 = "redirect-${local.redirect_listener_names[redirect_configuration.key]}"
-      redirect_type        = "Permanent"
-      target_listener_name = redirect_configuration.value.target.listener_name
-      include_path         = redirect_configuration.value.target.include_path
-      include_query_string = redirect_configuration.value.target.include_query_string
-    }
-  }
+  # dynamic "redirect_configuration" {
+  #   for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
+  #   content {
+  #     name                 = "redirect-${local.redirect_listener_names[redirect_configuration.key]}"
+  #     redirect_type        = "Permanent"
+  #     target_listener_name = redirect_configuration.value.target.listener_name
+  #     include_path         = redirect_configuration.value.target.include_path
+  #     include_query_string = redirect_configuration.value.target.include_query_string
+  #   }
+  # }
 
-  dynamic "request_routing_rule" {
-    for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
-    content {
-      name                        = "rule-${local.redirect_listener_names[request_routing_rule.key]}"
-      priority                    = request_routing_rule.value.routing_rule.priority
-      rule_type                   = "Basic"
-      http_listener_name          = "listener-${local.redirect_listener_names[request_routing_rule.key]}"
-      redirect_configuration_name = "redirect-${local.redirect_listener_names[request_routing_rule.key]}"
-    }
-  }
+  # dynamic "request_routing_rule" {
+  #   for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
+  #   content {
+  #     name                        = "rule-${local.redirect_listener_names[request_routing_rule.key]}"
+  #     priority                    = request_routing_rule.value.routing_rule.priority
+  #     rule_type                   = "Basic"
+  #     http_listener_name          = "listener-${local.redirect_listener_names[request_routing_rule.key]}"
+  #     redirect_configuration_name = "redirect-${local.redirect_listener_names[request_routing_rule.key]}"
+  #   }
+  # }
 
   lifecycle {
     ignore_changes = [tags]

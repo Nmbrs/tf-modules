@@ -35,32 +35,23 @@ variable "application_backend_settings" {
       certificate_name = optional(string, null)
     })
     backend = object({
-      fqdns      = list(string)
-      port       = number
-      protocol   = string
-      probe_host = string
-      health_probe = optional(object({
+      fqdns                         = list(string)
+      port                          = number
+      protocol                      = string
+      cookie_based_affinity_enabled = bool
+      request_timeout_in_seconds    = number
+      health_probe = object({
         timeout_in_seconds             = number
         evaluation_interval_in_seconds = number
         unhealthy_treshold_count       = number
+        fqdn                           = string
         path                           = string
-      }))
+        status_codes                   = list(string)
+      })
     })
   }))
 
   default = []
-}
-
-variable "status_code" {
-  description = "Status code allowed"
-  type = list
-  default = ["200-299", "302", "503"]
-}
-
-variable "cookie_based_affinity" {
-  description = "Cookie affinity definition"
-  type = string
-  default = "Disabled"
 }
 
 variable "redirect_url_settings" {
@@ -84,25 +75,27 @@ variable "redirect_url_settings" {
   default = []
 }
 
-variable "redirect_listener_settings" {
-  description = "A list of settings for the listeners redirection that the app gateway will serve."
-  type = list(object({
-    routing_rule = object({
-      priority = number
-    })
-    listener = object({
-      fqdn             = string
-      protocol         = string
-      certificate_name = optional(string, null)
-    })
-    target = object({
-      listener_name        = string
-      include_path         = optional(bool, false)
-      include_query_string = optional(bool, false)
-    })
-  }))
-  default = []
-}
+# variable "redirect_listener_settings" {
+#   description = "A list of settings for the listeners redirection that the app gateway will serve."
+#   type = list(object({
+#     routing_rule = object({
+#       priority = number
+#     })
+#     listener = object({
+#       fqdn             = string
+#       protocol         = string
+#       certificate_name = optional(string, null)
+#     })
+#     target = object({
+#       listener_name         = string
+#       backend_pool_name     = string
+#       backend_settings_name = string
+#       include_path          = bool
+#       include_query_string  = bool
+#     })
+#   }))
+#   default = []
+# }
 
 variable "network_settings" {
   description = "A list of settings related to the app gateway network connectivity."

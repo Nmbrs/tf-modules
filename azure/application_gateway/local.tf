@@ -40,9 +40,9 @@ locals {
     for redirect in var.redirect_url_settings : "${redirect.listener.protocol}-${replace(replace(replace(redirect.listener.fqdn, ".", "-"), "*", "wildcard"), "\\.$", "")}"
   ]
 
-  redirect_listener_names = [
-    for redirect in var.redirect_listener_settings : "${redirect.listener.protocol}-${replace(replace(replace(redirect.listener.fqdn, ".", "-"), "*", "wildcard"), "\\.$", "")}"
-  ]
+  # redirect_listener_names = [
+  #   for redirect in var.redirect_listener_settings : "${redirect.listener.protocol}-${replace(replace(replace(redirect.listener.fqdn, ".", "-"), "*", "wildcard"), "\\.$", "")}"
+  # ]
 
   application_names = length(var.application_backend_settings) != 0 ? [
     for application in var.application_backend_settings : "${application.listener.protocol}-${replace(replace(replace(application.listener.fqdn, ".", "-"), "*", "wildcard"), "\\.$", "")}"] : [
@@ -59,15 +59,18 @@ locals {
         protocol = "http"
       }
       backend = {
-        fqdns      = ["contoso.com"]
-        port       = 80
-        protocol   = "http"
-        probe_host = "constoso.com"
+        fqdns                         = ["contoso.com"]
+        port                          = 80
+        protocol                      = "http"
+        cookie_based_affinity_enabled = true
+        request_timeout_in_seconds    = 30
         health_probe = {
           timeout_in_seconds             = 30
           evaluation_interval_in_seconds = 30
           unhealthy_treshold_count       = 3
+          fqdn                           = "contoso.com"
           path                           = "/"
+          status_codes                   = ["200"]
         }
       }
 
