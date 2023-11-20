@@ -116,7 +116,7 @@ resource "azurerm_application_gateway" "app_gw" {
       unhealthy_threshold = probe.value.backend.health_probe.unhealthy_treshold_count
 
       match {
-        status_code = ["200-299", "503"]
+        status_code = var.status_code
       }
     }
   }
@@ -125,7 +125,7 @@ resource "azurerm_application_gateway" "app_gw" {
     for_each = length(var.application_backend_settings) != 0 ? var.application_backend_settings : local.default_application_settings
     content {
       name                                = "settings-${local.application_names[backend_http_settings.key]}"
-      cookie_based_affinity               = "Disabled"
+      cookie_based_affinity               = var.cookie_based_affinity
       port                                = backend_http_settings.value.backend.port
       protocol                            = title(backend_http_settings.value.backend.protocol)
       request_timeout                     = 230

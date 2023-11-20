@@ -51,6 +51,18 @@ variable "application_backend_settings" {
   default = []
 }
 
+variable "status_code" {
+  description = "Status code allowed"
+  type = list
+  default = ["200-299", "302", "503"]
+}
+
+variable "cookie_based_affinity" {
+  description = "Cookie affinity definition"
+  type = string
+  default = "Disabled"
+}
+
 variable "redirect_url_settings" {
   description = "A list of settings for the URL redirection that the app gateway will serve."
   type = list(object({
