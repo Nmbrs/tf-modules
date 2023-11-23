@@ -10,7 +10,12 @@ variable "resource_group_name" {
 
 variable "naming_count" {
   description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention."
-  type        = string
+  type        = number
+
+  validation {
+    condition     = var.naming_count >= 1 && var.naming_count <= 999
+    error_message = format("Invalid value '%s' for variable 'naming_count'. It must be between 1 and 999.", var.naming_count)
+  }
 }
 
 variable "environment" {
