@@ -35,10 +35,10 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_address_spaces"></a> [address\_spaces](#input\_address\_spaces) | The address space that is used the virtual network. | `list(string)` | `[]` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
-| <a name="input_instance_count"></a> [instance\_count](#input\_instance\_count) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention. | `number` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
+| <a name="input_naming_count"></a> [naming\_count](#input\_naming\_count) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention. | `number` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of the resource group in which to create the virtual network. | `string` | n/a | yes |
-| <a name="input_subnets"></a> [subnets](#input\_subnets) | List of objects that represent the configuration of each subnet. | <pre>list(object({<br>    name = string<br>    # instance_count                                = number<br>    address_prefixes                              = list(string)<br>    delegations                                   = list(string)<br>    private_link_service_network_policies_enabled = bool<br>    private_endpoint_network_policies_enabled     = bool<br>    service_endpoints                             = list(string)<br><br>  }))</pre> | `[]` | no |
+| <a name="input_subnets"></a> [subnets](#input\_subnets) | List of objects that represent the configuration of each subnet. | <pre>list(object({<br>    name                                          = string<br>    address_prefixes                              = list(string)<br>    delegations                                   = list(string)<br>    private_link_service_network_policies_enabled = bool<br>    private_endpoint_network_policies_enabled     = bool<br>    service_endpoints                             = list(string)<br><br>  }))</pre> | `[]` | no |
 | <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the virtual network. | `string` | n/a | yes |
 
 ## Outputs
@@ -60,7 +60,7 @@ module "virtual_network" {
   source              = "git::github.com/Nmbrs/tf-modules//azure/virtual_network"
   resource_group_name = "rg-demo-dev"
   workload            = "shared"
-  instance_count      = 1000
+  naming_count        = 100
   address_spaces      = ["10.150.0.0/16"]
   environment         = "dev"
   subnets = [

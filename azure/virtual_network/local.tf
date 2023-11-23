@@ -57,5 +57,5 @@ locals {
     "Qumulo.Storage/fileSystems"                      = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
   }
 
-  vnet_name = "vnet-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.instance_count)}"
+  vnet_name = "vnet-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.naming_count)}"
 }
