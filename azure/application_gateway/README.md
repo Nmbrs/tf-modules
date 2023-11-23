@@ -6,6 +6,7 @@ The `application_gateway` module enables users to easily provision and configure
 
 ## Requirements
 
+
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
@@ -36,18 +37,19 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_application_backend_settings"></a> [application\_backend\_settings](#input\_application\_backend\_settings) | A list of settings for the application backends that the app gateway will serve. | <pre>list(object({<br>    routing_rule = object({<br>      priority = number<br>    })<br>    listener = object({<br>      fqdn             = string<br>      protocol         = string<br>      certificate_name = optional(string, null)<br>    })<br>    backend = object({<br>      fqdns                         = list(string)<br>      port                          = number<br>      protocol                      = string<br>      cookie_based_affinity_enabled = bool<br>      request_timeout_in_seconds    = number<br>      health_probe = object({<br>        timeout_in_seconds             = number<br>        evaluation_interval_in_seconds = number<br>        unhealthy_treshold_count       = number<br>        fqdn                           = string<br>        path                           = string<br>        status_codes                   = list(string)<br>      })<br>    })<br>  }))</pre> | `[]` | no |
+| <a name="input_application_backend_settings"></a> [application\_backend\_settings](#input\_application\_backend\_settings) | A list of settings for the application backends that the app gateway will serve. | <pre>list(object({<br>    routing_rule = object({<br>      priority = number<br>    })<br>    listener = object({<br>      fqdn             = string<br>      protocol         = string<br>      certificate_name = optional(string, null)<br>    })<br>    backend = object({<br>      fqdns                         = list(string)<br>      port                          = number<br>      protocol                      = string<br>      cookie_based_affinity_enabled = optional(bool, false)<br>      request_timeout_in_seconds    = optional(number, 30)<br>      health_probe = object({<br>        timeout_in_seconds             = number<br>        evaluation_interval_in_seconds = number<br>        unhealthy_treshold_count       = number<br>        fqdn                           = string<br>        path                           = string<br>        status_codes                   = list(string)<br>      })<br>    })<br>  }))</pre> | `[]` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
-| <a name="input_instance_count"></a> [instance\_count](#input\_instance\_count) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention. | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_managed_identity_settings"></a> [managed\_identity\_settings](#input\_managed\_identity\_settings) | A list of settings related to the app gateway managed identity used to retrieve SSL certificates | <pre>object({<br>    name                = string<br>    resource_group_name = string<br>  })</pre> | n/a | yes |
-| <a name="input_max_instance_count"></a> [max\_instance\_count](#input\_max\_instance\_count) | Maximum value  of instances the application gateway will have. | `number` | `10` | no |
-| <a name="input_min_instance_count"></a> [min\_instance\_count](#input\_min\_instance\_count) | Minimum value of instances the application gateway will have. | `number` | `2` | no |
-| <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | A list of settings related to the app gateway network connectivity. | <pre>object({<br>    vnet_name                = string<br>    vnet_resource_group_name = string<br>    subnet_name              = string<br>  })</pre> | n/a | yes |
+| <a name="input_managed_identity_settings"></a> [managed\_identity\_settings](#input\_managed\_identity\_settings) | A list of settings related to the app gateway managed identity used to retrieve SSL certificates. | <pre>object({<br>    name                = string<br>    resource_group_name = string<br>  })</pre> | n/a | yes |
+| <a name="input_max_instance_count"></a> [max\_instance\_count](#input\_max\_instance\_count) | The maximum number of instances the application gateway will have. | `number` | `10` | no |
+| <a name="input_min_instance_count"></a> [min\_instance\_count](#input\_min\_instance\_count) | The minimum number of instances the application gateway will have. | `number` | `2` | no |
+| <a name="input_naming_count"></a> [naming\_count](#input\_naming\_count) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention. | `string` | n/a | yes |
+| <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | Settings related to the network connectivity of the application gateway. | <pre>object({<br>    vnet_name                = string<br>    vnet_resource_group_name = string<br>    subnet_name              = string<br>  })</pre> | n/a | yes |
+| <a name="input_redirect_listener_settings"></a> [redirect\_listener\_settings](#input\_redirect\_listener\_settings) | A list of settings for the listeners redirection that the app gateway will serve. | <pre>list(object({<br>    routing_rule = object({<br>      priority = number<br>    })<br>    listener = object({<br>      fqdn             = string<br>      protocol         = string<br>      certificate_name = optional(string, null)<br>    })<br>    target = object({<br>      listener_name        = string<br>      include_path         = bool<br>      include_query_string = bool<br>    })<br>  }))</pre> | `[]` | no |
 | <a name="input_redirect_url_settings"></a> [redirect\_url\_settings](#input\_redirect\_url\_settings) | A list of settings for the URL redirection that the app gateway will serve. | <pre>list(object({<br>    routing_rule = object({<br>      priority = number<br>    })<br>    listener = object({<br>      fqdn             = string<br>      protocol         = string<br>      certificate_name = optional(string, null)<br>    })<br>    target = object({<br>      url                  = string<br>      include_path         = optional(bool, false)<br>      include_query_string = optional(bool, false)<br>    })<br>  }))</pre> | `[]` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
-| <a name="input_ssl_certificates"></a> [ssl\_certificates](#input\_ssl\_certificates) | A list of settings related to SSL certificates that will be installed in the application gateway. | <pre>list(object({<br>    name                          = string<br>    key_vault_name                = string<br>    key_vault_resource_group_name = string<br>    key_vault_certificate_name    = string<br>  }))</pre> | `[]` | no |
-| <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the virtual gateway. | `string` | n/a | yes |
+| <a name="input_ssl_certificates"></a> [ssl\_certificates](#input\_ssl\_certificates) | Settings related to SSL certificates that will be installed in the application gateway. | <pre>list(object({<br>    name                          = string<br>    key_vault_name                = string<br>    key_vault_resource_group_name = string<br>    key_vault_certificate_name    = string<br>  }))</pre> | `[]` | no |
+| <a name="input_workload"></a> [workload](#input\_workload) | The name of the workload associated with the resource. | `string` | n/a | yes |
 
 ## Outputs
 
@@ -59,9 +61,6 @@ No modules.
 | <a name="output_public_ip_fqdn"></a> [public\_ip\_fqdn](#output\_public\_ip\_fqdn) | Output of the public IP FQDN |
 | <a name="output_workload"></a> [workload](#output\_workload) | The application gateway workload name. |
 
-## How to use it?
-
-A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
 
 ## Configuring application backends
 
@@ -70,7 +69,7 @@ module "application_gateway" {
   source              = "./azure/application_gateway"
   workload            = "your_workload"
   resource_group_name = "resource-group"
-  instance_count      = "1"
+  naming_count        = "1"
   environment         = "dev"
   location            = "westeurope"
   min_instance_count  = "2"
@@ -114,6 +113,7 @@ module "application_gateway" {
           cookie_based_affinity_enabled = false
           request_timeout_in_seconds    = 30
           health_probe = {
+            fqdn                           = "app1.contoso.com"
             timeout_in_seconds             = 30
             evaluation_interval_in_seconds = 30
             unhealthy_treshold_count       = 3
@@ -140,10 +140,12 @@ module "application_gateway" {
           cookie_based_affinity_enabled = false
           request_timeout_in_seconds    = 30
           health_probe = {
+            fqdn                           = "app1.contoso.com"
             timeout_in_seconds             = 30
             evaluation_interval_in_seconds = 30
             unhealthy_treshold_count       = 3
             path                           = "/health"
+            status_codes                   = ["200"]
           }
         }
       ]
@@ -159,7 +161,7 @@ module "application_gateway" {
   source              = "./azure/application_gateway"
   workload            = "your_workload"
   resource_group_name = "resource-group"
-  instance_count      = "1"
+  naming_count        = "1"
   environment         = "dev"
   location            = "westeurope"
   min_instance_count  = "2"
@@ -227,7 +229,7 @@ module "application_gateway" {
   source              = "./azure/application_gateway"
   workload            = "your_workload"
   resource_group_name = "resource-group"
-  instance_count      = "1"
+  naming_count        = "1"
   environment         = "dev"
   location            = "westeurope"
   min_instance_count  = "2"

@@ -1,7 +1,7 @@
 locals {
-  app_gateway_name = "agw-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.instance_count)}"
+  app_gateway_name = "agw-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.naming_count)}"
 
-  public_ip_name = "pip-agw-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.instance_count)}"
+  public_ip_name = "pip-agw-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.naming_count)}"
 
   http_frontend_port_name = "http-frontend-port"
 
@@ -19,7 +19,7 @@ locals {
     "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
     "TLS_RSA_WITH_AES_128_CBC_SHA256",
 
-    // Cloudflare + Custom V2
+    // Cloudflare recomandations + Azure Custom V2 policies
     "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
     "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA",
     "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
@@ -40,9 +40,9 @@ locals {
     for redirect in var.redirect_url_settings : "${redirect.listener.protocol}-${replace(replace(replace(redirect.listener.fqdn, ".", "-"), "*", "wildcard"), "\\.$", "")}"
   ]
 
-  # redirect_listener_names = [
-  #   for redirect in var.redirect_listener_settings : "${redirect.listener.protocol}-${replace(replace(replace(redirect.listener.fqdn, ".", "-"), "*", "wildcard"), "\\.$", "")}"
-  # ]
+  redirect_listener_names = [
+    for redirect in var.redirect_listener_settings : "${redirect.listener.protocol}-${replace(replace(replace(redirect.listener.fqdn, ".", "-"), "*", "wildcard"), "\\.$", "")}"
+  ]
 
   application_names = length(var.application_backend_settings) != 0 ? [
     for application in var.application_backend_settings : "${application.listener.protocol}-${replace(replace(replace(application.listener.fqdn, ".", "-"), "*", "wildcard"), "\\.$", "")}"] : [

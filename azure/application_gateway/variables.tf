@@ -1,5 +1,5 @@
 variable "workload" {
-  description = "The workload name of the virtual gateway."
+  description = "The name of the workload associated with the resource."
   type        = string
 }
 
@@ -8,8 +8,8 @@ variable "resource_group_name" {
   description = "The name of an existing Resource Group."
 }
 
-variable "instance_count" {
-  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention."
+variable "naming_count" {
+  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention."
   type        = string
 }
 
@@ -38,8 +38,8 @@ variable "application_backend_settings" {
       fqdns                         = list(string)
       port                          = number
       protocol                      = string
-      cookie_based_affinity_enabled = bool
-      request_timeout_in_seconds    = number
+      cookie_based_affinity_enabled = optional(bool, false)
+      request_timeout_in_seconds    = optional(number, 30)
       health_probe = object({
         timeout_in_seconds             = number
         evaluation_interval_in_seconds = number
@@ -75,30 +75,28 @@ variable "redirect_url_settings" {
   default = []
 }
 
-# variable "redirect_listener_settings" {
-#   description = "A list of settings for the listeners redirection that the app gateway will serve."
-#   type = list(object({
-#     routing_rule = object({
-#       priority = number
-#     })
-#     listener = object({
-#       fqdn             = string
-#       protocol         = string
-#       certificate_name = optional(string, null)
-#     })
-#     target = object({
-#       listener_name         = string
-#       backend_pool_name     = string
-#       backend_settings_name = string
-#       include_path          = bool
-#       include_query_string  = bool
-#     })
-#   }))
-#   default = []
-# }
+variable "redirect_listener_settings" {
+  description = "A list of settings for the listeners redirection that the app gateway will serve."
+  type = list(object({
+    routing_rule = object({
+      priority = number
+    })
+    listener = object({
+      fqdn             = string
+      protocol         = string
+      certificate_name = optional(string, null)
+    })
+    target = object({
+      listener_name        = string
+      include_path         = bool
+      include_query_string = bool
+    })
+  }))
+  default = []
+}
 
 variable "network_settings" {
-  description = "A list of settings related to the app gateway network connectivity."
+  description = "Settings related to the network connectivity of the application gateway."
   type = object({
     vnet_name                = string
     vnet_resource_group_name = string
@@ -107,7 +105,7 @@ variable "network_settings" {
 }
 
 variable "managed_identity_settings" {
-  description = "A list of settings related to the app gateway managed identity used to retrieve SSL certificates"
+  description = "A list of settings related to the app gateway managed identity used to retrieve SSL certificates."
   type = object({
     name                = string
     resource_group_name = string
@@ -115,7 +113,7 @@ variable "managed_identity_settings" {
 }
 
 variable "ssl_certificates" {
-  description = "A list of settings related to SSL certificates that will be installed in the application gateway."
+  description = "Settings related to SSL certificates that will be installed in the application gateway."
   type = list(object({
     name                          = string
     key_vault_name                = string
@@ -128,13 +126,13 @@ variable "ssl_certificates" {
 }
 
 variable "min_instance_count" {
-  description = "Minimum value of instances the application gateway will have."
+  description = "The minimum number of instances the application gateway will have."
   type        = number
   default     = 2
 }
 
 variable "max_instance_count" {
-  description = "Maximum value  of instances the application gateway will have."
+  description = "The maximum number of instances the application gateway will have."
   type        = number
   default     = 10
 }

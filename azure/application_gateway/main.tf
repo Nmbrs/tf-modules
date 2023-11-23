@@ -1,3 +1,6 @@
+# ==============================================================================
+# Azure Public IP Configuration
+# ==============================================================================
 resource "azurerm_public_ip" "app_gw" {
   name                = local.public_ip_name
   domain_name_label   = local.app_gateway_name
@@ -12,6 +15,9 @@ resource "azurerm_public_ip" "app_gw" {
   }
 }
 
+# ==============================================================================
+# Azure Application Gateway Configuration
+# ==============================================================================
 resource "azurerm_application_gateway" "app_gw" {
   name                = local.app_gateway_name
   location            = var.location
@@ -61,7 +67,7 @@ resource "azurerm_application_gateway" "app_gw" {
     port = 443
   }
 
-  ## TLS / SSL configurations
+  # TLS / SSL configurations
   ssl_policy {
     policy_type          = "Custom"
     min_protocol_version = "TLSv1_2"
@@ -76,9 +82,8 @@ resource "azurerm_application_gateway" "app_gw" {
     }
   }
 
-  ####################################
+
   # Application backend configurations
-  ####################################
   dynamic "http_listener" {
     for_each = length(var.application_backend_settings) != 0 ? var.application_backend_settings : local.default_application_settings
     content {
@@ -145,13 +150,7 @@ resource "azurerm_application_gateway" "app_gw" {
     }
   }
 
-
-
-
-
-  #############################
   #Redirect URL configurations
-  ############################
   dynamic "http_listener" {
     for_each = length(var.redirect_url_settings) != 0 ? var.redirect_url_settings : []
     content {
@@ -186,43 +185,40 @@ resource "azurerm_application_gateway" "app_gw" {
     }
   }
 
-
-  ##################################
   #Redirect listener configurations
-  ##################################
-  # dynamic "http_listener" {
-  #   for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
-  #   content {
-  #     name                           = "listener-${local.redirect_listener_names[http_listener.key]}"
-  #     frontend_ip_configuration_name = azurerm_public_ip.app_gw.name
-  #     frontend_port_name             = http_listener.value.listener.protocol == "https" ? local.https_frontend_port_name : local.http_frontend_port_name
-  #     host_names                     = [http_listener.value.listener.fqdn]
-  #     protocol                       = title(http_listener.value.listener.protocol)
-  #     ssl_certificate_name           = http_listener.value.listener.certificate_name
-  #   }
-  # }
+  dynamic "http_listener" {
+    for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
+    content {
+      name                           = "listener-${local.redirect_listener_names[http_listener.key]}"
+      frontend_ip_configuration_name = azurerm_public_ip.app_gw.name
+      frontend_port_name             = http_listener.value.listener.protocol == "https" ? local.https_frontend_port_name : local.http_frontend_port_name
+      host_names                     = [http_listener.value.listener.fqdn]
+      protocol                       = title(http_listener.value.listener.protocol)
+      ssl_certificate_name           = http_listener.value.listener.certificate_name
+    }
+  }
 
-  # dynamic "redirect_configuration" {
-  #   for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
-  #   content {
-  #     name                 = "redirect-${local.redirect_listener_names[redirect_configuration.key]}"
-  #     redirect_type        = "Permanent"
-  #     target_listener_name = redirect_configuration.value.target.listener_name
-  #     include_path         = redirect_configuration.value.target.include_path
-  #     include_query_string = redirect_configuration.value.target.include_query_string
-  #   }
-  # }
+  dynamic "redirect_configuration" {
+    for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
+    content {
+      name                 = "redirect-${local.redirect_listener_names[redirect_configuration.key]}"
+      redirect_type        = "Permanent"
+      target_listener_name = redirect_configuration.value.target.listener_name
+      include_path         = redirect_configuration.value.target.include_path
+      include_query_string = redirect_configuration.value.target.include_query_string
+    }
+  }
 
-  # dynamic "request_routing_rule" {
-  #   for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
-  #   content {
-  #     name                        = "rule-${local.redirect_listener_names[request_routing_rule.key]}"
-  #     priority                    = request_routing_rule.value.routing_rule.priority
-  #     rule_type                   = "Basic"
-  #     http_listener_name          = "listener-${local.redirect_listener_names[request_routing_rule.key]}"
-  #     redirect_configuration_name = "redirect-${local.redirect_listener_names[request_routing_rule.key]}"
-  #   }
-  # }
+  dynamic "request_routing_rule" {
+    for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
+    content {
+      name                        = "rule-${local.redirect_listener_names[request_routing_rule.key]}"
+      priority                    = request_routing_rule.value.routing_rule.priority
+      rule_type                   = "Basic"
+      http_listener_name          = "listener-${local.redirect_listener_names[request_routing_rule.key]}"
+      redirect_configuration_name = "redirect-${local.redirect_listener_names[request_routing_rule.key]}"
+    }
+  }
 
   lifecycle {
     ignore_changes = [tags]
