@@ -10,6 +10,7 @@ data "azurerm_subnet" "subnet" {
 
 resource "azurerm_public_ip" "vpn_gateway" {
   name                = local.public_ip_name
+  domain_name_label   = local.vpn_gateway_name
   location            = var.location
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"

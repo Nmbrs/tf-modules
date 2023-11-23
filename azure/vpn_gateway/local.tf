@@ -9,8 +9,7 @@ locals {
   # https://sts.windows.net/{AzureAD TenantID}/
   aad_issuer_url = "https://sts.windows.net/${data.azurerm_client_config.current.tenant_id}/"
 
-  vpn_gateway_name = "vpng-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.instance_count)}"
+  vpn_gateway_name = "vpng-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.naming_count)}"
 
-  public_ip_name = "pip-vpng-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.instance_count)}"
+  public_ip_name = "pip-vpng-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.naming_count)}"
 }
-

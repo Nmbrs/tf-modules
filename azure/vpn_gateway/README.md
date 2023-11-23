@@ -18,7 +18,7 @@ The module ensures compliance with specified policies and implements the Terrafo
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.70 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.79.0 |
 
 ## Modules
 
@@ -40,8 +40,8 @@ No modules.
 | <a name="input_address_spaces"></a> [address\_spaces](#input\_address\_spaces) | The address space out of which IP addresses for vpn clients will be taken. You can provide more than one address space, e.g. in CIDR notation | `list(string)` | `[]` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Defines the environment to provision the resources. | `string` | n/a | yes |
 | <a name="input_generation"></a> [generation](#input\_generation) | The Generation of the Virtual Network gateway. | `string` | `"Generation1"` | no |
-| <a name="input_instance_count"></a> [instance\_count](#input\_instance\_count) | n/a | `number` | `1` | no |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
+| <a name="input_naming_count"></a> [naming\_count](#input\_naming\_count) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention. | `number` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Resource group name for where the virtual gateway will be created | `string` | n/a | yes |
 | <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | Configuration of the size and capacity of the virtual network gateway. | `string` | `"VpnGw1"` | no |
 | <a name="input_vnet_name"></a> [vnet\_name](#input\_vnet\_name) | Name of the Vnet that will be added to the virtual gateway | `string` | n/a | yes |
@@ -66,7 +66,7 @@ A number of code snippets demonstrating different use cases for the module have 
 module "vpn_gateway" {
   source                   = "git::github.com/Nmbrs/tf-modules//azure/vpn_gateway?ref=main"
   workload                 = "testvpn"
-  instance_count           = 1
+  naming_count             = 1
   environment              = "dev"
   location                 = "westeurope"
   resource_group_name      = rg-virtualgateway
