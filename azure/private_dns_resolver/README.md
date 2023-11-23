@@ -38,8 +38,8 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_inbound_endpoints"></a> [inbound\_endpoints](#input\_inbound\_endpoints) | List of objects that represent the configuration of each inbound endpoint. | `list(string)` | `[]` | no |
-| <a name="input_instance_count"></a> [instance\_count](#input\_instance\_count) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention. | `number` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
+| <a name="input_naming_count"></a> [naming\_count](#input\_naming\_count) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention. | `number` | n/a | yes |
 | <a name="input_outbound_endpoints"></a> [outbound\_endpoints](#input\_outbound\_endpoints) | List of objects that represent the configuration of each outbound endpoint. | `list(string)` | `[]` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Specifies the name of the Resource Group where the Private DNS Resolver should exist. | `string` | n/a | yes |
 | <a name="input_vnet_name"></a> [vnet\_name](#input\_vnet\_name) | Specifies the name of the VNET associated with the Private DNS Resolver. | `string` | n/a | yes |
