@@ -8,7 +8,6 @@ locals {
   https_frontend_port_name = "https-frontend-port"
 
   cipher_suites = [
-    // Needs triage
     "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
     "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
     "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
@@ -18,8 +17,6 @@ locals {
     "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
     "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
     "TLS_RSA_WITH_AES_128_CBC_SHA256",
-
-    // Cloudflare recomandations + Azure Custom V2 policies
     "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
     "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA",
     "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
@@ -73,7 +70,6 @@ locals {
           status_codes                   = ["200"]
         }
       }
-
     }
   ]
 }

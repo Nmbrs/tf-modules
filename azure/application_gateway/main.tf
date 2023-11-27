@@ -112,11 +112,10 @@ resource "azurerm_application_gateway" "app_gw" {
       path                                      = probe.value.backend.health_probe.path
       port                                      = title(probe.value.backend.port)
       pick_host_name_from_backend_http_settings = false
-      #host                                      = probe.value.listener.fqdn
-      host                = probe.value.backend.health_probe.fqdn
-      timeout             = probe.value.backend.health_probe.timeout_in_seconds
-      interval            = probe.value.backend.health_probe.evaluation_interval_in_seconds
-      unhealthy_threshold = probe.value.backend.health_probe.unhealthy_treshold_count
+      host                                      = probe.value.backend.health_probe.fqdn
+      timeout                                   = probe.value.backend.health_probe.timeout_in_seconds
+      interval                                  = probe.value.backend.health_probe.evaluation_interval_in_seconds
+      unhealthy_threshold                       = probe.value.backend.health_probe.unhealthy_treshold_count
 
       match {
         status_code = probe.value.backend.health_probe.status_codes

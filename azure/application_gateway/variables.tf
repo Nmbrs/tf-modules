@@ -125,9 +125,7 @@ variable "ssl_certificates" {
     key_vault_resource_group_name = string
     key_vault_certificate_name    = string
   }))
-
   default = []
-
 }
 
 variable "min_instance_count" {
