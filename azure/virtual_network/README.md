@@ -36,18 +36,20 @@ No modules.
 | <a name="input_address_spaces"></a> [address\_spaces](#input\_address\_spaces) | The address space that is used the virtual network. | `list(string)` | `[]` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_name"></a> [name](#input\_name) | The name of the virtual network. | `string` | n/a | yes |
+| <a name="input_naming_count"></a> [naming\_count](#input\_naming\_count) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention. | `number` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of the resource group in which to create the virtual network. | `string` | n/a | yes |
 | <a name="input_subnets"></a> [subnets](#input\_subnets) | List of objects that represent the configuration of each subnet. | <pre>list(object({<br>    name                                          = string<br>    address_prefixes                              = list(string)<br>    delegations                                   = list(string)<br>    private_link_service_network_policies_enabled = bool<br>    private_endpoint_network_policies_enabled     = bool<br>    service_endpoints                             = list(string)<br><br>  }))</pre> | `[]` | no |
+| <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the virtual network. | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_id"></a> [id](#output\_id) | Specifies the resource id of the virtual network |
-| <a name="output_name"></a> [name](#output\_name) | Specifies the name of the virtual network |
+| <a name="output_id"></a> [id](#output\_id) | The virtual network ID. |
+| <a name="output_name"></a> [name](#output\_name) | The virtual network full name. |
 | <a name="output_subnet_ids"></a> [subnet\_ids](#output\_subnet\_ids) | Contains a list of the the resource id of the subnets |
 | <a name="output_subnets"></a> [subnets](#output\_subnets) | Contains a list of the subnets data |
+| <a name="output_workload"></a> [workload](#output\_workload) | The virtual network workload name. |
 
 ## How to use it?
 
@@ -56,8 +58,9 @@ A number of code snippets demonstrating different use cases for the module have 
 ```hcl
 module "virtual_network" {
   source              = "git::github.com/Nmbrs/tf-modules//azure/virtual_network"
-  resource_group_name = module.rg-01.name
-  name                = "vnet-dev-westeu-1000"
+  resource_group_name = "rg-demo-dev"
+  workload            = "shared"
+  naming_count        = 100
   address_spaces      = ["10.150.0.0/16"]
   environment         = "dev"
   subnets = [
@@ -72,4 +75,3 @@ module "virtual_network" {
   ]
 }
 ```
-
