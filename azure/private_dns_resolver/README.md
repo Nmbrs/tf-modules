@@ -69,7 +69,7 @@ module "private_dns_resolver" {
   source = "git::github.com/Nmbrs/tf-modules//azure/private_dns_resolver"
 
   workload                 = "my-resolver"
-  instance_count           = 1
+  naming_count             = 1
   resource_group_name      = "rg-private-resolver"
   location                 = "westeurope"
   environment              = "dev"
@@ -86,7 +86,7 @@ module "private_dns_resolver" {
   source = "git::github.com/Nmbrs/tf-modules//azure/private_dns_resolver"
 
   workload                 = "my-resolver"
-  instance_count           = 2
+  naming_count             = 2
   resource_group_name      = "rg-private-resolver"
   location                 = "westeurope"
   environment              = "dev"
@@ -102,7 +102,7 @@ module "private_dns_resolver" {
   source = "git::github.com/Nmbrs/tf-modules//azure/private_dns_resolver"
 
   workload                 = "my-resolver"
-  instance_count           = 3
+  naming_count             = 3
   resource_group_name      = "rg-private-resolver"
   location                 = "westeurope"
   environment              = "dev"
