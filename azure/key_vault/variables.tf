@@ -3,9 +3,14 @@ variable "resource_group_name" {
   description = "The name of an existing Resource Group."
 }
 
-variable "name" {
+variable "workload" {
+  description = "The workload name of the key vault."
   type        = string
-  description = "The name of the Azure Key Vault."
+
+  validation {
+    condition     = length(var.workload) <= 8
+    error_message = format("Invalid value '%s' for variable 'workload'. It must contain no more than 8 characters.", var.workload)
+  }
 }
 
 variable "location" {
