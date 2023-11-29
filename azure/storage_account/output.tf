@@ -1,10 +1,15 @@
 output "name" {
-  description = "The name of the Storage Account."
+  description = "The storage account full name."
   value       = azurerm_storage_account.storage_account.name
 }
 
+output "workload" {
+  description = "The storage account workload name."
+  value       = var.workload
+}
+
 output "id" {
-  description = "The ID of the Storage Account."
+  description = "The storage account ID."
   value       = azurerm_storage_account.storage_account.id
 }
 

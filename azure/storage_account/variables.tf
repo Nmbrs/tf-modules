@@ -1,20 +1,15 @@
-variable "name" {
-  description = "Name of the storage account."
+variable "workload" {
+  description = "The workload name of the storage account."
   type        = string
 
   validation {
-    condition     = can(coalesce(var.name))
-    error_message = "The 'name' value is invalid. It must be a non-empty string."
+    condition     = length(var.workload) <= 13
+    error_message = format("Invalid value '%s' for variable 'workload'. It must contain no more than 13 characters.", var.workload)
   }
 
   validation {
-    condition     = length(var.name) >= 3 && length(var.name) <= 24
-    error_message = "The 'name' value is invalid. It must be between 3 and 24 characters."
-  }
-
-  validation {
-    condition     = !can(regex("[^a-zA-Z0-9]+", var.name))
-    error_message = "The 'name' value is invalid. It must only contain letters and numbers."
+    condition     = !can(regex("[^a-zA-Z0-9]+", var.workload))
+    error_message = format("Invalid value '%s' for variable 'workload'. It must only contain letters and numbers.", var.workload)
   }
 }
 
