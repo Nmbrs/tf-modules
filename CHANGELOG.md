@@ -1,5 +1,25 @@
 # Changelog
 
+## [7.14.0](https://github.com/Nmbrs/tf-modules/compare/v7.13.0...v7.14.0) (2023-11-29)
+
+
+### Features
+
+* **app_gateway:** Create module for applicaton gateway ([#256](https://github.com/Nmbrs/tf-modules/issues/256)) ([c4b015a](https://github.com/Nmbrs/tf-modules/commit/c4b015a9adb100ba1317826a710b14a13f82e70d))
+* **app_service:** add client_affinity_enabled parameter and ignore log configurations ([#253](https://github.com/Nmbrs/tf-modules/issues/253)) ([3739fff](https://github.com/Nmbrs/tf-modules/commit/3739ffff79e2a544931a74554f552161726d5035))
+* **app_service:** ignore auto heal and ip restriction settings ([#263](https://github.com/Nmbrs/tf-modules/issues/263)) ([b285f0e](https://github.com/Nmbrs/tf-modules/commit/b285f0ec5be0a7dc535edf4289445ef2e405cdd0))
+* **app_service:** Update variable country to allow global  ([#250](https://github.com/Nmbrs/tf-modules/issues/250)) ([5437136](https://github.com/Nmbrs/tf-modules/commit/5437136b3f0021574127a195474f442b22973f49))
+* **event_grid_domain:** add event grid domain module ([#249](https://github.com/Nmbrs/tf-modules/issues/249)) ([ce92579](https://github.com/Nmbrs/tf-modules/commit/ce925793df2fbfc8b2a998b12cb57bd792c3f708))
+* **key_vault:** remove caf module by updating the naming logic ([#262](https://github.com/Nmbrs/tf-modules/issues/262)) ([71d9608](https://github.com/Nmbrs/tf-modules/commit/71d9608ce8cfabb3354a1de5058260123e105bd4))
+* **managed_identity:** add managed identiy modlule ([#255](https://github.com/Nmbrs/tf-modules/issues/255)) ([dfc52d8](https://github.com/Nmbrs/tf-modules/commit/dfc52d81819d02e6c112088269c0bde117886fa6))
+* **nat_gateway:** replace name parameter in favor of  workload ([#260](https://github.com/Nmbrs/tf-modules/issues/260)) ([8d8ecd3](https://github.com/Nmbrs/tf-modules/commit/8d8ecd3cb1e37261983e34de28df7ccf168d7794))
+* **nat_gateway:** update public ip and nat gateway naming logic ([#254](https://github.com/Nmbrs/tf-modules/issues/254)) ([461dc6b](https://github.com/Nmbrs/tf-modules/commit/461dc6bc4bf4d9a4ed67c3020406ace23f7b549a))
+* **private_dns_resolver:** update naming logic ([#257](https://github.com/Nmbrs/tf-modules/issues/257)) ([a21758c](https://github.com/Nmbrs/tf-modules/commit/a21758c4da9196c746f22f43fc9a37098c1af895))
+* **private_dns_resolver:** update vnet link resource group ([#248](https://github.com/Nmbrs/tf-modules/issues/248)) ([a691dab](https://github.com/Nmbrs/tf-modules/commit/a691dab4c0d43a7e393d47500c9aa79f350bffb6))
+* **storage_account:** remove caf module by updating the naming logic ([#261](https://github.com/Nmbrs/tf-modules/issues/261)) ([483b808](https://github.com/Nmbrs/tf-modules/commit/483b8089fcf4daa0d6d9d6a8d9d0209c111ba3c6))
+* **virtual_network:** update naming logic ([#258](https://github.com/Nmbrs/tf-modules/issues/258)) ([910bc4b](https://github.com/Nmbrs/tf-modules/commit/910bc4bf287526b28b40d860d978550909ba4377))
+* **vpn_gateway:** update naming logic ([#259](https://github.com/Nmbrs/tf-modules/issues/259)) ([79aa875](https://github.com/Nmbrs/tf-modules/commit/79aa875ce11f95c0271d783ed8ed13e6a8062009))
+
 ## [7.13.0](https://github.com/Nmbrs/tf-modules/compare/v7.12.0...v7.13.0) (2023-10-03)
 
 
