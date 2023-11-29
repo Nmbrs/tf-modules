@@ -3,8 +3,8 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "name" {
-  description = "The name of the virtual network."
+variable "workload" {
+  description = "The workload name of the virtual network."
   type        = string
 }
 
@@ -170,5 +170,15 @@ variable "subnets" {
   validation {
     condition     = alltrue([for subnet in var.subnets : length(subnet.delegations) == length(distinct(subnet.delegations))])
     error_message = "At least one of the values from 'delegations' list from one of the 'subnets' is duplicated. All elements must be unique."
+  }
+}
+
+variable "naming_count" {
+  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention."
+  type        = number
+
+  validation {
+    condition     = var.naming_count >= 1 && var.naming_count <= 999
+    error_message = format("Invalid value '%s' for variable 'naming_count'. It must be between 1 and 999.", var.naming_count)
   }
 }

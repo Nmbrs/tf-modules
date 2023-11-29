@@ -23,7 +23,6 @@ keyvault when need.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurecaf"></a> [azurecaf](#provider\_azurecaf) | 2.0.0-preview3 |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.70 |
 
 ## Modules
@@ -34,7 +33,6 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [azurecaf_name.caf_name](https://registry.terraform.io/providers/aztfmod/azurecaf/2.0.0-preview3/docs/resources/name) | resource |
 | [azurerm_key_vault.key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault) | resource |
 | [azurerm_key_vault_access_policy.default_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
 | [azurerm_key_vault_access_policy.readers_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
@@ -48,19 +46,20 @@ No modules.
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_external_usage"></a> [external\_usage](#input\_external\_usage) | (Optional) Specifies whether the keyvault should be used internally or externally. | `bool` | `true` | no |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_name"></a> [name](#input\_name) | The name of the Azure Key Vault. | `string` | n/a | yes |
 | <a name="input_policies"></a> [policies](#input\_policies) | (Optional) Access policies created for the Azure Key Vault. | <pre>list(object({<br>    name      = string<br>    object_id = string<br>    type      = string<br>  }))</pre> | `[]` | no |
 | <a name="input_protection_enabled"></a> [protection\_enabled](#input\_protection\_enabled) | (Optional) Enables the keyvault purge protection in case of accidental deletion. Default is false. | `bool` | `false` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
+| <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the key vault. | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_id"></a> [id](#output\_id) | The Key Vault Key ID. |
-| <a name="output_name"></a> [name](#output\_name) | The Key Vault Key name. |
+| <a name="output_id"></a> [id](#output\_id) | The key vault ID. |
+| <a name="output_name"></a> [name](#output\_name) | The key vault full name. |
 | <a name="output_readers_policies"></a> [readers\_policies](#output\_readers\_policies) | List of readers access policies. |
-| <a name="output_uri"></a> [uri](#output\_uri) | The URI of the Key Vault, used for performing operations on keys and secrets. |
+| <a name="output_uri"></a> [uri](#output\_uri) | The URI of the key vault, used for performing operations on keys and secrets. |
+| <a name="output_workload"></a> [workload](#output\_workload) | The key vault workload name. |
 | <a name="output_writers_policies"></a> [writers\_policies](#output\_writers\_policies) | List of writers access policies. |
 
 ## How to use it?
@@ -70,7 +69,7 @@ A number of code snippets demonstrating different use cases for the module have 
 ```hcl
 module "key_vault" {
   source = "git::github.com/Nmbrs/tf-modules//azure/key_vault"
-  name                = "Heimdall"
+  workload            = "demo"
   environment         = "dev"
   location            = "westeurope"
   resource_group_name = "rg-heimdall"
