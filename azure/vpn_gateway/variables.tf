@@ -4,8 +4,8 @@ variable "resource_group_name" {
 
 }
 
-variable "name" {
-  description = "This variable defines the name of the virtual gateway. For an exaustive list of skus, please use the command 'az account list-locations'"
+variable "workload" {
+  description = "The workload name of the virtual gateway."
   type        = string
 
 }
@@ -61,5 +61,15 @@ variable "generation" {
   validation {
     condition     = contains(["Generation1", "Generation2", "None"], var.generation)
     error_message = format("Invalid value '%s' for variable 'generation', valid options are 'Generation1', 'Generation2', 'None'.", var.generation)
+  }
+}
+
+variable "naming_count" {
+  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention."
+  type        = number
+
+  validation {
+    condition     = var.naming_count >= 1 && var.naming_count <= 999
+    error_message = format("Invalid value '%s' for variable 'naming_count'. It must be between 1 and 999.", var.naming_count)
   }
 }
