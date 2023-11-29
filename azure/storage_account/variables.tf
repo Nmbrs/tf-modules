@@ -3,7 +3,7 @@ variable "workload" {
   type        = string
 
   validation {
-    condition     = length(var.workload) <= 300
+    condition     = length(var.workload) <= 13
     error_message = format("Invalid value '%s' for variable 'workload'. It must contain no more than 13 characters.", var.workload)
   }
 
