@@ -1,8 +1,5 @@
 locals {
-  internal_external_suffix = var.external_usage ? "e" : "i"
-
-  org         = "nmbrs"
-  environment = var.environment
+  key_vault_name = lower("kv-nmbrs-${var.workload}-${var.external_usage ? "e" : "i"}-${var.environment}")
 
   certificates_full_permissions = ["Backup", "Create", "Delete", "DeleteIssuers", "Get", "GetIssuers", "Import", "List", "ListIssuers", "ManageContacts", "ManageIssuers", "Purge", "Recover", "Restore", "SetIssuers", "Update"]
   keys_full_permissions         = []

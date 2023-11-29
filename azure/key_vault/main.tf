@@ -1,15 +1,8 @@
 data "azurerm_client_config" "current" {}
 
-resource "azurecaf_name" "caf_name" {
-  name          = lower("${local.org}-${var.name}")
-  resource_type = "azurerm_key_vault"
-  suffixes      = [local.internal_external_suffix, lower(local.environment)]
-  clean_input   = true
-}
-
 # Create the Azure Key Vault
 resource "azurerm_key_vault" "key_vault" {
-  name                       = azurecaf_name.caf_name.result
+  name                       = local.key_vault_name
   location                   = var.location
   resource_group_name        = var.resource_group_name
   tenant_id                  = data.azurerm_client_config.current.tenant_id
