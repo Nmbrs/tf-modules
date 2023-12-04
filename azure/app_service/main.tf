@@ -45,7 +45,7 @@ resource "azurerm_windows_web_app" "web_app" {
   }
 
   lifecycle {
-    ignore_changes = [tags, virtual_network_subnet_id, identity, app_settings, sticky_settings, logs, site_config.0.auto_heal_enabled, sixte_config.0.auto_heal_setting, site_config.0.ip_restriction, site_config.0.health_check_path]
+    ignore_changes = [tags, virtual_network_subnet_id, identity, app_settings, sticky_settings, logs, site_config.0.auto_heal_enabled, site_config.0.auto_heal_setting, site_config.0.ip_restriction, site_config.0.health_check_path]
   }
 }
 
