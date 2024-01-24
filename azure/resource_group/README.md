@@ -56,13 +56,14 @@ module "resource-group" {
   location                  = "westeurope"
   environment               = "dev"
   tags = {
-    datadog     = "monitored"
-    managed_by  = terraform
+    managed_by  = "terraform"
     environment = "dev"
     product     = "internal"
     category    = "monolith"
     owner       = "infra"
     country     = "nl"
+    status      = "life_cycle"
+    service     = "payroll"
   }
 }
 ```
