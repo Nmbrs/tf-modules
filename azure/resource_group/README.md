@@ -31,15 +31,10 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_category"></a> [category](#input\_category) | (Optional) High-level identification name that supports product components. | `string` | `"not_applicable"` | no |
-| <a name="input_country"></a> [country](#input\_country) | (Optional) Name of the country to which the resources belongs. | `string` | `"global"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
-| <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | (Optional) A extra mapping of tags which should be assigned to the desired resource. | `map(string)` | `{}` | no |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name of the resource group. It must follow the CAF naming convention. | `string` | n/a | yes |
-| <a name="input_owner"></a> [owner](#input\_owner) | (Optional) Name of the owner to which the resource belongs. | `string` | `"not_applicable"` | no |
-| <a name="input_product"></a> [product](#input\_product) | (Optional) Name of the product to which the resource belongs. | `string` | `"not_applicable"` | no |
-| <a name="input_status"></a> [status](#input\_status) | (Optional) Indicates the resource state that can lead to post actions (either manually or automatically). | `string` | `"life_cycle"` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | A mapping of tags which should be assigned to the desired resource. | `map(string)` | `{}` | no |
 
 ## Outputs
 
@@ -60,12 +55,15 @@ module "resource-group" {
   name                      = "my_project"
   location                  = "westeurope"
   environment               = "dev"
-  product                   = "internal"
-  category                  = "monolith"
-  owner                     = "infra"
-  country                   = "nl"
-  extra_tags = {
-    datadog = "monitored"
+  tags = {
+    managed_by  = "terraform"
+    environment = "dev"
+    product     = "internal"
+    category    = "monolith"
+    owner       = "infra"
+    country     = "nl"
+    status      = "life_cycle"
+    service     = "payroll"
   }
 }
 ```

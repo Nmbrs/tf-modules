@@ -1,12 +1,9 @@
 resource "azurerm_resource_group" "rg" {
   name     = "rg-${var.name}-${var.environment}"
   location = var.location
-  tags     = merge(local.default_tags, var.extra_tags)
+  tags     = var.tags
 
   lifecycle {
-    ignore_changes = [
-      tags["created_at"],
-      tags["updated_at"]
-    ]
+    ignore_changes = [tags]
   }
 }

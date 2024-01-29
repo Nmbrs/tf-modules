@@ -1,5 +1,5 @@
-variable "name" {
-  description = "Specifies the name which should be used for this Private DNS Resolver."
+variable "workload" {
+  description = "Specifies the workload name which should be used for this Private DNS Resolver."
   type        = string
 }
 
@@ -56,5 +56,15 @@ variable "outbound_endpoints" {
   validation {
     condition     = length(var.outbound_endpoints) == length(distinct(var.outbound_endpoints))
     error_message = "At least one element from the 'outbound_endpoints' list is duplicated. They must be unique."
+  }
+}
+
+variable "naming_count" {
+  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention."
+  type        = number
+
+  validation {
+    condition     = var.naming_count >= 1 && var.naming_count <= 999
+    error_message = format("Invalid value '%s' for variable 'naming_count'. It must be between 1 and 999.", var.naming_count)
   }
 }

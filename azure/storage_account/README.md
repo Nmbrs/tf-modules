@@ -38,20 +38,21 @@ No modules.
 | <a name="input_account_tier"></a> [account\_tier](#input\_account\_tier) | Defines the Tier to use for this storage account. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | (Optional) The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_name"></a> [name](#input\_name) | Name of the storage account. | `string` | n/a | yes |
 | <a name="input_replication_type"></a> [replication\_type](#input\_replication\_type) | Defines the type of replication to use for this storage account. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
+| <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the storage account. | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_id"></a> [id](#output\_id) | The ID of the Storage Account. |
-| <a name="output_name"></a> [name](#output\_name) | The name of the Storage Account. |
+| <a name="output_id"></a> [id](#output\_id) | The storage account ID. |
+| <a name="output_name"></a> [name](#output\_name) | The storage account full name. |
 | <a name="output_primary_access_key"></a> [primary\_access\_key](#output\_primary\_access\_key) | The primary access key for the storage account. |
 | <a name="output_primary_connection_string"></a> [primary\_connection\_string](#output\_primary\_connection\_string) | The connection string associated with the primary location. |
 | <a name="output_secondary_access_key"></a> [secondary\_access\_key](#output\_secondary\_access\_key) | The secondary access key for the storage account. |
 | <a name="output_secondary_connection_string"></a> [secondary\_connection\_string](#output\_secondary\_connection\_string) | The connection string associated with the secondary location. |
+| <a name="output_workload"></a> [workload](#output\_workload) | The storage account workload name. |
 
 ## How to use it?
 
@@ -59,13 +60,13 @@ A number of code snippets demonstrating different use cases for the module have 
 
 ```hcl
 module "storage_account" {
-  source              = "git::github.com/Nmbrs/tf-modules/azure/storage_account"
-  name                = "sauniquename123"
-  resource_group_name = "rg-my-resource-group"
-  account_kind     = "Storage"
-  account_tier     = "Standard"
-  replication_type = "GRS"
-  environment         = "dev"
-  location            = "westeurope"
+  source                = "git::github.com/Nmbrs/tf-modules/azure/storage_account"
+  workload              = "demo"
+  resource_group_name   = "rg-my-resource-group"
+  account_kind          = "Storage"
+  account_tier          = "Standard"
+  replication_type      = "GRS"
+  environment           = "dev"
+  location              = "westeurope"
 }
 ```

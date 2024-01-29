@@ -15,11 +15,12 @@ resource "azurerm_service_plan" "service_plan" {
 resource "azurerm_windows_web_app" "web_app" {
   for_each = toset(var.app_service_names)
 
-  name                = local.app_service_names[index(var.app_service_names, each.key)]
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  service_plan_id     = azurerm_service_plan.service_plan.id
-  https_only          = true
+  name                    = local.app_service_names[index(var.app_service_names, each.key)]
+  resource_group_name     = var.resource_group_name
+  client_affinity_enabled = var.client_affinity_enabled
+  location                = var.location
+  service_plan_id         = azurerm_service_plan.service_plan.id
+  https_only              = true
 
   identity {
     type = "SystemAssigned"
@@ -44,7 +45,7 @@ resource "azurerm_windows_web_app" "web_app" {
   }
 
   lifecycle {
-    ignore_changes = [tags, virtual_network_subnet_id, identity, app_settings, sticky_settings]
+    ignore_changes = [tags, virtual_network_subnet_id, identity, app_settings, sticky_settings, logs, site_config.0.auto_heal_enabled, site_config.0.auto_heal_setting, site_config.0.ip_restriction, site_config.0.health_check_path]
   }
 }
 

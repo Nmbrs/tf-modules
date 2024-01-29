@@ -3,9 +3,9 @@ variable "resource_group_name" {
   description = "The name of an existing Resource Group."
 }
 
-variable "name" {
+variable "workload" {
+  description = "Specifies the workload name which should be used for this NAT gateway."
   type        = string
-  description = "This variable defines the name of the NAT gateway."
 }
 
 variable "location" {
@@ -31,4 +31,14 @@ variable "vnet_resource_group_name" {
 variable "subnets" {
   type        = list(string)
   description = "Subnets to be included in the NAT gateway"
+}
+
+variable "instance_count" {
+  type        = number
+  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention."
+
+  validation {
+    condition     = var.instance_count >= 1 && var.instance_count <= 999
+    error_message = format("Invalid value '%s' for variable 'instance_count'. It must be between 1 and 999.", var.instance_count)
+  }
 }
