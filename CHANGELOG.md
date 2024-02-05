@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.15.0](https://github.com/Nmbrs/tf-modules/compare/v7.14.0...v7.15.0) (2024-02-05)
+
+
+### Features
+
+* **app_service:** ignore auto-heal settings ([#264](https://github.com/Nmbrs/tf-modules/issues/264)) ([03190bc](https://github.com/Nmbrs/tf-modules/commit/03190bcaad6c3e3e433b2b614c0b4903bef1bbed))
+* **custom_domain_binding:** remove custom_domain_binding module ([#218](https://github.com/Nmbrs/tf-modules/issues/218)) ([5b37080](https://github.com/Nmbrs/tf-modules/commit/5b37080604153b102782418a8b2fb290d72661e6))
+* **key_vault:** remove caf provider reference ([#267](https://github.com/Nmbrs/tf-modules/issues/267)) ([a728109](https://github.com/Nmbrs/tf-modules/commit/a7281095953d44a5b8060927ad77e6cb64565d27))
+* **resource_group:** replace name parameter in favor of workload ([#271](https://github.com/Nmbrs/tf-modules/issues/271)) ([2bf46cb](https://github.com/Nmbrs/tf-modules/commit/2bf46cb7bcff97b4288ac06ecfeb69757f95f638))
+* **service_bus:** replace name parameter in favor of workload ([#272](https://github.com/Nmbrs/tf-modules/issues/272)) ([316d3ea](https://github.com/Nmbrs/tf-modules/commit/316d3eac997aa2ffc58b30ed4f93b72fd214df37))
+* **storage_account:** remove caf provider reference ([#270](https://github.com/Nmbrs/tf-modules/issues/270)) ([3dd79bf](https://github.com/Nmbrs/tf-modules/commit/3dd79bfa730cef73f7e3b5dcce6ffc308e01e637))
+
 ## [7.14.0](https://github.com/Nmbrs/tf-modules/compare/v7.13.0...v7.14.0) (2023-11-29)
 
 
