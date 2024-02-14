@@ -1,3 +1,3 @@
 locals {
-  workspace_name = "wsp-${var.name}-${var.environment}"
+  workspace_name = "wsp-${var.workload}-${var.environment}"
 }
