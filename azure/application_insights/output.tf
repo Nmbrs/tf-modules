@@ -3,6 +3,11 @@ output "name" {
   description = "The Application Insight component name."
 }
 
+output "workload" {
+  description = "The Application Insights workload name."
+  value       = var.workload
+}
+
 output "id" {
   value       = azurerm_application_insights.insights.app_id
   description = "The ID of the Application Insights component."
