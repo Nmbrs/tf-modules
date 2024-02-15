@@ -3,6 +3,11 @@ output "name" {
   description = "The log analytics workspace name."
 }
 
+output "workload" {
+  description = "The log analytics workspace workload name."
+  value       = var.workload
+}
+
 output "id" {
   value       = azurerm_log_analytics_workspace.workspace.id
   description = "The Log Analytics Workspace ID."
