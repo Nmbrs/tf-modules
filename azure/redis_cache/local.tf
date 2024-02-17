@@ -1,4 +1,5 @@
 locals {
+  redis_cache_name = lower("redis-${var.workload}-${var.environment}")
   # cache size translated into premium tier capacity
   premium_tier_capacity = {
     6   = 1
