@@ -49,13 +49,21 @@ variable "stack" {
   }
 }
 
+# The Portal displayed values and the actual underlying API values differ for this setting, as follows:
+# 
+# Portal Value    API value
+# ASP.NET V3.5    v2.0
+# ASP.NET V4.8    v4.0
+# .NET 6 (LTS)    v6.0
+# .NET 7 (STS)    v7.0
+# .NET 8 (LTS)    v8.0
 variable "dotnet_version" {
   description = "defines the dotnet framework version for the all app services."
   type        = string
 
   validation {
-    condition     = contains(["v2.0", "v3.0", "v4.0", "v5.0", "v6.0", "v7.0"], var.dotnet_version)
-    error_message = format("Invalid value '%s' for variable 'dotnet_version', valid options are 'v2.0', 'v3.0', 'v4.0', 'v5.0', 'v6.0', 'v7.0'.", var.dotnet_version)
+    condition     = contains(["v2.0", "v3.0", "v4.0", "v5.0", "v6.0", "v7.0", "v8.0"], var.dotnet_version)
+    error_message = format("Invalid value '%s' for variable 'dotnet_version', valid options are 'v2.0', 'v3.0', 'v4.0', 'v5.0', 'v6.0', 'v7.0', 'v8.0'.", var.dotnet_version)
   }
 }
 
@@ -115,4 +123,12 @@ variable "client_affinity_enabled" {
   description = "Specifies if client affinity should be enabled or not."
   type        = bool
   default     = false
+}
+
+variable "managed_identity_settings" {
+  description = "Settings related to the app gateway managed identity used to retrieve SSL certificates."
+  type = object({
+    name                = string
+    resource_group_name = string
+  })
 }
