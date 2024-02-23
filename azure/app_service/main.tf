@@ -23,12 +23,12 @@ resource "azurerm_windows_web_app" "web_app" {
   https_only              = true
 
   identity {
-    type = "SystemAssigned, UserAssigned"
-    identity_ids = [local.identity_ids]
+    type         = "SystemAssigned, UserAssigned"
+    identity_ids = var.user_assigned_identity_id != "" ? [var.user_assigned_identity_id] : []
   }
 
   app_settings = {
-    "azure_client_id" = data.azurerm_user_assigned_identity.identity.client_id
+    "azure_client_id" = var.user_assigned_identity_client_id != "" ? var.user_assigned_identity_client_id : null
   }
 
   site_config {

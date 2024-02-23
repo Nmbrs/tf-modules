@@ -117,13 +117,11 @@ variable "client_affinity_enabled" {
   default     = false
 }
 
-variable "managed_identities" {
-  description = "List of managed identities."
-  type = list(object({
-    workload            = string
-    location            = string
-    environment         = string
-    resource_group_name = string
-  }))
-  default = []
+variable "user_assigned_identity_id" {
+  type    = string
+  default = ""
+}
+variable "user_assigned_identity_client_id" {
+  type    = string
+  default = ""
 }
