@@ -116,3 +116,8 @@ variable "client_affinity_enabled" {
   type        = bool
   default     = false
 }
+
+variable "app_insights_connection_string" {
+  type = string
+  default = ""
+}

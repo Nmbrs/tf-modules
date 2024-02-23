@@ -26,6 +26,11 @@ resource "azurerm_windows_web_app" "web_app" {
     type = "SystemAssigned"
   }
 
+  app_settings = {
+    "APPLICATIONINSIGHTS_CONNECTION_STRING" = var.app_insights_connection_string != "" ? var.app_insights_connection_string : null
+    "ApplicationInsightsAgent_EXTENSION_VERSION" = var.app_insights_connection_string != "" ? "~2" : null 
+  }
+
   site_config {
     always_on                = true
     minimum_tls_version      = "1.2"
@@ -50,11 +55,6 @@ resource "azurerm_windows_web_app" "web_app" {
 }
 
 ## VNET integration
-data "azurerm_subnet" "service_plan" {
-  name                 = var.network_settings.subnet_name
-  virtual_network_name = var.network_settings.vnet_name
-  resource_group_name  = var.network_settings.vnet_resource_group_name
-}
 
 resource "azurerm_app_service_virtual_network_swift_connection" "web_app" {
   for_each = toset(var.app_service_names)
