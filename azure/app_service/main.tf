@@ -23,7 +23,12 @@ resource "azurerm_windows_web_app" "web_app" {
   https_only              = true
 
   identity {
-    type = "SystemAssigned"
+    type = "SystemAssigned, UserAssigned"
+    identity_ids = [local.identity_ids]
+  }
+
+  app_settings = {
+    "azure_client_id" = data.azurerm_user_assigned_identity.identity.client_id
   }
 
   site_config {
@@ -50,11 +55,6 @@ resource "azurerm_windows_web_app" "web_app" {
 }
 
 ## VNET integration
-data "azurerm_subnet" "service_plan" {
-  name                 = var.network_settings.subnet_name
-  virtual_network_name = var.network_settings.vnet_name
-  resource_group_name  = var.network_settings.vnet_resource_group_name
-}
 
 resource "azurerm_app_service_virtual_network_swift_connection" "web_app" {
   for_each = toset(var.app_service_names)

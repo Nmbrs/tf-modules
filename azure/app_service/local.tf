@@ -26,4 +26,6 @@ locals {
   app_service_names = [
     for app_name in var.app_service_names : "as-${app_name}-n${var.node_number}-${var.country}-${var.environment}"
   ]
+
+  identity_ids = data.azurerm_user_assigned_identity.identity.id
 }
