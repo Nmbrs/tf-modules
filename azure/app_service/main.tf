@@ -23,7 +23,7 @@ resource "azurerm_windows_web_app" "web_app" {
   https_only              = true
 
   identity {
-    type         = "SystemAssigned, UserAssigned"
+    type         = var.user_assigned_identity_id != "" ? "SystemAssigned, UserAssigned" : "SystemAssigned"
     identity_ids = var.user_assigned_identity_id != "" ? [var.user_assigned_identity_id] : []
   }
 
