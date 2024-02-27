@@ -86,6 +86,10 @@ module "app_service_plan" {
     name                = "mi-myidentity"
     resource_group_name = "rg-myrg"
   }
+  app_insights_settings = {
+    name                = "appi-test-test"
+    resource_group_name = "rg-test-test"
+  }
   app_service_names = ["web"]
 }
 ``` 
@@ -110,6 +114,10 @@ module "app_service_plan" {
   managed_identity_settings = {
     name                = "mi-myidentity"
     resource_group_name = "rg-myrg"
+  }
+  app_insights_settings = {
+    name                = "appi-test-test"
+    resource_group_name = "rg-test-test"
   }
   app_service_names = ["web", "worker"]
 }
