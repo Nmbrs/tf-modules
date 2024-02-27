@@ -23,12 +23,12 @@ resource "azurerm_windows_web_app" "web_app" {
   https_only              = true
 
 identity {
-    type         = length(var.managed_identity_name) > 1 && length(var.managed_identity_resource_group) > 1 ? "SystemAssigned, UserAssigned" : "SystemAssigned"
-    identity_ids = length(var.managed_identity_name) > 1 && length(var.managed_identity_resource_group) > 1 ? [data.azurerm_user_assigned_identity.managed_identity[0].id] : []
+    type         = "SystemAssigned, UserAssigned"
+    identity_ids = [data.azurerm_user_assigned_identity.managed_identity.id]
 }
 
   app_settings = {
-    "AZURE_CLIENT_ID" = length(var.managed_identity_name) > 1 && length(var.managed_identity_resource_group) > 1 ? data.azurerm_user_assigned_identity.managed_identity[0].client_id : null
+    "AZURE_CLIENT_ID" = data.azurerm_user_assigned_identity.managed_identity.client_id
     "APPLICATIONINSIGHTS_CONNECTION_STRING" = length(var.app_insights_name) > 1 && length(var.app_insights_resource_group) > 1 ? data.azurerm_application_insights.app_insights[0].connection_string : null
     "APPLICATIONINSIGHTSAGENT_EXTENSION_VERSION" = length(var.app_insights_name) > 1 && length(var.app_insights_resource_group) > 1 ? "~2" : null
   }

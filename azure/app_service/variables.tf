@@ -54,8 +54,8 @@ variable "dotnet_version" {
   type        = string
 
   validation {
-    condition     = contains(["v2.0", "v3.0", "v4.0", "v5.0", "v6.0", "v7.0"], var.dotnet_version)
-    error_message = format("Invalid value '%s' for variable 'dotnet_version', valid options are 'v2.0', 'v3.0', 'v4.0', 'v5.0', 'v6.0', 'v7.0'.", var.dotnet_version)
+    condition     = contains(["v2.0", "v3.0", "v4.0", "v5.0", "v6.0", "v7.0", "v8.0"], var.dotnet_version)
+    error_message = format("Invalid value '%s' for variable 'dotnet_version', valid options are 'v2.0', 'v3.0', 'v4.0', 'v5.0', 'v6.0', 'v7.0', 'v8.0'.", var.dotnet_version)
   }
 }
 
@@ -117,22 +117,10 @@ variable "client_affinity_enabled" {
   default     = false
 }
 
-variable "managed_identity_name" {
-  type    = string
-  default = ""
-}
-
-variable "managed_identity_resource_group" {
-  type    = string
-  default = ""
-}
-
-variable "app_insights_name" {
-  type = string
-  default = ""
-}
-
-variable "app_insights_resource_group" {
-  type    = string
-  default = ""
+variable "managed_identity_settings" {
+  description = "A list of settings related to the application service managed identity."
+  type = object({
+    name                = string
+    resource_group_name = string
+  })
 }
