@@ -124,3 +124,10 @@ variable "managed_identity_settings" {
     resource_group_name = string
   })
 }
+
+variable "app_insights_settings" {
+  type = object({
+    name                = string
+    resource_group_name = string
+  })
+}
