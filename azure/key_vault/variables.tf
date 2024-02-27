@@ -64,3 +64,9 @@ variable "policies" {
     error_message = "At least one 'type' property from 'policies' is invalid. Valid options are 'readers', 'writers'."
   }
 }
+
+variable "enable_rbac_authorization" {
+  description = "Optional) Boolean flag to specify whether Azure Key Vault uses Role Based Access Control (RBAC) for authorization of data actions."
+  type        = bool
+  default     = false
+}
