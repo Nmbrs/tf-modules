@@ -117,6 +117,14 @@ variable "client_affinity_enabled" {
   default     = false
 }
 
+variable "managed_identity_name" {
+  type    = string
+  default = ""
+}
+variable "managed_identity_resource_group" {
+  type    = string
+  default = ""
+}
 variable "app_insights_connection_string" {
   type = string
   default = ""
