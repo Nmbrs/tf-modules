@@ -121,11 +121,18 @@ variable "managed_identity_name" {
   type    = string
   default = ""
 }
+
 variable "managed_identity_resource_group" {
   type    = string
   default = ""
 }
-variable "app_insights_connection_string" {
+
+variable "app_insights_name" {
   type = string
+  default = ""
+}
+
+variable "app_insights_resource_group" {
+  type    = string
   default = ""
 }

@@ -33,12 +33,9 @@ identity {
 }
 
   app_settings = {
-    "azure_client_id" = length(var.managed_identity_name) > 1 && length(var.managed_identity_resource_group) > 1 ? data.azurerm_user_assigned_identity.managed_identity[0].client_id : null
-  }
-
-  app_settings = {
-    "APPLICATIONINSIGHTS_CONNECTION_STRING" = var.app_insights_connection_string != "" ? var.app_insights_connection_string : null
-    "ApplicationInsightsAgent_EXTENSION_VERSION" = var.app_insights_connection_string != "" ? "~2" : null 
+    "AZURE_CLIENT_ID" = length(var.managed_identity_name) > 1 && length(var.managed_identity_resource_group) > 1 ? data.azurerm_user_assigned_identity.managed_identity[0].client_id : null
+    "APPLICATIONINSIGHTS_CONNECTION_STRING" = length(var.app_insights_name) > 1 && length(var.app_insights_resource_group) > 1 ? data.azurerm_application_insights.app_insights[0].connection_string : null
+    "APPLICATIONINSIGHTSAGENT_EXTENSION_VERSION" = length(var.app_insights_name) > 1 && length(var.app_insights_resource_group) > 1 ? "~2" : null
   }
 
   site_config {
