@@ -117,11 +117,10 @@ variable "client_affinity_enabled" {
   default     = false
 }
 
-variable "managed_identity_name" {
-  type    = string
-  default = ""
-}
-variable "managed_identity_resource_group" {
-  type    = string
-  default = ""
+variable "managed_identity_settings" {
+  description = "A list of settings related to the app gateway managed identity used to retrieve SSL certificates."
+  type = object({
+    name                = string
+    resource_group_name = string
+  })
 }
