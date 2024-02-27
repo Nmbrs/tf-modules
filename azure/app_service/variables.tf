@@ -118,7 +118,7 @@ variable "client_affinity_enabled" {
 }
 
 variable "managed_identity_settings" {
-  description = "A list of settings related to the app gateway managed identity used to retrieve SSL certificates."
+  description = "A list of settings related to the application service managed identity."
   type = object({
     name                = string
     resource_group_name = string
