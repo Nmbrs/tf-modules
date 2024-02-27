@@ -22,15 +22,15 @@ resource "azurerm_windows_web_app" "web_app" {
   service_plan_id         = azurerm_service_plan.service_plan.id
   https_only              = true
 
-identity {
+  identity {
     type         = "SystemAssigned, UserAssigned"
     identity_ids = [data.azurerm_user_assigned_identity.managed_identity.id]
-}
+  }
 
   app_settings = {
-    "AZURE_CLIENT_ID" = data.azurerm_user_assigned_identity.managed_identity.client_id
-    "APPLICATIONINSIGHTS_CONNECTION_STRING" = data.azurerm_application_insights.app_insights_settings.connection_string
-    "APPINSIGHTS_INSTRUMENTATIONKEY" = data.azurerm_application_insights.app_insights_settings.instrumentation_key
+    "AZURE_CLIENT_ID"                            = data.azurerm_user_assigned_identity.managed_identity.client_id
+    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = data.azurerm_application_insights.app_insights_settings.connection_string
+    "APPINSIGHTS_INSTRUMENTATIONKEY"             = data.azurerm_application_insights.app_insights_settings.instrumentation_key
     "APPLICATIONINSIGHTSAGENT_EXTENSION_VERSION" = "~2"
   }
 
