@@ -117,11 +117,11 @@ variable "client_affinity_enabled" {
   default     = false
 }
 
-variable "user_assigned_identity_id" {
+variable "managed_identity_name" {
   type    = string
   default = ""
 }
-variable "user_assigned_identity_client_id" {
+variable "managed_identity_resource_group" {
   type    = string
   default = ""
 }
