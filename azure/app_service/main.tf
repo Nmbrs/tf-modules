@@ -29,8 +29,8 @@ identity {
 
   app_settings = {
     "AZURE_CLIENT_ID" = data.azurerm_user_assigned_identity.managed_identity.client_id
-    "APPLICATIONINSIGHTS_CONNECTION_STRING" = length(var.app_insights_name) > 1 && length(var.app_insights_resource_group) > 1 ? data.azurerm_application_insights.app_insights[0].connection_string : null
-    "APPLICATIONINSIGHTSAGENT_EXTENSION_VERSION" = length(var.app_insights_name) > 1 && length(var.app_insights_resource_group) > 1 ? "~2" : null
+    "APPLICATIONINSIGHTS_CONNECTION_STRING" = data.azurerm_application_insights.app_insights_settings.connection_string
+    "APPLICATIONINSIGHTSAGENT_EXTENSION_VERSION" = "~2"
   }
 
   site_config {
