@@ -1,5 +1,16 @@
 # Changelog
 
+## [7.16.0](https://github.com/Nmbrs/tf-modules/compare/v7.15.0...v7.16.0) (2024-02-27)
+
+
+### Features
+
+* **app_service:** add managed identity to app service ([#277](https://github.com/Nmbrs/tf-modules/issues/277)) ([68e230d](https://github.com/Nmbrs/tf-modules/commit/68e230d7fb5d919e6e449d7726c698df40ab0beb))
+* **app_service:** added app insights to the app service ([#278](https://github.com/Nmbrs/tf-modules/issues/278)) ([d1d6dac](https://github.com/Nmbrs/tf-modules/commit/d1d6dac165277c2cf40a982cb8422373ec2eb148))
+* **application_insights:** replace name parameter in favor of workload ([#273](https://github.com/Nmbrs/tf-modules/issues/273)) ([534ac03](https://github.com/Nmbrs/tf-modules/commit/534ac03b0975c826f48dd665a4554705eadb8ecb))
+* **log_analytics_workspace:** replace name parameter in favor of workload ([#274](https://github.com/Nmbrs/tf-modules/issues/274)) ([a454149](https://github.com/Nmbrs/tf-modules/commit/a4541492e9b9774844e710bc5fdade239d1cbbfb))
+* **redis_cache:** replace name parameter in favor of workload ([#276](https://github.com/Nmbrs/tf-modules/issues/276)) ([3dcb897](https://github.com/Nmbrs/tf-modules/commit/3dcb8976c5aea6598082c0c958404d005c628cad))
+
 ## [7.15.0](https://github.com/Nmbrs/tf-modules/compare/v7.14.0...v7.15.0) (2024-02-05)
 
 
