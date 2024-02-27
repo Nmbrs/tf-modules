@@ -54,8 +54,8 @@ variable "dotnet_version" {
   type        = string
 
   validation {
-    condition     = contains(["v2.0", "v3.0", "v4.0", "v5.0", "v6.0", "v7.0"], var.dotnet_version)
-    error_message = format("Invalid value '%s' for variable 'dotnet_version', valid options are 'v2.0', 'v3.0', 'v4.0', 'v5.0', 'v6.0', 'v7.0'.", var.dotnet_version)
+    condition     = contains(["v2.0", "v3.0", "v4.0", "v5.0", "v6.0", "v7.0", "v8.0"], var.dotnet_version)
+    error_message = format("Invalid value '%s' for variable 'dotnet_version', valid options are 'v2.0', 'v3.0', 'v4.0', 'v5.0', 'v6.0', 'v7.0', 'v8.0'.", var.dotnet_version)
   }
 }
 
