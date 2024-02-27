@@ -22,11 +22,6 @@ resource "azurerm_windows_web_app" "web_app" {
   service_plan_id         = azurerm_service_plan.service_plan.id
   https_only              = true
 
-  # identity {
-  #   type         = data.azurerm_user_assigned_identity.managed_identity != "" ? "SystemAssigned, UserAssigned" : "SystemAssigned"
-  #   identity_ids = data.azurerm_user_assigned_identity.managed_identity != "" ? [data.azurerm_user_assigned_identity.managed_identity[0].id] : []
-  # }
-
 identity {
     type         = length(var.managed_identity_name) > 1 && length(var.managed_identity_resource_group) > 1 ? "SystemAssigned, UserAssigned" : "SystemAssigned"
     identity_ids = length(var.managed_identity_name) > 1 && length(var.managed_identity_resource_group) > 1 ? [data.azurerm_user_assigned_identity.managed_identity[0].id] : []
