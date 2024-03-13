@@ -21,7 +21,7 @@ output "uri" {
 output "readers_policies" {
   description = "List of readers access policies."
   value = [for policy in azurerm_key_vault_access_policy.readers_policy : {
-    name      = var.policies[index(var.policies.*.object_id, policy.object_id)].name
+    name      = var.access_policies[index(var.access_policies.*.object_id, policy.object_id)].name
     object_id = policy.object_id
     }
   ]
@@ -30,7 +30,7 @@ output "readers_policies" {
 output "writers_policies" {
   description = "List of writers access policies."
   value = [for policy in azurerm_key_vault_access_policy.writers_policy : {
-    name      = var.policies[index(var.policies.*.object_id, policy.object_id)].name
+    name      = var.access_policies[index(var.access_policies.*.object_id, policy.object_id)].name
     object_id = policy.object_id
     }
   ]
