@@ -1,5 +1,21 @@
 # Changelog
 
+## [8.0.0](https://github.com/Nmbrs/tf-modules/compare/v7.16.0...v8.0.0) (2024-03-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* **key_vault:** add rbac authorization support ([#279](https://github.com/Nmbrs/tf-modules/issues/279))
+
+### Features
+
+* **key_vault:** add rbac authorization support ([#279](https://github.com/Nmbrs/tf-modules/issues/279)) ([eb605e1](https://github.com/Nmbrs/tf-modules/commit/eb605e125fea6f95db97ebd04ea2db48383e6e4c))
+
+
+### Bug Fixes
+
+* **redis:** fix workload parameter validation ([#280](https://github.com/Nmbrs/tf-modules/issues/280)) ([ef7bbf7](https://github.com/Nmbrs/tf-modules/commit/ef7bbf7793fb263c52d7fe6f8495b1ae4a6d07f0))
+
 ## [7.16.0](https://github.com/Nmbrs/tf-modules/compare/v7.15.0...v7.16.0) (2024-02-27)
 
 
