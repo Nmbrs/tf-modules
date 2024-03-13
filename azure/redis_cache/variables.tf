@@ -8,7 +8,7 @@ variable "workload" {
   type        = string
 
   validation {
-    condition     = can(coalesce(var.name))
+    condition     = can(coalesce(var.workload))
     error_message = "The 'name' value is invalid. It must be a non-empty string."
   }
 }
