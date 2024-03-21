@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.1.0](https://github.com/Nmbrs/tf-modules/compare/v8.0.0...v8.1.0) (2024-03-21)
+
+
+### Features
+
+* **app_service:** ignore ip restriction default action parameter ([#282](https://github.com/Nmbrs/tf-modules/issues/282)) ([da9b289](https://github.com/Nmbrs/tf-modules/commit/da9b289b8f3dfeb9ab17ef137d63501658162bd2))
+
 ## [8.0.0](https://github.com/Nmbrs/tf-modules/compare/v7.16.0...v8.0.0) (2024-03-13)
 
 
