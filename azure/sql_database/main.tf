@@ -11,11 +11,14 @@ resource "azurerm_mssql_database" "sql_database" {
     backup_interval_in_hours = local.backup_settings.diff_backup_frequency_hours
   }
 
-  long_term_retention_policy {
+  dynamic "long_term_retention_policy" {
+    for_each = var.environment == "prod" ? [1] : []
+    content {
     weekly_retention  = "P${local.backup_settings.weekly_ltr_retention_months}M"
     monthly_retention = "P${local.backup_settings.monthly_ltr_retention_years}Y"
     yearly_retention  = "P${local.backup_settings.yearly_ltr_retention_years}Y"
     week_of_year      = local.backup_settings.yearly_ltr_week_number
+    }
   }
 
   lifecycle {
