@@ -40,8 +40,8 @@ variable "sql_database_name" {
   description = "Name of the database to create"
   type        = string
   validation {
-    condition     = var.sql_server_name != ""
-    error_message = "Variable 'sql_server_name' cannot be empty."
+    condition     = var.sql_database_name != ""
+    error_message = "Variable 'sql_database_name' cannot be empty."
   }
 }
 
