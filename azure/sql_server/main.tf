@@ -17,7 +17,8 @@ resource "azurerm_mssql_server" "sql_server" {
 }
 
 resource "azurerm_mssql_virtual_network_rule" "sql_server_network_rule" {
-  name      = var.subnet_name
+  for_each  = { for subnet in var.allowed_subnets : subnet.subnet_name => subnet }
+  name      = each.key
   server_id = azurerm_mssql_server.sql_server.id
-  subnet_id = data.azurerm_subnet.subnet.id
+  subnet_id = data.azurerm_subnet.subnet[each.key].id
 }

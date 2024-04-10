@@ -40,17 +40,11 @@ variable "sql_admin" {
   type        = string
 }
 
-variable "virtual_network_name" {
-  description = "The name of the virtual network in which the subnet to be added to SQL firewall rules exists"
-  type        = string
-}
-
-variable "subnet_name" {
-  description = "The name of the subnet to add to the SQL Server firewall rule"
-  type        = string
-}
-
-variable "subnet_resource_group_name" {
-  description = "The name of the resource group in which the subnet exists"
-  type        = string
+variable "allowed_subnets" {
+  description = "A map of subnets and their corresponding resource groups"
+  type = list(object({
+    subnet_resource_group_name = string
+    virtual_network_name       = string
+    subnet_name                = string
+  }))
 }

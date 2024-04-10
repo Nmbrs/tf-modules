@@ -4,7 +4,8 @@ data "azuread_group" "sql_admin" {
 }
 
 data "azurerm_subnet" "subnet" {
-  name                 = var.subnet_name
-  virtual_network_name = var.virtual_network_name
-  resource_group_name  = var.subnet_resource_group_name
+  for_each             = { for subnet in var.allowed_subnets : subnet.subnet_name => subnet }
+  name                 = each.value.subnet_name
+  virtual_network_name = each.value.virtual_network_name
+  resource_group_name  = each.value.subnet_resource_group_name
 }
