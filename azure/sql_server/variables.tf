@@ -11,6 +11,7 @@ variable "location" {
 variable "environment" {
   description = "Defines the environment to provision the resources."
   type        = string
+  
   validation {
     condition     = contains(["dev", "test", "sand", "prod"], var.environment)
     error_message = format("Invalid value '%s' for variable 'environment', valid options are 'dev', 'test', 'sand', 'global'.", var.environment)
@@ -20,18 +21,20 @@ variable "environment" {
 variable "country" {
   description = "Specifies the country for the app services and service plan names."
   type        = string
+  
   validation {
     condition     = contains(["se", "nl", "global"], var.country)
     error_message = format("Invalid value '%s' for variable 'country', valid options are 'se', 'nl', 'global'.", var.country)
   }
 }
 
-variable "sql_server_name" {
+variable "workload" {
   description = "The name of the SQL Server to connect to"
   type        = string
+
   validation {
-    condition     = var.sql_server_name != ""
-    error_message = "Variable 'sql_server_name' cannot be empty."
+    condition     = can(coalesce(var.workload))
+    error_message = "The 'resource_group_name' value is invalid. It must be a non-empty string."
   }
 }
 

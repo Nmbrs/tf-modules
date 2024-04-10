@@ -1,3 +1,3 @@
 locals {
-  sql_server_name = "sqls-${var.sql_server_name}-${var.country}-${var.environment}"
+  sql_server_name = "sqls-${var.workload}-${var.country}-${var.environment}"
 }
