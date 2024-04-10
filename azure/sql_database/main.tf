@@ -14,10 +14,10 @@ resource "azurerm_mssql_database" "sql_database" {
   dynamic "long_term_retention_policy" {
     for_each = var.environment == "prod" ? [1] : []
     content {
-    weekly_retention  = "P${local.backup_settings.weekly_ltr_retention_months}M"
-    monthly_retention = "P${local.backup_settings.monthly_ltr_retention_years}Y"
-    yearly_retention  = "P${local.backup_settings.yearly_ltr_retention_years}Y"
-    week_of_year      = local.backup_settings.yearly_ltr_week_number
+      weekly_retention  = "P${local.backup_settings.weekly_ltr_retention_months}M"
+      monthly_retention = "P${local.backup_settings.monthly_ltr_retention_years}Y"
+      yearly_retention  = "P${local.backup_settings.yearly_ltr_retention_years}Y"
+      week_of_year      = local.backup_settings.yearly_ltr_week_number
     }
   }
 

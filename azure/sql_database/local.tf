@@ -7,5 +7,5 @@ locals {
     monthly_ltr_retention_years = 1
     yearly_ltr_retention_years  = 7
     yearly_ltr_week_number      = 1
-    }
+  }
 }
