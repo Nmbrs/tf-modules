@@ -38,7 +38,6 @@ data "azurerm_storage_account" "storage_account_file" {
   resource_group_name = var.resource_group_name
 }
 
-
 data "azurerm_mssql_server" "sql_server" {
   count               = var.resource_type == "sql_server" ? 1 : 0
   name                = var.resource_name
