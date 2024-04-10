@@ -3,6 +3,11 @@ output "name" {
   value       = azurerm_resource_group.rg.name
 }
 
+output "workload" {
+  description = "The resource group workload name."
+  value       = var.workload
+}
+
 output "id" {
   description = "The ID of the Resource Group."
   value       = azurerm_resource_group.rg.id

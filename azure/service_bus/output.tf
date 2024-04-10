@@ -3,6 +3,11 @@ output "name" {
   description = "The servicebus namespace name."
 }
 
+output "workload" {
+  description = "The servicebus namespace workload name."
+  value       = var.workload
+}
+
 output "id" {
   value       = azurerm_servicebus_namespace.service_bus.id
   description = "The servicebus namespace ID."

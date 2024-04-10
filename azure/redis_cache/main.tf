@@ -1,5 +1,5 @@
 resource "azurerm_redis_cache" "redis" {
-  name                          = "redis-${var.name}-${var.environment}"
+  name                          = local.redis_cache_name
   location                      = var.location
   resource_group_name           = var.resource_group_name
   capacity                      = var.sku_name == "Premium" ? local.premium_tier_capacity[var.cache_size_in_gb] : local.basic_standard_tier_capacity[var.cache_size_in_gb]
@@ -34,7 +34,7 @@ resource "azurerm_redis_cache" "redis" {
   lifecycle {
     ignore_changes = [tags]
 
-    ## cache_size_in_gb validation 
+    ## cache_size_in_gb validation
     precondition {
       condition     = (var.sku_name == "Basic" && contains([0.25, 1, 2.5, 6, 13, 26, 53], var.cache_size_in_gb)) || var.sku_name == "Standard" || var.sku_name == "Premium"
       error_message = format("Invalid value '%s' for variable 'cache_size_in_gb' when using the 'Basic' SKU, valid options are 0.25, 1, 2.5, 6, 13, 26, 53.", var.cache_size_in_gb)

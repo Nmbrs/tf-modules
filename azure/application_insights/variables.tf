@@ -3,7 +3,7 @@ variable "resource_group_name" {
   description = "The name of an existing Resource Group."
 }
 
-variable "name" {
+variable "workload" {
   description = "The workload name of the app insights component."
   type        = string
 }

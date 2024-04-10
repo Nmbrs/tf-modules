@@ -3,12 +3,12 @@ variable "resource_group_name" {
   description = "The name of an existing Resource Group."
 }
 
-variable "name" {
-  description = "Name of the  Redis instance. It must follow the CAF naming convention."
+variable "workload" {
+  description = "The workload name of the redis instance."
   type        = string
 
   validation {
-    condition     = can(coalesce(var.name))
+    condition     = can(coalesce(var.workload))
     error_message = "The 'name' value is invalid. It must be a non-empty string."
   }
 }

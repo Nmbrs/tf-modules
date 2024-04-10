@@ -1,11 +1,16 @@
-output "id" {
-  description = "Redis ID."
-  value       = azurerm_redis_cache.redis.id
-}
-
 output "name" {
   description = "The name of the Redis Instance."
   value       = azurerm_redis_cache.redis.name
+}
+
+output "workload" {
+  description = "The redis instance workload name."
+  value       = var.workload
+}
+
+output "id" {
+  description = "The Redis ID."
+  value       = azurerm_redis_cache.redis.id
 }
 
 output "hostname" {
@@ -14,7 +19,7 @@ output "hostname" {
 }
 
 output "ssl_port" {
-  description = "ssl_port - The SSL Port of the Redis Instance."
+  description = "The SSL Port of the Redis Instance."
   value       = azurerm_redis_cache.redis.ssl_port
 }
 

@@ -33,10 +33,10 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_name"></a> [name](#input\_name) | The workload name of the log analytics workspace. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 | <a name="input_retention_in_days"></a> [retention\_in\_days](#input\_retention\_in\_days) | The workspace data retention in days. | `number` | `90` | no |
 | <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | Configuration of the size and capacity of the logspace analytics. | `string` | n/a | yes |
+| <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the log analytics workspace. | `string` | n/a | yes |
 
 ## Outputs
 
@@ -44,8 +44,9 @@ No modules.
 |------|-------------|
 | <a name="output_id"></a> [id](#output\_id) | The Log Analytics Workspace ID. |
 | <a name="output_name"></a> [name](#output\_name) | The log analytics workspace name. |
-| <a name="output_primary_shared_key"></a> [primary\_shared\_key](#output\_primary\_shared\_key) | The Secondary shared key for the Log Analytics Workspace. |
+| <a name="output_primary_shared_key"></a> [primary\_shared\_key](#output\_primary\_shared\_key) | The Primary shared key for the Log Analytics Workspace. |
 | <a name="output_secondary_shared_key"></a> [secondary\_shared\_key](#output\_secondary\_shared\_key) | The Secondary shared key for the Log Analytics Workspace. |
+| <a name="output_workload"></a> [workload](#output\_workload) | The log analytics workspace workload name. |
 | <a name="output_workspace_id"></a> [workspace\_id](#output\_workspace\_id) | The Workspace (or Customer) ID for the Log Analytics Workspace. |
 
 ## How to use it?
@@ -57,7 +58,7 @@ A number of code snippets demonstrating different use cases for the module have 
 ```hcl
 module "log_analytics_workspace" {
   source              = "git::github.com/Nmbrs/tf-modules//azure/logs_analytics_workspace"
-  name                = "myworkspace"
+  workload            = "myworkspace"
   resource_group_name = "rg-my-resource-group"
   environment         = "dev"
   location            = "westeurope"

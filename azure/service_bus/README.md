@@ -37,7 +37,7 @@ No modules.
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 | <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | Configuration of the size and capacity of the service bus. | `string` | n/a | yes |
 | <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the service bus namespace. | `string` | n/a | yes |
-| <a name="input_zone_redundant"></a> [zone\_redundant](#input\_zone\_redundant) | Defines whether or not this resource is zone redundant. The required sku to enable it needs to be 'Premium'. | `bool` | `false` | no |
+| <a name="input_zone_redundant"></a> [zone\_redundant](#input\_zone\_redundant) | Defines whether or not this resource is zone redundant. The required sku to enable it needs to be 'Premium'. | `bool` | `true` | no |
 
 ## Outputs
 
@@ -46,6 +46,7 @@ No modules.
 | <a name="output_default_connection_string"></a> [default\_connection\_string](#output\_default\_connection\_string) | The primary connection string for the authorization rule RootManageSharedAccessKey which is created automatically by Azure. |
 | <a name="output_id"></a> [id](#output\_id) | The servicebus namespace ID. |
 | <a name="output_name"></a> [name](#output\_name) | The servicebus namespace name. |
+| <a name="output_workload"></a> [workload](#output\_workload) | The servicebus namespace workload name. |
 
 ## How to use it?
 
@@ -57,7 +58,7 @@ A number of code snippets demonstrating different use cases for the module have 
 module "service_bus" {
   source = "git::github.com/Nmbrs/tf-modules//azure/service_bus"
 
-  name                = "test"
+  workload            = "test"
   environment         = "dev"
   location            = "westeurope"
   resource_group_name = "rg-service-bus"
