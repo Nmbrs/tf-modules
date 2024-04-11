@@ -6,7 +6,7 @@ resource "azurerm_mssql_server" "sql_server" {
   minimum_tls_version = "1.2"
 
   azuread_administrator {
-    azuread_authentication_only = true
+    azuread_authentication_only = false
     login_username              = var.sql_admin
     object_id                   = data.azuread_group.sql_admin.object_id
   }
