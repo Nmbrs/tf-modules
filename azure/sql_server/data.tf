@@ -9,3 +9,8 @@ data "azurerm_subnet" "subnet" {
   virtual_network_name = each.value.virtual_network_name
   resource_group_name  = each.value.subnet_resource_group_name
 }
+
+data "azurerm_storage_account" "auditing_storage_account" {
+  name                = var.storage_account_auditing
+  resource_group_name = var.storage_account_resource_group
+}

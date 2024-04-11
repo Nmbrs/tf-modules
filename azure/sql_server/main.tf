@@ -22,3 +22,11 @@ resource "azurerm_mssql_virtual_network_rule" "sql_server_network_rule" {
   server_id = azurerm_mssql_server.sql_server.id
   subnet_id = data.azurerm_subnet.subnet[each.key].id
 }
+
+resource "azurerm_mssql_server_extended_auditing_policy" "sql_auditing" {
+  server_id                               = azurerm_mssql_server.sql_server.id
+  storage_endpoint                        = data.azurerm_storage_account.auditing_storage_account.primary_blob_endpoint
+  storage_account_access_key              = data.azurerm_storage_account.auditing_storage_account.primary_access_key
+  storage_account_access_key_is_secondary = false
+  retention_in_days                       = 7
+}

@@ -61,3 +61,13 @@ variable "allowed_subnets" {
     subnet_name                = string
   }))
 }
+
+variable "storage_account_auditing" {
+  description = "The name of the storage account to use for auditing"
+  type        = string  
+}
+
+variable "storage_account_resource_group" {
+  description = "The name of the resource group in which the storage account exists."
+  type        = string  
+}
