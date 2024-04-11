@@ -1,5 +1,5 @@
 resource "azurerm_mssql_database" "sql_database" {
-  name            = local.sql_database_name
+  name            = var.override_name != "" ? var.override_name : local.sql_database_name
   server_id       = data.azurerm_mssql_server.sql_server.id
   sku_name        = var.sku_name
   collation       = var.collation

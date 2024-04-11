@@ -1,5 +1,5 @@
 locals {
-  sql_database_name = "sqldb-${var.sql_database_name}-${var.country}-${var.environment}"
+  sql_database_name = "sqldb-${var.workload}-${var.country}-${var.environment}"
   backup_settings = {
     pitr_backup_retention_days  = 14
     diff_backup_frequency_hours = 12

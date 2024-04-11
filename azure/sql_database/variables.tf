@@ -36,13 +36,18 @@ variable "sql_elastic_pool_name" {
   default     = ""
 }
 
-variable "sql_database_name" {
+variable "workload" {
   description = "Name of the database to create"
   type        = string
   validation {
-    condition     = var.sql_database_name != ""
-    error_message = "Variable 'sql_database_name' cannot be empty."
+    condition     = var.workload != ""
+    error_message = "Variable 'workload' cannot be empty."
   }
+}
+
+variable "override_name" {
+  description = "Override the predefined naming of the database"
+  type        = string  
 }
 
 variable "collation" {
