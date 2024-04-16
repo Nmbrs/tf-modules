@@ -16,7 +16,7 @@ data "azurerm_storage_account" "auditing_storage_account" {
 }
 
 data "azurerm_key_vault_secret" "local_sql_admin_password" {
-  for_each     = { for secret in var.local_sql_admin_password : secret.secret_name => secret }
-  name         = each.value.secret_name
-  key_vault_id = each.value.key_vault_id
+  count        = var.local_sql_admin_password != "" && var.local_sql_admin != "" ? 1 : 0
+  name         = var.local_sql_admin_password[0].secret_name
+  key_vault_id = var.local_sql_admin_password[0].key_vault_id
 }

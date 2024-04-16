@@ -75,7 +75,7 @@ variable "storage_account_resource_group" {
 variable "local_sql_admin" {
   description = "The name of the SQL Server admin to be used localy sql server"
   type        = string
-  default     = ""
+  default = ""
 }
 
 variable "local_sql_admin_password" {

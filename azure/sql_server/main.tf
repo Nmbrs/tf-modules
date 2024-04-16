@@ -5,7 +5,7 @@ resource "azurerm_mssql_server" "sql_server" {
   version             = "12.0"
   minimum_tls_version = "1.2"
   administrator_login = var.local_sql_admin != "" ? var.local_sql_admin : null
-  administrator_login_password = var.local_sql_admin_password != "" ? data.azurerm_key_vault_secret.local_sql_admin_password[0].value : null
+  administrator_login_password = length(data.azurerm_key_vault_secret.local_sql_admin_password) > 0 ? data.azurerm_key_vault_secret.local_sql_admin_password[0].value : null
 
   azuread_administrator {
     azuread_authentication_only = var.local_sql_admin_password != "" ? false : true
