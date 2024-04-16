@@ -71,3 +71,21 @@ variable "storage_account_resource_group" {
   description = "The name of the resource group in which the storage account exists."
   type        = string  
 }
+
+variable "local_sql_admin" {
+  description = "The name of the SQL Server admin to be used localy sql server"
+  type        = string
+  default     = ""
+}
+
+variable "local_sql_admin_password" {
+  description = "The name of the secret in the key vault that contains the SQL Server admin password to be used localy sql server"
+  type        = list(object({
+    secret_name = string
+    key_vault_id = string
+  }))
+  default = [ {
+    key_vault_id = ""
+    secret_name = ""
+  } ]
+}
