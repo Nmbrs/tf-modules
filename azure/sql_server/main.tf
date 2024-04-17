@@ -1,16 +1,16 @@
 resource "azurerm_mssql_server" "sql_server" {
-  name                = local.sql_server_name
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  version             = "12.0"
-  minimum_tls_version = "1.2"
-  administrator_login = var.local_sql_admin != "" ? var.local_sql_admin : null
-  administrator_login_password = length(data.azurerm_key_vault_secret.local_sql_admin_password) > 0 ? data.azurerm_key_vault_secret.local_sql_admin_password[0].value : null
+  name                         = local.sql_server_name
+  resource_group_name          = var.resource_group_name
+  location                     = var.location
+  version                      = "12.0"
+  minimum_tls_version          = "1.2"
+  administrator_login          = var.local_sql_admin
+  administrator_login_password = data.azurerm_key_vault_secret.local_sql_admin_password.value
 
   azuread_administrator {
-    azuread_authentication_only = var.local_sql_admin_password != "" ? false : true
-    login_username              = var.sql_admin
-    object_id                   = data.azuread_group.sql_admin.object_id
+    azuread_authentication_only = var.azuread_authentication_only_enabled
+    login_username              = var.azuread_sql_admin
+    object_id                   = data.azuread_group.azuread_sql_admin.object_id
   }
 
   lifecycle {

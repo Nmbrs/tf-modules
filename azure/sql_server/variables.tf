@@ -29,12 +29,12 @@ variable "country" {
 }
 
 variable "workload" {
-  description = "The name of the SQL Server to connect to"
+  description = "The name of the SQL Server that will be created"
   type        = string
 
   validation {
     condition     = can(coalesce(var.workload))
-    error_message = "The 'resource_group_name' value is invalid. It must be a non-empty string."
+    error_message = "The 'workload' value is invalid. It must be a non-empty string."
   }
 }
 
@@ -48,13 +48,13 @@ variable "node_number" {
   }
 }
 
-variable "sql_admin" {
-  description = "The name of the group that will be SQL Server admin"
+variable "azuread_sql_admin" {
+  description = "The name of the admin (Azure AD) that will be SQL Server admin"
   type        = string
 }
 
 variable "allowed_subnets" {
-  description = "A map of subnets and their corresponding resource groups"
+  description = "A map of subnets and their corresponding resource groups that will be allowed to connect to the server."
   type = list(object({
     subnet_resource_group_name = string
     virtual_network_name       = string
@@ -64,28 +64,35 @@ variable "allowed_subnets" {
 
 variable "storage_account_auditing" {
   description = "The name of the storage account to use for auditing"
-  type        = string  
+  type        = string
 }
 
 variable "storage_account_resource_group" {
-  description = "The name of the resource group in which the storage account exists."
-  type        = string  
+  description = "The name of the resource group in which the storage account of auditing exists."
+  type        = string
+}
+
+variable "azuread_authentication_only_enabled" {
+  description = "Specifies if only Azure AD authentication is allowed"
+  type        = bool
+  default     = true
 }
 
 variable "local_sql_admin" {
-  description = "The name of the SQL Server admin to be used localy sql server"
+  description = "The name of the SQL Server admin to be created localy in the SQL server"
   type        = string
-  default = ""
+  default     = ""
 }
 
-variable "local_sql_admin_password" {
-  description = "The name of the secret in the key vault that contains the SQL Server admin password to be used localy sql server"
-  type        = list(object({
-    secret_name = string
-    key_vault_id = string
+variable "local_sql_admin_key_vault" {
+  description = "The name of the key vault where the local SQL Server admin password is stored"
+  type = list(object({
+    key_vault_name           = string
+    key_vault_resource_group = string
   }))
-  default = [ {
-    key_vault_id = ""
-    secret_name = ""
-  } ]
+}
+
+variable "local_sql_admin_key_vault_secret_name" {
+  description = "The name of the secret in the key vault that contains the local SQL Server admin password"
+  type        = string
 }
