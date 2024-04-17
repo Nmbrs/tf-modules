@@ -49,7 +49,7 @@ variable "node_number" {
 }
 
 variable "azuread_sql_admin" {
-  description = "The name of the admin (Azure AD) that will be SQL Server admin"
+  description = "The name of the admin (Azure AD group) that will be SQL Server admin"
   type        = string
 }
 
