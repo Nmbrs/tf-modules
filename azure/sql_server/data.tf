@@ -11,16 +11,16 @@ data "azurerm_subnet" "subnet" {
 }
 
 data "azurerm_storage_account" "auditing_storage_account" {
-  name                = var.storage_account_auditing
-  resource_group_name = var.storage_account_resource_group
+  name                = var.storage_account_auditing_settings.storage_account_name
+  resource_group_name = var.storage_account_auditing_settings.storage_account_resource_group
 }
 
-data "azurerm_key_vault" "key_vault_local_sql_admin" {
-  name                = var.local_sql_admin_key_vault[0].key_vault_name
-  resource_group_name = var.local_sql_admin_key_vault[0].key_vault_resource_group
+data "azurerm_key_vault" "local_sql_admin_key_vault" {
+  name                = var.local_sql_admin_settings.key_vault_name
+  resource_group_name = var.local_sql_admin_settings.key_vault_resource_group
 }
 
 data "azurerm_key_vault_secret" "local_sql_admin_password" {
-  name         = var.local_sql_admin_key_vault_secret_name
-  key_vault_id = data.azurerm_key_vault.key_vault_local_sql_admin.id
+  name         = var.local_sql_admin_settings.key_vault_secret_name
+  key_vault_id = data.azurerm_key_vault.local_sql_admin_key_vault.id
 }

@@ -1,10 +1,10 @@
 resource "azurerm_mssql_server" "sql_server" {
-  name                         = local.sql_server_name
+  name                         = var.override_name != "" ? var.override_name : local.sql_server_name
   resource_group_name          = var.resource_group_name
   location                     = var.location
   version                      = "12.0"
   minimum_tls_version          = "1.2"
-  administrator_login          = var.local_sql_admin
+  administrator_login          = var.local_sql_admin_settings.local_sql_admin
   administrator_login_password = data.azurerm_key_vault_secret.local_sql_admin_password.value
 
   azuread_administrator {

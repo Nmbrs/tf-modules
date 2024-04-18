@@ -38,6 +38,12 @@ variable "workload" {
   }
 }
 
+variable "override_name" {
+  description = "Overrides the name of the SQL Server that will be created"
+  type        = string
+  default     = ""
+}
+
 variable "node_number" {
   description = "Specifies the node number for the resources."
   type        = number
@@ -62,37 +68,26 @@ variable "allowed_subnets" {
   }))
 }
 
-variable "storage_account_auditing" {
-  description = "The name of the storage account to use for auditing"
-  type        = string
-}
-
-variable "storage_account_resource_group" {
-  description = "The name of the resource group in which the storage account of auditing exists."
-  type        = string
-}
-
 variable "azuread_authentication_only_enabled" {
   description = "Specifies if only Azure AD authentication is allowed"
   type        = bool
   default     = true
 }
 
-variable "local_sql_admin" {
-  description = "The name of the SQL Server admin to be created localy in the SQL server"
-  type        = string
-  default     = ""
+variable "storage_account_auditing_settings" {
+  description = "The settings necessary for the storage account auditing, the name and the resource group."
+  type = object({
+    storage_account_name           = string
+    storage_account_resource_group = string
+  })
 }
 
-variable "local_sql_admin_key_vault" {
-  description = "The name of the key vault where the local SQL Server admin password is stored"
-  type = list(object({
+variable "local_sql_admin_settings" {
+  description = "The settings necessary for the local SQL admin creation, the username and the key vault settings for the password."
+  type = object({
+    local_sql_admin          = string
     key_vault_name           = string
     key_vault_resource_group = string
-  }))
-}
-
-variable "local_sql_admin_key_vault_secret_name" {
-  description = "The name of the secret in the key vault that contains the local SQL Server admin password"
-  type        = string
+    key_vault_secret_name    = string
+  })
 }
