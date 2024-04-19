@@ -72,10 +72,10 @@ variable "sku_name" {
   type        = string
   default     = ""
 
-  # validation {
-  #   condition     = contains(["S0", "S1", "S2", "S3", "S4", "S6", "S7", "GP_Gen5_2", "GP_Gen5_4", "GP_Gen5_6", "GP_Gen5_8", "GP_Gen5_10", "GP_Gen5_12", "GP_Gen5_14", "GP_Gen5_16", "GP_Gen5_18", "GP_Gen5_20"], var.sku_name)
-  #   error_message = format("Invalid value '%s' for variable 'environment', valid options are 'S0', 'S1', 'S2', 'S3', 'S4', 'S6', 'S7', 'GP_Gen5_2', 'GP_Gen5_4', 'GP_Gen5_6', 'GP_Gen5_8', 'GP_Gen5_10', 'GP_Gen5_12', 'GP_Gen5_14', 'GP_Gen5_16', 'GP_Gen5_18', 'GP_Gen5_20'.", var.sku_name)
-  # }
+  validation {
+    condition     = contains(["S0", "S1", "S2", "S3", "S4", "S6", "S7", "GP_Gen5_2", "GP_Gen5_4", "GP_Gen5_6", "GP_Gen5_8", "GP_Gen5_10", "GP_Gen5_12", "GP_Gen5_14", "GP_Gen5_16", "GP_Gen5_18", "GP_Gen5_20"], var.sku_name)
+    error_message = format("Invalid value '%s' for variable 'environment', valid options are 'S0', 'S1', 'S2', 'S3', 'S4', 'S6', 'S7', 'GP_Gen5_2', 'GP_Gen5_4', 'GP_Gen5_6', 'GP_Gen5_8', 'GP_Gen5_10', 'GP_Gen5_12', 'GP_Gen5_14', 'GP_Gen5_16', 'GP_Gen5_18', 'GP_Gen5_20'.", var.sku_name)
+  }
 }
 
 variable "max_size_gb" {
