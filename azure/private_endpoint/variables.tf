@@ -8,13 +8,13 @@ variable "environment" {
   type        = string
 }
 
-variable "instance_count" {
+variable "node_number" {
+  description = "Specifies the node number for the resources."
   type        = number
-  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention."
 
   validation {
-    condition     = var.instance_count >= 1 && var.instance_count <= 999
-    error_message = format("Invalid value '%s' for variable 'instance_count'. It must be between 1 and 999.", var.instance_count)
+    condition     = alltrue([try(var.node_number > 0, false), try(var.node_number == floor(var.node_number), false)])
+    error_message = format("Invalid value '%s' for variable 'node_number'. It must be an integer number and greater than 0.", var.node_number)
   }
 }
 
