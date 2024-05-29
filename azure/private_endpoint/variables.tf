@@ -8,13 +8,13 @@ variable "environment" {
   type        = string
 }
 
-variable "node_number" {
-  description = "Specifies the node number for the resources."
+variable "instance_count" {
   type        = number
+  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention."
 
   validation {
-    condition     = alltrue([try(var.node_number > 0, false), try(var.node_number == floor(var.node_number), false)])
-    error_message = format("Invalid value '%s' for variable 'node_number'. It must be an integer number and greater than 0.", var.node_number)
+    condition     = var.instance_count >= 1 && var.instance_count <= 999
+    error_message = format("Invalid value '%s' for variable 'instance_count'. It must be between 1 and 999.", var.instance_count)
   }
 }
 
@@ -51,8 +51,13 @@ variable "resource_type" {
 }
 
 variable "workload" {
-  description = "Name of the private endpoint"
+  description = "The workload name of the private endpoint."
   type        = string
+
+  validation {
+    condition     = length(var.workload) <= 20
+    error_message = format("Invalid value '%s' for variable 'workload'. It must contain no more than 8 characters.", var.workload)
+  }
 }
 
 variable "resource_group_name_private_dns_zone" {
