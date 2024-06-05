@@ -8,7 +8,8 @@ resource "azurerm_private_endpoint" "endpoint" {
   private_service_connection {
     name                           = ("${var.resource_settings.name}-private-service-connection")
     private_connection_resource_id = local.resource_data_blocks[var.resource_settings.type][0].id
-    subresource_names              = lookup(local.subresource_name, var.resource_settings.type, [])
+    #subresource_names              = lookup(local.subresource_name, var.resource_settings.type, [])
+    subresource_names              = [local.subresource_name[var.resource_settings.type]]
     is_manual_connection           = false
   }
 
