@@ -16,7 +16,7 @@ Terraform code to create and manage private endpoints in Azure, that connects yo
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.70 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.105.0 |
 
 ## Modules
 
@@ -27,10 +27,17 @@ No modules.
 | Name | Type |
 |------|------|
 | [azurerm_private_endpoint.endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
+| [azurerm_container_registry.container_registry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/container_registry) | data source |
+| [azurerm_eventgrid_domain.eventgrid_domain](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/eventgrid_domain) | data source |
+| [azurerm_eventgrid_topic.eventgrid_topic](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/eventgrid_topic) | data source |
+| [azurerm_key_vault.key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault) | data source |
 | [azurerm_mssql_server.sql_server](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/mssql_server) | data source |
 | [azurerm_private_dns_zone.private_dns_zone](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/private_dns_zone) | data source |
+| [azurerm_servicebus_namespace.service_bus](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/servicebus_namespace) | data source |
+| [azurerm_storage_account.storage_account_blob](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/storage_account) | data source |
+| [azurerm_storage_account.storage_account_file](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/storage_account) | data source |
+| [azurerm_storage_account.storage_account_table](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/storage_account) | data source |
 | [azurerm_subnet.subnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subnet) | data source |
-| [azurerm_virtual_network.vnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/virtual_network) | data source |
 | [azurerm_windows_web_app.app_service](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/windows_web_app) | data source |
 
 ## Inputs
@@ -38,21 +45,17 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
+| <a name="input_instance_count"></a> [instance\_count](#input\_instance\_count) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention. | `number` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_node_number"></a> [node\_number](#input\_node\_number) | Specifies the node number for the resources. | `number` | n/a | yes |
-| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | value | `string` | n/a | yes |
-| <a name="input_resource_group_name_private_dns_zone"></a> [resource\_group\_name\_private\_dns\_zone](#input\_resource\_group\_name\_private\_dns\_zone) | Resource group where the private dns zone exists | `string` | n/a | yes |
-| <a name="input_resource_group_name_virtual_network"></a> [resource\_group\_name\_virtual\_network](#input\_resource\_group\_name\_virtual\_network) | Resource group of the virtual network where the private endpoint will connect to | `string` | n/a | yes |
-| <a name="input_resource_name"></a> [resource\_name](#input\_resource\_name) | The name of the resource the private endpoint will connect to | `any` | n/a | yes |
-| <a name="input_resource_type"></a> [resource\_type](#input\_resource\_type) | The type of resource (e.g., app\_service, storage\_account, database, key\_vault) | `any` | n/a | yes |
-| <a name="input_subnet_name"></a> [subnet\_name](#input\_subnet\_name) | Name of the subnet that the private endpoint will connect to | `string` | n/a | yes |
-| <a name="input_virtual_network"></a> [virtual\_network](#input\_virtual\_network) | Name of the vnet the private endpoint will connect to | `string` | n/a | yes |
-| <a name="input_workload"></a> [workload](#input\_workload) | Name of the private endpoint | `string` | n/a | yes |
+| <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | Defines the network settings for the resources, specifying the subnet, virtual network name, and the resource group for the virtual network. | <pre>object(<br>    {<br>      subnet_name              = string<br>      vnet_name                = string<br>      vnet_resource_group_name = string<br>    }<br>  )</pre> | n/a | yes |
+| <a name="input_private_dns_zone_settings"></a> [private\_dns\_zone\_settings](#input\_private\_dns\_zone\_settings) | Defines the private dns zone settings. | <pre>object(<br>    {<br>      use_custom_dns_zone = bool<br>      custom_name         = optional(string)<br>      resource_group_name = string<br>    }<br>  )</pre> | n/a | yes |
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
+| <a name="input_resource_settings"></a> [resource\_settings](#input\_resource\_settings) | Defines the settings for the associated resources, specifying the name, and the resource group for it. | <pre>object(<br>    {<br>      name                = string<br>      type                = string<br>      resource_group_name = string<br>    }<br>  )</pre> | n/a | yes |
+| <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the private endpoint. | `string` | n/a | yes |
 
 ## Outputs
 
 No outputs.
-
 
 ## How to use it?
 
@@ -60,17 +63,26 @@ A number of code snippets demonstrating different use cases for the module have 
 
 ```hcl
 module "private_endpoint" {
-  source                                      = "git::github.com/Nmbrs/tf-modules//azure/private_endpoint"
-  private_endpoint_name                       = "as-web-test"
-  location                                    = "westeurope"
-  environment                                 = "prod"
-  node_number                                 = 1
-  resource_group_name_virtual_network         = "rg-network-test" 
-  virtual_network                             = "vnet-test"
-  subnet_name                                 = "subnet-test"
-  resource_group_name                         = "rg-location-service"
-  resource_name                               = "service-name"
-  resource_type                               = "app_service"
-  resource_group_name_private_dns_zone_group  = "rg-dns-zone-test"
+  source              = "git::github.com/Nmbrs/tf-modules//azure/private_endpoint"
+  workload            = "as-web-test"
+  resource_group_name = rg-myrg
+  location            = "westeurope"
+  environment         = "dev"
+  instance_count      = 1
+  resource_settings = {
+    name                = "as-web-test"
+    type                = "app_service"
+    resource_group_name = "rg-resource-rg"
+  }
+  network_settings = {
+    vnet_name                = "vnet-mynetwork"
+    subnet_name              = "snet-mysnet-002"
+    vnet_resource_group_name = "rg-networks"
+  }
+  private_dns_zone_settings = {
+    use_custom_dns_zone = true
+    custom_name         = "mydnszone.net"
+    resource_group_name = "rg-dnszones"
+  }
 }
 ```

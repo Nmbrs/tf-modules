@@ -1,3 +1,8 @@
+variable "workload" {
+  description = "The workload name of the private endpoint."
+  type        = string
+}
+
 variable "resource_group_name" {
   description = "The name of an existing Resource Group."
   type        = string
@@ -51,19 +56,19 @@ variable "resource_settings" {
   }
 }
 
-# variable "private_dns_zone_settings" {
-#   description = "Defines the network settings for the resources, specifying the subnet, virtual network name, and the resource group for the virtual network."
-#   type = object(
-#     {
-#       use_custom_dns_zone      = bool
-#       custom_name              = string
-#       vnet_resource_group_name = string
-#     }
-#   )
-# }
-
-variable "private_dns_zone_resource_group_name" {
-  description = "Resource group where the private dns zone exists"
-  type        = string
+variable "private_dns_zone_settings" {
+  description = "Defines the private dns zone settings."
+  type = object(
+    {
+      use_custom_dns_zone = bool
+      custom_name         = optional(string)
+      resource_group_name = string
+    }
+  )
 }
+
+# variable "private_dns_zone_resource_group_name" {
+#   description = "Resource group where the private dns zone exists"
+#   type        = string
+# }
 
