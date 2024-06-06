@@ -25,17 +25,4 @@ locals {
     "eventgrid_topic"       = "topic"
     "container_registry"    = "registry"
   }
-
-  private_dns_zones = {
-    "app_service"           = "privatelink.azurewebsites.net"
-    "storage_account_blob"  = "privatelink.blob.core.windows.net"
-    "storage_account_table" = "privatelink.table.core.windows.net"
-    "storage_account_file"  = "privatelink.file.core.windows.net"
-    "sql_server"            = "privatelink.database.windows.net"
-    "key_vault"             = "privatelink.vaultcore.azure.net"
-    "service_bus"           = "privatelink.servicebus.windows.net	"
-    "eventgrid_domain"      = "privatelink.eventgrid.azure.net"
-    "eventgrid_topic"       = "privatelink.eventgrid.azure.net"
-    "container_registry"    = "privatelink.azurecr.io"
-  }
 }
