@@ -13,7 +13,7 @@ locals {
     container_registry    = data.azurerm_container_registry.container_registry,
     # Add more resource types and corresponding data blocks as needed
   }
-  subresource_name = {
+  subresource_names = {
     "app_service"           = "sites"
     "storage_account_blob"  = "blob"
     "storage_account_table" = "table"
