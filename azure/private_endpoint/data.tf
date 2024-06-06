@@ -5,7 +5,7 @@ data "azurerm_subnet" "subnet" {
 }
 
 data "azurerm_private_dns_zone" "private_dns_zone" {
-  name                = var.private_dns_zone_settings.use_custom_dns_zone ? var.private_dns_zone_settings.custom_name : lookup(local.private_dns_zones, var.resource_settings.type, null)
+  name                = var.private_dns_zone_settings.use_custom_dns_zone ? var.private_dns_zone_settings.custom_name : lookup(local.private_dns_zones, var.resource_settings.types, null)
   resource_group_name = var.private_dns_zone_settings.resource_group_name
 }
 
