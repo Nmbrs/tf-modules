@@ -7,10 +7,9 @@ resource "azurerm_private_endpoint" "endpoint" {
 
   private_service_connection {
     name                           = ("${var.workload}-private-service-connection")
-    private_connection_resource_id = local.resource_data_blocks[var.resource_settings.types[0]][0].id
-    subresource_names              = ["files", "blob"]
-    # subresource_names              = [for type in var.resource_settings.types : [local.subresource_names[type]]]
-    #subresource_names              = var.resource_settings.types
+    private_connection_resource_id = local.resource_data_blocks[var.resource_settings.type][0].id
+    subresource_names              = [local.subresource_name[var.resource_settings.type]]
+
     is_manual_connection = false
   }
   # 

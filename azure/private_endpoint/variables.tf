@@ -46,18 +46,13 @@ variable "resource_settings" {
   type = object(
     {
       name                = string
-      types               = list(string)
+      type                = string
       resource_group_name = string
     }
   )
   validation {
-    condition     = alltrue([for type in var.resource_settings.types : contains(["app_service", "storage_account_blob", "storage_account_table", "storage_account_file", "sql_server", "key_vault", "service_bus", "eventgrid_domain", "eventgrid_topic", "container_registry"], type)])
-    error_message = "At least one 'type' property from 'resource_settings' is invalid. Valid options are 'app_service', 'storage_account_blob', 'storage_account_table', 'storage_account_file', 'sql_server', 'key_vault', 'service_bus', 'eventgrid_domain', 'eventgrid_topic', 'container_registry'."
-  }
-
-  validation {
-    condition     = length(var.resource_settings.types) == length(distinct(var.resource_settings.types))
-    error_message = "At least one 'type' property from one of the 'resource_settings' is duplicated. They must be unique."
+    condition     = contains(["app_service", "storage_account_blob", "storage_account_table", "storage_account_file", "sql_server", "key_vault", "service_bus", "eventgrid_domain", "eventgrid_topic", "container_registry"], var.resource_settings.type)
+    error_message = format("Invalid value '%s' for variable 'resource_settings.type'. Valid options are 'app_service', 'storage_account_blob', 'storage_account_table', 'storage_account_file', 'sql_server', 'key_vault', 'service_bus', 'eventgrid_domain', 'eventgrid_topic', 'container_registry'.", var.resource_settings.type)
   }
 }
 
