@@ -8,7 +8,7 @@ locals {
     sql_server            = data.azurerm_mssql_server.sql_server,
     key_vault             = data.azurerm_key_vault.key_vault,
     service_bus           = data.azurerm_servicebus_namespace.service_bus
-    eventgrid_domain      = data.azurerm_eventgrid_domain.eventgrid_domain, 
+    eventgrid_domain      = data.azurerm_eventgrid_domain.eventgrid_domain,
     eventgrid_topic       = data.azurerm_eventgrid_topic.eventgrid_topic,
     container_registry    = data.azurerm_container_registry.container_registry,
     # Add more resource types and corresponding data blocks as needed

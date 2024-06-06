@@ -60,15 +60,8 @@ variable "private_dns_zone_settings" {
   description = "Defines the private dns zone settings."
   type = object(
     {
-      use_custom_dns_zone = bool
-      custom_name         = optional(string)
+      name                = string
       resource_group_name = string
     }
   )
 }
-
-# variable "private_dns_zone_resource_group_name" {
-#   description = "Resource group where the private dns zone exists"
-#   type        = string
-# }
-
