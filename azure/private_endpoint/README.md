@@ -48,7 +48,7 @@ No modules.
 | <a name="input_instance_count"></a> [instance\_count](#input\_instance\_count) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance in the naming convention. | `number` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
 | <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | Defines the network settings for the resources, specifying the subnet, virtual network name, and the resource group for the virtual network. | <pre>object(<br>    {<br>      subnet_name              = string<br>      vnet_name                = string<br>      vnet_resource_group_name = string<br>    }<br>  )</pre> | n/a | yes |
-| <a name="input_private_dns_zone_settings"></a> [private\_dns\_zone\_settings](#input\_private\_dns\_zone\_settings) | Defines the private dns zone settings. | <pre>object(<br>    {<br>      use_custom_dns_zone = bool<br>      custom_name         = optional(string)<br>      resource_group_name = string<br>    }<br>  )</pre> | n/a | yes |
+| <a name="input_private_dns_zone_settings"></a> [private\_dns\_zone\_settings](#input\_private\_dns\_zone\_settings) | Defines the private dns zone settings. | <pre>object(<br>    {<br>      name                = string<br>      resource_group_name = string<br>    }<br>  )</pre> | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 | <a name="input_resource_settings"></a> [resource\_settings](#input\_resource\_settings) | Defines the settings for the associated resources, specifying the name, and the resource group for it. | <pre>object(<br>    {<br>      name                = string<br>      type                = string<br>      resource_group_name = string<br>    }<br>  )</pre> | n/a | yes |
 | <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the private endpoint. | `string` | n/a | yes |
@@ -80,8 +80,7 @@ module "private_endpoint" {
     vnet_resource_group_name = "rg-networks"
   }
   private_dns_zone_settings = {
-    use_custom_dns_zone = true
-    custom_name         = "mydnszone.net"
+    name                = "mydnszone.net"
     resource_group_name = "rg-dnszones"
   }
 }
