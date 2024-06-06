@@ -6,7 +6,7 @@ resource "azurerm_private_endpoint" "endpoint" {
   custom_network_interface_name = "nic-${local.private_endpoint_name}"
 
   private_service_connection {
-    name                           = ("${var.resource_settings.name}-private-service-connection")
+    name                           = ("${var.workload}-private-service-connection")
     private_connection_resource_id = local.resource_data_blocks[var.resource_settings.type][0].id
     subresource_names              = [local.subresource_name[var.resource_settings.type]]
     is_manual_connection           = false
