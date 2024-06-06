@@ -1,5 +1,5 @@
 locals {
-  private_endpoint_name = "pep-${var.workload}-${var.location}-${var.environment}-${format("%03d", var.instance_count)}"
+  private_endpoint_name = "pep-${var.workload}-${var.location}-${format("%03d", var.instance_count)}"
   resource_data_blocks = {
     app_service           = data.azurerm_windows_web_app.app_service,
     storage_account_blob  = data.azurerm_storage_account.storage_account_blob,
