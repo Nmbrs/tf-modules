@@ -29,12 +29,6 @@ variable "external_usage" {
   default     = true
 }
 
-variable "protection_enabled" {
-  description = "(Optional) Enables the keyvault purge protection in case of accidental deletion. Default is false."
-  type        = bool
-  default     = false
-}
-
 variable "access_policies" {
   description = "(Optional) Access policies created for the Azure Key Vault."
   type = list(object({
