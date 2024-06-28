@@ -54,8 +54,8 @@ variable "access_policies" {
   }
 
   validation {
-    condition     = alltrue([for policy in var.access_policies : contains(["readers", "writers"], policy.type)])
-    error_message = "At least one 'type' property from 'policies' is invalid. Valid options are 'readers', 'writers'."
+    condition     = alltrue([for policy in var.access_policies : contains(["readers", "writers", "administrators"], policy.type)])
+    error_message = "At least one 'type' property from 'policies' is invalid. Valid options are 'readers', 'writers', 'administrators'."
   }
 }
 
