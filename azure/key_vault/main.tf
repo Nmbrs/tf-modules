@@ -8,9 +8,8 @@ resource "azurerm_key_vault" "key_vault" {
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   sku_name                   = "standard"
   soft_delete_retention_days = 31
-  #tfsec:ignore:azure-keyvault-no-purge
-  purge_protection_enabled  = var.protection_enabled
-  enable_rbac_authorization = var.enable_rbac_authorization
+  purge_protection_enabled   = true
+  enable_rbac_authorization  = var.enable_rbac_authorization
 
   network_acls {
     #tfsec:ignore:azure-keyvault-specify-network-acl
