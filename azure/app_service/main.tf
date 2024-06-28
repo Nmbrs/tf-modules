@@ -66,7 +66,3 @@ resource "azurerm_app_service_virtual_network_swift_connection" "web_app" {
   app_service_id = azurerm_windows_web_app.web_app[each.key].id
   subnet_id      = data.azurerm_subnet.service_plan.id
 }
-
-resource "ke" "name" {
-  
-}
