@@ -1,4 +1,4 @@
-resource "azurerm_app_service_certificate_order" "certificates" {
+resource "azurerm_app_service_certificate_order" "certificate" {
   name                = local.certificate_name
   resource_group_name = var.resource_group_name
   location            = "global"
