@@ -1,5 +1,5 @@
 resource "azurerm_app_service_certificate_order" "certificates" {
-  name                = "asc-${local.certificate_name}"
+  name                = local.certificate_name
   resource_group_name = var.resource_group_name
   location            = "global"
   distinguished_name  = "CN=*.${var.domain_name}"

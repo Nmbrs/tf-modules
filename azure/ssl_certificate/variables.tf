@@ -8,7 +8,7 @@ variable "workload" {
   type        = string
 
   validation {
-    condition     = !contains(var.workload, "_") && !contains(var.workload, ".")
+    condition     = !contains([var.workload], "_") && !contains([var.workload], ".")
     error_message = format("Invalid value '%s' for variable 'workload'. It must not contain '_' or '.'.", var.workload)
   }
 }
