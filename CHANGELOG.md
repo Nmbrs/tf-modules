@@ -1,5 +1,14 @@
 # Changelog
 
+## [8.2.0](https://github.com/Nmbrs/tf-modules/compare/v8.1.0...v8.2.0) (2024-07-02)
+
+
+### Features
+
+* **app_service:** add aspnet core environment variable configured by the environment ([#288](https://github.com/Nmbrs/tf-modules/issues/288)) ([8a51799](https://github.com/Nmbrs/tf-modules/commit/8a517994354fda6fc3f94a830c36fbb4e5cbe9a6))
+* **key_vault:** enable purge protection by default ([#287](https://github.com/Nmbrs/tf-modules/issues/287)) ([97fb276](https://github.com/Nmbrs/tf-modules/commit/97fb276d28b50a05f5d252aa6efa4e64c03b8888))
+* **private_endpoint:** create private endpoint module ([#252](https://github.com/Nmbrs/tf-modules/issues/252)) ([b19a313](https://github.com/Nmbrs/tf-modules/commit/b19a313136847b51f88eda8fda062267d7ad2365))
+
 ## [8.1.0](https://github.com/Nmbrs/tf-modules/compare/v8.0.0...v8.1.0) (2024-03-21)
 
 
