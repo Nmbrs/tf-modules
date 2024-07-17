@@ -45,21 +45,21 @@ variable "log_analytics_worspace_settings" {
   })
 }
 
-variable "file_share_settings" {
-  type = list(object({
-    name        = string
-    access_mode = string //"ReadOnly" "ReadWrite"
-    storage_account = object({
-      name       = string
-      share_name = string
-      access_key = object({
-        key_vault_name                = string
-        key_vault_resource_group_name = string
-        key_vault_secret_name    = string
-      })
-    })
-  }))
-}
+# variable "file_share_settings" {
+#   type = list(object({
+#     name        = string
+#     access_mode = string //"ReadOnly" "ReadWrite"
+#     storage_account = object({
+#       name       = string
+#       share_name = string
+#       access_key = object({
+#         key_vault_name                = string
+#         key_vault_resource_group_name = string
+#         key_vault_secret_name    = string
+#       })
+#     })
+#   }))
+# }
 
 # variable "managed_identity_settings" {
 #   description = "A list of settings related to the app gateway managed identity used to retrieve SSL certificates."

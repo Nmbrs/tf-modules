@@ -19,13 +19,13 @@ resource "azurerm_container_app_environment" "container_app_environment" {
   }
 }
 
-resource "azurerm_container_app_environment_storage" "file_share" {
-  for_each = { for settings in file_share_settings : settings => settings.name }
+# resource "azurerm_container_app_environment_storage" "file_share" {
+#   for_each = { for settings in file_share_settings : settings => settings.name }
 
-  name                         = lower(mycontainerappstorage)
-  container_app_environment_id = azurerm_container_app_environment.container_app_environment.id
-  account_name                 = each.value.storage_account.name
-  share_name                   = each.value.storage_account.share_name
-  access_key                   = azurerm_storage_account.example.primary_access_key
-  access_mode                  = "ReadOnly"
-}
+#   name                         = lower(mycontainerappstorage)
+#   container_app_environment_id = azurerm_container_app_environment.container_app_environment.id
+#   account_name                 = each.value.storage_account.name
+#   share_name                   = each.value.storage_account.share_name
+#   access_key                   = azurerm_storage_account.example.primary_access_key
+#   access_mode                  = "ReadOnly"
+# }
