@@ -1,4 +1,4 @@
-resource "azurerm_container_app" "example" {
+resource "azurerm_container_app" "container" {
   name                         = local.container_app_name
   container_app_environment_id = data.azurerm_container_app_environment.container_environment.id
   # Omit this value to use the default Consumption Workload Profile.
@@ -20,8 +20,8 @@ resource "azurerm_container_app" "example" {
   template {
     container {
       name   = local.container_app_name
+      # Microsoft Container Registry (MCR) default image
       image  = "mcr.microsoft.com/k8se/quickstart"
-      #"${data.azurerm_container_registry.container_registry.login_server}/third-parties/hello-world:latest"
       cpu    = 0.25
       memory = "0.5Gi"
     }
