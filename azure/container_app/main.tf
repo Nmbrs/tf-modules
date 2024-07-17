@@ -1,7 +1,8 @@
 resource "azurerm_container_app" "example" {
   name                         = local.container_app_name
   container_app_environment_id = data.azurerm_container_app_environment.container_environment.id
-  workload_profile_name        = "Consumption"
+  # Omit this value to use the default Consumption Workload Profile.
+  workload_profile_name        = var.workload_profile_name == "Consumption" ? null : var.workload_profile_name
   resource_group_name          = var.resource_group_name
   revision_mode                = "Single"
 
