@@ -43,7 +43,7 @@ resource "azurerm_network_interface" "nics" {
   # Create a mapping of the nic name to its settings
   for_each = { for nic_settings in local.network_interfaces_settings : trimspace(lower(nic_settings.name)) => nic_settings }
 
-  name                = "nic-${var.vm_name}-${format("%03d", index(keys(local.network_interfaces_settings), each.key) + 1)}"
+  name                = "nic-${var.vm_name}-${format("%03d", index(local.network_interfaces_settings, each.value) + 1)}"
   location            = var.location
   resource_group_name = var.resource_group_name
 
@@ -64,7 +64,7 @@ resource "azurerm_managed_disk" "data_disks" {
     for disk_settings in local.data_disks_settings : trimspace(lower(disk_settings.name)) => disk_settings
   }
 
-  name                 = "dsk-${each.value.name}-${format("%03d", index(keys(local.data_disks_settings), each.key) + 1)}"
+  name                 = "dsk-${each.value.name}-${format("%03d", index(local.data_disks_settings, each.value) + 1)}"
   location             = var.location
   resource_group_name  = var.resource_group_name
   storage_account_type = each.value.storage_account_type
