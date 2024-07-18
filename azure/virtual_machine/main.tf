@@ -43,7 +43,7 @@ resource "azurerm_network_interface" "nics" {
   # Create a mapping of the nic name to its settings
   for_each = { for nic_settings in local.network_interfaces_settings : trimspace(lower(nic_settings.name)) => nic_settings }
 
-  name                = "nic-${var.vm_name}-${format("%03d", index(local.network_interfaces_settings, each.key) + 1)}"
+  name                = "nic-${var.vm_name}-${format("%03d", index(keys(local.network_interfaces_settings), each.key) + 1)}"
   location            = var.location
   resource_group_name = var.resource_group_name
 
@@ -64,7 +64,7 @@ resource "azurerm_managed_disk" "data_disks" {
     for disk_settings in local.data_disks_settings : trimspace(lower(disk_settings.name)) => disk_settings
   }
 
-  name                 = "dsk-${each.value.name}-${format("%03d", index(local.data_disks_settings, each.key) + 1)}"
+  name                 = "dsk-${each.value.name}-${format("%03d", index(keys(local.data_disks_settings), each.key) + 1)}"
   location             = var.location
   resource_group_name  = var.resource_group_name
   storage_account_type = each.value.storage_account_type
@@ -87,7 +87,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disks" {
   # Choose the virtual machine based on the OS type
   virtual_machine_id = var.os_type == "linux" ? azurerm_linux_virtual_machine.linux_vm[0].id : azurerm_windows_virtual_machine.windows_vm[0].id
   # Assign a unique LUN number to each disk, starting from #1
-  lun     = index(local.data_disks_settings, each.value) + 1  
+  lun     = index(local.data_disks_settings, each.value) + 1
   caching = each.value.caching
 }
 
