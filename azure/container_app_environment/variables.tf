@@ -79,3 +79,13 @@ variable "log_analytics_worspace_settings" {
 #   }))
 #   default = []
 # }
+
+# variable "workload_profile_name" {
+#   description = "The name of the workload profile to use."
+#   type        = string
+
+#   validation {
+#     condition     = contains(["Consumption", "Dedicated-D4", "Dedicated-D8", "Dedicated-16", "Dedicated-D32", "Dedicated-E4", "Dedicated-E8", "Dedicated-E16", "Dedicated-E32"], var.workload_profile_name)
+#     error_message = format("Invalid value '%s' for variable 'workload_profile_name', valid options are 'Consumption', 'Dedicated-D4', 'Dedicated-D8', 'Dedicated-16', 'Dedicated-D32', 'Dedicated-E4', 'Dedicated-E8', 'Dedicated-E16', 'Dedicated-E32'.", var.workload_profile_name)
+#   }
+# }
