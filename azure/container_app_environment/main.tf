@@ -82,7 +82,7 @@ resource "azurerm_container_app_environment_storage" "file_share" {
   name                         = lower(each.value.name)
   container_app_environment_id = azurerm_container_app_environment.environment.id
   account_name                 = each.value.storage_account.name
-  share_name                   = each.value.file_share_name
+  share_name                   = each.value.storage_account.file_share_name
   access_key                   = data.azurerm_storage_account.file_share[each.key].primary_access_key
   access_mode                  = each.value.access_mode
 }

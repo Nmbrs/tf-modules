@@ -29,7 +29,7 @@ variable "location" {
 }
 
 variable "network_settings" {
-  description = "Settings related to the network connectivity of the application gateway."
+  description = "Settings related to the network connectivity of the container environment."
   type = object({
     vnet_name                = string
     vnet_resource_group_name = string
@@ -54,7 +54,7 @@ variable "managed_identity_settings" {
 }
 
 variable "file_share_settings" {
-  description = "A list of seetingsvalues for volume mounts"
+  description = "A list of setting for file shares that will be mounted to the container environment."
   type = list(object({
     name        = string
     access_mode = string
@@ -72,7 +72,7 @@ variable "file_share_settings" {
 }
 
 # variable "ssl_certificates" {
-#   description = "Settings related to SSL certificates that will be installed in the application gateway."
+#   description = "Settings related to SSL certificates that will be installed in the container environment."
 #   type = list(object({
 #     name                          = string
 #     key_vault_name                = string
