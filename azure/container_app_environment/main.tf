@@ -36,15 +36,28 @@ resource "azapi_update_resource" "managed_identity_settings" {
   type        = "Microsoft.App/managedEnvironments@2024-03-01"
   resource_id = azurerm_container_app_environment.container_app_environment.id
 
-  body = jsondecode(
-    {
-      identity = {
-        type = "UserAssigned",
-        userAssignedIdentities : {
-          data.azurerm_user_assigned_identity.identity.id : {}
-        }
+  body = jsonencode({
+    identity = {
+      type = "UserAssigned"
+      userAssignedIdentities = {
+        "${data.azurerm_user_assigned_identity.identity.id}" = {}
       }
+    }
+    # properties = {
+    #   privacy       = true
+    #   autoRenew     = true
+    #   targetDnsType = "AzureDns"
+    # }
   })
+
+    #   properties = {
+    #   identity = {
+    #     type = "UserAssigned",
+    #     userAssignedIdentities = {
+    #       a = {}
+    #     }
+    #   }
+    # }
 
   depends_on = [azurerm_container_app_environment.container_app_environment]
 }
