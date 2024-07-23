@@ -16,8 +16,10 @@ resource "azurerm_subnet" "subnet" {
   resource_group_name                           = var.resource_group_name
   virtual_network_name                          = azurerm_virtual_network.vnet.name
   address_prefixes                              = each.value.address_prefixes
+  default_outbound_access_enabled               = true
   service_endpoints                             = lookup(each.value, "service_endpoints", [])
-  private_endpoint_network_policies_enabled     = lookup(each.value, "private_endpoint_network_policies_enabled", true)
+  private_endpoint_network_policies             = lookup(each.value, "private_endpoint_network_policies_enabled", true) ? "Enabled" : "Disabled"
+  # In order to deploy a Private Link Service on a given subnet, you must set the private_link_service_network_policies_enabled attribute to false.
   private_link_service_network_policies_enabled = lookup(each.value, "private_link_service_network_policies_enabled", true)
 
   dynamic "delegation" {
