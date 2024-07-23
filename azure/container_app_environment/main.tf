@@ -16,7 +16,7 @@ resource "azurerm_container_app_environment" "container_app_environment" {
   workload_profile {
     name                  = "Consumption"
     workload_profile_type = "Consumption"
-    maximum_count         = 10
+    maximum_count         = 0
     minimum_count         = 0
   }
   internal_load_balancer_enabled = true
@@ -32,35 +32,21 @@ resource "azurerm_container_app_environment" "container_app_environment" {
   }
 }
 
-resource "azapi_update_resource" "managed_identity_settings" {
-  type        = "Microsoft.App/managedEnvironments@2024-03-01"
-  resource_id = azurerm_container_app_environment.container_app_environment.id
+# resource "azapi_update_resource" "managed_identity_settings" {
+#   type        = "Microsoft.App/managedEnvironments@2024-03-01"
+#   resource_id = azurerm_container_app_environment.container_app_environment.id
 
-  body = jsonencode({
-    identity = {
-      type = "UserAssigned"
-      userAssignedIdentities = {
-        "${data.azurerm_user_assigned_identity.identity.id}" = {}
-      }
-    }
-    # properties = {
-    #   privacy       = true
-    #   autoRenew     = true
-    #   targetDnsType = "AzureDns"
-    # }
-  })
+#   body = jsonencode({
+#     identity = {
+#       type = "UserAssigned"
+#       userAssignedIdentities = {
+#         "${data.azurerm_user_assigned_identity.identity.id}" = {}
+#       }
+#     }
+#   })
 
-    #   properties = {
-    #   identity = {
-    #     type = "UserAssigned",
-    #     userAssignedIdentities = {
-    #       a = {}
-    #     }
-    #   }
-    # }
-
-  depends_on = [azurerm_container_app_environment.container_app_environment]
-}
+#   depends_on = [azurerm_container_app_environment.container_app_environment]
+# }
 
 # resource "azurerm_container_app_environment_storage" "file_share" {
 #   for_each = { for settings in file_share_settings : settings => settings.name }
