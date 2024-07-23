@@ -9,6 +9,11 @@ data "azurerm_log_analytics_workspace" "workspace" {
   resource_group_name = var.log_analytics_worspace_settings.resource_group_name
 }
 
+data "azurerm_user_assigned_identity" "identity" {
+  name                = var.managed_identity_settings.name
+  resource_group_name = var.managed_identity_settings.resource_group_name
+}
+
 # data "azurerm_key_vault" "access_key" {
 #   for_each = { for settings in file_share_settings : settings => settings.name }
 #   name                = each.value.storage_account.access_key.key_vault_name

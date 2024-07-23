@@ -7,28 +7,46 @@
 # }
 
 resource "azurerm_container_app_environment" "container_app_environment" {
-  name                           = local.container_app_environment_name
-  location                       = var.location
-  resource_group_name            = var.resource_group_name
-  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.workspace.id
-  infrastructure_subnet_id       = data.azurerm_subnet.container_app_environment.id
-workload_profile {
-  name = "Consumption"
-  workload_profile_type = "Consumption"
-  maximum_count = 10
-  minimum_count = 0
-}
+  name                       = local.container_app_environment_name
+  location                   = var.location
+  resource_group_name        = var.resource_group_name
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.workspace.id
+  infrastructure_subnet_id   = data.azurerm_subnet.container_app_environment.id
+
+  workload_profile {
+    name                  = "Consumption"
+    workload_profile_type = "Consumption"
+    maximum_count         = 10
+    minimum_count         = 0
+  }
   internal_load_balancer_enabled = true
-  
+
   timeouts {
     create = "60m"
     update = "60m"
     delete = "30m"
-  
+
   }
   lifecycle {
     ignore_changes = [tags]
   }
+}
+
+resource "azapi_update_resource" "managed_identity_settings" {
+  type        = "Microsoft.App/managedEnvironments@2024-03-01"
+  resource_id = azurerm_container_app_environment.container_app_environment.id
+
+  body = jsondecode(
+    {
+      identity = {
+        type = "UserAssigned",
+        userAssignedIdentities : {
+          data.azurerm_user_assigned_identity.identity.id : {}
+        }
+      }
+  })
+
+  depends_on = [azurerm_container_app_environment.container_app_environment]
 }
 
 # resource "azurerm_container_app_environment_storage" "file_share" {

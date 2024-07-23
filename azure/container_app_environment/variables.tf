@@ -61,13 +61,13 @@ variable "log_analytics_worspace_settings" {
 #   }))
 # }
 
-# variable "managed_identity_settings" {
-#   description = "A list of settings related to the app gateway managed identity used to retrieve SSL certificates."
-#   type = object({
-#     name                = string
-#     resource_group_name = string
-#   })
-# }
+variable "managed_identity_settings" {
+  description = "A list of settings related to the app gateway managed identity used to retrieve SSL certificates."
+  type = object({
+    name                = string
+    resource_group_name = string
+  })
+}
 
 # variable "ssl_certificates" {
 #   description = "Settings related to SSL certificates that will be installed in the application gateway."
