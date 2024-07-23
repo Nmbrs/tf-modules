@@ -37,44 +37,28 @@ resource "azurerm_container_app_environment" "environment" {
   }
 }
 
-# resource "azurerm_container_app_environment_storage" "volume_mount" {
-#   for_each            = { for mount in var.volume_mounts_settings : mount.name => mount }
-#   name                         = each.value.name
-#   container_app_environment_id = azurerm_container_app_environment.environment.id
-#   account_name                 = each.value.storage_account.name
-#   share_name                   = each.value.file_share_name
-#   access_key                   = azurerm_storage_account.example.primary_access_key
-#   access_mode                  = each.value.access_mode
-# }
 
-#   dynamic "ssl_certificate" {
+resource "azapi_update_resource" "managed_identity_settings" {
+  type      = "Microsoft.App/managedEnvironments@2024-03-01"
+  name      = local.container_app_environment_name
+  # location  = var.location
+  parent_id = data.azurerm_resource_group.environment.id
+  # identity {
+  #   type         = "string"
+  #   identity_ids = [data.azurerm_user_assigned_identity.identity.id]
+  # }
 
-#     content {
-#       name                = ssl_certificate.value.name
-#       key_vault_secret_id = data.azurerm_key_vault_secret.certificate[ssl_certificate.value.name].versionless_id
-#     }
-#   }
-# resource "azapi_resource" "managed_identity_settings" {
-#   type = "Microsoft.App/containerApps@2023-11-02-preview"
-#   name = local.container_app_environment_name
-#   location = var.location
-#   parent_id = data.azurerm_resource_group.environment.id
-#   identity {
-#     type = "string"
-#     identity_ids = [data.azurerm_user_assigned_identity.identity.id]
-#   }
-#   body = jsonencode({})
-#   # body = jsonencode({
-#   #   identity = {
-#   #     type = "UserAssigned"
-#   #     userAssignedIdentities = {
-#   #       "${data.azurerm_user_assigned_identity.identity.id}" = {}
-#   #     }
-#   #   }
-#   # })
+  body = {
+    identity = {
+      type = "UserAssigned"
+      userAssignedIdentities = {
+        "${data.azurerm_user_assigned_identity.identity.id}" = {}
+      }
+    }
+  }
 
-#   depends_on = [azurerm_container_app_environment.container_app_environment]
-# }
+  depends_on = [azurerm_container_app_environment.environment]
+}
 
 
 resource "azurerm_container_app_environment_storage" "file_share" {
