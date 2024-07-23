@@ -45,28 +45,30 @@ variable "log_analytics_worspace_settings" {
   })
 }
 
-# variable "file_share_settings" {
-#   type = list(object({
-#     name        = string
-#     access_mode = string //"ReadOnly" "ReadWrite"
-#     storage_account = object({
-#       name       = string
-#       share_name = string
-#       access_key = object({
-#         key_vault_name                = string
-#         key_vault_resource_group_name = string
-#         key_vault_secret_name    = string
-#       })
-#     })
-#   }))
-# }
-
 variable "managed_identity_settings" {
   description = "A list of settings related to the app gateway managed identity used to retrieve SSL certificates."
   type = object({
     name                = string
     resource_group_name = string
   })
+}
+
+variable "file_share_settings" {
+  description = "A list of seetingsvalues for volume mounts"
+  type = list(object({
+    name        = string
+    access_mode = string
+    storage_account = object({
+      name                = string
+      resource_group_name = string
+      file_share_name     = string
+    })
+  }))
+
+  validation {
+    condition     = alltrue([for file_share in var.file_share_settings : contains(["ReadOnly", "ReadWrite"], file_share.access_mode)])
+    error_message = "At least one 'access_mode' property from 'file_share_settings' is invalid. Valid options are 'ReadOnly', 'ReadWrite'."
+  }
 }
 
 # variable "ssl_certificates" {

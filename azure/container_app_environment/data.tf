@@ -14,6 +14,12 @@ data "azurerm_user_assigned_identity" "identity" {
   resource_group_name = var.managed_identity_settings.resource_group_name
 }
 
+data "azurerm_storage_account" "file_share" {
+  for_each            = { for file_share in var.file_share_settings : file_share.name => file_share }
+  name                = each.value.storage_account.name
+  resource_group_name = each.value.storage_account.resource_group_name
+}
+
 # data "azurerm_key_vault" "access_key" {
 #   for_each = { for settings in file_share_settings : settings => settings.name }
 #   name                = each.value.storage_account.access_key.key_vault_name
