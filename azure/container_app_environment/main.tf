@@ -38,27 +38,27 @@ resource "azurerm_container_app_environment" "environment" {
 }
 
 
-resource "azapi_update_resource" "managed_identity_settings" {
-  type      = "Microsoft.App/managedEnvironments@2024-03-01"
-  name      = local.container_app_environment_name
-  # location  = var.location
-  parent_id = data.azurerm_resource_group.environment.id
-  # identity {
-  #   type         = "string"
-  #   identity_ids = [data.azurerm_user_assigned_identity.identity.id]
-  # }
+# resource "azapi_update_resource" "managed_identity_settings" {
+#   type      = "Microsoft.App/managedEnvironments@2024-03-01"
+#   name      = local.container_app_environment_name
+#   # location  = var.location
+#   parent_id = data.azurerm_resource_group.environment.id
+#   # identity {
+#   #   type         = "string"
+#   #   identity_ids = [data.azurerm_user_assigned_identity.identity.id]
+#   # }
 
-  body = {
-    identity = {
-      type = "UserAssigned"
-      userAssignedIdentities = {
-        "${data.azurerm_user_assigned_identity.identity.id}" = {}
-      }
-    }
-  }
+#   body = {
+#     identity = {
+#       type = "UserAssigned"
+#       userAssignedIdentities = {
+#         "${data.azurerm_user_assigned_identity.identity.id}" = {}
+#       }
+#     }
+#   }
 
-  depends_on = [azurerm_container_app_environment.environment]
-}
+#   depends_on = [azurerm_container_app_environment.environment]
+# }
 
 
 resource "azurerm_container_app_environment_storage" "file_share" {
