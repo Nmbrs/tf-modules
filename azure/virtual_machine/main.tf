@@ -64,7 +64,7 @@ resource "azurerm_managed_disk" "data_disks" {
     for disk_settings in local.data_disks_settings : trimspace(lower(disk_settings.name)) => disk_settings
   }
 
-  name                 = "dsk-${each.value.name}-${format("%03d", index(local.data_disks_settings, each.value) + 1)}"
+  name                 = "dsk-${var.vm_name}-${format("%03d", index(local.data_disks_settings, each.value) + 1)}"
   location             = var.location
   resource_group_name  = var.resource_group_name
   storage_account_type = each.value.storage_account_type
@@ -110,7 +110,7 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
   }
 
   os_disk {
-    name                 = "dsk-${local.os_disk_settings.name}-os-001"
+    name                 = "dsk-${var.vm_name}-os-001"
     caching              = local.os_disk_settings.caching
     storage_account_type = local.os_disk_settings.storage_account_type
   }
