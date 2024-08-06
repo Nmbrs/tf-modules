@@ -1,7 +1,8 @@
 # SSH key
 resource "tls_private_key" "ssh" {
   count     = var.os_type == "linux" ? 1 : 0
-  algorithm = "ED25519"
+  algorithm = "RSA"
+  rsa_bits  = "4096"
 }
 
 resource "azurerm_ssh_public_key" "ssh_public_key" {
