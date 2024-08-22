@@ -33,7 +33,6 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | The domain name for the SSL certificate. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
-| <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the SSL certificate. | `string` | n/a | yes |
 
 ## Outputs
 
@@ -48,8 +47,7 @@ A number of code snippets demonstrating different use cases for the module have 
 ```hcl
 module "ssl_certificate" {
   source              = "git::github.com/Nmbrs/tf-modules//azure/ssl_certificate"
-  workload            = "mydomain"
-  resource_group_name = "rg-demo"
   domain_name         = "domain.com"
+  resource_group_name = "rg-demo"
 }
 ```
