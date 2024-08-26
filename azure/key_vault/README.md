@@ -106,6 +106,11 @@ module "key_vault" {
       type      = "writers"
       object_id = "objectID"
     }
+    {
+      name      = "domainW"
+      type      = "administrators"
+      object_id = "objectID"
+    }
   ]
 }
 ```
@@ -122,17 +127,20 @@ The keyvault module supports two types of access policies which will be applied 
 
 #### Certificates
 
-| Type    | Permissions               |
-| ------- | ------------------------- |
-| writers | get, list, update, delete |
-| readers | get, list                 |
+| Type           | Permissions                                                                                                                                                         |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| writers        | get, list, update, delete                                                                                                                                           |
+| readers        | get, list                                                                                                                                                           |
+| adminsitrators | backup, create, delete, delete issuers, get, get issuers, import, list, list issuers, manage contacts, manage issuers, purge, recover, restore, set issuers, update |
 
 #### Secrets
 
-| Type    | Permissions            |
-| ------- | ---------------------- |
-| writers | get, list, set, delete |
-| readers | get, list              |
+| Type           | Permissions                                                     |
+| -------------- | --------------------------------------------------------------- |
+| writers        | get, list, set, delete                                          |
+| readers        | get, list                                                       |
+| adminsitrators | backup, create, delete, get, list, purge, recover, restore, set |
+
 
 ### Configuring access policies
 
