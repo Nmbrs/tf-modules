@@ -27,20 +27,25 @@ variable "name" {
     error_message = "The project name must not be a reserved IIS segment like 'App_Browsers', 'App_code', or 'web.config'."
   }
 
-  # Allowed characters validation - only alphanumeric characters, underscores, and hyphens
-  validation {
-    condition     = can(regex("^[a-zA-Z0-9_-.]+$", var.name))
-    error_message = "The project name can only contain alphanumeric characters, underscores (_), hyphens (-), and dot (.)."
-  }
+#   # Allowed characters validation - only alphanumeric characters, underscores, and hyphens
+#   validation {
+#     condition     = can(regex("^[a-zA-Z0-9_-.]+$", var.name))
+#     error_message = "The project name can only contain alphanumeric characters, underscores (_), hyphens (-), and dot (.)."
+#   }
 
-  # Hyphen, underscore, or dot position validation - must not start or end with hyphen (-), underscore (_), or dot (.)
-  validation {
-    condition     = !can(regex("(^[-_.]|[-_.]$)", var.name))
-    error_message = "The project name must not start or end with a hyphen (-), underscore (_), or dot (.)."
-  }
+#   # Hyphen, underscore, or dot position validation - must not start or end with hyphen (-), underscore (_), or dot (.)
+#   validation {
+#     condition     = !can(regex("(^[-_.]|[-_.]$)", var.name))
+#     error_message = "The project name must not start or end with a hyphen (-), underscore (_), or dot (.)."
+#   }
 }
 
-variable "owner" {
-  description = "Azure DevOps domain owner"
+variable "domain_owner" {
+  description = "Domain that will be the contributor at the Azure DevOps project"
+  type        = string
+}
+
+variable "domain_administartor" {
+  description = "Domain that will be the administrator at the Azure DevOps project"
   type        = string
 }
