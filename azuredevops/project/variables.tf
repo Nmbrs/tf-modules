@@ -40,7 +40,7 @@ variable "name" {
 #   }
 }
 
-variable "domain_owner" {
+variable "domain_contributor" {
   description = "Domain that will be the contributor at the Azure DevOps project"
   type        = string
 }
