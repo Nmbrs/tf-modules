@@ -101,7 +101,7 @@ data "azuredevops_group" "aad_contributors" {
 }
 
 data "azuredevops_group" "aad_readers" {
-  name = lower("sg-${var.group_readers}")
+  name = lower(var.group_readers)
 }
 
 
