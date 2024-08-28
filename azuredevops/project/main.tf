@@ -126,7 +126,7 @@ data "azuredevops_group" "readers" {
 }
 
 resource "azuredevops_group_membership" "project_default_team_membership" {
-  group = data.azuredevops_group.project_default_team[each.value.name].descriptor
+  group = data.azuredevops_group.project_default_team.descriptor
   mode  = "add"
   members = [
     data.azuredevops_group.aad_contributors.descriptor
