@@ -40,12 +40,17 @@ variable "name" {
   #   }
 }
 
-variable "domain_contributor" {
-  description = "Domain that will be the contributor at the Azure DevOps project"
+variable "group_contributors" {
+  description = "Group that will be the contributor at the Azure DevOps project"
   type        = string
 }
 
-variable "domain_administartor" {
-  description = "Domain that will be the administrator at the Azure DevOps project"
+variable "group_administrators" {
+  description = "Group that will be the administrator at the Azure DevOps project"
+  type        = string
+}
+
+variable "group_readers" {
+  description = "Group that will be the readers at the Azure DevOps project"
   type        = string
 }
