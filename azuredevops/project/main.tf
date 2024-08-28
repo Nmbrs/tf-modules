@@ -154,6 +154,6 @@ resource "azuredevops_group_membership" "readers" {
   group = data.azuredevops_group.readers.descriptor
   mode  = "add"
   members = [
-    data.azuredevops_group.aad_developers.descriptor
+    data.azuredevops_group.aad_readers.descriptor
   ]
 }
