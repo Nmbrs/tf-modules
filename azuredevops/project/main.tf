@@ -9,7 +9,7 @@ resource "azuredevops_project" "project" {
     repositories = "disabled"
     pipelines    = "enabled"
     testplans    = "disabled"
-    artifacts    = "enabled"
+    artifacts    = "disabled"
   }
 
   lifecycle {
