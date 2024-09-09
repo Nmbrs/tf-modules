@@ -4,10 +4,13 @@ resource "azurerm_virtual_network" "vnet" {
   resource_group_name = var.resource_group_name
   address_space       = var.address_spaces
 
-  ddos_protection_plan {
-    # Only enable if ddos_plan_id is not null and not an empty string
-    id     = var.ddos_plan_resource_id != null && var.ddos_plan_resource_id != "" ? var.ddos_plan_resource_id : null
-    enable = var.ddos_plan_resource_id != null && var.ddos_plan_resource_id != ""
+  # Only enable if ddos_plan_id is not null and not an empty string
+  dynamic "ddos_protection_plan" {
+    for_each = var.ddos_plan_resource_id != null && var.ddos_plan_resource_id != "" ? [1] : []
+    content {
+      id     = var.ddos_plan_resource_id
+      enable = true
+    }
   }
 
   lifecycle {
