@@ -5,8 +5,9 @@ resource "azurerm_virtual_network" "vnet" {
   address_space       = var.address_spaces
 
   ddos_protection_plan {
-    id     = var.ddos_plan_settings.resource_id
-    enable = var.ddos_plan_settings.enabled
+    # Only enable if ddos_plan_id is not null and not an empty string
+    id     = var.ddos_plan_resource_id != null && var.ddos_plan_resource_id != "" ? var.ddos_plan_resource_id : null
+    enable = var.ddos_plan_resource_id != null && var.ddos_plan_resource_id != ""
   }
 
   lifecycle {

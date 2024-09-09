@@ -183,10 +183,9 @@ variable "naming_count" {
   }
 }
 
-variable "ddos_plan_settings" {
+variable "ddos_plan_resource_id" {
   description = "DDoS protection plan settings"
-  type = object({
-    resource_id = string
-    enabled     = bool
-  })
+  type        = string
+  nullable    = true
+  default     = null
 }
