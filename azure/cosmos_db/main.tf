@@ -2,14 +2,11 @@ resource "azurerm_cosmosdb_account" "cosmo_db" {
   access_key_metadata_writes_enabled    = true
   analytical_storage_enabled            = false
   default_identity_type                 = "FirstPartyIdentity"
-  enable_automatic_failover             = false
-  enable_free_tier                      = false
-  enable_multiple_write_locations       = false
   is_virtual_network_filter_enabled     = false
   kind                                  = var.kind
   local_authentication_disabled         = false
-  mongo_server_version                  = var.mongo_db_version
-  name                                  = var.name
+  mongo_server_version                  = var.kind == "GlobalDocumentDB" ?  null : var.mongo_db_version 
+  name                                  = local.cosmo_db_name
   network_acl_bypass_for_azure_services = false
   network_acl_bypass_ids                = []
   offer_type                            = "Standard"

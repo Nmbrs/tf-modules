@@ -3,7 +3,7 @@ variable "resource_group_name" {
   description = "The name of an existing Resource Group."
 }
 
-variable "name" {
+variable "workload" {
   description = "(Required) Specifies the name of the resource."
   type        = string
 }
@@ -31,9 +31,20 @@ variable "kind" {
 variable "mongo_db_version" {
   description = "(Optional) The Server Version of a MongoDB account. Possible values are 4.2, 4.0, 3.6, and 3.2."
   type        = string
+  default     = ""
 
   validation {
-    condition     = contains(["4.2", "4.0", "3.6", "3.2"], var.mongo_db_version)
+    condition     = contains(["4.2", "4.0", "3.6", "3.2", ""], var.mongo_db_version)
     error_message = format("Invalid value '%s' for variable 'mongo_db_version', Valid options are '4.2', '4.0', '3.6' and '3.2'.", var.mongo_db_version)
+  }
+}
+
+variable "instance_count" {
+  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention."
+  type        = number
+
+  validation {
+    condition     = var.instance_count >= 1 && var.instance_count <= 999
+    error_message = format("Invalid value '%s' for variable 'instance_count'. It must be between 1 and 999.", var.instance_count)
   }
 }
