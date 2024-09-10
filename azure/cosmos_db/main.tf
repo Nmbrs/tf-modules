@@ -5,7 +5,7 @@ resource "azurerm_cosmosdb_account" "cosmo_db" {
   is_virtual_network_filter_enabled     = false
   kind                                  = var.kind
   local_authentication_disabled         = false
-  mongo_server_version                  = var.kind == "GlobalDocumentDB" ?  null : var.mongo_db_version 
+  mongo_server_version                  = var.kind == "MongoDB" ?  var.mongo_db_version : null
   name                                  = local.cosmo_db_name
   network_acl_bypass_for_azure_services = false
   network_acl_bypass_ids                = []
