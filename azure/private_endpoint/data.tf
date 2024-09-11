@@ -68,3 +68,15 @@ data "azurerm_container_registry" "container_registry" {
   name                = var.resource_settings.name
   resource_group_name = var.resource_group_name
 }
+
+data "azurerm_cosmosdb_account" "cosmos_db_nosql" {
+  count               = var.resource_settings.type == "cosmos_db_nosql" ? 1 : 0
+  name                = var.resource_settings.name
+  resource_group_name = var.resource_group_name
+}
+
+data "azurerm_cosmosdb_account" "cosmos_db_mongodb" {
+  count               = var.resource_settings.type == "cosmos_db_mongodb" ? 1 : 0
+  name                = var.resource_settings.name
+  resource_group_name = var.resource_group_name
+}
