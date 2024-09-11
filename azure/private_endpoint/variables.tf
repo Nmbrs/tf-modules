@@ -51,7 +51,7 @@ variable "resource_settings" {
     }
   )
   validation {
-    condition     = contains(["app_service", "storage_account_blob", "storage_account_table", "storage_account_file", "sql_server", "key_vault", "service_bus", "eventgrid_domain", "eventgrid_topic", "container_registry", "MongoDB","SQL"], var.resource_settings.type)
+    condition     = contains(["app_service", "storage_account_blob", "storage_account_table", "storage_account_file", "sql_server", "key_vault", "service_bus", "eventgrid_domain", "eventgrid_topic", "container_registry", "cosmos_db_nosql","cosmos_db_mongodb"], var.resource_settings.type)
     error_message = format("Invalid value '%s' for variable 'resource_settings.type'. Valid options are 'app_service', 'storage_account_blob', 'storage_account_table', 'storage_account_file', 'sql_server', 'key_vault', 'service_bus', 'eventgrid_domain', 'eventgrid_topic', 'container_registry'.", var.resource_settings.type)
   }
 }
