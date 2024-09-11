@@ -11,6 +11,9 @@ locals {
     eventgrid_domain      = data.azurerm_eventgrid_domain.eventgrid_domain,
     eventgrid_topic       = data.azurerm_eventgrid_topic.eventgrid_topic,
     container_registry    = data.azurerm_container_registry.container_registry,
+    cosmos_db_nosql       = data.azurerm_cosmosdb_account.cosmos_db_nosql,
+    cosmos_db_mongodb     = data.azurerm_cosmosdb_account.cosmos_db_mongodb,
+
     # Add more resource types and corresponding data blocks as needed
   }
   subresource_name = {
@@ -24,5 +27,7 @@ locals {
     "eventgrid_domain"      = "domain"
     "eventgrid_topic"       = "topic"
     "container_registry"    = "registry"
+    "cosmos_db_nosql"       = "SQL"
+    "cosmos_db_mongodb"     = "MongoDB"
   }
 }
