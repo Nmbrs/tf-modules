@@ -62,7 +62,7 @@ module "cosmos_db" {
   instance_count                    = 1
   public_network_access_enabled     = false
 }
-````
+```
 
 ## NOSQL DB mode
 
@@ -70,11 +70,11 @@ module "cosmos_db" {
 module "cosmos_db" {
   source                            = "git::github.com/Nmbrs/tf-modules//azure/cosmos_db"
   resource_group_name               = "rg-myapp"
-  workload                          = "mymongoserver"
+  workload                          = "myserver"
   environment                       = "dev"
   location                          = "westeurope"
   kind                              = "GlobalDocumentDB"
   instance_count                    = 1
   public_network_access_enabled     = false
 }
-````
+```
