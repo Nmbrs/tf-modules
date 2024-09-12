@@ -48,3 +48,9 @@ variable "instance_count" {
     error_message = format("Invalid value '%s' for variable 'instance_count'. It must be between 1 and 999.", var.instance_count)
   }
 }
+
+variable "public_network_access_enabled" {
+  description = "A condition to indicate if the cosmos db will have public access (defaults to false)"
+  type        = bool
+  default     = false
+}
