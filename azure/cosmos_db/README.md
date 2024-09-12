@@ -51,7 +51,7 @@ A number of code snippets demonstrating different use cases for the module have 
 ## Mongo DB mode
 
 ```hcl
-module "cosmos_mongo_db" {
+module "cosmos_db" {
   source                            = "git::github.com/Nmbrs/tf-modules//azure/cosmos_db"
   resource_group_name               = "rg-myapp"
   workload                          = "mymongoserver"
@@ -59,6 +59,21 @@ module "cosmos_mongo_db" {
   location                          = "westeurope"
   kind                              = "MongoDB"
   mongo_db_version                  = "4.2"
+  instance_count                    = 1
+  public_network_access_enabled     = false
+}
+````
+
+## NOSQL DB mode
+
+```hcl
+module "cosmos_db" {
+  source                            = "git::github.com/Nmbrs/tf-modules//azure/cosmos_db"
+  resource_group_name               = "rg-myapp"
+  workload                          = "mymongoserver"
+  environment                       = "dev"
+  location                          = "westeurope"
+  kind                              = "GlobalDocumentDB"
   instance_count                    = 1
   public_network_access_enabled     = false
 }

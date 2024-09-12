@@ -31,10 +31,10 @@ variable "kind" {
 variable "mongo_db_version" {
   description = "(Optional) The Server Version of a MongoDB account. Possible values are 4.2, 4.0, 3.6, and 3.2."
   type        = string
-  default     = ""
+  default     = "4.2"
 
   validation {
-    condition     = contains(["4.2", "4.0", "3.6", "3.2", ""], var.mongo_db_version)
+    condition     = contains(["4.2", "4.0", "3.6", "3.2"], var.mongo_db_version)
     error_message = format("Invalid value '%s' for variable 'mongo_db_version', Valid options are '4.2', '4.0', '3.6' and '3.2'.", var.mongo_db_version)
   }
 }
