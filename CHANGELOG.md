@@ -1,5 +1,20 @@
 # Changelog
 
+## [8.3.0](https://github.com/Nmbrs/tf-modules/compare/v8.2.0...v8.3.0) (2024-09-12)
+
+
+### Features
+
+* **azuredevopsproject:** add module ([#296](https://github.com/Nmbrs/tf-modules/issues/296)) ([49dda16](https://github.com/Nmbrs/tf-modules/commit/49dda16c818c5bb7404bae104a2981efb9f51644))
+* **cosmos_db:** add cosmo db module ([#297](https://github.com/Nmbrs/tf-modules/issues/297)) ([15ceb33](https://github.com/Nmbrs/tf-modules/commit/15ceb337d0dbc8c706e9c5fbaeda511bc7b30653))
+* **private_endpoint:** add new subresource to private endpoint ([#294](https://github.com/Nmbrs/tf-modules/issues/294)) ([7b61a97](https://github.com/Nmbrs/tf-modules/commit/7b61a978af99e29095ec18af35a250386e13aa51))
+* **storage_account:** update https only parameter ([#292](https://github.com/Nmbrs/tf-modules/issues/292)) ([8cceda3](https://github.com/Nmbrs/tf-modules/commit/8cceda359e06d54d4d10935f004e947f7ce8928d))
+
+
+### Bug Fixes
+
+* **application_gateway:** update corrupted documentation ([#295](https://github.com/Nmbrs/tf-modules/issues/295)) ([e26cfeb](https://github.com/Nmbrs/tf-modules/commit/e26cfebd6489ab04c59e6e3bfd908667898d7636))
+
 ## [8.2.0](https://github.com/Nmbrs/tf-modules/compare/v8.1.0...v8.2.0) (2024-08-26)
 
 
