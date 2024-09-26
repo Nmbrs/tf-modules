@@ -8,9 +8,8 @@ resource "azurerm_key_vault" "key_vault" {
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   sku_name                   = "standard"
   soft_delete_retention_days = 31
-  #tfsec:ignore:azure-keyvault-no-purge
-  purge_protection_enabled  = var.protection_enabled
-  enable_rbac_authorization = var.enable_rbac_authorization
+  purge_protection_enabled   = true
+  enable_rbac_authorization  = var.enable_rbac_authorization
 
   network_acls {
     #tfsec:ignore:azure-keyvault-specify-network-acl
@@ -75,4 +74,19 @@ resource "azurerm_key_vault_access_policy" "writers_policy" {
   key_permissions         = local.keys_write_permissions
   secret_permissions      = local.secrets_write_permissions
   storage_permissions     = local.storage_write_permissions
+}
+
+resource "azurerm_key_vault_access_policy" "administrators_policy" {
+  for_each = {
+    for policy in var.access_policies : trimspace(lower(policy.name)) => policy
+    if policy.type == "administrators" && !var.enable_rbac_authorization
+  }
+
+  key_vault_id            = azurerm_key_vault.key_vault.id
+  tenant_id               = data.azurerm_client_config.current.tenant_id
+  object_id               = each.value.object_id
+  certificate_permissions = local.certificates_full_permissions
+  key_permissions         = local.keys_full_permissions
+  secret_permissions      = local.secrets_full_permissions
+  storage_permissions     = local.storage_full_permissions
 }

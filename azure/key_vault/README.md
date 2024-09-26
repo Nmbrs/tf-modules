@@ -47,7 +47,6 @@ No modules.
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_external_usage"></a> [external\_usage](#input\_external\_usage) | (Optional) Specifies whether the keyvault should be used internally or externally. | `bool` | `true` | no |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_protection_enabled"></a> [protection\_enabled](#input\_protection\_enabled) | (Optional) Enables the keyvault purge protection in case of accidental deletion. Default is false. | `bool` | `false` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 | <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the key vault. | `string` | n/a | yes |
 
@@ -107,6 +106,11 @@ module "key_vault" {
       type      = "writers"
       object_id = "objectID"
     }
+    {
+      name      = "domainW"
+      type      = "administrators"
+      object_id = "objectID"
+    }
   ]
 }
 ```
@@ -123,17 +127,20 @@ The keyvault module supports two types of access policies which will be applied 
 
 #### Certificates
 
-| Type    | Permissions               |
-| ------- | ------------------------- |
-| writers | get, list, update, delete |
-| readers | get, list                 |
+| Type           | Permissions                                                                                                                                                         |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| writers        | get, list, update, delete                                                                                                                                           |
+| readers        | get, list                                                                                                                                                           |
+| adminsitrators | backup, create, delete, delete issuers, get, get issuers, import, list, list issuers, manage contacts, manage issuers, purge, recover, restore, set issuers, update |
 
 #### Secrets
 
-| Type    | Permissions            |
-| ------- | ---------------------- |
-| writers | get, list, set, delete |
-| readers | get, list              |
+| Type           | Permissions                                                     |
+| -------------- | --------------------------------------------------------------- |
+| writers        | get, list, set, delete                                          |
+| readers        | get, list                                                       |
+| adminsitrators | backup, create, delete, get, list, purge, recover, restore, set |
+
 
 ### Configuring access policies
 

@@ -29,12 +29,6 @@ variable "external_usage" {
   default     = true
 }
 
-variable "protection_enabled" {
-  description = "(Optional) Enables the keyvault purge protection in case of accidental deletion. Default is false."
-  type        = bool
-  default     = false
-}
-
 variable "access_policies" {
   description = "(Optional) Access policies created for the Azure Key Vault."
   type = list(object({
@@ -60,8 +54,8 @@ variable "access_policies" {
   }
 
   validation {
-    condition     = alltrue([for policy in var.access_policies : contains(["readers", "writers"], policy.type)])
-    error_message = "At least one 'type' property from 'policies' is invalid. Valid options are 'readers', 'writers'."
+    condition     = alltrue([for policy in var.access_policies : contains(["readers", "writers", "administrators"], policy.type)])
+    error_message = "At least one 'type' property from 'policies' is invalid. Valid options are 'readers', 'writers', 'administrators'."
   }
 }
 
