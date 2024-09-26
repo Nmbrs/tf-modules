@@ -32,6 +32,7 @@ resource "azurerm_windows_web_app" "web_app" {
     "APPLICATIONINSIGHTS_CONNECTION_STRING"      = data.azurerm_application_insights.app_insights_settings.connection_string
     "APPINSIGHTS_INSTRUMENTATIONKEY"             = data.azurerm_application_insights.app_insights_settings.instrumentation_key
     "APPLICATIONINSIGHTSAGENT_EXTENSION_VERSION" = "~2"
+    "ASPNETCORE_ENVIRONMENT"                     = var.environment == "dev" ? "Kitchen" : var.environment == "test" ? "Test" : var.environment == "prod" ? "Production" : var.environment == "sand" ? "Sandbox" : null
   }
 
   site_config {
