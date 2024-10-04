@@ -139,3 +139,9 @@ variable "max_instance_count" {
   type        = number
   default     = 10
 }
+
+variable "waf_policy_name" {
+  description = "Name of the WAF policy to be associated with the application gateway."
+  type = string
+  default = ""
+}

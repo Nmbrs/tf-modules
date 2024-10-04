@@ -18,10 +18,12 @@ resource "azurerm_public_ip" "app_gw" {
 # Azure Application Gateway Configuration
 # ==============================================================================
 resource "azurerm_application_gateway" "app_gw" {
-  name                = local.app_gateway_name
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  enable_http2        = true
+  name                              = local.app_gateway_name
+  location                          = var.location
+  resource_group_name               = var.resource_group_name
+  enable_http2                      = true
+  force_firewall_policy_association = var.waf_policy_name != "" && var.waf_policy_name != null ? true : null
+  firewall_policy_id                = var.waf_policy_name != "" && var.waf_policy_name != null ? data.azurerm_web_application_firewall_policy.waf_policy[0].id : null
 
   sku {
     name = "WAF_v2"
@@ -219,6 +221,6 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [tags, waf_configuration]
   }
 }
