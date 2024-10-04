@@ -219,6 +219,6 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [tags, waf_configuration]
   }
 }
