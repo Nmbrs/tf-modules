@@ -21,8 +21,8 @@ data "azurerm_user_assigned_identity" "certificate" {
   resource_group_name = var.managed_identity_settings.resource_group_name
 }
 
-data "azurerm_web_application_firewall_policy" "waf_policy" {
-  count               = var.waf_policy != "" && var.waf_policy != null ? 1 : 0
-  name                = var.waf_policy.name
-  resource_group_name = var.waf_policy.resource_group_name
+data "azurerm_web_application_firewall_policy" "waf_policy_settings" {
+  count               = var.waf_policy_settings != "" && var.waf_policy_settings != null ? 1 : 0
+  name                = var.waf_policy_settings.name
+  resource_group_name = var.waf_policy_settings.resource_group_name
 }
