@@ -22,8 +22,8 @@ resource "azurerm_application_gateway" "app_gw" {
   location                          = var.location
   resource_group_name               = var.resource_group_name
   enable_http2                      = true
-  force_firewall_policy_association = var.waf_policy_name != "" && var.waf_policy_name != null ? true : null
-  firewall_policy_id                = var.waf_policy_name != "" && var.waf_policy_name != null ? data.azurerm_web_application_firewall_policy.waf_policy[0].id : null
+  force_firewall_policy_association = var.waf_policy != "" && var.waf_policy != null ? true : null
+  firewall_policy_id                = var.waf_policy != "" && var.waf_policy != null ? data.azurerm_web_application_firewall_policy.waf_policy[0].id : null
 
   sku {
     name = "WAF_v2"

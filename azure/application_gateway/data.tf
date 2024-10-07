@@ -22,7 +22,7 @@ data "azurerm_user_assigned_identity" "certificate" {
 }
 
 data "azurerm_web_application_firewall_policy" "waf_policy" {
-  count               = var.waf_policy_name != "" && var.waf_policy_name != null ? 1 : 0
-  name                = var.waf_policy_name
-  resource_group_name = var.resource_group_name
+  count               = var.waf_policy != "" && var.waf_policy != null ? 1 : 0
+  name                = var.waf_policy.name
+  resource_group_name = var.waf_policy.resource_group_name
 }
