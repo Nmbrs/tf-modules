@@ -182,3 +182,10 @@ variable "naming_count" {
     error_message = format("Invalid value '%s' for variable 'naming_count'. It must be between 1 and 999.", var.naming_count)
   }
 }
+
+variable "ddos_plan_resource_id" {
+  description = "DDoS protection plan settings"
+  type        = string
+  nullable    = true
+  default     = null
+}
