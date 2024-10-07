@@ -1,8 +1,10 @@
-# Virtual Network Module
+<!-- BEGIN_TF_DOCS -->
+# Application gateway Module
 
 ## Sumary
 
 The `application_gateway` module enables users to easily provision and configure Azure Application Gateway resources for entry points of traffic and load balancing to the apps. It simplifies the process of setting up Application Gateway, allowing you to define key parameters such as resource name, location, etc all while maintaining infrastructure as code.
+
 
 ## Requirements
 
@@ -15,7 +17,7 @@ The `application_gateway` module enables users to easily provision and configure
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.70 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.116.0 |
 
 ## Modules
 
@@ -31,6 +33,7 @@ No modules.
 | [azurerm_key_vault_secret.certificate](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
 | [azurerm_subnet.app_gw](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subnet) | data source |
 | [azurerm_user_assigned_identity.certificate](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/user_assigned_identity) | data source |
+| [azurerm_web_application_firewall_policy.waf_policy_settings](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/web_application_firewall_policy) | data source |
 
 ## Inputs
 
@@ -48,6 +51,7 @@ No modules.
 | <a name="input_redirect_url_settings"></a> [redirect\_url\_settings](#input\_redirect\_url\_settings) | A list of settings for the URL redirection that the app gateway will serve. | <pre>list(object({<br>    routing_rule = object({<br>      priority = number<br>    })<br>    listener = object({<br>      fqdn             = string<br>      protocol         = string<br>      certificate_name = optional(string, null)<br>    })<br>    target = object({<br>      url                  = string<br>      include_path         = optional(bool, false)<br>      include_query_string = optional(bool, false)<br>    })<br>  }))</pre> | `[]` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 | <a name="input_ssl_certificates"></a> [ssl\_certificates](#input\_ssl\_certificates) | Settings related to SSL certificates that will be installed in the application gateway. | <pre>list(object({<br>    name                          = string<br>    key_vault_name                = string<br>    key_vault_resource_group_name = string<br>    key_vault_certificate_name    = string<br>  }))</pre> | `[]` | no |
+| <a name="input_waf_policy_settings"></a> [waf\_policy\_settings](#input\_waf\_policy\_settings) | Name of the WAF policy to be associated with the application gateway. | <pre>object({<br>    name                = string<br>    resource_group_name = string<br>  })</pre> | <pre>{<br>  "name": "",<br>  "resource_group_name": ""<br>}</pre> | no |
 | <a name="input_workload"></a> [workload](#input\_workload) | The name of the workload associated with the resource. | `string` | n/a | yes |
 
 ## Outputs
@@ -59,6 +63,7 @@ No modules.
 | <a name="output_public_ip_address"></a> [public\_ip\_address](#output\_public\_ip\_address) | Output of the public IP address |
 | <a name="output_public_ip_fqdn"></a> [public\_ip\_fqdn](#output\_public\_ip\_fqdn) | Output of the public IP FQDN |
 | <a name="output_workload"></a> [workload](#output\_workload) | The application gateway workload name. |
+
 
 ## How to use it?
 
@@ -166,6 +171,7 @@ module "application_gateway" {
   location            = "westeurope"
   min_instance_count  = "2"
   max_instance_count  = "10"
+  waf_policy_settings = null
   network_settings = {
     vnet_name                = "virtual_network_name"
     vnet_resource_group_name = "rg-vnet-001"
@@ -230,6 +236,10 @@ module "application_gateway" {
   location            = "westeurope"
   min_instance_count  = "2"
   max_instance_count  = "10"
+  waf_policy_settings = {
+        "name"                = "waf-name",
+        "resource_group_name" = "rg-waf-policy-resource-group"
+      }
   network_settings = {
     vnet_name                = "virtual_network_name"
     vnet_resource_group_name = "rg-vnet-001"
@@ -334,6 +344,10 @@ module "application_gateway" {
   location            = "westeurope"
   min_instance_count  = "2"
   max_instance_count  = "10"
+  waf_policy_settings = {
+    "name"                = "waf-name",
+    "resource_group_name" = "rg-waf-policy-resource-group"
+  }
   network_settings = {
     vnet_name                = "virtual_network_name"
     vnet_resource_group_name = "rg-vnet-001"
@@ -360,3 +374,5 @@ module "application_gateway" {
 }
 
 ```
+
+<!-- END_TF_DOCS -->
