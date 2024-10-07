@@ -1,5 +1,14 @@
 # Changelog
 
+## [8.4.0](https://github.com/Nmbrs/tf-modules/compare/v8.3.0...v8.4.0) (2024-10-07)
+
+
+### Features
+
+* **application_gateway:** ignore waf_settings ([#299](https://github.com/Nmbrs/tf-modules/issues/299)) ([116654a](https://github.com/Nmbrs/tf-modules/commit/116654a1d29e1691e65fba5ca60858de40dde0b3))
+* **application-gateway:** add waf policy ([#301](https://github.com/Nmbrs/tf-modules/issues/301)) ([804bbc6](https://github.com/Nmbrs/tf-modules/commit/804bbc64f98bd680ae52c0daad6d19000ed871d6))
+* **virtual_network:** add ddos plan settings virtual network ([#298](https://github.com/Nmbrs/tf-modules/issues/298)) ([82e5312](https://github.com/Nmbrs/tf-modules/commit/82e531256ffb5cbd296fa3b10293074c53ab24ba))
+
 ## [8.3.0](https://github.com/Nmbrs/tf-modules/compare/v8.2.0...v8.3.0) (2024-09-12)
 
 
