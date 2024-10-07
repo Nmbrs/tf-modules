@@ -146,8 +146,8 @@ variable "waf_policy" {
     name                = string
     resource_group_name = string
   })
-  # default = {
-  #   name                = ""
-  #   resource_group_name = ""
-  # }
+  default = {
+    name                = ""
+    resource_group_name = ""
+  }
 }
