@@ -18,16 +18,6 @@ variable "environment" {
   }
 }
 
-variable "country" {
-  description = "Specifies the country for the app services and service plan names."
-  type        = string
-
-  validation {
-    condition     = contains(["se", "nl", "global"], var.country)
-    error_message = format("Invalid value '%s' for variable 'country', valid options are 'se', 'nl', 'global'.", var.country)
-  }
-}
-
 variable "workload" {
   description = "The name of the SQL Server that will be created"
   type        = string
@@ -41,17 +31,8 @@ variable "workload" {
 variable "override_name" {
   description = "Overrides the name of the SQL Server that will be created"
   type        = string
-  default     = ""
-}
-
-variable "node_number" {
-  description = "Specifies the node number for the resources."
-  type        = number
-
-  validation {
-    condition     = alltrue([try(var.node_number > 0, false), try(var.node_number == floor(var.node_number), false)])
-    error_message = format("Invalid value '%s' for variable 'node_number'. It must be an integer number and greater than 0.", var.node_number)
-  }
+  default     = null
+  nullable    = true
 }
 
 variable "azuread_sql_admin" {
@@ -59,13 +40,16 @@ variable "azuread_sql_admin" {
   type        = string
 }
 
-variable "allowed_subnets" {
-  description = "A map of subnets and their corresponding resource groups that will be allowed to connect to the server."
-  type = list(object({
-    subnet_resource_group_name = string
-    virtual_network_name       = string
-    subnet_name                = string
-  }))
+variable "public_network_settings" {
+  description = "Public network settings."
+  type = object({
+    access_enabled = bool
+    allowed_subnets = list(object({
+      subnet_resource_group_name = string
+      virtual_network_name       = string
+      subnet_name                = string
+    }))
+  })
 }
 
 variable "azuread_authentication_only_enabled" {
@@ -90,4 +74,14 @@ variable "local_sql_admin_settings" {
     key_vault_resource_group = string
     key_vault_secret_name    = string
   })
+}
+
+variable "instance_count" {
+  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention."
+  type        = number
+
+  validation {
+    condition     = var.instance_count >= 1 && var.instance_count <= 999
+    error_message = format("Invalid value '%s' for variable 'instance_count'. It must be between 1 and 999.", var.instance_count)
+  }
 }

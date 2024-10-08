@@ -1,11 +1,13 @@
 resource "azurerm_mssql_server" "sql_server" {
-  name                         = var.override_name != "" ? var.override_name : local.sql_server_name
-  resource_group_name          = var.resource_group_name
-  location                     = var.location
-  version                      = "12.0"
-  minimum_tls_version          = "1.2"
-  administrator_login          = var.local_sql_admin_settings.local_sql_admin
-  administrator_login_password = data.azurerm_key_vault_secret.local_sql_admin_password.value
+  name                                 = var.override_name != "" && var.override_name != null ? var.override_name : local.sql_server_name
+  resource_group_name                  = var.resource_group_name
+  location                             = var.location
+  version                              = "12.0"
+  minimum_tls_version                  = "1.2"
+  administrator_login                  = var.local_sql_admin_settings.local_sql_admin
+  administrator_login_password         = data.azurerm_key_vault_secret.local_sql_admin_password.value
+  public_network_access_enabled        = var.public_network_settings.access_enabled
+  outbound_network_restriction_enabled = false
 
   azuread_administrator {
     azuread_authentication_only = var.azuread_authentication_only_enabled
@@ -19,10 +21,21 @@ resource "azurerm_mssql_server" "sql_server" {
 }
 
 resource "azurerm_mssql_virtual_network_rule" "sql_server_network_rule" {
-  for_each  = { for subnet in var.allowed_subnets : subnet.subnet_name => subnet }
-  name      = each.key
-  server_id = azurerm_mssql_server.sql_server.id
-  subnet_id = data.azurerm_subnet.subnet[each.key].id
+  for_each = {
+    for subnet in var.public_network_settings.allowed_subnets : subnet.subnet_name => subnet
+    if var.public_network_settings.access_enabled
+  }
+  name                                 = each.key
+  server_id                            = azurerm_mssql_server.sql_server.id
+  subnet_id                            = data.azurerm_subnet.subnet[each.key].id
+  ignore_missing_vnet_service_endpoint = false
+
+  # lifecycle {
+  #   precondition {
+  #     condition = data.azurerm_subnet.subnet[each.key].service_endpoints
+  #     error_message = ""
+  #   }
+  # }
 }
 
 resource "azurerm_mssql_server_extended_auditing_policy" "sql_auditing" {
