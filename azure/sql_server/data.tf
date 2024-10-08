@@ -14,7 +14,7 @@ data "azurerm_subnet" "subnet" {
 }
 
 data "azurerm_storage_account" "auditing_storage_account" {
-  count               = local.audit_enabled
+  count               = local.audit_enabled ? 1 : 0
   name                = var.storage_account_auditing_settings.storage_account_name
   resource_group_name = var.storage_account_auditing_settings.storage_account_resource_group
 }
