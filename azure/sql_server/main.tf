@@ -39,6 +39,7 @@ resource "azurerm_mssql_virtual_network_rule" "sql_server_network_rule" {
 }
 
 resource "azurerm_mssql_server_extended_auditing_policy" "sql_auditing" {
+  count                                   = local.audit_enabled
   server_id                               = azurerm_mssql_server.sql_server.id
   storage_endpoint                        = data.azurerm_storage_account.auditing_storage_account.primary_blob_endpoint
   storage_account_access_key              = data.azurerm_storage_account.auditing_storage_account.primary_access_key
