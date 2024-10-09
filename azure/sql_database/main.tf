@@ -5,7 +5,7 @@ resource "azurerm_mssql_database" "sql_database" {
   collation       = var.collation
   license_type    = var.license_type
   elastic_pool_id = var.sql_elastic_pool_name != "" && var.sql_elastic_pool_name != null ? data.azurerm_mssql_elasticpool.sql_elasticpool[0].id : null
-  max_size_gb     = ar.sql_elastic_pool_name != "" && var.sql_elastic_pool_name != null ? 1024 : var.max_size_gb
+  max_size_gb     = var.sql_elastic_pool_name != "" && var.sql_elastic_pool_name != null ? 1024 : var.max_size_gb
 
   short_term_retention_policy {
     retention_days           = local.backup_settings.pitr_backup_retention_days
