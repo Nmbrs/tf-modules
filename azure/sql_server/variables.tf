@@ -14,7 +14,7 @@ variable "environment" {
 
   validation {
     condition     = contains(["dev", "test", "sand", "prod"], var.environment)
-    error_message = format("Invalid value '%s' for variable 'environment', valid options are 'dev', 'test', 'sand', 'global'.", var.environment)
+    error_message = format("Invalid value '%s' for variable 'environment', valid options are 'dev', 'test', 'sand', 'prod'.", var.environment)
   }
 }
 
