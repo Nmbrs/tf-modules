@@ -29,13 +29,6 @@ resource "azurerm_mssql_virtual_network_rule" "sql_server_network_rule" {
   server_id                            = azurerm_mssql_server.sql_server.id
   subnet_id                            = data.azurerm_subnet.subnet[each.key].id
   ignore_missing_vnet_service_endpoint = false
-
-  lifecycle {
-    precondition {
-      condition = contains([for endpoint in data.azurerm_subnet.subnet[each.key].service_endpoints : lower(data.azurerm_subnet.subnet[each.key].service_endpoints)], lower("Microsoft.SQL"))
-      error_message = format("Invalid subnet '%s'. One of the service endpoints must be of the type 'Microsoft.SQL'",data.azurerm_subnet.subnet[each.key].name)
-    }
-  }
 }
 
 resource "azurerm_mssql_server_extended_auditing_policy" "sql_auditing" {
