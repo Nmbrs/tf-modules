@@ -6,7 +6,9 @@ resource "azurerm_redis_cache" "redis" {
   redis_version                 = 6
   family                        = var.sku_name == "Premium" ? "P" : "C"
   sku_name                      = var.sku_name
-  enable_non_ssl_port           = false
+  access_keys_authentication_enabled  = true
+
+  non_ssl_port_enabled =            false
   minimum_tls_version           = "1.2"
   public_network_access_enabled = true
   zones                         = []
@@ -15,13 +17,12 @@ resource "azurerm_redis_cache" "redis" {
   shard_count = var.sku_name == "Premium" ? var.shard_count : 0 # Sharding is only supported in the "Premium" rier
 
   redis_configuration {
-    enable_authentication = true
-    # This needs to be refacored after being solved in newer versios of the azurerm provider
-    # For more information see: https://github.com/hashicorp/terraform-provider-azurerm/pull/22309
+    active_directory_authentication_enabled = false # must be set to true to disable access key authentication.
     aof_backup_enabled = var.sku_name == "Premium" ? false : null
     rdb_backup_enabled = false
     # Removes the least recently used key out of all the keys with an expiration set.
     maxmemory_policy = "volatile-lru"
+  
   }
 
   # Maintenance schedule

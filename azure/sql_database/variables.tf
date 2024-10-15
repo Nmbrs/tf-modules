@@ -36,14 +36,14 @@ variable "sql_server_settings" {
     name                = string
     resource_group_name = string
   })
-
 }
 
-variable "sql_elastic_pool_name" {
-  description = "The name of the elastic pool to add the database to"
-  type        = string
-  default     = null
-  nullable    = true
+variable "elastic_pool_settings" {
+  description = "SQL server settings."
+  type = object({
+    name                = string
+    resource_group_name = string
+  })
 }
 
 variable "collation" {
