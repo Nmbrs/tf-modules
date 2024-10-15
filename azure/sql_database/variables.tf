@@ -1,7 +1,20 @@
-# variable "sql_server_resource_group_name" {
-#   description = "The name of the resource group in which the SQL server exists."
-#   type        = string
-# }
+
+variable "workload" {
+  description = "Name of the database to create"
+  type        = string
+
+  validation {
+    condition     = can(coalesce(var.workload))
+    error_message = format("Invalid value '%s' for variable 'workload'. It must be a non-empty string.", var.workload)
+  }
+}
+
+variable "override_name" {
+  description = "Override the name of the SQL database, to bypass naming convention"
+  type        = string
+  default     = null
+  nullable    = true
+}
 
 variable "location" {
   description = "The location where the SQL Server will be created"
@@ -17,15 +30,6 @@ variable "environment" {
   }
 }
 
-# variable "sql_server_name" {
-#   description = "The name of the SQL Server to connect to"
-#   type        = string
-#   validation {
-#     condition     = var.sql_server_name != "" && var.sql_server_name != null 
-#     error_message = "Variable 'sql_server_name' cannot be empty."
-#   }
-# }
-
 variable "sql_server_settings" {
   description = "SQL server settings."
   type = object({
@@ -37,18 +41,6 @@ variable "sql_server_settings" {
 
 variable "sql_elastic_pool_name" {
   description = "The name of the elastic pool to add the database to"
-  type        = string
-  default     = null
-  nullable    = true
-}
-
-variable "workload" {
-  description = "Name of the database to create"
-  type        = string
-}
-
-variable "override_name" {
-  description = "Override the name of the SQL database, to bypass naming convention"
   type        = string
   default     = null
   nullable    = true
