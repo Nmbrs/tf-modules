@@ -1,5 +1,13 @@
 # Changelog
 
+## [8.5.0](https://github.com/Nmbrs/tf-modules/compare/v8.4.0...v8.5.0) (2024-10-17)
+
+
+### Features
+
+* **sql_database:** add sql database module ([#284](https://github.com/Nmbrs/tf-modules/issues/284)) ([da73f5c](https://github.com/Nmbrs/tf-modules/commit/da73f5cbcfea9842eadf66c23d69d3719aa8384c))
+* **sql_server:** add sql server module ([#285](https://github.com/Nmbrs/tf-modules/issues/285)) ([51306c1](https://github.com/Nmbrs/tf-modules/commit/51306c11c17fd55000490311a374acdc0e69a350))
+
 ## [8.4.0](https://github.com/Nmbrs/tf-modules/compare/v8.3.0...v8.4.0) (2024-10-07)
 
 
