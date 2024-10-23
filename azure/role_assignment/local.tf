@@ -1,6 +1,6 @@
 locals {
   resource_data_blocks = {
-    resource_group = data.azurerm_resource_group.resourc,
+    resource_group = data.azurerm_resource_group.resource_group
     # Add more resource types and corresponding data blocks as needed
   }
 
