@@ -14,9 +14,9 @@ variable "principal_name" {
   default  = null
 }
 
-variable "principal_resource_group" {
-  type = string
-}
+# variable "principal_resource_group" {
+#   type = string
+# }
 
 variable "resource_name" {
   type     = string
