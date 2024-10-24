@@ -39,7 +39,7 @@ data "azurerm_resource_group" "resource_group" {
 }
 
 # roles
-data "azurerm_role_definition" "role_definition" {
-  for_each = toset(var.roles)
-  name     = each.value
-}
+# data "azurerm_role_definition" "role_definition" {
+#   for_each = toset(var.roles)
+#   name     = each.value
+# }
