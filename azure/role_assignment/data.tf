@@ -28,7 +28,7 @@ data "azuread_user" "user" {
 
 # resources
 data "azurerm_subscriptions" "subscription" {
-  count = var.resource_type == "subscription" ? 1 : 0
+  count                 = var.resource_type == "subscription" ? 1 : 0
   display_name_contains = var.resource_name
 }
 

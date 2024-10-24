@@ -32,7 +32,7 @@ variable "resource_type" {
   #   error_message = format("Invalid value '%s' for variable 'resource_settings.type'. Valid options are 'service_bus', 'service_bus_queue', 'storage_account', 'key_vault', 'app_configuration', 'key_vault', 'resource_group', 'container_registry', 'cosmos_db_nosql'.", var.resource_settings.type)
   # }
   validation {
-    condition     = contains(["resource_group"], var.resource_type)
+    condition     = contains(["resource_group", "subscription"], var.resource_type)
     error_message = format("Invalid value '%s' for variable 'var.resource_type'. Valid options are 'resource_group'.", var.resource_type)
   }
 }
