@@ -4,6 +4,7 @@
 #   resource_group_name = "example-rg"
 # }
 
+# principal
 data "azuread_service_principal" "managed_identity" {
   count        = var.principal_type == "managed_identity" ? 1 : 0
   display_name = var.principal_name
@@ -25,7 +26,14 @@ data "azuread_user" "user" {
   user_principal_name = var.principal_name
 }
 
+# resources
 data "azurerm_resource_group" "resource_group" {
   count = var.resource_type == "resource_group" ? 1 : 0
   name  = var.resource_name
+}
+
+# roles
+data "azurerm_role_definition" "role_definition" {
+  for_each = toset(var.roles)
+  name     = each.value
 }
