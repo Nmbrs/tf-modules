@@ -27,6 +27,12 @@ data "azuread_user" "user" {
 }
 
 # resources
+data "azurerm_subscriptions" "subscription" {
+  count = var.resource_type == "subscription" ? 1 : 0
+  display_name_contains = var.resource_name
+}
+
+
 data "azurerm_resource_group" "resource_group" {
   count = var.resource_type == "resource_group" ? 1 : 0
   name  = var.resource_name

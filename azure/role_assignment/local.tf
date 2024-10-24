@@ -1,5 +1,6 @@
 locals {
   resource_data_blocks = {
+    subscription = data.azurerm_subscriptions.subscription[0]
     resource_group = data.azurerm_resource_group.resource_group
     # Add more resource types and corresponding data blocks as needed
   }
@@ -22,3 +23,4 @@ locals {
 
   }
 }
+
