@@ -40,7 +40,7 @@ variable "resources" {
   }
 
   validation {
-    condition     = length(var.resources.roles) == length(distinct(lower(var.resources.roles)))
+    condition     = alltrue([for resource in var.resources : length(resource.roles) == length(distinct(lower(resource.roles)))])
     error_message = "At least one 'role' property from one of the 'resources' is duplicated. They must be unique."
   }
 }
