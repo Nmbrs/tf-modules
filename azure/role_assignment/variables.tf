@@ -30,7 +30,7 @@ variable "resources" {
   }
 
   validation {
-    condition     = length([for resource in var.var.resources : resource.name]) == length(distinct([for resource in var.resources : trimspace(lower(resource.name))]))
+    condition     = length([for resource in var.resources : resource.name]) == length(distinct([for resource in var.resources : trimspace(lower(resource.name))]))
     error_message = "At least one 'name' property from one of the 'resources' is duplicated. They must be unique."
   }
 
