@@ -35,8 +35,8 @@ variable "resources" {
   }
 
   validation {
-    condition     = alltrue([for resource in var.resources : contains(["resource_group"], resource.type)])
-    error_message = "At least one 'type' property from 'policies' is invalid. Valid options are 'resource_group'."
+    condition     = alltrue([for resource in var.resources : contains(["resource_group", "key_vault", "storage_account", "service_bus", "app_configuration"], resource.type)])
+    error_message = "At least one 'type' property from 'policies' is invalid. Valid options are 'resource_group', 'key_vault', 'storage_account', 'service_bus', 'app_configuration'."
   }
 }
 
