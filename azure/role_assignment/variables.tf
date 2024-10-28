@@ -38,5 +38,10 @@ variable "resources" {
     condition     = alltrue([for resource in var.resources : contains(["resource_group", "key_vault", "storage_account", "service_bus", "app_configuration"], resource.type)])
     error_message = "At least one 'type' property from 'policies' is invalid. Valid options are 'resource_group', 'key_vault', 'storage_account', 'service_bus', 'app_configuration'."
   }
+
+  validation {
+    condition     = length(var.resources.roles) == length(distinct(lower(var.resources.roles)))
+    error_message = "At least one 'role' property from one of the 'resources' is duplicated. They must be unique."
+  }
 }
 

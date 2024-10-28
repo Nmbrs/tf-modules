@@ -34,8 +34,8 @@ data "azurerm_key_vault" "key_vault" {
     for resource in var.resources : lower(resource.name) => resource
     if resouce.type == "key_vault"
   }
-  name                = var.resource_settings.name
-  resource_group_name = var.resource_settings.resource_group_name
+  name                = each.value.name
+  resource_group_name = each.value.resource_group_name
 }
 
 data "azurerm_storage_account" "storage_account" {
@@ -43,8 +43,8 @@ data "azurerm_storage_account" "storage_account" {
     for resource in var.resources : lower(resource.name) => resource
     if resouce.type == "storage_account"
   }
-  name                = var.resource_settings.name
-  resource_group_name = var.resource_settings.resource_group_name
+  name                = each.value.name
+  resource_group_name = each.value.resource_group_name
 }
 
 data "azurerm_servicebus_namespace" "service_bus" {
@@ -52,8 +52,8 @@ data "azurerm_servicebus_namespace" "service_bus" {
     for resource in var.resources : lower(resource.name) => resource
     if resouce.type == "service_bus"
   }
-  name                = var.resource_settings.name
-  resource_group_name = var.resource_settings.resource_group_name
+  name                = each.value.name
+  resource_group_name = each.value.resource_group_name
 }
 
 data "azurerm_app_configuration" "app_configuration" {
@@ -61,6 +61,6 @@ data "azurerm_app_configuration" "app_configuration" {
     for resource in var.resources : lower(resource.name) => resource
     if resouce.type == "app_configuration"
   }
-  name                = var.resource_settings.name
-  resource_group_name = var.resource_settings.resource_group_name
+  name                = each.value.name
+  resource_group_name = each.value.resource_group_name
 }

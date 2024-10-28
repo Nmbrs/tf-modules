@@ -1,6 +1,10 @@
 locals {
   resource_data_blocks = {
-    resource_group = data.azurerm_resource_group.resource_group
+    resource_group    = data.azurerm_resource_group.resource_group
+    key_vault         = data.azurerm_key_vault.key_vault
+    storage_account   = data.azurerm_storage_account.storage_account
+    service_bus       = data.azurerm_servicebus_namespace.service_bus
+    app_configuration = data.azurerm_app_configuration.app_configuration
     # Add more resource types and corresponding data blocks as needed
   }
 
