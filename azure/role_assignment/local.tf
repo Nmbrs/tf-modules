@@ -32,6 +32,7 @@ locals {
           resource_type                = resource.type
           resource_resource_group_name = resource.resource_group_name
           resource_subscription_name   = resource.subscription_name
+          resource_id                  = resource.id
           role_name                    = role
         }
       ]
