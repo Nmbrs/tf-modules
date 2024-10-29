@@ -11,7 +11,7 @@ resource "azurerm_role_assignment" "default_assignment" {
 
 resource "azurerm_role_assignment" "custom_assignment" {
   for_each = {
-    for assignment in local.assignments : "${lower(split("/", assignment.id)[length(split("/", assignment.id)) - 1])}_${replace(lower(assignment.role_name), " ", "-")}" => assignment
+    for assignment in local.assignments : "${lower(assignment.resource_name)}_${replace(lower(assignment.role_name), " ", "-")}" => assignment
     if assignment.resource_type == "custom"
   }
   scope                = each.value.resource_id
