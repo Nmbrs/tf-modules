@@ -37,5 +37,5 @@ variable "auto_inflate_enabled" {
 variable "maximum_throughput_units" {
   description = "The maximum throughput units of the event hub namespace."
   type        = number
-  
+
 }
