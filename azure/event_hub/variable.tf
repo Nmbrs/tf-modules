@@ -21,4 +21,21 @@ variable "location" {
 variable "event_hub" {
   description = "The names of the event hubs"
   type        = list(string)
+  default     = []
+}
+
+variable "capacity" {
+  description = "The capacity of the event hub namespace."
+  type        = number
+}
+
+variable "auto_inflate_enabled" {
+  description = "The auto inflate enabled of the event hub namespace."
+  type        = bool
+}
+
+variable "maximum_throughput_units" {
+  description = "The maximum throughput units of the event hub namespace."
+  type        = number
+  
 }
