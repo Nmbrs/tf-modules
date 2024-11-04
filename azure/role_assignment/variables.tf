@@ -56,7 +56,7 @@ variable "resources" {
 
   # Validation for custom resources
   validation {
-    condition     = alltrue([for resource in var.resources : resource.type != "custom" || (resource.id != null && resource_group_name == null)])
+    condition     = alltrue([for resource in var.resources : resource.type != "custom" || (resource.id != null && resource.resource_group_name == null)])
     error_message = "At least one 'custom' resource is missing a required 'id' or has an incorrectly set 'resource_group_name'. When 'type' is 'custom', 'id' is required and 'resource_group_name' must not be set."
   }
 
