@@ -38,8 +38,8 @@ variable "resources" {
 
   # Validation for resource types
   validation {
-    condition     = alltrue([for resource in var.resources : contains(["custom", "resource_group", "key_vault", "storage_account", "service_bus", "app_configuration"], resource.type)])
-    error_message = "At least one 'type' property from 'resources' is invalid. Valid options are 'custom' 'resource_group', 'key_vault', 'storage_account', 'service_bus', 'app_configuration'."
+    condition     = alltrue([for resource in var.resources : contains(["custom", "resource_group", "key_vault", "storage_account", "service_bus", "app_configuration", "cosmosdb_sql_account"], resource.type)])
+    error_message = "At least one 'type' property from 'resources' is invalid. Valid options are 'custom' 'resource_group', 'key_vault', 'storage_account', 'service_bus', 'app_configuration', 'cosmosdb_sql_account'."
   }
 
   # Validation for non-empty roles
