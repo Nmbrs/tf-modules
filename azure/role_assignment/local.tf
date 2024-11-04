@@ -14,7 +14,7 @@ locals {
     managed_identity  = data.azuread_service_principal.managed_identity,
     user              = data.azuread_user.user
 
-    # Add more resource types and corresponding data blocks as needed
+    # Add more principal types and corresponding data blocks as needed
   }
 
   principal_type = {
@@ -28,15 +28,13 @@ locals {
     [
       for resource in var.resources : [
         for role in resource.roles : {
-          resource_name                = resource.name
-          resource_type                = resource.type
-          resource_resource_group_name = resource.resource_group_name
-          resource_subscription_name   = resource.subscription_name
-          resource_id                  = resource.id
-          role_name                    = role
+          resource_name       = resource.name
+          resource_type       = resource.type
+          resource_group_name = resource.type == "custom" ? null : resource.resource_group_name
+          resource_id         = resource.type == "custom" ? resource.id : null
+          role_name           = role
         }
       ]
     ]
   )
 }
-
