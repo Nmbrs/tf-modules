@@ -16,6 +16,7 @@ locals {
 
     # Add more resource types and corresponding data blocks as needed
   }
+  # For more information on subresource names: https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview
   subresource_name = {
     "app_service"           = "sites"
     "storage_account_blob"  = "blob"
@@ -29,5 +30,6 @@ locals {
     "container_registry"    = "registry"
     "cosmos_db_nosql"       = "SQL"
     "cosmos_db_mongodb"     = "MongoDB"
+    "redis_cache"           = "redisCache"
   }
 }

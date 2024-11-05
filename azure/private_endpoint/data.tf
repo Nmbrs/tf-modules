@@ -80,3 +80,9 @@ data "azurerm_cosmosdb_account" "cosmos_db_mongodb" {
   name                = var.resource_settings.name
   resource_group_name = var.resource_settings.resource_group_name
 }
+
+data "azurerm_redis_cache" "redis_cache" {
+  count               = var.resource_settings.type == "redis_cache" ? 1 : 0
+  name                = var.resource_settings.name
+  resource_group_name = var.resource_settings.resource_group_name
+}
