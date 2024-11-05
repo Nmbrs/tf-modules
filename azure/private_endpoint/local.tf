@@ -13,9 +13,10 @@ locals {
     container_registry    = data.azurerm_container_registry.container_registry,
     cosmos_db_nosql       = data.azurerm_cosmosdb_account.cosmos_db_nosql,
     cosmos_db_mongodb     = data.azurerm_cosmosdb_account.cosmos_db_mongodb,
-
+    redis_cache           = data.azurerm_redis_cache.redis_cache,
     # Add more resource types and corresponding data blocks as needed
   }
+  
   # For more information on subresource names: https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview
   subresource_name = {
     "app_service"           = "sites"
