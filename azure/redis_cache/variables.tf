@@ -48,3 +48,9 @@ variable "sku_name" {
     error_message = format("Invalid value '%s' for variable 'sku_name', valid options are 'Basic', 'Standard', 'Premium'.", var.sku_name)
   }
 }
+
+variable "public_network_access_enabled" {
+  description = "Whether or not public network access is allowed for this redis instance."
+  type        = bool
+  default     = false
+}

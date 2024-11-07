@@ -6,16 +6,16 @@ resource "azurerm_redis_cache" "redis" {
   redis_version                 = 6
   family                        = var.sku_name == "Premium" ? "P" : "C"
   sku_name                      = var.sku_name
-  enable_non_ssl_port           = false
+  enable_non_ssl_port           = false # Note: update "to non_ssl_port_enabled = false" when upgrading to azurerm 4.x
   minimum_tls_version           = "1.2"
-  public_network_access_enabled = true
+  public_network_access_enabled = var.public_network_access_enabled
   zones                         = []
   tenant_settings               = {}
 
   shard_count = var.sku_name == "Premium" ? var.shard_count : 0 # Sharding is only supported in the "Premium" rier
 
   redis_configuration {
-    enable_authentication = true
+    enable_authentication = true #Note: update to "authentication_enabled = true" when upgrading to azurerm 4.x
     # This needs to be refacored after being solved in newer versios of the azurerm provider
     # For more information see: https://github.com/hashicorp/terraform-provider-azurerm/pull/22309
     aof_backup_enabled = var.sku_name == "Premium" ? false : null
