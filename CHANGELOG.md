@@ -1,5 +1,13 @@
 # Changelog
 
+## [8.6.0](https://github.com/Nmbrs/tf-modules/compare/v8.5.0...v8.6.0) (2024-11-07)
+
+
+### Features
+
+* **private_endpoint:** add redis cache support ([#304](https://github.com/Nmbrs/tf-modules/issues/304)) ([60ea6a1](https://github.com/Nmbrs/tf-modules/commit/60ea6a1134ecedb40a325816ea6cc32230f61e8a))
+* **redis_cache:** add public network flag redis ([#306](https://github.com/Nmbrs/tf-modules/issues/306)) ([e43871b](https://github.com/Nmbrs/tf-modules/commit/e43871b94c0d606e89a4c39da42a45cb184c16ae))
+
 ## [8.5.0](https://github.com/Nmbrs/tf-modules/compare/v8.4.0...v8.5.0) (2024-10-17)
 
 
