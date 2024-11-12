@@ -15,7 +15,7 @@ variable "principal_name" {
 
 variable "resources" {
   type = list(object({
-    name                = string
+    name                = optional(string, null)
     type                = string
     id                  = optional(string, null)
     resource_group_name = optional(string, null)
@@ -24,17 +24,17 @@ variable "resources" {
   default     = []
   description = "A list of resources with their details, including name, type, ID, resource group name, and roles."
 
-  # Validation for non-empty names
-  validation {
-    condition     = alltrue([for resource in var.resources : can(coalesce(resource.name))])
-    error_message = "At least one 'name' property from 'resources' is invalid. They must be non-empty string values."
-  }
+  # # Validation for non-empty names
+  # validation {
+  #   condition     = alltrue([for resource in var.resources : can(coalesce(resource.name))])
+  #   error_message = "At least one 'name' property from 'resources' is invalid. They must be non-empty string values."
+  # }
 
-  # Validation: for unique names
-  validation {
-    condition     = length([for resource in var.resources : resource.name]) == length(distinct([for resource in var.resources : trimspace(lower(resource.name))]))
-    error_message = "At least one 'name' property from one of the 'resources' is duplicated. They must be unique."
-  }
+  # # Validation: for unique names
+  # validation {
+  #   condition     = length([for resource in var.resources : resource.name]) == length(distinct([for resource in var.resources : trimspace(lower(resource.name))]))
+  #   error_message = "At least one 'name' property from one of the 'resources' is duplicated. They must be unique."
+  # }
 
   # Validation for resource types
   validation {
