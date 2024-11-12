@@ -28,10 +28,10 @@ locals {
     [
       for resource in var.resources : [
         for role in resource.roles : {
-          resource_name       = resource.name
+          resource_name       = lower(element(split("/", resource.id), length(split("/", resource.id)) - 1))
           resource_type       = resource.type
           resource_group_name = resource.type == "custom" ? null : resource.resource_group_name
-          resource_id         = resource.type == "custom" ? resource.id : null
+          resource_id         = resource.id
           role_name           = role
         }
       ]
