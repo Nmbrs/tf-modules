@@ -18,10 +18,22 @@ variable "location" {
   type        = string
 }
 
-variable "event_hub" {
-  description = "The names of the event hubs"
-  type        = list(string)
-  default     = []
+variable "event_hubs_settings" {
+  description = "Configuration settings for the Event Hubs, including names, consumer groups, and authorization rules."
+  type = list(object({
+    name = list(string)
+    consumer_groups = list(object({
+      name              = string
+      partition_count   = number
+      message_retention = number
+    }))
+    eventhub_authorization_rule = list(object({
+      name   = string
+      listen = bool
+      send   = bool
+      manage = bool
+    }))
+  }))
 }
 
 variable "capacity" {
@@ -38,4 +50,14 @@ variable "maximum_throughput_units" {
   description = "The maximum throughput units of the event hub namespace."
   type        = number
 
+}
+
+variable "sku" {
+  description = "The sku of the event hub namespace."
+  type        = string
+
+  validation {
+    condition     = contains(["Basic", "Standard", "Premium"], var.sku)
+    error_message = "The sku must be either Basic, Standard or Premium."
+  }
 }
