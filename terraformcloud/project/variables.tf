@@ -8,7 +8,7 @@ variable "organization_name" {
   type        = string
 }
 
-variable "variable_sets" {
+variable "associated_variable_sets" {
   description = "List of variable sets associated to the project."
   type        = list(string)
 }
