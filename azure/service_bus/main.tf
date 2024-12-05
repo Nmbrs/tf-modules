@@ -5,11 +5,6 @@ resource "azurerm_servicebus_namespace" "service_bus" {
   sku                 = var.sku_name
   capacity            = var.capacity
   minimum_tls_version = "1.2"
-  zone_redundant      = var.zone_redundant
-
-  identity {
-    type = "SystemAssigned"
-  }
 
   lifecycle {
     ignore_changes = [tags]
