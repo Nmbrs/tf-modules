@@ -21,13 +21,13 @@ variable "location" {
 variable "event_hubs_settings" {
   description = "Configuration settings for the Event Hubs, including names, consumer groups, and authorization rules."
   type = list(object({
-    name = list(string)
+    name = string
     consumer_groups = list(object({
       name              = string
       partition_count   = number
       message_retention = number
     }))
-    eventhub_authorization_rule = list(object({
+    authorization_rules = list(object({
       name   = string
       listen = bool
       send   = bool
