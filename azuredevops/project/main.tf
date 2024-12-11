@@ -87,6 +87,25 @@ resource "azuredevops_check_approval" "sand_environment" {
   timeout = (24 * 60) * 14 #in minutes
 }
 
+# stage
+resource "azuredevops_environment" "stage" {
+  project_id = azuredevops_project.project.id
+  name       = "stage"
+}
+
+resource "azuredevops_check_approval" "stage_environment" {
+  project_id           = azuredevops_project.project.id
+  target_resource_id   = azuredevops_environment.stage.id
+  target_resource_type = "environment"
+
+  requester_can_approve      = true
+  minimum_required_approvers = 1
+  approvers = [
+    data.azuredevops_group.project_default_team.origin_id
+  ]
+  timeout = (24 * 60) * 14 #in minutes
+}
+
 # ==============================================================================
 # Azure DevOps Project - Group Memberships
 # ==============================================================================
