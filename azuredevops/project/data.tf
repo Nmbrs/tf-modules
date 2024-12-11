@@ -1,14 +1,14 @@
 
 data "azuredevops_group" "aad_administrators" {
-  name = lower(var.group_administrators)
+  name = lower(var.administrators_groups[0])
 }
 
 data "azuredevops_group" "aad_contributors" {
-  name = lower(var.group_contributors)
+  name = lower(var.contributors_groups[0])
 }
 
 data "azuredevops_group" "aad_readers" {
-  name = lower(var.group_readers)
+  name = lower(var.readers_groups[0])
 }
 
 data "azuredevops_group" "contributors" {
