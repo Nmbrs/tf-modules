@@ -113,7 +113,7 @@ resource "azuredevops_group_membership" "project_default_team_membership" {
   group = data.azuredevops_group.project_default_team.descriptor
   mode  = "add"
   members = [
-    data.azuredevops_group.aad_contributors.descriptor
+    for group in data.azuredevops_group.aad_contributors : group.value.descriptor
   ]
 }
 
@@ -121,7 +121,7 @@ resource "azuredevops_group_membership" "project_administrators" {
   group = data.azuredevops_group.project_administrators.descriptor
   mode  = "add"
   members = [
-    data.azuredevops_group.aad_administrators.descriptor
+    for group in data.azuredevops_group.aad_administrators : group.value.descriptor
   ]
 }
 
@@ -129,6 +129,23 @@ resource "azuredevops_group_membership" "readers" {
   group = data.azuredevops_group.readers.descriptor
   mode  = "add"
   members = [
-    data.azuredevops_group.aad_readers.descriptor
+    for group in data.azuredevops_group.aad_readers : group.value.descriptor
   ]
 }
+
+# # ==============================================================================
+# # Azure DevOps Azure Service Connections  - Workload Identity Federation
+# # ==============================================================================
+# resource "azuredevops_serviceendpoint_azurerm" "azure_connection" {
+#   for_each                               = { for azure_connection in var.service_connections.azure : azure_connection.name => azure_connection }
+#   project_id                             = azuredevops_project.project.id
+#   service_endpoint_name                  = each.value.name
+#   description                            = "Azure Service conncetion managed by Terraform"
+#   service_endpoint_authentication_scheme = "WorkloadIdentityFederation"
+#   credentials {
+#     serviceprincipalid = data.azurerm_user_assigned_identity[each.key].managed_identity.id
+#   }
+#   azurerm_spn_tenantid      = data.azurerm_subscription.current.tenant_id
+#   azurerm_subscription_id   = data.azurerm_subscription.current.id
+#   azurerm_subscription_name = data.azurerm_subscription.current.display_name
+# }
