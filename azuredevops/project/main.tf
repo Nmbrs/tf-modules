@@ -113,7 +113,7 @@ resource "azuredevops_group_membership" "project_default_team_membership" {
   group = data.azuredevops_group.project_default_team.descriptor
   mode  = "add"
   members = [
-    for group in data.azuredevops_group.aad_contributors : group.value.descriptor
+    for group in data.azuredevops_group.aad_contributors : group.descriptor
   ]
 }
 
@@ -121,7 +121,7 @@ resource "azuredevops_group_membership" "project_administrators" {
   group = data.azuredevops_group.project_administrators.descriptor
   mode  = "add"
   members = [
-    for group in data.azuredevops_group.aad_administrators : group.value.descriptor
+    for group in data.azuredevops_group.aad_administrators : group.descriptor
   ]
 }
 
@@ -129,7 +129,7 @@ resource "azuredevops_group_membership" "readers" {
   group = data.azuredevops_group.readers.descriptor
   mode  = "add"
   members = [
-    for group in data.azuredevops_group.aad_readers : group.value.descriptor
+    for group in data.azuredevops_group.aad_readers : group.descriptor
   ]
 }
 
