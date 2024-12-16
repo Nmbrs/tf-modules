@@ -30,7 +30,7 @@ variable "response_timeout_seconds" {
 
   validation {
     condition     = var.response_timeout_seconds >= 16 && var.response_timeout_seconds <= 240
-    error_message = format("Invalid value '%s' for variable 'response_timeout_seconds', valid values are between 16 and 240 '.", var.sku_name)
+    error_message = format("Invalid value '%s' for variable 'response_timeout_seconds', valid values are between 16 and 240 '.", var.response_timeout_seconds)
   }
 }
 variable "endpoints" {
