@@ -39,6 +39,8 @@ variable "endpoints" {
     name = string
     origin_settings = object({
       fqdns                    = list(string)
+      path                     = string
+      patterns_to_match        = list(string)
       http_port                = number
       https_port               = number
       session_affinity_enabled = bool

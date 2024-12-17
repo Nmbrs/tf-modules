@@ -70,12 +70,12 @@ resource "azurerm_cdn_frontdoor_route" "route" {
     origin.cdn_frontdoor_origin_group_id == azurerm_cdn_frontdoor_origin_group.group[lower(each.value.name)].id ? origin.id : null
   ]
   #cdn_frontdoor_rule_set_ids    = [azurerm_cdn_frontdoor_rule_set.example.id]
-  enabled = true
-
-  forwarding_protocol    = "HttpsOnly"
-  https_redirect_enabled = true
-  patterns_to_match      = ["/*"]
-  supported_protocols    = ["Http", "Https"]
+  enabled                   = true
+  cdn_frontdoor_origin_path = each.value.origin_settings.path
+  forwarding_protocol       = "HttpsOnly"
+  https_redirect_enabled    = true
+  patterns_to_match         = each.value.origin_settings.patterns_to_match
+  supported_protocols       = ["Http", "Https"]
 
   #cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.contoso.id, azurerm_cdn_frontdoor_custom_domain.fabrikam.id]
   #link_to_default_domain          = false
