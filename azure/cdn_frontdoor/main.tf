@@ -20,6 +20,11 @@ resource "azurerm_cdn_frontdoor_endpoint" "endpoint" {
   }
 }
 
+resource "azurerm_cdn_frontdoor_rule_set" "rule_set" {
+  for_each                 = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
+  name                     = each.value.name
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.profile.id
+}
 
 resource "azurerm_cdn_frontdoor_origin_group" "group" {
   for_each                 = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
@@ -43,7 +48,6 @@ resource "azurerm_cdn_frontdoor_origin_group" "group" {
   }
 }
 
-
 resource "azurerm_cdn_frontdoor_origin" "origin" {
   for_each                       = { for origin in local.origins : "${lower(origin.fqdn)}-${origin.endpoint_name}" => origin }
   name                           = replace(replace(each.value.fqdn, ".", "-"), "\\.$", "") # replaces . with - and remove trailing dots
@@ -59,23 +63,22 @@ resource "azurerm_cdn_frontdoor_origin" "origin" {
   weight   = 1
 }
 
-
 resource "azurerm_cdn_frontdoor_route" "route" {
   for_each                      = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
   name                          = "fdr-${each.value.name}-${var.environment}"
-  cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.endpoint[lower(each.value.name)].id
-  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.group[lower(each.value.name)].id
+  cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.endpoint[each.key].id
+  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.group[each.key].id
   cdn_frontdoor_origin_ids = [
     for origin in azurerm_cdn_frontdoor_origin.origin :
-    origin.cdn_frontdoor_origin_group_id == azurerm_cdn_frontdoor_origin_group.group[lower(each.value.name)].id ? origin.id : null
+    origin.cdn_frontdoor_origin_group_id == azurerm_cdn_frontdoor_origin_group.group[each.key].id ? origin.id : null
   ]
-  #cdn_frontdoor_rule_set_ids    = [azurerm_cdn_frontdoor_rule_set.example.id]
-  enabled                   = true
-  cdn_frontdoor_origin_path = each.value.origin_settings.path
-  forwarding_protocol       = "HttpsOnly"
-  https_redirect_enabled    = true
-  patterns_to_match         = each.value.origin_settings.patterns_to_match
-  supported_protocols       = ["Http", "Https"]
+  cdn_frontdoor_rule_set_ids = [azurerm_cdn_frontdoor_rule_set.rule_set[each.key].id]
+  enabled                    = true
+  cdn_frontdoor_origin_path  = each.value.origin_settings.path
+  forwarding_protocol        = "HttpsOnly"
+  https_redirect_enabled     = true
+  patterns_to_match          = each.value.origin_settings.patterns_to_match
+  supported_protocols        = ["Http", "Https"]
 
   #cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.contoso.id, azurerm_cdn_frontdoor_custom_domain.fabrikam.id]
   #link_to_default_domain          = false
@@ -87,8 +90,15 @@ resource "azurerm_cdn_frontdoor_route" "route" {
   }
 }
 
-resource "azurerm_cdn_frontdoor_rule_set" "rule_set" {
-  for_each                 = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
-  name                     = each.value.name
-  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.profile.id
+
+
+resource "azurerm_cdn_frontdoor_custom_domain" "domain" {
+  name                     = "example-customDomain"
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.example.id
+  host_name                = "contoso.fabrikam.com"
+
+  tls {
+    certificate_type    = "ManagedCertificate"
+    minimum_tls_version = "TLS12"
+  }
 }
