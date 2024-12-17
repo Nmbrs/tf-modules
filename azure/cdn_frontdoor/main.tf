@@ -58,3 +58,31 @@ resource "azurerm_cdn_frontdoor_origin" "origin" {
   priority = index(local.origins, each.value) + 1
   weight   = 1
 }
+
+
+resource "azurerm_cdn_frontdoor_route" "route" {
+  for_each                      = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
+  name                          = "fdr-${each.value.name}-${var.environment}"
+  cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.endpoint[lower(each.value.name)].id
+  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.group[lower(each.value.name)].id
+  cdn_frontdoor_origin_ids = [
+    for origin in azurerm_cdn_frontdoor_origin.origin :
+    origin.cdn_frontdoor_origin_group_id == azurerm_cdn_frontdoor_origin_group.group[lower(each.value.name)].id ? origin.id : null
+  ]
+  #cdn_frontdoor_rule_set_ids    = [azurerm_cdn_frontdoor_rule_set.example.id]
+  enabled = true
+
+  forwarding_protocol    = "HttpsOnly"
+  https_redirect_enabled = true
+  patterns_to_match      = ["/*"]
+  supported_protocols    = ["Http", "Https"]
+
+  #cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.contoso.id, azurerm_cdn_frontdoor_custom_domain.fabrikam.id]
+  #link_to_default_domain          = false
+
+  cache {
+    query_string_caching_behavior = "IgnoreQueryString"
+    compression_enabled           = true
+    content_types_to_compress     = ["text/html", "text/javascript", "text/xml"]
+  }
+}
