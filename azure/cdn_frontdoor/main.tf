@@ -23,7 +23,7 @@ resource "azurerm_cdn_frontdoor_origin_group" "group" {
   health_probe {
     interval_in_seconds = each.value.origin_settings.health_probe.evaluation_interval_in_seconds
     path                = each.value.origin_settings.health_probe.path
-    protocol            = each.value.origin_settings.health_probe.protocol
+    protocol            = title(each.value.origin_settings.health_probe.protocol)
     request_type        = "HEAD" #Do not change this as it might reduce the traffic load on the origin
   }
 
