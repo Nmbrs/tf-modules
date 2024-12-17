@@ -38,10 +38,10 @@ variable "endpoints" {
   type = list(object({
     name = string
     origin_settings = object({
-      fqdns                      = list(string)
-      http_port                  = number
-      https_port                 = number
-      session_affinity_enabled   = bool
+      fqdns                    = list(string)
+      http_port                = number
+      https_port               = number
+      session_affinity_enabled = bool
       #request_timeout_in_seconds = optional(number, 30)
       health_probe = object({
         protocol = string

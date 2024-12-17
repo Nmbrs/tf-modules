@@ -3,6 +3,10 @@ resource "azurerm_cdn_frontdoor_profile" "profile" {
   resource_group_name      = var.resource_group_name
   response_timeout_seconds = var.response_timeout_seconds
   sku_name                 = local.sku_name[var.sku_name]
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
 
 resource "azurerm_cdn_frontdoor_endpoint" "endpoint" {
@@ -10,7 +14,12 @@ resource "azurerm_cdn_frontdoor_endpoint" "endpoint" {
   name                     = "fde-${each.value.name}-${var.environment}"
   enabled                  = true
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.profile.id
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
+
 
 resource "azurerm_cdn_frontdoor_origin_group" "group" {
   for_each                 = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
@@ -32,7 +41,12 @@ resource "azurerm_cdn_frontdoor_origin_group" "group" {
     sample_size                        = 4
     successful_samples_required        = 1
   }
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
+
 
 resource "azurerm_cdn_frontdoor_origin" "origin" {
   for_each                       = { for origin in local.origins : "${lower(origin.fqdn)}-${origin.endpoint_name}" => origin }
@@ -47,4 +61,8 @@ resource "azurerm_cdn_frontdoor_origin" "origin" {
   # Calculate priority (incremental based on the order of the origin in the list)
   priority = index(local.origins, each.value) + 1
   weight   = 1
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
