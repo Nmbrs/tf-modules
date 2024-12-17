@@ -16,7 +16,7 @@ resource "azurerm_cdn_frontdoor_origin_group" "group" {
   for_each                 = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
   name                     = "fdog-${each.value.name}-${var.environment}"
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.profile.id
-  session_affinity_enabled = each.value.session_affinity_enabled
+  session_affinity_enabled = each.value.origin_settings.session_affinity_enabled
 
   restore_traffic_time_to_healed_or_new_endpoint_in_minutes = 10
 
