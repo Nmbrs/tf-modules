@@ -86,3 +86,9 @@ resource "azurerm_cdn_frontdoor_route" "route" {
     content_types_to_compress     = ["text/html", "text/javascript", "text/xml"]
   }
 }
+
+resource "azurerm_cdn_frontdoor_rule_set" "rule_set" {
+  for_each                 = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
+  name                     = each.value.name
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.profile.id
+}
