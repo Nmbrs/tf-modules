@@ -41,10 +41,6 @@ resource "azurerm_cdn_frontdoor_origin_group" "group" {
     sample_size                        = 4
     successful_samples_required        = 1
   }
-
-  lifecycle {
-    ignore_changes = [tags]
-  }
 }
 
 
