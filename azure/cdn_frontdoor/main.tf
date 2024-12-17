@@ -57,8 +57,4 @@ resource "azurerm_cdn_frontdoor_origin" "origin" {
   # Calculate priority (incremental based on the order of the origin in the list)
   priority = index(local.origins, each.value) + 1
   weight   = 1
-
-  lifecycle {
-    ignore_changes = [tags]
-  }
 }
