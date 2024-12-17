@@ -64,7 +64,7 @@ resource "azurerm_cdn_frontdoor_origin" "origin" {
 }
 
 resource "azurerm_cdn_frontdoor_custom_domain" "domain" {
-  for_each                 = { for domain in local.custom_domain : lower(each.value.name) => domain }
+  for_each                 = { for domain in local.custom_domain : lower(domain.name) => domain }
   name                     = each.key
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.profile.id
   #dns_zone_id              = azurerm_dns_zone.example.id
