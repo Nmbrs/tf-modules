@@ -63,6 +63,19 @@ resource "azurerm_cdn_frontdoor_origin" "origin" {
   weight   = 1
 }
 
+resource "azurerm_cdn_frontdoor_custom_domain" "domain" {
+  for_each                 = { for domain in local.custom_domain : lower(each.value.name) => domain }
+  name                     = each.key
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.profile.id
+  #dns_zone_id              = azurerm_dns_zone.example.id
+  host_name                = each.key
+
+  tls {
+    certificate_type    = "ManagedCertificate"
+    minimum_tls_version = "TLS12"
+  }
+}
+
 resource "azurerm_cdn_frontdoor_route" "route" {
   for_each                      = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
   name                          = "fdr-${each.value.name}-${var.environment}"
@@ -91,14 +104,3 @@ resource "azurerm_cdn_frontdoor_route" "route" {
 }
 
 
-
-resource "azurerm_cdn_frontdoor_custom_domain" "domain" {
-  name                     = "example-customDomain"
-  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.example.id
-  host_name                = "contoso.fabrikam.com"
-
-  tls {
-    certificate_type    = "ManagedCertificate"
-    minimum_tls_version = "TLS12"
-  }
-}

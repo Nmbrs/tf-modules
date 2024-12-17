@@ -22,4 +22,15 @@ locals {
       }
     ]
   ])
+
+  custom_domain = flatten([
+    for endpoint in var.endpoints : [
+      for domain in endpoint.custom_domains :
+      {
+        name = domain
+        associated_endpoint_name = endpoint.name
+        
+      }
+    ]
+  ])
 }

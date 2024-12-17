@@ -37,6 +37,7 @@ variable "endpoints" {
   description = "A list of frontdoor endpoints."
   type = list(object({
     name = string
+    custom_domains = list(string)
     origin_settings = object({
       fqdns                    = list(string)
       path                     = string
