@@ -36,7 +36,7 @@ resource "azurerm_cdn_frontdoor_origin_group" "group" {
 
 resource "azurerm_cdn_frontdoor_origin" "origin" {
   for_each                       = { for origin in local.origins : "${lower(origin.fqdn)}-${origin.endpoint_name}" => origin }
-  name                           = each.value.fqdn
+  name                           = replace(replace(each.value.fqdn, ".", "-"), "\\.$", "") # replaces . with - and remove trailing dots
   cdn_frontdoor_origin_group_id  = azurerm_cdn_frontdoor_origin_group.group[lower(each.value.endpoint_name)].id
   enabled                        = true
   certificate_name_check_enabled = false
