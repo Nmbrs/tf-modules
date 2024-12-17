@@ -6,45 +6,45 @@ resource "azurerm_cdn_frontdoor_profile" "profile" {
 }
 
 resource "azurerm_cdn_frontdoor_endpoint" "endpoint" {
-  
-  for_each                 = { for endpoint in var.endpoints: lower(endpoint.name) => endpoint }
+  for_each                 = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
   name                     = "fde-${each.value.name}-${var.environment}"
   enabled                  = true
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.profile.id
 }
 
-# resource "azurerm_cdn_frontdoor_origin_group" "group" {
-#   name                     = "example-origin-group"
-#   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.example.id
-#   session_affinity_enabled = true
+resource "azurerm_cdn_frontdoor_origin_group" "group" {
+  for_each                 = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
+  name                     = "fdog-${each.value.name}-${var.environment}"
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.profile.id
+  session_affinity_enabled = each.value.session_affinity_enabled
 
-#   restore_traffic_time_to_healed_or_new_endpoint_in_minutes = 10
+  restore_traffic_time_to_healed_or_new_endpoint_in_minutes = 10
 
-#   health_probe {
-#     interval_in_seconds = 240
-#     path                = "/healthProbe"
-#     protocol            = "Https"
-#     request_type        = "HEAD"
-#   }
+  health_probe {
+    interval_in_seconds = each.value.origin_settings.health_probe.evaluation_interval_in_seconds
+    path                = each.value.origin_settings.health_probe.path
+    protocol            = each.value.origin_settings.health_probe.protocol
+    request_type        = "HEAD" #Do not change this as it might reduce the traffic load on the origin
+  }
 
-#   load_balancing {
-#     additional_latency_in_milliseconds = 0
-#     sample_size                        = 16
-#     successful_samples_required        = 3
-#   }
-# }
+  load_balancing {
+    additional_latency_in_milliseconds = 50
+    sample_size                        = 4
+    successful_samples_required        = 1
+  }
+}
 
-# resource "azurerm_cdn_frontdoor_origin" "origin" {
-#   name                          = "example-origin"
-#   cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.example.id
-#   enabled                       = true
-
-#   certificate_name_check_enabled = false
-
-#   host_name          = "contoso.com"
-#   http_port          = 80
-#   https_port         = 443
-#   origin_host_header = "www.contoso.com"
-#   priority           = 1
-#   weight             = 1
-# }
+resource "azurerm_cdn_frontdoor_origin" "origin" {
+  for_each                       = { for origin in local.origins : "${lower(origin.fqdn)}-${origin.endpoint_name}" => origin }
+  name                           = each.value.fqdn
+  cdn_frontdoor_origin_group_id  = azurerm_cdn_frontdoor_origin_group.group[lower(each.value.endpoint_name)].id
+  enabled                        = true
+  certificate_name_check_enabled = false
+  host_name                      = each.value.fqdn
+  http_port                      = each.value.http_port
+  https_port                     = each.value.https_port
+  origin_host_header             = each.value.fqdn
+  # Calculate priority (incremental based on the order of the origin in the list)
+  priority = index(local.origins, each.value) + 1
+  weight   = 1
+}

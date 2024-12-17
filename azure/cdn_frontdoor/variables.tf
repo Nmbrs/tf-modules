@@ -36,7 +36,22 @@ variable "response_timeout_seconds" {
 variable "endpoints" {
   description = "A list of frontdoor endpoints."
   type = list(object({
-    name = string 
+    name = string
+    origin_settings = object({
+      fqdns                      = list(string)
+      http_port                  = number
+      https_port                 = number
+      session_affinity_enabled   = bool
+      #request_timeout_in_seconds = optional(number, 30)
+      health_probe = object({
+        protocol = string
+        #timeout_in_seconds             = number
+        evaluation_interval_in_seconds = number
+        #unhealthy_treshold_count       = number
+        path = string
+        #status_codes                   = list(string)
+      })
+    })
   }))
 
   default = []
