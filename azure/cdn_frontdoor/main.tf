@@ -94,7 +94,7 @@ resource "azurerm_cdn_frontdoor_route" "route" {
 
   cdn_frontdoor_custom_domain_ids = [
     for domain in local.custom_domain : 
-      domain.associated_endpoint_name == each.key ? azurerm_cdn_frontdoor_custom_domain.domain[lower(domain.name)].id : []
+      domain.associated_endpoint_name == each.key ? azurerm_cdn_frontdoor_custom_domain.domain[lower(domain.name)].id : null
   ]
   #link_to_default_domain          = false
 
