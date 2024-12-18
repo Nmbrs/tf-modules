@@ -35,32 +35,31 @@ resource "azurerm_cdn_frontdoor_origin_group" "group" {
   restore_traffic_time_to_healed_or_new_endpoint_in_minutes = 10
 
   health_probe {
-    interval_in_seconds = each.value.origin_settings.health_probe.evaluation_interval_in_seconds
-    path                = each.value.origin_settings.health_probe.path
-    protocol            = title(each.value.origin_settings.health_probe.protocol)
+    interval_in_seconds = 30
+    path                = each.value.origin_settings.path
+    protocol            = "Https"
     request_type        = "HEAD" #Do not change this as it might reduce the traffic load on the origin
   }
 
   load_balancing {
     additional_latency_in_milliseconds = 50
     sample_size                        = 4
-    successful_samples_required        = 1
+    successful_samples_required        = 3
   }
 }
 
 resource "azurerm_cdn_frontdoor_origin" "origin" {
-  for_each                       = { for origin in local.origins : "${lower(origin.fqdn)}-${origin.endpoint_name}" => origin }
-  name                           = replace(replace(each.value.fqdn, ".", "-"), "\\.$", "") # replaces . with - and remove trailing dots
-  cdn_frontdoor_origin_group_id  = azurerm_cdn_frontdoor_origin_group.group[lower(each.value.endpoint_name)].id
+  for_each                       = { for origin in local.origins : "${lower(origin.fqdn)}-${origin.associated_endpoint_name}" => origin }
+  name                           = replace(replace(each.value.fqdn, ".", "-"), "\\.$", "")
+  cdn_frontdoor_origin_group_id  = azurerm_cdn_frontdoor_origin_group.group[lower(each.value.associated_endpoint_name)].id
   enabled                        = true
   certificate_name_check_enabled = false
   host_name                      = each.value.fqdn
-  http_port                      = each.value.http_port
-  https_port                     = each.value.https_port
+  http_port                      = 80
+  https_port                     = 443
   origin_host_header             = each.value.fqdn
   # Calculate priority (incremental based on the order of the origin in the list)
   priority = index(local.origins, each.value) + 1
-  weight   = 1
 }
 
 resource "azurerm_cdn_frontdoor_custom_domain" "domain" {
@@ -93,10 +92,10 @@ resource "azurerm_cdn_frontdoor_route" "route" {
   patterns_to_match          = each.value.origin_settings.patterns_to_match
   supported_protocols        = ["Http", "Https"]
 
-  cdn_frontdoor_custom_domain_ids = flatten([
+  cdn_frontdoor_custom_domain_ids = [
     for domain in local.custom_domain : 
-      domain.associated_endpoint_name == each.key ? [azurerm_cdn_frontdoor_custom_domain.domain[lower(domain.name)].id] : []
-  ])
+      domain.associated_endpoint_name == each.key ? azurerm_cdn_frontdoor_custom_domain.domain[lower(domain.name)].id : []
+  ]
   #link_to_default_domain          = false
 
   cache {

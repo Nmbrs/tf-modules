@@ -42,18 +42,7 @@ variable "endpoints" {
       fqdns                    = list(string)
       path                     = string
       patterns_to_match        = list(string)
-      http_port                = number
-      https_port               = number
       session_affinity_enabled = bool
-      #request_timeout_in_seconds = optional(number, 30)
-      health_probe = object({
-        protocol = string
-        #timeout_in_seconds             = number
-        evaluation_interval_in_seconds = number
-        #unhealthy_treshold_count       = number
-        path = string
-        #status_codes                   = list(string)
-      })
     })
   }))
 
