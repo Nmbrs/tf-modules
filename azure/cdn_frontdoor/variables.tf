@@ -38,6 +38,9 @@ variable "endpoints" {
   type = list(object({
     name = string
     custom_domains = list(string)
+    rules = list(object({
+      name = string
+    }))
     origin_settings = object({
       fqdns                    = list(string)
       path                     = string
