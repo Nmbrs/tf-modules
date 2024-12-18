@@ -20,12 +20,6 @@ resource "azurerm_cdn_frontdoor_endpoint" "endpoint" {
   }
 }
 
-resource "azurerm_cdn_frontdoor_rule_set" "rule_set" {
-  for_each                 = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
-  name                     = each.value.name
-  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.profile.id
-}
-
 resource "azurerm_cdn_frontdoor_origin_group" "group" {
   for_each                 = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
   name                     = "fdog-${each.value.name}-${var.environment}"
@@ -61,6 +55,45 @@ resource "azurerm_cdn_frontdoor_origin" "origin" {
   # Calculate priority (incremental based on the order of the origin in the list)
   priority = index(local.origins, each.value) + 1
 }
+
+resource "azurerm_cdn_frontdoor_rule_set" "rule_set" {
+  for_each                 = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
+  name                     = each.value.name
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.profile.id
+}
+
+resource "azurerm_cdn_frontdoor_rule" "rule" {
+  for_each                 = { for rule in local.rules : lower(rule.name) => rule }
+  depends_on = [azurerm_cdn_frontdoor_origin_group.group, azurerm_cdn_frontdoor_origin.origin]
+
+  name                      = each.value.name
+  cdn_frontdoor_rule_set_id = azurerm_cdn_frontdoor_rule_set.rule_set[lower(each.value.associated_endpoint_name)].id
+  order                     = index(local.rules, each.value) + 1
+  behavior_on_match         = "Continue"
+
+  actions {
+    route_configuration_override_action {
+      cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.example.id
+      forwarding_protocol           = "HttpsOnly"
+      query_string_caching_behavior = "IncludeSpecifiedQueryStrings"
+      query_string_parameters       = ["foo", "clientIp={client_ip}"]
+      compression_enabled           = true
+      cache_behavior                = "OverrideIfOriginMissing"
+      cache_duration                = "365.23:59:59"
+    }
+
+    response_header_action {
+      header_action = "Delete"
+      header_name = "Age"
+    }
+    response_header_action {
+      header_action = "Overwrite"
+      header_name = "Cache-Control"
+      value = "Max-Age=2700"
+    }
+  }
+}
+
 
 resource "azurerm_cdn_frontdoor_custom_domain" "domain" {
   for_each                 = { for domain in local.custom_domain : lower(domain.name) => domain }

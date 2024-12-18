@@ -28,4 +28,15 @@ locals {
       }
     ]
   ])
+
+    rules = flatten([
+    for endpoint in var.endpoints : [
+      for rule in endpoint.rules :
+      {
+        name = rule.name
+        associated_endpoint_name = endpoint.name
+        
+      }
+    ]
+  ])
 }
