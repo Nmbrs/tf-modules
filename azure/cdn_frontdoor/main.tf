@@ -72,16 +72,6 @@ resource "azurerm_cdn_frontdoor_rule" "rule" {
   behavior_on_match         = "Continue"
 
   actions {
-    route_configuration_override_action {
-      cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.example.id
-      forwarding_protocol           = "HttpsOnly"
-      query_string_caching_behavior = "IncludeSpecifiedQueryStrings"
-      query_string_parameters       = ["foo", "clientIp={client_ip}"]
-      compression_enabled           = true
-      cache_behavior                = "OverrideIfOriginMissing"
-      cache_duration                = "365.23:59:59"
-    }
-
     response_header_action {
       header_action = "Delete"
       header_name = "Age"
