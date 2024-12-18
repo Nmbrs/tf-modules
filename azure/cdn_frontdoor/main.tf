@@ -93,7 +93,10 @@ resource "azurerm_cdn_frontdoor_route" "route" {
   patterns_to_match          = each.value.origin_settings.patterns_to_match
   supported_protocols        = ["Http", "Https"]
 
-  #cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.contoso.id, azurerm_cdn_frontdoor_custom_domain.fabrikam.id]
+  cdn_frontdoor_custom_domain_ids = flatten([
+    for domain in local.custom_domain : 
+      domain.associated_endpoint_name == each.key ? [azurerm_cdn_frontdoor_custom_domain.domain[lower(domain.name)].id] : []
+  ])
   #link_to_default_domain          = false
 
   cache {
