@@ -100,21 +100,6 @@ resource "azurerm_cdn_frontdoor_custom_domain" "domain" {
   }
 }
 
-resource "azurerm_dns_cname_record" "record" {
-  for_each            = { for domain in local.custom_domains : lower(domain.fqdn) => domain }
-  name                = each.value.fqdn
-  zone_name           = each.value.dns_zone_name
-  resource_group_name = each.value.dns_zone_resource_group_name
-  ttl                 = 300
-  record              = azurerm_cdn_frontdoor_endpoint.endpoint[each.value.associated_endpoint_name].host_name
-
-  lifecycle {
-    ignore_changes = [tags]
-  }
-
-  depends_on = [azurerm_cdn_frontdoor_route.route]
-}
-
 resource "azurerm_cdn_frontdoor_route" "route" {
   for_each                      = { for endpoint in var.endpoints : lower(endpoint.name) => endpoint }
   name                          = "fdr-${each.value.name}-${var.environment}"
