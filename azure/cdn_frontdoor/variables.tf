@@ -42,7 +42,7 @@ variable "endpoints" {
     custom_domains = list(object({
       fqdn                   = string
       dns_zone_name          = string
-      dns_zone_resource_name = string
+      dns_zone_resource_group_name = string
     }))
     origin_settings = object({
       fqdns                    = list(string)
