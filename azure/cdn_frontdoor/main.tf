@@ -84,7 +84,7 @@ resource "azurerm_cdn_frontdoor_rule" "caching_rule" {
     }
   }
 
-  depends_on = [azurerm_cdn_frontdoor_origin_group.group, azurerm_cdn_frontdoor_origin.origin]
+  depends_on = [azurerm_cdn_frontdoor_origin_group.group[each.key], azurerm_cdn_frontdoor_origin.origin]
 }
 
 
@@ -99,6 +99,21 @@ resource "azurerm_cdn_frontdoor_custom_domain" "domain" {
     certificate_type    = "ManagedCertificate"
     minimum_tls_version = "TLS12"
   }
+}
+
+resource "azurerm_dns_cname_record" "record" {
+  for_each                 = { for domain in local.custom_domains : lower(domain.fqdn) => domain }
+  name                = each.value.fqdn
+  zone_name           = each.value.dns_zone_name
+  resource_group_name = each.value.dns_zone_resource_group_name
+  ttl                 = 300
+  record              = azurerm_cdn_frontdoor_endpoint.endpoint[each.value.associated_endpoint_name].host_name
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
+
+  depends_on = [ azurerm_cdn_frontdoor_route.route[each.value.associated_endpoint_name]]
 }
 
 resource "azurerm_cdn_frontdoor_route" "route" {
