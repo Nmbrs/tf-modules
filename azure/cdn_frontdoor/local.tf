@@ -18,11 +18,14 @@ locals {
     ]
   ])
 
-  custom_domain = flatten([
+  custom_domains = flatten([
     for endpoint in var.endpoints : [
       for domain in endpoint.custom_domains :
       {
-        name = domain
+        fqdn = domain.fqnd
+        dns_zone_name = domain.dns_zone_name
+        dns_zone_resource_group_name = domain.dns_zone_resource_group_name
+      
         associated_endpoint_name = endpoint.name
         
       }

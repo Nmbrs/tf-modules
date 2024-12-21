@@ -62,10 +62,11 @@ resource "azurerm_cdn_frontdoor_rule_set" "rule_set" {
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.profile.id
 }
 
-resource "azurerm_cdn_frontdoor_rule" "rule" {
-  for_each                 = { for rule in local.rules : lower(rule.name) => rule }
-  depends_on = [azurerm_cdn_frontdoor_origin_group.group, azurerm_cdn_frontdoor_origin.origin]
-
+resource "azurerm_cdn_frontdoor_rule" "caching_rule" {
+  for_each = {
+    for endpoint in var.endpoints : lower(endpoint.name) => endpoint
+    if endpoint.caching_rule_enabled
+  }
   name                      = each.value.name
   cdn_frontdoor_rule_set_id = azurerm_cdn_frontdoor_rule_set.rule_set[lower(each.value.associated_endpoint_name)].id
   order                     = index(local.rules, each.value) + 1
@@ -74,23 +75,25 @@ resource "azurerm_cdn_frontdoor_rule" "rule" {
   actions {
     response_header_action {
       header_action = "Delete"
-      header_name = "Age"
+      header_name   = "Age"
     }
     response_header_action {
       header_action = "Overwrite"
-      header_name = "Cache-Control"
-      value = "Max-Age=2700"
+      header_name   = "Cache-Control"
+      value         = "Max-Age=${60 * each.value.caching_timeout_minutes}"
     }
   }
+
+  depends_on = [azurerm_cdn_frontdoor_origin_group.group, azurerm_cdn_frontdoor_origin.origin]
 }
 
 
 resource "azurerm_cdn_frontdoor_custom_domain" "domain" {
-  for_each                 = { for domain in local.custom_domain : lower(domain.name) => domain }
+  for_each                 = { for domain in local.custom_domains : lower(domain.fqdn) => domain }
   name                     = replace(replace(each.key, ".", "-"), "\\.$", "")
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.profile.id
-  #dns_zone_id              = azurerm_dns_zone.example.id
-  host_name = each.key
+  dns_zone_id              = data.azurerm_dns_zone.dns_zone[each.key].id
+  host_name                = each.key
 
   tls {
     certificate_type    = "ManagedCertificate"
@@ -116,15 +119,15 @@ resource "azurerm_cdn_frontdoor_route" "route" {
   supported_protocols        = ["Http", "Https"]
 
   cdn_frontdoor_custom_domain_ids = [
-    for domain in local.custom_domain : 
-      domain.associated_endpoint_name == each.key ? azurerm_cdn_frontdoor_custom_domain.domain[lower(domain.name)].id : null
+    for domain in local.custom_domains :
+    domain.associated_endpoint_name == each.key ? azurerm_cdn_frontdoor_custom_domain.domain[lower(domain.name)].id : null
   ]
-  #link_to_default_domain          = false
+  link_to_default_domain = false
 
   cache {
     query_string_caching_behavior = "IgnoreQueryString"
-    compression_enabled           = true
-    content_types_to_compress     = ["text/html", "text/javascript", "text/xml"]
+    compression_enabled           = false
+    content_types_to_compress     = []
   }
 }
 

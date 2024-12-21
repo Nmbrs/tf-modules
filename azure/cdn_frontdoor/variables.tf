@@ -36,10 +36,13 @@ variable "response_timeout_seconds" {
 variable "endpoints" {
   description = "A list of frontdoor endpoints."
   type = list(object({
-    name = string
-    custom_domains = list(string)
-    rules = list(object({
-      name = string
+    name                   = string
+    caching_rule_enabled   = optional(bool, false)
+    caching_timeout_minutes = optional(number, null)
+    custom_domains = list(object({
+      fqdn                   = string
+      dns_zone_name          = string
+      dns_zone_resource_name = string
     }))
     origin_settings = object({
       fqdns                    = list(string)
