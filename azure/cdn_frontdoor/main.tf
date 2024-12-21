@@ -68,7 +68,7 @@ resource "azurerm_cdn_frontdoor_rule" "caching_rule" {
     if endpoint.caching_rule_enabled
   }
   name                      = each.value.name
-  cdn_frontdoor_rule_set_id = azurerm_cdn_frontdoor_rule_set.rule_set[lower(each.value.associated_endpoint_name)].id
+  cdn_frontdoor_rule_set_id = azurerm_cdn_frontdoor_rule_set.rule_set[each.key].id
   order                     = 1
   behavior_on_match         = "Continue"
 
@@ -86,7 +86,6 @@ resource "azurerm_cdn_frontdoor_rule" "caching_rule" {
 
   depends_on = [azurerm_cdn_frontdoor_origin_group.group, azurerm_cdn_frontdoor_origin.origin]
 }
-
 
 resource "azurerm_cdn_frontdoor_custom_domain" "domain" {
   for_each                 = { for domain in local.custom_domains : lower(domain.fqdn) => domain }
