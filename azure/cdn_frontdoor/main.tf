@@ -84,7 +84,7 @@ resource "azurerm_cdn_frontdoor_rule" "caching_rule" {
     }
   }
 
-  depends_on = [azurerm_cdn_frontdoor_origin_group.group[each.key], azurerm_cdn_frontdoor_origin.origin]
+  depends_on = [azurerm_cdn_frontdoor_origin_group.group, azurerm_cdn_frontdoor_origin.origin]
 }
 
 
@@ -113,7 +113,7 @@ resource "azurerm_dns_cname_record" "record" {
     ignore_changes = [tags]
   }
 
-  depends_on = [ azurerm_cdn_frontdoor_route.route[each.value.associated_endpoint_name]]
+  depends_on = [ azurerm_cdn_frontdoor_route.route]
 }
 
 resource "azurerm_cdn_frontdoor_route" "route" {
