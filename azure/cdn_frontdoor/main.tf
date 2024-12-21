@@ -69,7 +69,7 @@ resource "azurerm_cdn_frontdoor_rule" "caching_rule" {
   }
   name                      = each.value.name
   cdn_frontdoor_rule_set_id = azurerm_cdn_frontdoor_rule_set.rule_set[lower(each.value.associated_endpoint_name)].id
-  order                     = index(local.rules, each.value) + 1
+  order                     = 1
   behavior_on_match         = "Continue"
 
   actions {
@@ -102,7 +102,7 @@ resource "azurerm_cdn_frontdoor_custom_domain" "domain" {
 }
 
 resource "azurerm_dns_cname_record" "record" {
-  for_each                 = { for domain in local.custom_domains : lower(domain.fqdn) => domain }
+  for_each            = { for domain in local.custom_domains : lower(domain.fqdn) => domain }
   name                = each.value.fqdn
   zone_name           = each.value.dns_zone_name
   resource_group_name = each.value.dns_zone_resource_group_name
@@ -113,7 +113,7 @@ resource "azurerm_dns_cname_record" "record" {
     ignore_changes = [tags]
   }
 
-  depends_on = [ azurerm_cdn_frontdoor_route.route]
+  depends_on = [azurerm_cdn_frontdoor_route.route]
 }
 
 resource "azurerm_cdn_frontdoor_route" "route" {
