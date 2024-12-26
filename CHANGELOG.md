@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.7.0](https://github.com/Nmbrs/tf-modules/compare/v8.6.0...v8.7.0) (2024-12-26)
+
+
+### Features
+
+* **event_hub:** add event_hub module ([#307](https://github.com/Nmbrs/tf-modules/issues/307)) ([9818873](https://github.com/Nmbrs/tf-modules/commit/98188735e5fd1ffc4e3fd7fba13f912df3cd112a))
+
 ## [8.6.0](https://github.com/Nmbrs/tf-modules/compare/v8.5.0...v8.6.0) (2024-11-07)
 
 
