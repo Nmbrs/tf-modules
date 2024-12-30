@@ -105,10 +105,11 @@ resource "azurerm_cdn_frontdoor_route" "route" {
   name                          = "fdr-${each.value.name}-${var.environment}"
   cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.endpoint[each.key].id
   cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.group[each.key].id
-  cdn_frontdoor_origin_ids = [
+  cdn_frontdoor_origin_ids = compact([
     for origin in azurerm_cdn_frontdoor_origin.origin :
     origin.cdn_frontdoor_origin_group_id == azurerm_cdn_frontdoor_origin_group.group[each.key].id ? origin.id : null
-  ]
+  ])
+
   cdn_frontdoor_rule_set_ids = [azurerm_cdn_frontdoor_rule_set.rule_set[each.key].id]
   enabled                    = true
   cdn_frontdoor_origin_path  = each.value.origin_settings.path
@@ -117,10 +118,10 @@ resource "azurerm_cdn_frontdoor_route" "route" {
   patterns_to_match          = each.value.origin_settings.patterns_to_match
   supported_protocols        = ["Http", "Https"]
 
-  cdn_frontdoor_custom_domain_ids = [
+  cdn_frontdoor_custom_domain_ids = compact([
     for domain in local.custom_domains :
     domain.associated_endpoint_name == each.key ? azurerm_cdn_frontdoor_custom_domain.domain[lower(domain.fqdn)].id : null
-  ]
+  ])
   link_to_default_domain = false
 
   cache {
