@@ -53,7 +53,8 @@ resource "azurerm_cdn_frontdoor_origin" "origin" {
   https_port                     = 443
   origin_host_header             = each.value.fqdn
   # Calculate priority (incremental based on the order of the origin in the list)
-  priority = index(local.origins, each.value) + 1
+  #priority = index(local.origins, each.value) + 1
+  priority =1 # TODO: fix this priority as a dynamic value. Currently it will only work with one origin
 }
 
 resource "azurerm_cdn_frontdoor_rule_set" "rule_set" {
