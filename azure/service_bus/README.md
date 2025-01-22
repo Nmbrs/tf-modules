@@ -1,3 +1,4 @@
+<!-- BEGIN_TF_DOCS -->
 # Service Bus Module
 
 ## Summary
@@ -9,13 +10,13 @@ The Service Bus module is a Terraform module that provides a convenient way to c
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.70 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.117 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.70 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.117 |
 
 ## Modules
 
@@ -37,7 +38,6 @@ No modules.
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 | <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | Configuration of the size and capacity of the service bus. | `string` | n/a | yes |
 | <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the service bus namespace. | `string` | n/a | yes |
-| <a name="input_zone_redundant"></a> [zone\_redundant](#input\_zone\_redundant) | Defines whether or not this resource is zone redundant. The required sku to enable it needs to be 'Premium'. | `bool` | `true` | no |
 
 ## Outputs
 
@@ -64,7 +64,6 @@ module "service_bus" {
   resource_group_name = "rg-service-bus"
   sku_name            = "Basic"
   capacity            = 0
-  zone_redundant      = false
 }
 ```
 
@@ -80,22 +79,6 @@ module "service_bus" {
   resource_group_name = "rg-service-bus"
   sku_name            = "Premium"
   capacity            = 1
-  zone_redundant      = false
 }
 ```
-
-### Service Bus - Premium Tier (Zone Redundancy Enabled)
-
-```hcl
-module "service_bus" {
-  source = "git::github.com/Nmbrs/tf-modules//azure/service_bus"
-
-  workload            = "app1"
-  environment         = "dev"
-  location            = "westeurope"
-  resource_group_name = "rg-service-bus"
-  sku_name            = "Premium"
-  capacity            = 1
-  zone_redundant      = true
-}
-```
+<!-- END_TF_DOCS -->
