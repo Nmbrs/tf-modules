@@ -1,21 +1,24 @@
-# Resource Group Module
+<!-- BEGIN_TF_DOCS -->
+# Role Assignment Module
 
-## Sumary
+## Summary
 
-The resource_group module is an abstraction that handle the creation and management of resource groups in Azure.
+The `role_assignment` module enables the assignment of one or multiple roles to service principals, managed identities, security groups, or users, simplifying access control and permission management in Azure.
 
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.70 |
+| <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) | ~> 3.1 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.117 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.70 |
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 3.0.2 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.116.0 |
 
 ## Modules
 
@@ -25,46 +28,77 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
+| [azurerm_role_assignment.assignment](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
+| [azuread_group.security_group](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/group) | data source |
+| [azuread_service_principal.managed_identity](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/service_principal) | data source |
+| [azuread_service_principal.service_principal](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/service_principal) | data source |
+| [azuread_user.user](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/user) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
-| <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_tags"></a> [tags](#input\_tags) | A mapping of tags which should be assigned to the desired resource. | `map(string)` | `{}` | no |
-| <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the resource group. | `string` | n/a | yes |
+| <a name="input_principal_name"></a> [principal\_name](#input\_principal\_name) | The name of the principal to assign roles to. | `string` | n/a | yes |
+| <a name="input_principal_type"></a> [principal\_type](#input\_principal\_type) | The type of pricipal to which roles will be assigned. | `string` | n/a | yes |
+| <a name="input_resources"></a> [resources](#input\_resources) | A list of resources with their details, including name, type, ID, resource group name, and roles. | <pre>list(object({<br/>    id                  = optional(string, null)<br/>    roles               = list(string)<br/>  }))</pre> | `[]` | no |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| <a name="output_id"></a> [id](#output\_id) | The ID of the Resource Group. |
-| <a name="output_location"></a> [location](#output\_location) | The Azure Region where the Resource Group exists. |
-| <a name="output_name"></a> [name](#output\_name) | The Resource Group name. |
-| <a name="output_tags"></a> [tags](#output\_tags) | A mapping of tags assigned to the Resource Group. |
-| <a name="output_workload"></a> [workload](#output\_workload) | The resource group workload name. |
+No outputs.
 
 ## How to use it?
 
-A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
+To help you get started, we’ve included code snippets showcasing various use cases for this module.
+
+### Assigning roles to a service principal
 
 ```hcl
-module "resource-group" {
-  source                    = "git::github.com/Nmbrs/tf-modules//azure/resource_group"
-  workload                  = "my_project"
-  location                  = "westeurope"
-  environment               = "dev"
-  tags = {
-    managed_by  = "terraform"
-    environment = "dev"
-    product     = "internal"
-    category    = "monolith"
-    owner       = "infra"
-    country     = "nl"
-    status      = "life_cycle"
-    service     = "payroll"
-  }
+module "role_assignments" {
+  source          = "git::github.com/Nmbrs/tf-modules//azure/role_assignments"
+  principal_type  = "service_principal"
+  principal_name  = "my-service-principal"
+  resources = [
+    {
+      id    = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/my-resource-group/providers/Microsoft.Storage/storageAccounts/mystorageaccount"
+      roles = ["Storage Blob Data Contributor", "Reader"]
+    },
+    {
+      id    = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/another-resource-group/providers/Microsoft.KeyVault/vaults/mykeyvault"
+      roles = ["Key Vault Secrets User"]
+    }
+  ]
+}
+
+```
+
+### Assigning roles to a security group
+
+```hcl
+module "role_assignments" {
+  source          = "git::github.com/Nmbrs/tf-modules//azure/role_assignments"
+  principal_type  = "security_group"
+  principal_name  = "my-security-group"
+  resources = [
+    {
+      id    = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/secure-resource-group/providers/Microsoft.Compute/virtualMachines/myvm"
+      roles = ["Virtual Machine Contributor"]
+    }
+  ]
 }
 ```
+
+### Assigning roles to a managed identity
+```hcl
+module "role_assignments" {
+  source          = "git::github.com/Nmbrs/tf-modules//azure/role_assignments"
+  principal_type  = "managed_identity"
+  principal_name  = "my-managed-identity"
+  resources = [
+    {
+      id    = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/identity-resource-group/providers/Microsoft.Storage/storageAccounts/identityStorage"
+      roles = ["Storage Account Contributor"]
+    }
+  ]
+}
+```
+<!-- END_TF_DOCS -->
