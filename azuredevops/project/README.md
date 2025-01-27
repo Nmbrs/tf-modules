@@ -3,8 +3,7 @@
 
 ## Sumary
 
-The `virtual_network` module supports the creation of Microsoft Azure virtual network in an existent Azure resource group name. This module also supports
-the creation of vnet subnets and enables the vnet service delegation, when needed.
+The `azuredevops_project` module simplifies the creation and configuration of Azure DevOps projects. It enables the setup of core project settings, such as repositories, pipelines, and service connections, while integrating with existing Azure DevOps organizations.
 
 ## Requirements
 
