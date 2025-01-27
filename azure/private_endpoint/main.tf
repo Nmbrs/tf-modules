@@ -6,15 +6,15 @@ resource "azurerm_private_endpoint" "endpoint" {
   custom_network_interface_name = "nic-${local.private_endpoint_name}"
 
   private_service_connection {
-    name                           = ("${var.workload}-private-service-connection")
+    name                           = local.service_connection_name
     private_connection_resource_id = local.resource_data_blocks[var.resource_settings.type][0].id
     subresource_names              = [local.subresource_name[var.resource_settings.type]]
     is_manual_connection           = false
   }
 
   private_dns_zone_group {
-    name                 = data.azurerm_private_dns_zone.private_dns_zone.name
-    private_dns_zone_ids = [data.azurerm_private_dns_zone.private_dns_zone.id]
+    name                 = lower(element(split("/", var.private_dns_zone_id), length(split("/", var.private_dns_zone_id)) - 1))
+    private_dns_zone_ids = [var.private_dns_zone_id]
   }
 
   lifecycle {

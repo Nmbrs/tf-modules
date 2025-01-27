@@ -4,11 +4,6 @@ data "azurerm_subnet" "subnet" {
   resource_group_name  = var.network_settings.vnet_resource_group_name
 }
 
-data "azurerm_private_dns_zone" "private_dns_zone" {
-  name                = var.private_dns_zone_settings.name
-  resource_group_name = var.private_dns_zone_settings.resource_group_name
-}
-
 data "azurerm_windows_web_app" "app_service" {
   count               = var.resource_settings.type == "app_service" ? 1 : 0
   name                = var.resource_settings.name

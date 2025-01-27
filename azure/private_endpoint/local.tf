@@ -1,5 +1,6 @@
 locals {
-  private_endpoint_name = "pep-${var.workload}-${var.location}-${format("%03d", var.instance_count)}"
+  private_endpoint_name   = "pep-${var.resource_settings.name}"
+  service_connection_name = "sc-${var.resource_settings.name}"
   resource_data_blocks = {
     app_service           = data.azurerm_windows_web_app.app_service,
     storage_account_blob  = data.azurerm_storage_account.storage_account_blob,
@@ -16,7 +17,7 @@ locals {
     redis_cache           = data.azurerm_redis_cache.redis_cache,
     # Add more resource types and corresponding data blocks as needed
   }
-  
+
   # For more information on subresource names: https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview
   subresource_name = {
     "app_service"           = "sites"
