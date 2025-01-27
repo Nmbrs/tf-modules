@@ -25,7 +25,7 @@ locals {
         fqdn                         = domain.fqdn
         dns_zone_name                = domain.dns_zone_name
         dns_zone_resource_group_name = domain.dns_zone_resource_group_name
-        associated_endpoint_name = endpoint.name
+        associated_endpoint_name     = endpoint.name
       }
     ]
   ])

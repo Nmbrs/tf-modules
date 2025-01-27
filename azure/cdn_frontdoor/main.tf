@@ -36,7 +36,7 @@ resource "azurerm_cdn_frontdoor_origin_group" "group" {
   }
 
   load_balancing {
-    additional_latency_in_milliseconds = 50
+    additional_latency_in_milliseconds = 1000
     sample_size                        = 4
     successful_samples_required        = 3
   }
@@ -53,8 +53,8 @@ resource "azurerm_cdn_frontdoor_origin" "origin" {
   https_port                     = 443
   origin_host_header             = each.value.fqdn
   # Calculate priority (incremental based on the order of the origin in the list)
-  #priority = index(local.origins, each.value) + 1
-  priority =1 # TODO: fix this priority as a dynamic value. Currently it will only work with one origin
+  # TODO: fix this priority as a dynamic value. Currently it will only work with one origin
+  priority = 1
 }
 
 resource "azurerm_cdn_frontdoor_rule_set" "rule_set" {
@@ -131,5 +131,3 @@ resource "azurerm_cdn_frontdoor_route" "route" {
     content_types_to_compress     = []
   }
 }
-
-
