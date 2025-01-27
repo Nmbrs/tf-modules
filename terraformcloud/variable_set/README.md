@@ -1,6 +1,7 @@
 <!-- BEGIN_TF_DOCS -->
-## Terraform Cloud Variable Set
+# Terraform Cloud Variable Set
 
+## Summary
 The `variable_set` module automates the creation and management of variable sets in Terraform Cloud, allowing for streamlined configuration and reuse of variables across multiple workspaces.
 
 ## Requirements
