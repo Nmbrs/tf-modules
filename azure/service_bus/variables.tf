@@ -39,9 +39,4 @@ variable "capacity" {
   }
 }
 
-variable "zone_redundant" {
-  description = "Defines whether or not this resource is zone redundant. The required sku to enable it needs to be 'Premium'."
-  type        = bool
-  default     = true
-}
 
