@@ -3,7 +3,7 @@
 
 ## Summary
 
-The `project` module facilitates the creation and management of projects in Terraform Cloud, enabling organized grouping and streamlined management of related workspaces.  
+The `project` module facilitates the creation and management of projects in Terraform Cloud, enabling organized grouping and streamlined management of related workspaces.
 
 ## Requirements
 
