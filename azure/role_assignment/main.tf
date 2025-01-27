@@ -1,7 +1,6 @@
 resource "azurerm_role_assignment" "assignment" {
   for_each = {
     for assignment in local.assignments : "${lower(assignment.resource_name)}_${replace(lower(assignment.role_name), " ", "-")}" => assignment
-    if assignment.resource_type == "custom"
   }
 
   scope                = each.value.resource_id
