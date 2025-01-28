@@ -28,17 +28,27 @@ variable "name" {
   }
 }
 
-variable "group_contributors" {
-  description = "Group that will be the contributor at the Azure DevOps project"
-  type        = string
+variable "contributors_groups" {
+  description = "List of groups that will be contributors at the Azure DevOps project"
+  type        = list(string)
 }
 
-variable "group_administrators" {
-  description = "Group that will be the administrator at the Azure DevOps project"
-  type        = string
+variable "administrators_groups" {
+  description = "List of groups that will be administrators at the Azure DevOps project"
+  type        = list(string)
 }
 
-variable "group_readers" {
-  description = "Group that will be the readers at the Azure DevOps project"
-  type        = string
+variable "readers_groups" {
+  description = "List of groups that will be readers at the Azure DevOps project"
+  type        = list(string)
 }
+
+# variable "service_connections" {
+#   type = object({
+#     azure = list(object({
+#       name = string
+#       managed_identity_name = string
+#       managed_identity_resource_group_name = string
+#     }))
+#   })
+# }

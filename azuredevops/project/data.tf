@@ -1,14 +1,17 @@
 
 data "azuredevops_group" "aad_administrators" {
-  name = lower(var.group_administrators)
+  for_each = toset([for group in var.administrators_groups : lower(group)])
+  name     = each.value
 }
 
 data "azuredevops_group" "aad_contributors" {
-  name = lower(var.group_contributors)
+  for_each = toset([for group in var.contributors_groups : lower(group)])
+  name     = each.value
 }
 
 data "azuredevops_group" "aad_readers" {
-  name = lower(var.group_readers)
+  for_each = toset([for group in var.readers_groups : lower(group)])
+  name     = each.value
 }
 
 data "azuredevops_group" "contributors" {
