@@ -1,5 +1,21 @@
 # Changelog
 
+## [8.7.0](https://github.com/Nmbrs/tf-modules/compare/v8.6.0...v8.7.0) (2025-01-28)
+
+
+### Features
+
+* **azuredevops_project:** add multiple ownerships ([#314](https://github.com/Nmbrs/tf-modules/issues/314)) ([d074d71](https://github.com/Nmbrs/tf-modules/commit/d074d7169502ae26b00bf9f703b5c9b7d0a08be5))
+* **cdn_frontdoor:** add module ([#313](https://github.com/Nmbrs/tf-modules/issues/313)) ([329aaf6](https://github.com/Nmbrs/tf-modules/commit/329aaf661e0cf62d2d1c9ad6c202c8509a7468c3))
+* **event_hub:** add event_hub module ([#307](https://github.com/Nmbrs/tf-modules/issues/307)) ([9818873](https://github.com/Nmbrs/tf-modules/commit/98188735e5fd1ffc4e3fd7fba13f912df3cd112a))
+* **private_endpoint:** support private dns zone id logic ([#309](https://github.com/Nmbrs/tf-modules/issues/309)) ([d3da3e9](https://github.com/Nmbrs/tf-modules/commit/d3da3e9d3e10895eb2b599902ec4b8e108de8792))
+* **role_assignment:** add module ([#319](https://github.com/Nmbrs/tf-modules/issues/319)) ([bccfab7](https://github.com/Nmbrs/tf-modules/commit/bccfab7064e0b55c1fd669bcd0034b532ed5639a))
+* **servcie_bus:** remove system assigned identity implementation ([#311](https://github.com/Nmbrs/tf-modules/issues/311)) ([12817f8](https://github.com/Nmbrs/tf-modules/commit/12817f846e03df1e5c807bfdec9fcf362541b977))
+* **terraformcloud_organization:** add module ([#316](https://github.com/Nmbrs/tf-modules/issues/316)) ([241249b](https://github.com/Nmbrs/tf-modules/commit/241249b2f5639bfb8ae55e973036d212bce9d7df))
+* **terraformcloud_project:** add module ([#317](https://github.com/Nmbrs/tf-modules/issues/317)) ([5944be3](https://github.com/Nmbrs/tf-modules/commit/5944be3a0daf8d5563ecff838ede3b603b3ee7d9))
+* **terraformcloud_variable_set:** add module ([#315](https://github.com/Nmbrs/tf-modules/issues/315)) ([500fe48](https://github.com/Nmbrs/tf-modules/commit/500fe480e38816334e815fceb17ccaf307707b2b))
+* **terraformcloud_workspace:** add module ([#318](https://github.com/Nmbrs/tf-modules/issues/318)) ([cef9753](https://github.com/Nmbrs/tf-modules/commit/cef975347722a04d7de7b9043b06cfef5a4a135e))
+
 ## [8.6.0](https://github.com/Nmbrs/tf-modules/compare/v8.5.0...v8.6.0) (2024-11-07)
 
 
