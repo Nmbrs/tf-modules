@@ -26,8 +26,8 @@ resource "github_organization_ruleset" "protect_all_main_branches" {
   }
 
   bypass_actors {
-    actor_id    = data.github_user.admin.id
-    actor_type  = "OrganizationAdmin"
+    actor_id    = data.github_team.admin.id
+    actor_type  = "Team"
     bypass_mode = "always"
   }
 }
