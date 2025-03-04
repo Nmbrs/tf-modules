@@ -1,7 +1,4 @@
-variable "resource_group_name" {
-  type        = string
-  description = "The name of an existing Resource Group."
-}
+
 
 variable "name" {
   description = "The name of the DNS Zone. Must be a valid domain name."
@@ -39,18 +36,28 @@ variable "name" {
     error_message = format("Invalid value '%s' for variable 'name'. The TLD (rightmost label of a domain name) each label must consist of letters, numbers, or hyphens, and must not start or end with a hyphen. It must also be between 2 and 63 characters long.", var.name)
   }
 
-  # Validating top level domains (rightmost label of a domain) against the RFC2606 list of reserved names
+  # Validating top level domains (rightmost label of a domain).
+  # The following top-level domains are supported by App Service domains: com, net, co.uk, org, nl, in, biz, org.uk, and co.in.
   validation {
-    condition = !contains(
+    condition = contains(
       [
-        "test",
-        "example",
-        "invalid",
-        "localhost"
+        "com",
+        "net",
+        "co.uk",
+        "org",
+        "nl",
+        "biz",
+        "org.uk",
+        "co.in"
       ], split(".", var.name)[length(split(".", var.name)) - 1]
     )
-    error_message = format("Invalid value '%s' for variable 'name', The following list of reserved zone names are blocked from creation to prevent disruption of services: 'test', 'example', 'invalid', 'localhost'.", var.name)
+    error_message = format("Invalid value '%s' for variable 'name'. The following top-level domain (rightmost label of a domain)are supported by App Service domains: 'com', 'net', 'co.uk', 'org', 'nl', 'in', 'biz', 'org.uk', and 'co.in'.", var.name)
   }
+}
+
+variable "dns_zone_resource_group_name" {
+  type        = string
+  description = "The name of the resource group where the Azure DNS Zone exists."
 }
 
 variable "contact" {
