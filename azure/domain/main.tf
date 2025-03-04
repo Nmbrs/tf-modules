@@ -85,7 +85,7 @@ resource "azapi_resource" "app_service_domain" {
         organization = var.contact.organization
         phone        = var.contact.phone
       }
-      dnsZoneId     = data.azurerm_dns_zone.domain.id
+      dnsZoneId     = data.azurerm_dns_zone.app_service_domain.id
       privacy       = true
       autoRenew     = true
       targetDnsType = "AzureDns",
