@@ -6,8 +6,6 @@ resource "azuread_user" "user" {
     trimspace(lower(var.last_name)),
     lower(var.domain_name)
   )
-  given_name = var.first_name
-  surname    = var.last_name
 
   password = format(
     "%s%s%s!",
