@@ -18,6 +18,6 @@ resource "azuread_user" "user" {
   disable_strong_password     = false
 
 
-  display_name = "${var.first_name} ${var.last_name}"
+  display_name = "${title(var.first_name)} ${title(var.last_name)}"
   department   = var.department
 }
