@@ -16,13 +16,18 @@ resource "github_organization_ruleset" "protect_all_main_branches" {
   }
 
   rules {
-    creation                = true
-    update                  = true
-    deletion                = true
-    required_linear_history = true
+    update   = true
+    deletion = true
     pull_request {
-      required_approving_review_count = 2
+      dismiss_stale_reviews_on_push     = true
+      require_code_owner_review         = true
+      require_last_push_approval        = true
+      required_approving_review_count   = 2
+      required_review_thread_resolution = true
     }
+    required_linear_history = true
+    non_fast_forward        = true
+    required_signatures     = true #to check with Filipe
   }
 
   bypass_actors {
