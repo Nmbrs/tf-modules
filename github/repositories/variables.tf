@@ -2,7 +2,7 @@ variable "repositories" {
   type = list(object({
     name        = string
     description = string
-    template    = string
+    template    = optional(string, null)
     visibility  = string
     squad       = string
   }))
@@ -24,10 +24,6 @@ variable "repositories" {
     error_message = "At least one 'description' property from 'repositories' is invalid.  They must be non-empty string values."
   }
 
-  validation {
-    condition     = alltrue([for repository in var.repositories : contains(["dotnet-template", "golang-template", "nodejs-template"], repository.template)])
-    error_message = "At least one 'template' property from 'repositories' is invalid. Valid options are 'golang-template', 'dotnet-template'."
-  }
 
   validation {
     condition     = alltrue([for repository in var.repositories : contains(["public", "private"], repository.visibility)])
@@ -42,10 +38,11 @@ variable "repositories" {
 
 variable "github_owner" {
   type        = string
-  description = "GitHub Nmbrs owner name"
+  description = "GitHub organization or user name that will own the repositories"
 }
 
 variable "github_token" {
   type        = string
-  description = "GitHub Nmbrs token to provision and configure resources."
+  description = "GitHub personal access token with repository creation permissions"
+  sensitive   = true
 }
