@@ -4,7 +4,6 @@ variable "repositories" {
     description = string
     template    = optional(string, null)
     visibility  = string
-    squad       = string
   }))
   description = "List of values needed to create the repo"
   default     = []
