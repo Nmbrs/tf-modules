@@ -36,13 +36,13 @@ variable "repositories" {
   }
 }
 
-variable "github_owner" {
-  type        = string
-  description = "GitHub organization or user name that will own the repositories"
-}
+#variable "github_owner" {
+#  type        = string
+#  description = "GitHub organization or user name that will own the repositories"
+#}
 
-variable "github_token" {
-  type        = string
-  description = "GitHub personal access token with repository creation permissions"
-  sensitive   = true
-}
+#variable "github_token" {
+#  type        = string
+#  description = "GitHub personal access token with repository creation permissions"
+#  sensitive   = true
+#}
