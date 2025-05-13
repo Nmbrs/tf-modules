@@ -4,7 +4,6 @@ resource "github_repository" "repo" {
   description            = each.value.description
   visibility             = each.value.visibility
   has_issues             = false
-  has_discussions        = true
   has_projects           = false
   has_wiki               = false
   allow_merge_commit     = false
@@ -15,7 +14,6 @@ resource "github_repository" "repo" {
   has_downloads          = false
   auto_init              = true
   delete_branch_on_merge = true
-  topics                 = [each.value.squad]
   vulnerability_alerts   = true
 
 }
