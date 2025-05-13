@@ -3,6 +3,7 @@ resource "github_repository" "repo" {
   name                   = each.value.name
   description            = each.value.description
   visibility             = each.value.visibility
+  has_discussions        = true
   has_issues             = false
   has_projects           = false
   has_wiki               = false
@@ -15,5 +16,4 @@ resource "github_repository" "repo" {
   auto_init              = true
   delete_branch_on_merge = true
   vulnerability_alerts   = true
-
 }
