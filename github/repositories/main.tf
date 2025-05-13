@@ -4,6 +4,7 @@ resource "github_repository" "repo" {
   description            = each.value.description
   visibility             = each.value.visibility
   has_issues             = false
+  has_discussions        = true
   has_projects           = false
   has_wiki               = false
   allow_merge_commit     = false
