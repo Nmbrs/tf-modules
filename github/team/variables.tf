@@ -27,6 +27,8 @@ variable "description" {
 }
 
 variable "parent_team" {
-  type        = optional(string, null)
+  type        = string
+  nullable    = true
   description = "The slug of the parent GitHub team, if the current team is a child team. Use null if this team has no parent."
+  default     = null
 }
