@@ -29,19 +29,21 @@ variable "repositories" {
     error_message = "At least one 'visibility' property from 'repositories' is invalid. Valid options are 'public', 'private'."
   }
 
-  validation {
-    condition     = alltrue([for repository in var.repositories : can(coalesce(repository.squad))])
-    error_message = "At least one 'squad' property from 'repositories' is invalid. They must be non-empty string values."
-  }
 }
 
-#variable "github_owner" {
-#  type        = string
-#  description = "GitHub organization or user name that will own the repositories"
-#}
+# variable "name" {
+#   type = string
+# }
 
-#variable "github_token" {
-#  type        = string
-#  description = "GitHub personal access token with repository creation permissions"
-#  sensitive   = true
-#}
+# variable "description" {
+#   type = string
+# }
+
+# variable "template" {
+#   type = string
+# }
+
+# variable "visibility" {
+#   type = string
+# }
+
