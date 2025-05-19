@@ -1,8 +1,7 @@
 resource "github_repository" "repo" {
-  for_each               = { for repository in var.repositories : trimspace(lower(repository.name)) => repository }
-  name                   = each.value.name
-  description            = each.value.description
-  visibility             = each.value.visibility
+  name                   = var.name
+  description            = var.description
+  visibility             = var.visibility
   has_discussions        = true
   has_issues             = false
   has_projects           = false
