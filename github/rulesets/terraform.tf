@@ -2,13 +2,9 @@ terraform {
   required_providers {
     github = {
       source  = "integrations/github"
-      version = "~> 6.5.0"
+      version = "~> 6.6"
     }
   }
-}
 
-provider "github" {
-  owner = var.github_owner
-  token = var.github_token
+  required_version = ">= 1.5.0, < 2.0.0"
 }
-

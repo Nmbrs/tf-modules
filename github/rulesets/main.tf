@@ -5,12 +5,12 @@ resource "github_organization_ruleset" "protect_all_main_branches" {
 
   conditions {
     ref_name {
-      include = ["refs/heads/main"]
+      include = ["refs/heads/main", "refs/heads/master"]
       exclude = []
     }
 
     repository_name {
-      include = ["~ALL"]
+      include = ["~ALL"] #check if we should use patterns for the repo names, to not block everything
       exclude = []
     }
   }
@@ -27,7 +27,7 @@ resource "github_organization_ruleset" "protect_all_main_branches" {
     }
     required_linear_history = true
     non_fast_forward        = true
-    required_signatures     = true #to check with Filipe
+    required_signatures     = false
   }
 
   bypass_actors {
