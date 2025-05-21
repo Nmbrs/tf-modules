@@ -1,5 +1,14 @@
 # Changelog
 
+## [8.8.0](https://github.com/Nmbrs/tf-modules/compare/v8.7.0...v8.8.0) (2025-05-21)
+
+
+### Features
+
+* **domain:** add module ([#351](https://github.com/Nmbrs/tf-modules/issues/351)) ([a1b34c5](https://github.com/Nmbrs/tf-modules/commit/a1b34c5d19debae346b383ce8e3112617d3c7fc2))
+* **key_vault:** allow override naming convention ([#352](https://github.com/Nmbrs/tf-modules/issues/352)) ([06d046b](https://github.com/Nmbrs/tf-modules/commit/06d046b93243cc63c148cdd3565fbd2d236af04f))
+* **sslcertificates:** add override name parameter ([#355](https://github.com/Nmbrs/tf-modules/issues/355)) ([f200fed](https://github.com/Nmbrs/tf-modules/commit/f200fed8024e0fc91cf973915398854d1a5577b4))
+
 ## [8.7.0](https://github.com/Nmbrs/tf-modules/compare/v8.6.0...v8.7.0) (2025-01-28)
 
 
