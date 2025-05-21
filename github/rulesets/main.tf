@@ -5,7 +5,7 @@ resource "github_organization_ruleset" "protect_all_main_branches" {
 
   conditions {
     ref_name {
-      include = ["refs/heads/main", "refs/heads/master"]
+      include = ["~DEFAULT_BRANCH"]
       exclude = []
     }
 
