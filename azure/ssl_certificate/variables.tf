@@ -4,7 +4,7 @@ variable "domain_name" {
 
   # Notes: Validations imposed by Microsoft in Azure Portal
   validation {
-    # Length validation between 4 and 64 characters. 
+    # Length validation between 4 and 64 characters.
     condition     = length(var.domain_name) >= 4 && length(var.domain_name) <= 64
     error_message = "The domain name must be between 4 and 64 characters long."
   }
@@ -33,3 +33,9 @@ variable "resource_group_name" {
   description = "The name of an existing Resource Group."
 }
 
+variable "override_name" {
+  description = "Override the name of the certificate, to bypass naming convention"
+  type        = string
+  nullable    = true
+  default     = null
+}
