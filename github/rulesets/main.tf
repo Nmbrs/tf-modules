@@ -16,13 +16,13 @@ resource "github_organization_ruleset" "protect_all_main_branches" {
   }
 
   rules {
-    update   = true
+    update   = false
     deletion = true
     pull_request {
       dismiss_stale_reviews_on_push     = true
       require_code_owner_review         = true
       require_last_push_approval        = true
-      required_approving_review_count   = 2
+      required_approving_review_count   = 1
       required_review_thread_resolution = true
     }
     required_linear_history = true
