@@ -1,45 +1,44 @@
-# variable "repositories" {
-#   type = list(object({
-#     name        = string
-#     description = string
-#     template    = optional(string, null)
-#     visibility  = string
-#   }))
-#   description = "List of values needed to create the repo"
-#   default     = []
-
-#   validation {
-#     condition     = alltrue([for repository in var.repositories : can(coalesce(repository.name))])
-#     error_message = "At least one 'name' property from 'repositories' is invalid. They must be non-empty string values."
-#   }
-
-#   validation {
-#     condition     = length([for repository in var.repositories : repository.name]) == length(distinct([for repository in var.repositories : trimspace(lower(repository.name))]))
-#     error_message = "At least one 'name' property from 'repositories' is duplicated. They must be unique."
-#   }
-
-#   validation {
-#     condition     = alltrue([for repository in var.repositories : can(coalesce(repository.description))])
-#     error_message = "At least one 'description' property from 'repositories' is invalid.  They must be non-empty string values."
-#   }
-
-
-#   validation {
-#     condition     = alltrue([for repository in var.repositories : contains(["public", "private"], repository.visibility)])
-#     error_message = "At least one 'visibility' property from 'repositories' is invalid. Valid options are 'public', 'private'."
-#   }
-
-# }
-
 variable "name" {
-  type = string
+  type        = string
+  description = "Name of the repository"
+
+  validation {
+    condition     = can(coalesce(var.name))
+    error_message = format("Invalid value '%s' for variable 'name'. They must be non-empty string values.", var.name)
+  }
 }
 
 variable "description" {
-  type = string
+  type        = string
+  description = "Description of the repository"
+
+  validation {
+    condition     = can(coalesce(var.description))
+    error_message = format("Invalid value '%s' for variable 'description'. They must be non-empty string values.", var.description)
+  }
 }
 
 variable "visibility" {
-  type = string
+  type        = string
+  description = "Describes visibility."
+
+  validation {
+    condition     = contains(["internal", "private"], var.visibility)
+    error_message = format("Invalid value '%s' for variable 'visibility', valid options are 'internal', 'private'.", var.visibility)
+  }
 }
 
+variable "owner" {
+  type        = string
+  description = "The owner of the repository"
+
+  validation {
+    condition     = can(coalesce(var.owner))
+    error_message = format("Invalid value '%s' for variable 'owner'. They must be non-empty string values.", var.owner)
+  }
+}
+
+variable "internal_usage" {
+  description = "Describes if the repo is used internally only or not"
+  type        = bool
+}
