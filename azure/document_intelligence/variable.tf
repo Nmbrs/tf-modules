@@ -37,3 +37,21 @@ variable "instance_count" {
     error_message = format("Invalid value '%s' for variable 'instance_count'. It must be between 1 and 999.", var.instance_count)
   }
 }
+
+variable "network_acls" {
+  description = "The network ACLs for the document intelligence."
+  type = object({
+    default_action = string
+    ip_rules       = list(string)
+  })
+  default = {
+    default_action = "Allow"
+    ip_rules       = []
+  }
+}
+
+variable "autoscale_enabled" {
+  description = "Enable dynamic throttling for the document intelligence."
+  type        = bool
+  default     = false
+}

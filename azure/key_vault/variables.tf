@@ -63,3 +63,10 @@ variable "enable_rbac_authorization" {
   description = "Boolean flag to specify whether Azure Key Vault uses Role Based Access Control (RBAC) for authorization of data actions."
   type        = bool
 }
+
+variable "override_name" {
+  description = "Override the name of the key vault, to bypass naming convention"
+  type        = string
+  default     = null
+  nullable    = true
+}
