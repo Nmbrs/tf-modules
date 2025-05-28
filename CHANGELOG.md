@@ -1,5 +1,14 @@
 # Changelog
 
+## [8.9.0](https://github.com/Nmbrs/tf-modules/compare/v8.8.0...v8.9.0) (2025-05-28)
+
+
+### Features
+
+* **github-module:** add module ([#357](https://github.com/Nmbrs/tf-modules/issues/357)) ([bf63bf5](https://github.com/Nmbrs/tf-modules/commit/bf63bf54cd5ac98a114ba5daf2e5fdb86ec95b28))
+* **github-repository:** add tool poc and internal metadata ([#360](https://github.com/Nmbrs/tf-modules/issues/360)) ([4d61328](https://github.com/Nmbrs/tf-modules/commit/4d613289f978d77a2e5c8e446d6175157e49cf23))
+* **github-repository:** update module to use the official provider ([#359](https://github.com/Nmbrs/tf-modules/issues/359)) ([add4861](https://github.com/Nmbrs/tf-modules/commit/add486183edc897c50b3b8ecc6e853eb3f0ef174))
+
 ## [8.8.0](https://github.com/Nmbrs/tf-modules/compare/v8.7.0...v8.8.0) (2025-05-21)
 
 
