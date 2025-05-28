@@ -17,6 +17,7 @@ resource "github_repository" "repo" {
   vulnerability_alerts   = true
 }
 
+# repository metadata settings
 resource "github_repository_custom_property" "owner" {
   repository     = github_repository.repo.name
   property_name  = "owner"
@@ -24,13 +25,28 @@ resource "github_repository_custom_property" "owner" {
   property_value = [var.owner]
 }
 
-resource "github_repository_custom_property" "internal_usage" {
+resource "github_repository_custom_property" "internal" {
   repository     = github_repository.repo.name
-  property_name  = "internal_usage"
+  property_name  = "internal"
   property_type  = "true_false"
-  property_value = [var.internal_usage]
+  property_value = [var.is_internal]
 }
 
+resource "github_repository_custom_property" "poc" {
+  repository     = github_repository.repo.name
+  property_name  = "poc"
+  property_type  = "true_false"
+  property_value = [var.is_poc]
+}
+
+resource "github_repository_custom_property" "tool" {
+  repository     = github_repository.repo.name
+  property_name  = "tool"
+  property_type  = "true_false"
+  property_value = [var.is_tool]
+}
+
+# github action access configuration
 resource "github_actions_repository_access_level" "organization_level" {
   access_level = "organization"
   repository   = github_repository.repo.name

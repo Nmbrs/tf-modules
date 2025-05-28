@@ -38,7 +38,17 @@ variable "owner" {
   }
 }
 
-variable "internal_usage" {
+variable "is_internal" {
   description = "Describes if the repo is used internally only or not"
+  type        = bool
+}
+
+variable "is_poc" {
+  description = "Describes if the repo is used for poc or not"
+  type        = bool
+}
+
+variable "is_tool" {
+  description = "Describes if the repo is an internal tool or not"
   type        = bool
 }
