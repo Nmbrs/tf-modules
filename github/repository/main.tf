@@ -18,32 +18,11 @@ resource "github_repository" "repo" {
 }
 
 # repository metadata settings
-resource "github_repository_custom_property" "owner" {
+resource "github_repository_custom_property" "purpose" {
   repository     = github_repository.repo.name
-  property_name  = "owner"
+  property_name  = "purpose"
   property_type  = "single_select"
-  property_value = [var.owner]
-}
-
-resource "github_repository_custom_property" "internal" {
-  repository     = github_repository.repo.name
-  property_name  = "internal"
-  property_type  = "true_false"
-  property_value = [var.is_internal]
-}
-
-resource "github_repository_custom_property" "poc" {
-  repository     = github_repository.repo.name
-  property_name  = "poc"
-  property_type  = "true_false"
-  property_value = [var.is_poc]
-}
-
-resource "github_repository_custom_property" "tool" {
-  repository     = github_repository.repo.name
-  property_name  = "tool"
-  property_type  = "true_false"
-  property_value = [var.is_tool]
+  property_value = [var.purpose]
 }
 
 # github action access configuration

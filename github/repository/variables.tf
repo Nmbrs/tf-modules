@@ -38,17 +38,12 @@ variable "owner" {
   }
 }
 
-variable "is_internal" {
+variable "purpose" {
   description = "Describes if the repo is used internally only or not"
-  type        = bool
-}
+  type        = string
 
-variable "is_poc" {
-  description = "Describes if the repo is used for poc or not"
-  type        = bool
-}
-
-variable "is_tool" {
-  description = "Describes if the repo is an internal tool or not"
-  type        = bool
+  validation {
+    condition     = contains(["internal", "tool", "poc", "product"], var.purpose)
+    error_message = format("Invalid value '%s' for variable 'visibility', valid options are 'internal', 'tool', 'poc', 'product'.", var.purpose)
+  }
 }
