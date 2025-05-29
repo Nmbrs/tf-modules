@@ -25,6 +25,13 @@ resource "github_repository_custom_property" "purpose" {
   property_value = [var.purpose]
 }
 
+resource "github_repository_custom_property" "owner" {
+  repository     = github_repository.repo.name
+  property_name  = "owner"
+  property_type  = "single_select"
+  property_value = [var.owner]
+}
+
 # github action access configuration
 resource "github_actions_repository_access_level" "organization_level" {
   access_level = "organization"
