@@ -2,7 +2,8 @@ resource "github_repository" "repo" {
   name                   = var.name
   description            = var.description
   visibility             = var.visibility
-  has_discussions        = true
+  has_discussions        = false
+  has_downloads          = false
   has_issues             = false
   has_projects           = false
   has_wiki               = false
@@ -11,10 +12,15 @@ resource "github_repository" "repo" {
   allow_squash_merge     = true
   allow_auto_merge       = false
   archive_on_destroy     = false
-  has_downloads          = false
-  auto_init              = true
+  auto_init              = false
   delete_branch_on_merge = true
   vulnerability_alerts   = true
+  # Topics are an empty list in favor of organization custom properties
+  topics = []
+  
+  lifecycle {
+    ignore_changes = [is_template]
+  }
 }
 
 # repository metadata settings
