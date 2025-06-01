@@ -11,11 +11,6 @@ variable "name" {
 variable "description" {
   type        = string
   description = "Description of the repository"
-
-  validation {
-    condition     = can(coalesce(var.description))
-    error_message = format("Invalid value '%s' for variable 'description'. They must be non-empty string values.", var.description)
-  }
 }
 
 variable "visibility" {
