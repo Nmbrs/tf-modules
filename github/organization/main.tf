@@ -3,11 +3,11 @@ resource "github_enterprise_organization" "organization" {
   name          = var.name
   display_name  = var.display_name
   description   = var.description
-  billing_email = var.billing_email
-  admin_logins  = []
+  billing_email = var.billing_email # irrelevent as it will be ignored
+  admin_logins  = []                # irrelevent as it will be ignored
 
   lifecycle {
-    ignore_changes = [admin_logins]
+    ignore_changes = [admin_logins, billing_email]
   }
 }
 

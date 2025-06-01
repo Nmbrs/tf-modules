@@ -17,6 +17,7 @@ variable "display_name" {
 
 variable "billing_email" {
   type = string
+  default = ""
 }
 
 
