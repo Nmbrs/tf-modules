@@ -1,5 +1,5 @@
 resource "github_organization_ruleset" "protect_all_main_branches" {
-  count       = var.ruleset_type == "protect_all_main_branches" ? 1 : 0
+  count       = var.type == "protect_all_main_branches" ? 1 : 0
   name        = "Protect all main branches"
   target      = "branch"
   enforcement = "active"
