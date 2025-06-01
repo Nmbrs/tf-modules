@@ -1,5 +1,5 @@
 resource "github_enterprise_organization" "organization" {
-  enterprise_id = data.github_enterprise.main_organization.id
+  enterprise_id = data.github_enterprise.enterprise.id
   name          = var.name
   display_name  = var.display_name
   description   = var.description
