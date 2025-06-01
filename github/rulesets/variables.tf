@@ -1,3 +1,14 @@
+variable "type" {
+  description = "Type of ruleset to apply."
+  type        = string
+  default     = "protect_all_main_branches"
+
+  validation {
+    condition = contains(["protect_all_main_branches"], var.type)
+    error_message = format("Invalid value '%s' for variable 'type', valid options are 'protect_all_main_branches'.", var.type)
+  }
+}
+
 variable "bypass_teams" {
   description = "List of GitHub admin team slugs to bypass protection rules"
   type        = list(string)
