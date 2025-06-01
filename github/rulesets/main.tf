@@ -32,7 +32,7 @@ resource "github_organization_ruleset" "protect_all_main_branches" {
 
 
   dynamic "bypass_actors" {
-    for_each = var.bypass_teams
+    for_each = toset(var.bypass_teams)
     content {
       actor_id    = data.github_team.bypass_team[each.value].id
       actor_type  = "Team"
