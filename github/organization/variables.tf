@@ -24,8 +24,8 @@ variable "billing_email" {
 variable "rulesets_settings" {
   type = object({
     protect_all_main_branches = object({
-      protected_repositories = string
-      excluded_repositories  = string
+      protected_repositories = list(string)
+      excluded_repositories  = list(string)
       bypass_teams           = list(string)
     })
   })
