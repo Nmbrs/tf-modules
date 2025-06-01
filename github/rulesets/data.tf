@@ -1,7 +1,4 @@
-data "github_team" "admin" {
-  slug = var.admin_team
-}
-
-data "github_user" "admin" {
-  username = var.admin_username
+data "github_team" "bypass_team" {
+  for_each = toset(var.bypass_teams)
+  slug     = each.value
 }

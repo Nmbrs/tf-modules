@@ -8,10 +8,9 @@ resource "github_organization_ruleset" "protect_all_main_branches" {
       include = ["~DEFAULT_BRANCH"]
       exclude = []
     }
-
     repository_name {
-      include = ["~ALL"] #check if we should use patterns for the repo names, to not block everything
-      exclude = []
+      include = var.protected_repositories
+      exclude = var.excluded_repositories
     }
   }
 
@@ -30,9 +29,13 @@ resource "github_organization_ruleset" "protect_all_main_branches" {
     required_signatures     = false
   }
 
-  bypass_actors {
-    actor_id    = data.github_team.admin.id
-    actor_type  = "Team"
-    bypass_mode = "always"
+
+  dynamic "bypass_actors" {
+    for_each = var.bypass_teams
+    content {
+      actor_id    = data.github_team.bypass_team[each.value].id
+      actor_type  = "Team"
+      bypass_mode = "always"
+    }
   }
 }
