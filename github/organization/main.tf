@@ -59,6 +59,11 @@ resource "github_organization_ruleset" "protect_all_main_branches" {
   rules {
     update   = false
     deletion = true
+    required_status_checks {
+      required_check {
+        context = "checks-statuses/*"
+      }
+    }
     pull_request {
       dismiss_stale_reviews_on_push     = true
       require_code_owner_review         = true
