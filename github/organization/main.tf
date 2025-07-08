@@ -11,35 +11,6 @@ resource "github_enterprise_organization" "organization" {
   }
 }
 
-# resource "github_organization_settings" "settings" {
-#     billing_email = var.billing_email
-#     company = var.name
-#     blog =  var.url
-#     email = null
-#     twitter_username = null
-#     location = null
-#     name = null
-#     description = var.description
-#     has_organization_projects = true
-#     has_repository_projects = true
-#     default_repository_permission = "read"
-#     members_can_create_repositories = false
-#     members_can_create_public_repositories = false
-#     members_can_create_private_repositories = true
-#     members_can_create_internal_repositories = true
-#     members_can_create_pages = true
-#     members_can_create_public_pages = false
-#     members_can_create_private_pages = true
-#     members_can_fork_private_repositories = false
-#     web_commit_signoff_required = false
-#     advanced_security_enabled_for_new_repositories = false
-#     dependabot_alerts_enabled_for_new_repositories=  true
-#     dependabot_security_updates_enabled_for_new_repositories = true
-#     dependency_graph_enabled_for_new_repositories = true
-#     secret_scanning_enabled_for_new_repositories = false
-#     secret_scanning_push_protection_enabled_for_new_repositories = false
-# }
-
 resource "github_organization_ruleset" "protect_all_main_branches" {
   name        = "Protect all main branches"
   target      = "branch"
@@ -50,6 +21,8 @@ resource "github_organization_ruleset" "protect_all_main_branches" {
       include = ["~DEFAULT_BRANCH"]
       exclude = []
     }
+    ## What we want to do in this rule is to apply it only to filtered repositories
+    ## but it's not supported yet byt github modules so we will ignore this section in the lifecycle
     repository_name {
       include = var.rulesets_settings.protect_all_main_branches.protected_repositories
       exclude = var.rulesets_settings.protect_all_main_branches.excluded_repositories
@@ -59,11 +32,6 @@ resource "github_organization_ruleset" "protect_all_main_branches" {
   rules {
     update   = false
     deletion = true
-    required_status_checks {
-      required_check {
-        context = "checks-statuses/*"
-      }
-    }
     pull_request {
       dismiss_stale_reviews_on_push     = true
       require_code_owner_review         = true
@@ -71,7 +39,7 @@ resource "github_organization_ruleset" "protect_all_main_branches" {
       required_approving_review_count   = 1
       required_review_thread_resolution = true
     }
-    required_linear_history = true
+    required_linear_history = false
     non_fast_forward        = true
     required_signatures     = false
   }
@@ -84,5 +52,11 @@ resource "github_organization_ruleset" "protect_all_main_branches" {
       actor_type  = "Team"
       bypass_mode = "always"
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      conditions[0].repository_name
+    ]
   }
 }
