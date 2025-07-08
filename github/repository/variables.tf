@@ -42,3 +42,10 @@ variable "purpose" {
     error_message = format("Invalid value '%s' for variable 'visibility', valid options are 'internal', 'tool', 'poc', 'product'.", var.purpose)
   }
 }
+
+variable "ruleset_enabled" {
+  description = "Enable or disable branch protection rules for this repository."
+  type        = bool
+  default     = true
+}
+

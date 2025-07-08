@@ -7,7 +7,7 @@ resource "github_repository" "repo" {
   has_issues             = false
   has_projects           = false
   has_wiki               = false
-  allow_merge_commit     = false
+  allow_merge_commit     = true
   allow_rebase_merge     = false
   allow_squash_merge     = true
   allow_auto_merge       = false
@@ -17,7 +17,7 @@ resource "github_repository" "repo" {
   vulnerability_alerts   = true
   # Topics are an empty list in favor of organization custom properties
   topics = []
-  
+
   lifecycle {
     ignore_changes = [is_template]
   }
@@ -36,6 +36,13 @@ resource "github_repository_custom_property" "owner" {
   property_name  = "owner"
   property_type  = "single_select"
   property_value = [var.owner]
+}
+
+resource "github_repository_custom_property" "apply_ruleset" {
+  repository     = github_repository.repo.name
+  property_name  = "apply_ruleset"
+  property_type  = "true_false"
+  property_value = [var.ruleset_enabled]
 }
 
 # github action access configuration
