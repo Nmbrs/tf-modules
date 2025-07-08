@@ -13,7 +13,7 @@ resource "github_repository" "repo" {
   allow_auto_merge       = false
   archive_on_destroy     = false
   auto_init              = false
-  delete_branch_on_merge = true
+  delete_branch_on_merge = var.branch_deletion_enabled
   vulnerability_alerts   = true
   # Topics are an empty list in favor of organization custom properties
   topics = []

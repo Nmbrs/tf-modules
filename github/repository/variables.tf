@@ -49,3 +49,8 @@ variable "rulesets_enabled" {
   default     = true
 }
 
+variable "branch_deletion_enabled" {
+  description = "Allow or prevent deletion of branches in this repository."
+  type        = bool
+  default     = true
+}
