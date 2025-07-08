@@ -38,11 +38,11 @@ resource "github_repository_custom_property" "owner" {
   property_value = [var.owner]
 }
 
-resource "github_repository_custom_property" "apply_ruleset" {
+resource "github_repository_custom_property" "apply_rulesets" {
   repository     = github_repository.repo.name
-  property_name  = "apply_ruleset"
+  property_name  = "apply_rulesets"
   property_type  = "true_false"
-  property_value = [var.ruleset_enabled]
+  property_value = [var.rulesets_enabled]
 }
 
 # github action access configuration

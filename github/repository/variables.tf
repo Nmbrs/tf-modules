@@ -43,7 +43,7 @@ variable "purpose" {
   }
 }
 
-variable "ruleset_enabled" {
+variable "rulesets_enabled" {
   description = "Enable or disable branch protection rules for this repository."
   type        = bool
   default     = true
