@@ -15,6 +15,7 @@ locals {
     cosmos_db_nosql       = data.azurerm_cosmosdb_account.cosmos_db_nosql,
     cosmos_db_mongodb     = data.azurerm_cosmosdb_account.cosmos_db_mongodb,
     redis_cache           = data.azurerm_redis_cache.redis_cache,
+    api_management        = data.azurerm_api_management.api_management,
     # Add more resource types and corresponding data blocks as needed
   }
 
@@ -33,5 +34,6 @@ locals {
     "cosmos_db_nosql"       = "SQL"
     "cosmos_db_mongodb"     = "MongoDB"
     "redis_cache"           = "redisCache"
+    "api_management"        = "gateway"
   }
 }

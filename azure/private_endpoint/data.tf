@@ -81,3 +81,9 @@ data "azurerm_redis_cache" "redis_cache" {
   name                = var.resource_settings.name
   resource_group_name = var.resource_settings.resource_group_name
 }
+
+data "azurerm_api_management" "api_management" {
+  count               = var.resource_settings.type == "api_management" ? 1 : 0
+  name                = var.resource_settings.name
+  resource_group_name = var.resource_settings.resource_group_name
+}
