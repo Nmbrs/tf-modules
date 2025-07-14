@@ -8,7 +8,7 @@ locals {
     storage_account_file  = data.azurerm_storage_account.storage_account_file,
     sql_server            = data.azurerm_mssql_server.sql_server,
     key_vault             = data.azurerm_key_vault.key_vault,
-    service_bus           = data.azurerm_servicebus_namespace.service_bus
+    service_bus           = data.azurerm_servicebus_namespace.service_bus,
     eventgrid_domain      = data.azurerm_eventgrid_domain.eventgrid_domain,
     eventgrid_topic       = data.azurerm_eventgrid_topic.eventgrid_topic,
     container_registry    = data.azurerm_container_registry.container_registry,
@@ -16,6 +16,7 @@ locals {
     cosmos_db_mongodb     = data.azurerm_cosmosdb_account.cosmos_db_mongodb,
     redis_cache           = data.azurerm_redis_cache.redis_cache,
     api_management        = data.azurerm_api_management.api_management,
+    app_configuration     = data.azurerm_app_configuration.app_configuration,
     # Add more resource types and corresponding data blocks as needed
   }
 
@@ -35,5 +36,6 @@ locals {
     "cosmos_db_mongodb"     = "MongoDB"
     "redis_cache"           = "redisCache"
     "api_management"        = "gateway"
+    "app_configuration"     = "configurationStores"
   }
 }
