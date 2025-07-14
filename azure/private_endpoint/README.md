@@ -1,4 +1,11 @@
 <!-- BEGIN_TF_DOCS -->
+# Private Endpoint
+
+## Sumary
+
+The `private_endpoint` module is a Terraform abstraction that that implements all the necessary
+Terraform code to create and manage private endpoints in Azure, that connects you privately and securely to a private dns zone and allows private traffic to reach the service.
+
 ## Requirements
 
 | Name | Version |
@@ -51,4 +58,27 @@ No modules.
 ## Outputs
 
 No outputs.
+
+## How to use it?
+
+A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
+
+```hcl
+module "private_endpoint" {
+  source              = "git::github.com/Nmbrs/tf-modules//azure/private_endpoint"
+  resource_group_name = "rg-myrg"
+  location            = "westeurope"
+  resource_settings = {
+    name                = "as-web-test"
+    type                = "app_service"
+    resource_group_name = "rg-resource-rg"
+  }
+  network_settings = {
+    vnet_name                = "vnet-mynetwork"
+    subnet_name              = "snet-mysnet-002"
+    vnet_resource_group_name = "rg-networks"
+  }
+  private_dns_zone_id = "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/my-rg/providers/Microsoft.Network/privateDnsZones/privatednszone.com"
+}
+```
 <!-- END_TF_DOCS -->
