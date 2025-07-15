@@ -59,7 +59,7 @@ variable "access_policies" {
   }
 }
 
-variable "enable_rbac_authorization" {
+variable "rbac_authorization_enabled" {
   description = "Boolean flag to specify whether Azure Key Vault uses Role Based Access Control (RBAC) for authorization of data actions."
   type        = bool
 }
