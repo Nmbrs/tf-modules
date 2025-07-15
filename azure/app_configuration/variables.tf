@@ -1,3 +1,8 @@
+variable "public_network_access_enabled" {
+  description = "A condition to indicate if the App Configuration will have public network access (defaults to false)."
+  type        = bool
+  default     = false
+}
 variable "sku_name" {
   description = "The SKU name of the App Configuration. Possible values are 'free', 'standard', and 'premium'. Defaults to 'free'."
   type        = string
@@ -56,13 +61,11 @@ variable "override_name" {
 }
 
 variable "company_prefix" {
-  description = "Prefix for the company name to be used in resource naming. Defaults to 'nmbrs'."
+  description = "Short, unique prefix for the company or organization. Used in naming for uniqueness. Must be 1-5 characters."
   type        = string
   default     = "nmbrs"
-
   validation {
-    condition     = can(coalesce(var.company_prefix))
-    error_message = "The company_prefix must be a non-empty string."
+    condition     = length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5
+    error_message = "company_prefix must be a non-empty string with a maximum of 5 characters."
   }
 }
-
