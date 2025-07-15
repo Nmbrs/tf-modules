@@ -16,26 +16,12 @@ repos:
         files: \.(js|ts|jsx|tsx|css|less|html|json|yaml|yml)$
 
   - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v4.2.0
+    rev: v4.0.0
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
 
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.99.5
+    rev: v1.97.0
     hooks:
       - id: terraform_fmt
-      - id: terraform_validate
-
-  - repo: https://github.com/terraform-docs/terraform-docs
-    rev: v0.20.0
-    hooks:
-      - id: terraform-docs-go
-        args:
-          [
-            "markdown",
-            "table",
-            "--output-file",
-            "README.md",
-            "./azure/key_vault",
-          ]
