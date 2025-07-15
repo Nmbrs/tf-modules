@@ -1,8 +1,3 @@
-variable "resource_group_name" {
-  type        = string
-  description = "The name of an existing Resource Group."
-}
-
 variable "workload" {
   description = "The workload name of the key vault."
   type        = string
@@ -11,6 +6,11 @@ variable "workload" {
     condition     = length(var.workload) <= 8
     error_message = format("Invalid value '%s' for variable 'workload'. It must contain no more than 8 characters.", var.workload)
   }
+}
+
+variable "resource_group_name" {
+  type        = string
+  description = "The name of an existing Resource Group."
 }
 
 variable "location" {
@@ -69,4 +69,20 @@ variable "override_name" {
   type        = string
   default     = null
   nullable    = true
+}
+
+variable "company_prefix" {
+  description = "Short, unique prefix for the company or organization. Used in naming for uniqueness. Must be 1-5 characters."
+  type        = string
+  default     = "nmbrs"
+  validation {
+    condition     = length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5
+    error_message = "company_prefix must be a non-empty string with a maximum of 5 characters."
+  }
+}
+
+variable "public_network_access_enabled" {
+  description = "A condition to indicate if the Key Vault will have public network access (defaults to false)."
+  type        = bool
+  default     = false
 }
