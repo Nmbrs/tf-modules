@@ -43,13 +43,13 @@ variable "account_kind" {
   }
 }
 
-variable "account_tier" {
-  description = "Defines the Tier to use for this storage account."
+variable "sku_name" {
+  description = "Defines the SKU name to use for this storage account."
   type        = string
 
   validation {
-    condition     = contains(["Standard", "Premium"], var.account_tier)
-    error_message = "The account_tier value is invalid. Valid options are 'Standard' and 'Premium'."
+    condition     = contains(["Standard", "Premium"], var.sku_name)
+    error_message = "The sku_name value is invalid. Valid options are 'Standard' and 'Premium'."
   }
 }
 
@@ -61,4 +61,27 @@ variable "replication_type" {
     condition     = contains(["LRS", "GRS", "RAGS", "ZRS", "GZRS", "RAGZRS"], var.replication_type)
     error_message = "The replication_type value is invalid. Valid options are LRS, GRS, RAGRS, ZRS, GZRS and RAGZRS."
   }
+}
+
+variable "company_prefix" {
+  description = "Short, unique prefix for the company or organization. Used in naming for uniqueness. Must be 1-5 characters."
+  type        = string
+  default     = "nmbrs"
+  validation {
+    condition     = length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5
+    error_message = "company_prefix must be a non-empty string with a maximum of 5 characters."
+  }
+}
+
+variable "override_name" {
+  description = "Optional override for naming logic. If set, this value is used for the resource name."
+  type        = string
+  default     = null
+  nullable    = true
+}
+
+variable "public_network_access_enabled" {
+  description = "A condition to indicate if the Storage Account will have public network access (defaults to false)."
+  type        = bool
+  default     = false
 }
