@@ -1,6 +1,6 @@
 locals {
   key_vault_name = (
-    var.override_name != null && trimspace(var.override_name) != "" ?
+    var.override_name != null && var.override_name != "" ?
     lower(var.override_name) :
     lower("kv${var.company_prefix}${var.workload}${var.external_usage ? "e" : "i"}${var.environment}")
   )
