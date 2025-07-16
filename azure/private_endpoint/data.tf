@@ -40,6 +40,12 @@ data "azurerm_key_vault" "key_vault" {
   resource_group_name = var.resource_settings.resource_group_name
 }
 
+data "azurerm_app_configuration" "app_configuration" {
+  count               = var.resource_settings.type == "app_configuration" ? 1 : 0
+  name                = var.resource_settings.name
+  resource_group_name = var.resource_settings.resource_group_name
+}
+
 data "azurerm_servicebus_namespace" "service_bus" {
   count               = var.resource_settings.type == "service_bus" ? 1 : 0
   name                = var.resource_settings.name
