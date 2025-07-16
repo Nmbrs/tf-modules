@@ -35,7 +35,7 @@ locals {
     "cosmos_db_nosql"       = "SQL"
     "cosmos_db_mongodb"     = "MongoDB"
     "redis_cache"           = "redisCache"
-    "api_management"        = "gateway"
+    "api_management"        = "Gateway"
     "app_configuration"     = "configurationStores"
   }
 }
