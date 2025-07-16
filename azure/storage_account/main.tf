@@ -10,10 +10,12 @@ resource "azurerm_storage_account" "storage_account" {
   public_network_access_enabled   = var.public_network_access_enabled
   allow_nested_items_to_be_public = var.public_network_access_enabled
 
-network_rules {
-  default_action = "Deny"
-  bypass         = ["None"]
-}
+  network_rules {
+    default_action             = "Deny"
+    bypass                     = ["None"]
+    ip_rules                   = []
+    virtual_network_subnet_ids = []
+  }
 
   lifecycle {
     ignore_changes = [tags]
