@@ -13,6 +13,11 @@ resource "azurerm_key_vault" "key_vault" {
   enable_rbac_authorization     = var.rbac_authorization_enabled
   public_network_access_enabled = var.public_network_access_enabled
 
+  network_acls {
+    bypass         = "None"
+    default_action = "Deny"
+  }
+
   lifecycle {
     ignore_changes = [tags]
 
