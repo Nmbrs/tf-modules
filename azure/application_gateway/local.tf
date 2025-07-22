@@ -82,14 +82,14 @@ locals {
       }
       backend = {
         fqdns                         = ["contoso.com"]
-        port                          = var.http_port
+        port                          = 80
         protocol                      = "http"
         cookie_based_affinity_enabled = true
-        request_timeout_in_seconds    = var.request_timeout_seconds
+        request_timeout_in_seconds    = 30
         health_probe = {
-          timeout_in_seconds             = var.health_probe_timeout_seconds
-          evaluation_interval_in_seconds = var.health_probe_evaluation_interval_seconds
-          unhealthy_treshold_count       = var.health_probe_unhealthy_threshold_count
+          timeout_in_seconds             = 30
+          evaluation_interval_in_seconds = 30
+          unhealthy_treshold_count       = 3
           fqdn                           = "contoso.com"
           path                           = "/"
           status_codes                   = ["200"]

@@ -62,12 +62,12 @@ resource "azurerm_application_gateway" "app_gw" {
 
   frontend_port {
     name = local.http_frontend_port_name
-    port = var.http_port
+    port = 80
   }
 
   frontend_port {
     name = local.https_frontend_port_name
-    port = var.https_port
+    port = 443
   }
 
   ssl_policy {
