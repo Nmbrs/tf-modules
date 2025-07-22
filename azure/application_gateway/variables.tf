@@ -1,31 +1,55 @@
 variable "workload" {
-  description = "The name of the workload associated with the resource."
   type        = string
+  description = "Short, descriptive name for the application, service, or workload."
+}
+
+variable "override_name" {
+  type        = string
+  description = "Optional override for naming logic."
+  default     = null
+  nullable    = true
+}
+
+variable "company_prefix" {
+  type        = string
+  description = "Short, unique prefix for the company/organization."
+  default     = "nmbrs"
+
+  validation {
+    condition     = length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5
+    error_message = "company_prefix must be a non-empty string with a maximum of 5 characters."
+  }
 }
 
 variable "resource_group_name" {
   type        = string
-  description = "The name of an existing Resource Group."
-}
-
-variable "naming_count" {
-  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention."
-  type        = number
-
-  validation {
-    condition     = var.naming_count >= 1 && var.naming_count <= 999
-    error_message = format("Invalid value '%s' for variable 'naming_count'. It must be between 1 and 999.", var.naming_count)
-  }
-}
-
-variable "environment" {
-  description = "The environment in which the resource should be provisioned."
-  type        = string
+  description = "Name of the Azure Resource Group."
 }
 
 variable "location" {
-  description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
   type        = string
+  description = "Azure region for resource deployment."
+  default     = "westeurope"
+}
+
+variable "environment" {
+  type        = string
+  description = "The environment for the resource (e.g., dev, test, prod, stag, sand)."
+
+  validation {
+    condition     = contains(["dev", "test", "prod", "stag", "sand"], var.environment)
+    error_message = "Environment must be one of: dev, test, prod, stag, sand."
+  }
+}
+
+variable "sequence_number" {
+  type        = number
+  description = "A numeric value used to ensure uniqueness for resource names."
+
+  validation {
+    condition     = var.sequence_number >= 1 && var.sequence_number <= 999
+    error_message = "sequence_number must be between 1 and 999."
+  }
 }
 
 variable "application_backend_settings" {
@@ -147,3 +171,82 @@ variable "waf_policy_settings" {
     resource_group_name = string
   })
 }
+
+# Application Gateway configuration variables
+variable "http_port" {
+  type        = number
+  description = "HTTP port number for the application gateway frontend."
+  default     = 80
+
+  validation {
+    condition     = var.http_port >= 1 && var.http_port <= 65535
+    error_message = "HTTP port must be between 1 and 65535."
+  }
+}
+
+variable "https_port" {
+  type        = number
+  description = "HTTPS port number for the application gateway frontend."
+  default     = 443
+
+  validation {
+    condition     = var.https_port >= 1 && var.https_port <= 65535
+    error_message = "HTTPS port must be between 1 and 65535."
+  }
+}
+
+variable "default_priority" {
+  type        = number
+  description = "Default priority for routing rules (lower number = higher priority). Used for fallback/default rules."
+  default     = 20000
+
+  validation {
+    condition     = var.default_priority >= 1 && var.default_priority <= 20000
+    error_message = "Default priority must be between 1 and 20000."
+  }
+}
+
+variable "health_probe_timeout_seconds" {
+  type        = number
+  description = "Timeout in seconds for health probe requests."
+  default     = 30
+
+  validation {
+    condition     = var.health_probe_timeout_seconds >= 1 && var.health_probe_timeout_seconds <= 86400
+    error_message = "Health probe timeout must be between 1 and 86400 seconds."
+  }
+}
+
+variable "health_probe_evaluation_interval_seconds" {
+  type        = number
+  description = "Evaluation interval in seconds for health probes."
+  default     = 30
+
+  validation {
+    condition     = var.health_probe_evaluation_interval_seconds >= 1 && var.health_probe_evaluation_interval_seconds <= 86400
+    error_message = "Health probe evaluation interval must be between 1 and 86400 seconds."
+  }
+}
+
+variable "health_probe_unhealthy_threshold_count" {
+  type        = number
+  description = "Number of consecutive failed health probe attempts before marking backend as unhealthy."
+  default     = 3
+
+  validation {
+    condition     = var.health_probe_unhealthy_threshold_count >= 1 && var.health_probe_unhealthy_threshold_count <= 20
+    error_message = "Health probe unhealthy threshold must be between 1 and 20."
+  }
+}
+
+variable "request_timeout_seconds" {
+  type        = number
+  description = "Request timeout in seconds for backend HTTP settings."
+  default     = 30
+
+  validation {
+    condition     = var.request_timeout_seconds >= 1 && var.request_timeout_seconds <= 86400
+    error_message = "Request timeout must be between 1 and 86400 seconds."
+  }
+}
+
