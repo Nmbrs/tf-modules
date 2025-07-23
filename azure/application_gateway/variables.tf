@@ -7,7 +7,11 @@ variable "override_name" {
   type        = string
   description = "Optional override for naming logic."
   default     = null
-  nullable    = true
+
+  validation {
+    condition     = var.override_name == null || try(length(trim(var.override_name, "")) > 0, false)
+    error_message = "override_name must be a non-empty string."
+  }
 }
 
 variable "company_prefix" {

@@ -1,5 +1,5 @@
 resource "azurerm_public_ip" "app_gw" {
-  name                = "pip-${local.app_gateway_name}"
+  name                = local.public_ip_name
   domain_name_label   = local.app_gateway_dns_label
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -62,12 +62,12 @@ resource "azurerm_application_gateway" "app_gw" {
 
   frontend_port {
     name = local.http_frontend_port_name
-    port = 80
+    port = local.http_port
   }
 
   frontend_port {
     name = local.https_frontend_port_name
-    port = 443
+    port = local.https_port
   }
 
   ssl_policy {
