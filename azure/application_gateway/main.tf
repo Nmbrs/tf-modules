@@ -1,9 +1,6 @@
-# ==============================================================================
-# Azure Public IP Configuration
-# ==============================================================================
 resource "azurerm_public_ip" "app_gw" {
   name                = local.public_ip_name
-  domain_name_label   = local.app_gateway_name
+  domain_name_label   = local.app_gateway_dns_label
   location            = var.location
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
@@ -15,15 +12,22 @@ resource "azurerm_public_ip" "app_gw" {
 }
 
 # ==============================================================================
-# Azure Application Gateway Configuration
+# Application Gateway Configuration
 # ==============================================================================
+
 resource "azurerm_application_gateway" "app_gw" {
-  name                              = local.app_gateway_name
-  location                          = var.location
-  resource_group_name               = var.resource_group_name
-  enable_http2                      = true
-  force_firewall_policy_association = var.waf_policy_settings != "" && var.waf_policy_settings != null ? true : null
-  firewall_policy_id                = var.waf_policy_settings != "" && var.waf_policy_settings != null ? data.azurerm_web_application_firewall_policy.waf_policy_settings[0].id : null
+  name                = local.app_gateway_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  enable_http2        = true
+  force_firewall_policy_association = (
+    var.waf_policy_settings != "" && var.waf_policy_settings != null ? true : null
+  )
+  firewall_policy_id = (
+    var.waf_policy_settings != "" && var.waf_policy_settings != null ?
+    data.azurerm_web_application_firewall_policy.waf_policy_settings[0].id :
+    null
+  )
 
   sku {
     name = "WAF_v2"
@@ -56,25 +60,23 @@ resource "azurerm_application_gateway" "app_gw" {
     public_ip_address_id = azurerm_public_ip.app_gw.id
   }
 
-  # HTTP front end port configuration
   frontend_port {
     name = local.http_frontend_port_name
-    port = 80
+    port = local.http_port
   }
 
-  # HTTPs front end port configuration
   frontend_port {
     name = local.https_frontend_port_name
-    port = 443
+    port = local.https_port
   }
 
-  # TLS / SSL configurations
   ssl_policy {
     policy_type          = "Custom"
     min_protocol_version = "TLSv1_2"
     cipher_suites        = local.cipher_suites
   }
 
+  # SSL Certificates
   dynamic "ssl_certificate" {
     for_each = var.ssl_certificates
     content {
@@ -83,10 +85,13 @@ resource "azurerm_application_gateway" "app_gw" {
     }
   }
 
-
-  # Application backend configurations
+  # Application Backend Configuration
   dynamic "http_listener" {
-    for_each = length(var.application_backend_settings) != 0 ? var.application_backend_settings : local.default_application_settings
+    for_each = (
+      length(var.application_backend_settings) != 0 ?
+      var.application_backend_settings :
+      local.default_application_settings
+    )
     content {
       name                           = "listener-${local.application_names[http_listener.key]}"
       frontend_ip_configuration_name = azurerm_public_ip.app_gw.name
@@ -98,7 +103,11 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   dynamic "backend_address_pool" {
-    for_each = length(var.application_backend_settings) != 0 ? var.application_backend_settings : local.default_application_settings
+    for_each = (
+      length(var.application_backend_settings) != 0 ?
+      var.application_backend_settings :
+      local.default_application_settings
+    )
 
     content {
       name  = "backend-${local.application_names[backend_address_pool.key]}"
@@ -107,7 +116,11 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   dynamic "probe" {
-    for_each = length(var.application_backend_settings) != 0 ? var.application_backend_settings : local.default_application_settings
+    for_each = (
+      length(var.application_backend_settings) != 0 ?
+      var.application_backend_settings :
+      local.default_application_settings
+    )
     content {
       name                                      = "probe-${local.application_names[probe.key]}"
       protocol                                  = title(probe.value.backend.protocol)
@@ -126,7 +139,11 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   dynamic "backend_http_settings" {
-    for_each = length(var.application_backend_settings) != 0 ? var.application_backend_settings : local.default_application_settings
+    for_each = (
+      length(var.application_backend_settings) != 0 ?
+      var.application_backend_settings :
+      local.default_application_settings
+    )
     content {
       name                                = "settings-${local.application_names[backend_http_settings.key]}"
       cookie_based_affinity               = backend_http_settings.value.backend.cookie_based_affinity_enabled ? "Enabled" : "Disabled"
@@ -139,7 +156,11 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   dynamic "request_routing_rule" {
-    for_each = length(var.application_backend_settings) != 0 ? var.application_backend_settings : local.default_application_settings
+    for_each = (
+      length(var.application_backend_settings) != 0 ?
+      var.application_backend_settings :
+      local.default_application_settings
+    )
     content {
       name                       = "rule-${local.application_names[request_routing_rule.key]}"
       priority                   = request_routing_rule.value.routing_rule.priority
@@ -150,9 +171,13 @@ resource "azurerm_application_gateway" "app_gw" {
     }
   }
 
-  #Redirect URL configurations
+  # Redirect URL Configuration
   dynamic "http_listener" {
-    for_each = length(var.redirect_url_settings) != 0 ? var.redirect_url_settings : []
+    for_each = (
+      length(var.redirect_url_settings) != 0 ?
+      var.redirect_url_settings :
+      []
+    )
     content {
       name                           = "listener-${local.redirect_url_names[http_listener.key]}"
       frontend_ip_configuration_name = azurerm_public_ip.app_gw.name
@@ -164,7 +189,11 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   dynamic "redirect_configuration" {
-    for_each = length(var.redirect_url_settings) != 0 ? var.redirect_url_settings : []
+    for_each = (
+      length(var.redirect_url_settings) != 0 ?
+      var.redirect_url_settings :
+      []
+    )
     content {
       name                 = "redirect-${local.redirect_url_names[redirect_configuration.key]}"
       redirect_type        = "Permanent"
@@ -175,7 +204,11 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   dynamic "request_routing_rule" {
-    for_each = length(var.redirect_url_settings) != 0 ? var.redirect_url_settings : []
+    for_each = (
+      length(var.redirect_url_settings) != 0 ?
+      var.redirect_url_settings :
+      []
+    )
     content {
       name                        = "rule-${local.redirect_url_names[request_routing_rule.key]}"
       priority                    = request_routing_rule.value.routing_rule.priority
@@ -185,9 +218,13 @@ resource "azurerm_application_gateway" "app_gw" {
     }
   }
 
-  #Redirect listener configurations
+  # Redirect Listener Configuration
   dynamic "http_listener" {
-    for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
+    for_each = (
+      length(var.redirect_listener_settings) != 0 ?
+      var.redirect_listener_settings :
+      []
+    )
     content {
       name                           = "listener-${local.redirect_listener_names[http_listener.key]}"
       frontend_ip_configuration_name = azurerm_public_ip.app_gw.name
@@ -199,7 +236,11 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   dynamic "redirect_configuration" {
-    for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
+    for_each = (
+      length(var.redirect_listener_settings) != 0 ?
+      var.redirect_listener_settings :
+      []
+    )
     content {
       name                 = "redirect-${local.redirect_listener_names[redirect_configuration.key]}"
       redirect_type        = "Permanent"
@@ -210,7 +251,11 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   dynamic "request_routing_rule" {
-    for_each = length(var.redirect_listener_settings) != 0 ? var.redirect_listener_settings : []
+    for_each = (
+      length(var.redirect_listener_settings) != 0 ?
+      var.redirect_listener_settings :
+      []
+    )
     content {
       name                        = "rule-${local.redirect_listener_names[request_routing_rule.key]}"
       priority                    = request_routing_rule.value.routing_rule.priority
