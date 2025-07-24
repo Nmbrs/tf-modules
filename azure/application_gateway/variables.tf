@@ -1,7 +1,13 @@
 variable "workload" {
   type        = string
   description = "Short, descriptive name for the application, service, or workload."
+
+  validation {
+    condition     = var.workload == null || try(length(trim(var.workload, "")) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'workload', it must be null or a non-empty string.", var.workload)
+  }
 }
+
 
 variable "override_name" {
   type        = string
@@ -10,7 +16,7 @@ variable "override_name" {
 
   validation {
     condition     = var.override_name == null || try(length(trim(var.override_name, "")) > 0, false)
-    error_message = "override_name must be a non-empty string."
+    error_message = format("Invalid value '%s' for variable 'override_name', it must be null or a non-empty string.", var.override_name)
   }
 }
 
@@ -18,31 +24,33 @@ variable "company_prefix" {
   type        = string
   description = "Short, unique prefix for the company/organization."
   default     = "nmbrs"
+  nullable    = false
 
   validation {
     condition     = length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5
-    error_message = "company_prefix must be a non-empty string with a maximum of 5 characters."
+    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", var.company_prefix)
   }
 }
 
-variable "resource_group_name" {
-  type        = string
-  description = "Name of the Azure Resource Group."
-}
-
 variable "location" {
+  description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
   type        = string
-  description = "Azure region for resource deployment."
-  default     = "westeurope"
-}
-
-variable "environment" {
-  type        = string
-  description = "The environment for the resource (e.g., dev, test, prod, stag, sand)."
+  nullable    = false
 
   validation {
-    condition     = contains(["dev", "test", "prod", "stag", "sand"], var.environment)
-    error_message = "Environment must be one of: dev, test, prod, stag, sand."
+    condition     = try(length(trim(var.location, "")) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'location', it must be a non-empty string.", var.location)
+  }
+}
+
+
+variable "environment" {
+  description = "The environment in which the resource should be provisioned."
+  type        = string
+
+  validation {
+    condition     = contains(["dev", "test", "prod", "sand", "stag"], var.environment)
+    error_message = format("Invalid value '%s' for variable 'environment', valid options are 'dev', 'test', 'prod', 'sand', 'stag'.", var.environment)
   }
 }
 
@@ -52,7 +60,7 @@ variable "sequence_number" {
 
   validation {
     condition     = var.sequence_number >= 1 && var.sequence_number <= 999
-    error_message = "sequence_number must be between 1 and 999."
+    error_message = format("Invalid value '%s' for variable 'sequence_number', it must be between a number between 1 and 999.", var.sequence_number)
   }
 }
 
