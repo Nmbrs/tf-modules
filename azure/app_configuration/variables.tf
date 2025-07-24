@@ -4,12 +4,12 @@ variable "public_network_access_enabled" {
   default     = false
 }
 variable "sku_name" {
-  description = "The SKU name of the App Configuration. Possible values are 'free', 'standard', and 'premium'. Defaults to 'free'."
+  description = "The SKU name of the App Configuration."
   type        = string
-  default     = "free"
+  default     = "developer"
   validation {
-    condition     = contains(["free", "standard", "premium"], lower(var.sku_name))
-    error_message = "sku_name must be one of 'free', 'standard', or 'premium'."
+    condition     = contains(["free", "developer", "standard", "premium"], lower(var.sku_name))
+    error_message = "sku_name must be one of 'free', 'developer', 'standard', or 'premium'."
   }
 }
 
