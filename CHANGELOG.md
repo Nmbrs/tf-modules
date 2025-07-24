@@ -1,5 +1,19 @@
 # Changelog
 
+## [8.9.0](https://github.com/Nmbrs/tf-modules/compare/v8.8.0...v8.9.0) (2025-07-24)
+
+
+### Features
+
+* **app_configuration:** add module ([#363](https://github.com/Nmbrs/tf-modules/issues/363)) ([8fbb252](https://github.com/Nmbrs/tf-modules/commit/8fbb252138ea289c06bef9973974e0cdb79fecac))
+* **application_gateway:** standardize module and add configuration options ([#368](https://github.com/Nmbrs/tf-modules/issues/368)) ([d7f9b68](https://github.com/Nmbrs/tf-modules/commit/d7f9b6869c7ed706b985427f8ae0000c2ac84656))
+* **github-module:** add module ([#357](https://github.com/Nmbrs/tf-modules/issues/357)) ([bf63bf5](https://github.com/Nmbrs/tf-modules/commit/bf63bf54cd5ac98a114ba5daf2e5fdb86ec95b28))
+* **github-repository:** add tool poc and internal metadata ([#360](https://github.com/Nmbrs/tf-modules/issues/360)) ([4d61328](https://github.com/Nmbrs/tf-modules/commit/4d613289f978d77a2e5c8e446d6175157e49cf23))
+* **github-repository:** update module to use the official provider ([#359](https://github.com/Nmbrs/tf-modules/issues/359)) ([add4861](https://github.com/Nmbrs/tf-modules/commit/add486183edc897c50b3b8ecc6e853eb3f0ef174))
+* **key_vault:** add control for public network availability ([#365](https://github.com/Nmbrs/tf-modules/issues/365)) ([77b98bd](https://github.com/Nmbrs/tf-modules/commit/77b98bd3482d236a5de860f557683ed6f4e71b27))
+* **private_endpoint:** add support for app_configuration ([#364](https://github.com/Nmbrs/tf-modules/issues/364)) ([b9f45a1](https://github.com/Nmbrs/tf-modules/commit/b9f45a1cd5ac3223241bca462af6c7b26db29af1))
+* **storage_account:** add control for public network availability  ([#366](https://github.com/Nmbrs/tf-modules/issues/366)) ([4a402d7](https://github.com/Nmbrs/tf-modules/commit/4a402d73bec16c3276e4a42451867288b87ff6c8))
+
 ## [8.8.0](https://github.com/Nmbrs/tf-modules/compare/v8.7.0...v8.8.0) (2025-05-21)
 
 
