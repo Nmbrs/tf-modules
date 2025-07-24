@@ -32,8 +32,8 @@ variable "override_name" {
 }
 
 variable "resource_group_name" {
-  description = "Specifies the name of the resource group where the resource should exist."
   type        = string
+  description = "Specifies the name of the resource group where the resource should exist."
   nullable    = false
 
   validation {
@@ -44,8 +44,8 @@ variable "resource_group_name" {
 
 
 variable "location" {
-  description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
   type        = string
+  description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
   nullable    = false
 
   validation {
@@ -56,8 +56,8 @@ variable "location" {
 
 
 variable "environment" {
-  description = "The environment in which the resource should be provisioned."
   type        = string
+  description = "The environment in which the resource should be provisioned."
 
   validation {
     condition     = contains(["dev", "test", "prod", "sand", "stag"], var.environment)
@@ -76,7 +76,6 @@ variable "sequence_number" {
 }
 
 variable "application_backend_settings" {
-  description = "A list of settings for the application backends that the app gateway will serve."
   type = list(object({
     routing_rule = object({
       priority = number
@@ -102,12 +101,11 @@ variable "application_backend_settings" {
       })
     })
   }))
-
-  default = []
+  description = "A list of settings for the application backends that the app gateway will serve."
+  default     = []
 }
 
 variable "redirect_url_settings" {
-  description = "A list of settings for the URL redirection that the app gateway will serve."
   type = list(object({
     routing_rule = object({
       priority = number
@@ -123,12 +121,11 @@ variable "redirect_url_settings" {
       include_query_string = optional(bool, false)
     })
   }))
-
-  default = []
+  description = "A list of settings for the URL redirection that the app gateway will serve."
+  default     = []
 }
 
 variable "redirect_listener_settings" {
-  description = "A list of settings for the listeners redirection that the app gateway will serve."
   type = list(object({
     routing_rule = object({
       priority = number
@@ -144,55 +141,56 @@ variable "redirect_listener_settings" {
       include_query_string = bool
     })
   }))
-  default = []
+  description = "A list of settings for the listeners redirection that the app gateway will serve."
+  default     = []
 }
 
 variable "network_settings" {
-  description = "Settings related to the network connectivity of the application gateway."
   type = object({
     vnet_name                = string
     vnet_resource_group_name = string
     subnet_name              = string
   })
+  description = "Settings related to the network connectivity of the application gateway."
 }
 
 variable "managed_identity_settings" {
-  description = "A list of settings related to the app gateway managed identity used to retrieve SSL certificates."
   type = object({
     name                = string
     resource_group_name = string
   })
+  description = "A list of settings related to the app gateway managed identity used to retrieve SSL certificates."
 }
 
 variable "ssl_certificates" {
-  description = "Settings related to SSL certificates that will be installed in the application gateway."
   type = list(object({
     name                          = string
     key_vault_name                = string
     key_vault_resource_group_name = string
     key_vault_certificate_name    = string
   }))
-  default = []
+  description = "Settings related to SSL certificates that will be installed in the application gateway."
+  default     = []
 }
 
 variable "min_instance_count" {
-  description = "The minimum number of instances the application gateway will have."
   type        = number
+  description = "The minimum number of instances the application gateway will have."
   default     = 2
 }
 
 variable "max_instance_count" {
-  description = "The maximum number of instances the application gateway will have."
   type        = number
+  description = "The maximum number of instances the application gateway will have."
   default     = 10
 }
 
 variable "waf_policy_settings" {
-  description = "Name of the WAF policy to be associated with the application gateway."
   type = object({
     name                = string
     resource_group_name = string
   })
+  description = "Name of the WAF policy to be associated with the application gateway."
 }
 
 
