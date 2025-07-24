@@ -8,6 +8,17 @@ variable "workload" {
   }
 }
 
+variable "company_prefix" {
+  type        = string
+  description = "Short, unique prefix for the company/organization."
+  default     = "nmbrs"
+  nullable    = false
+
+  validation {
+    condition     = length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5
+    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", var.company_prefix)
+  }
+}
 
 variable "override_name" {
   type        = string
@@ -20,17 +31,17 @@ variable "override_name" {
   }
 }
 
-variable "company_prefix" {
+variable "resource_group_name" {
+  description = "Specifies the name of the resource group where the resource should exist."
   type        = string
-  description = "Short, unique prefix for the company/organization."
-  default     = "nmbrs"
   nullable    = false
 
   validation {
-    condition     = length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5
-    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", var.company_prefix)
+    condition     = try(length(trim(var.resource_group_name, "")) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'resource_group_name', it must be a non-empty string.", var.resource_group_name)
   }
 }
+
 
 variable "location" {
   description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
