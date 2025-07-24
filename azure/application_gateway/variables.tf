@@ -4,7 +4,7 @@ variable "workload" {
 
   validation {
     condition     = var.workload == null || try(length(trim(var.workload, "")) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'workload', it must be null or a non-empty string.", var.workload)
+    error_message = format("Invalid value '%s' for variable 'workload', it must be null or a non-empty string.", coalesce(var.workload, "null"))
   }
 }
 
@@ -27,7 +27,7 @@ variable "override_name" {
 
   validation {
     condition     = var.override_name == null || try(length(trim(var.override_name, "")) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'override_name', it must be null or a non-empty string.", var.override_name)
+    error_message = format("Invalid value '%s' for variable 'override_name', it must be null or a non-empty string.", coalesce(var.override_name, "null"))
   }
 }
 
