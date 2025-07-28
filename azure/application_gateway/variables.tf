@@ -28,7 +28,7 @@ variable "company_prefix" {
 
   validation {
     condition     = var.company_prefix == null || try(length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5, false)
-    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", var.company_prefix)
+    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", coalesce(var.company_prefix, "null"))
   }
 }
 
@@ -39,7 +39,7 @@ variable "sequence_number" {
 
   validation {
     condition     = var.sequence_number == null || try(var.sequence_number >= 1 && var.sequence_number <= 999, false)
-    error_message = format("Invalid value '%s' for variable 'sequence_number', it must be null or a number between 1 and 999.", var.sequence_number)
+    error_message = format("Invalid value '%s' for variable 'sequence_number', it must be null or a number between 1 and 999.", coalesce(var.sequence_number, "null"))
   }
 }
 
