@@ -161,17 +161,17 @@ variable "network_settings" {
 
   validation {
     condition     = try(length(trimspace(var.network_settings.vnet_name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'network_settings.vnet_name', it must be a non-empty string.", var.network_settings.vnet_name)
+    error_message = format("Invalid value '%s' for variable 'network_settings.vnet_name', it must be a non-empty string.", coalesce(var.network_settings.vnet_name, "null"))
   }
 
   validation {
     condition     = try(length(trimspace(var.network_settings.vnet_resource_group_name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'network_settings.vnet_resource_group_name', it must be a non-empty string.", var.network_settings.vnet_resource_group_name)
+    error_message = format("Invalid value '%s' for variable 'network_settings.vnet_resource_group_name', it must be a non-empty string.", coalesce(var.network_settings.vnet_resource_group_name, "null"))
   }
 
   validation {
     condition     = try(length(trimspace(var.network_settings.subnet_name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'network_settings.subnet_name', it must be a non-empty string.", var.network_settings.subnet_name)
+    error_message = format("Invalid value '%s' for variable 'network_settings.subnet_name', it must be a non-empty string.", coalesce(var.network_settings.subnet_name, "null"))
   }
 }
 
@@ -185,12 +185,12 @@ variable "managed_identity_settings" {
 
   validation {
     condition     = try(length(trimspace(var.managed_identity_settings.name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'managed_identity_settings.name', it must be a non-empty string.", var.managed_identity_settings.name)
+    error_message = format("Invalid value '%s' for variable 'managed_identity_settings.name', it must be a non-empty string.", coalesce(var.managed_identity_settings.name, "null"))
   }
 
   validation {
     condition     = try(length(trimspace(var.managed_identity_settings.resource_group_name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'managed_identity_settings.resource_group_name', it must be a non-empty string.", var.managed_identity_settings.resource_group_name)
+    error_message = format("Invalid value '%s' for variable 'managed_identity_settings.resource_group_name', it must be a non-empty string.", coalesce(var.managed_identity_settings.resource_group_name, "null"))
   }
 }
 
@@ -240,11 +240,11 @@ variable "waf_policy_settings" {
 
   validation {
     condition     = try(length(trimspace(var.waf_policy_settings.name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'waf_policy_settings.name', it must be a non-empty string.", var.waf_policy_settings.name)
+    error_message = format("Invalid value '%s' for variable 'waf_policy_settings.name', it must be a non-empty string.", coalesce(var.waf_policy_settings.name, "null"))
   }
 
   validation {
     condition     = try(length(trimspace(var.waf_policy_settings.resource_group_name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'waf_policy_settings.resource_group_name', it must be a non-empty string.", var.waf_policy_settings.resource_group_name)
+    error_message = format("Invalid value '%s' for variable 'waf_policy_settings.resource_group_name', it must be a non-empty string.", coalesce(var.waf_policy_settings.resource_group_name, "null"))
   }
 }
