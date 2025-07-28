@@ -214,7 +214,7 @@ variable "min_instance_count" {
 
   validation {
     condition     = var.min_instance_count >= 1 && var.min_instance_count <= 100
-    error_message = format("Invalid value '%s' for variable 'min_instance_count', be between 1 and 100", var.min_instance_count)
+    error_message = format("Invalid value '%s' for variable 'min_instance_count', it must be between 1 and 100.", var.min_instance_count)
   }
 }
 
@@ -226,7 +226,7 @@ variable "max_instance_count" {
 
   validation {
     condition     = var.max_instance_count >= 1 && var.max_instance_count <= 100
-    error_message = format("Invalid value '%s' for variable 'max_instance_count', be between 1 and 100", var.max_instance_count)
+    error_message = format("Invalid value '%s' for variable 'max_instance_count', it must be between 1 and 100.", var.max_instance_count)
   }
 }
 
