@@ -3,9 +3,11 @@ locals {
   # Format: redis-{company}-{workload}-{env}-{location}-{seq}
   redis_cache_name = (var.override_name != null ?
     lower(var.override_name) :
-    lower("redis-${coalesce(var.company_prefix, "nmbrs")}-${coalesce(var.workload, "redis")}-${var.environment}-${var.location}-${format("%03d", coalesce(var.sequence_number, 1))}")
+    lower("redis-${var.company_prefix}-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.sequence_number)}")
   )
+}
 
+locals {
   # cache size translated into premium tier capacity
   premium_tier_capacity = {
     6   = 1
