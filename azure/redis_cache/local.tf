@@ -1,5 +1,13 @@
 locals {
-  redis_cache_name = lower("redis-${var.workload}-${var.environment}")
+  # Redis Cache naming following standard conventions
+  # Format: redis-{company}-{workload}-{env}-{location}-{seq}
+  redis_cache_name = (var.override_name != null ?
+    lower(var.override_name) :
+    lower("redis-${var.company_prefix}-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.sequence_number)}")
+  )
+}
+
+locals {
   # cache size translated into premium tier capacity
   premium_tier_capacity = {
     6   = 1
