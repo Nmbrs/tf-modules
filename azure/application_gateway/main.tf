@@ -267,5 +267,11 @@ resource "azurerm_application_gateway" "app_gw" {
 
   lifecycle {
     ignore_changes = [tags, waf_configuration]
+
+    ## Instance count validation
+    precondition {
+      condition     = var.min_instance_count <= var.max_instance_count
+      error_message = format("Invalid configuration: minimum instance count (%s) must be less than or equal to maximum instance count (%s).", var.min_instance_count, var.max_instance_count)
+    }
   }
 }
