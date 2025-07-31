@@ -96,7 +96,7 @@ variable "network_settings" {
   }
 
   validation {
-    condition     = try(length(var.network_settings.subnets) > 0, false)
-    error_message = "Invalid value for variable 'network_settings.subnets', it must be a non-empty list."
+    condition     = try(can(var.network_settings.subnets), false)
+    error_message = "Invalid value for variable 'network_settings.subnets', it must be a valid list."
   }
 }
