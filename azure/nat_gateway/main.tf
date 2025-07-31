@@ -1,5 +1,3 @@
-
-
 resource "azurerm_public_ip" "natgw" {
   name                = local.public_ip_name
   location            = var.location

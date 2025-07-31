@@ -13,33 +13,33 @@ variable "override_name" {
 variable "workload" {
   description = "Short, descriptive name for the application, service, or workload. Used in resource naming conventions."
   type        = string
-  nullable    = false
+  nullable    = true
 
   validation {
-    condition     = length(trimspace(var.workload)) > 0
-    error_message = format("Invalid value '%s' for variable 'workload', it must be a non-empty string.", var.workload)
+    condition     = var.workload == null || try(length(trimspace(var.workload)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'workload', it must be null or a non-empty string.", coalesce(var.workload, "null"))
   }
 }
 
 variable "company_prefix" {
   description = "Short, unique prefix for the company / organization."
   type        = string
-  nullable    = false
+  nullable    = true
 
   validation {
-    condition     = length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5
-    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", var.company_prefix)
+    condition     = var.company_prefix == null || try(length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5, false)
+    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", coalesce(var.company_prefix, "null"))
   }
 }
 
 variable "sequence_number" {
   description = "A numeric value used to ensure uniqueness for resource names."
   type        = number
-  nullable    = false
+  nullable    = true
 
   validation {
-    condition     = var.sequence_number >= 1 && var.sequence_number <= 999
-    error_message = format("Invalid value '%s' for variable 'sequence_number', it must be a number between 1 and 999.", var.sequence_number)
+    condition     = var.sequence_number == null || try(var.sequence_number >= 1 && var.sequence_number <= 999, false)
+    error_message = format("Invalid value '%s' for variable 'sequence_number', it must be null or a number between 1 and 999.", coalesce(var.sequence_number, "null"))
   }
 }
 
