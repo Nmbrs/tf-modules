@@ -4,6 +4,7 @@ resource "azurerm_public_ip" "natgw" {
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
   sku                 = "Standard"
+  zones               = ["1"]
 
   lifecycle {
     ignore_changes = [tags]
@@ -20,6 +21,7 @@ resource "azurerm_nat_gateway" "natgw" {
   resource_group_name     = var.resource_group_name
   sku_name                = "Standard"
   idle_timeout_in_minutes = 10
+  zones                   = ["1"]
 
   lifecycle {
     ignore_changes = [tags]
