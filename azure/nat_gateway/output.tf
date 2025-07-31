@@ -9,11 +9,11 @@ output "workload" {
 }
 
 output "id" {
-  description = "The NAT gateway  ID."
+  description = "The NAT gateway ID."
   value       = azurerm_nat_gateway.natgw.id
 }
 
 output "public_ip_address" {
+  description = "The public IP address of the NAT gateway."
   value       = azurerm_public_ip.natgw.ip_address
-  description = "Output of the public IP"
 }
