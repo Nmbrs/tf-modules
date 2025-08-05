@@ -35,19 +35,19 @@ output "primary_connection_string" {
 }
 
 output "secondary_connection_string" {
-  description = "The primary connection string of the Redis Instance."
+  description = "The secondary connection string of the Redis Instance."
   value       = azurerm_redis_cache.redis.secondary_connection_string
   sensitive   = true
 }
 
 output "primary_access_key" {
-  description = "The primary access key for  the Redis Instance."
+  description = "The primary access key for the Redis Instance."
   value       = azurerm_redis_cache.redis.primary_access_key
   sensitive   = true
 }
 
 output "secondary_access_key" {
-  description = "The secondary access key for  the Redis Instance."
+  description = "The secondary access key for the Redis Instance."
   value       = azurerm_redis_cache.redis.secondary_access_key
   sensitive   = true
 }

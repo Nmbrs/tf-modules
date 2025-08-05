@@ -12,11 +12,11 @@ resource "azurerm_redis_cache" "redis" {
   zones                         = []
   tenant_settings               = {}
 
-  shard_count = var.sku_name == "Premium" ? var.shard_count : 0 # Sharding is only supported in the "Premium" rier
+  shard_count = var.sku_name == "Premium" ? var.shard_count : 0 # Sharding is only supported in the "Premium" tier
 
   redis_configuration {
     authentication_enabled = true
-    # This needs to be refacored after being solved in newer versios of the azurerm provider
+    # This needs to be refactored after being solved in newer versions of the azurerm provider
     # For more information see: https://github.com/hashicorp/terraform-provider-azurerm/pull/22309
     aof_backup_enabled = var.sku_name == "Premium" ? false : null
     rdb_backup_enabled = false
@@ -42,12 +42,12 @@ resource "azurerm_redis_cache" "redis" {
 
     precondition {
       condition     = (var.sku_name == "Standard" && contains([0.25, 1, 2.5, 6, 13, 26, 53], var.cache_size_in_gb)) || var.sku_name == "Basic" || var.sku_name == "Premium"
-      error_message = format("Invalid value '%s' for variable 'cache_size_in_gb'when using the 'Standard' SKU, valid options are 0.25, 1, 2.5, 6, 13, 26, 53.", var.cache_size_in_gb)
+      error_message = format("Invalid value '%s' for variable 'cache_size_in_gb' when using the 'Standard' SKU, valid options are 0.25, 1, 2.5, 6, 13, 26, 53.", var.cache_size_in_gb)
     }
 
     precondition {
       condition     = (var.sku_name == "Premium" && contains([6, 13, 26, 53, 120], var.cache_size_in_gb)) || var.sku_name == "Basic" || var.sku_name == "Standard"
-      error_message = format("Invalid value '%s' for variable 'cache_size_in_gb'when using the 'Premium' SKU, valid options are 6, 13, 26, 53, 120.", var.cache_size_in_gb)
+      error_message = format("Invalid value '%s' for variable 'cache_size_in_gb' when using the 'Premium' SKU, valid options are 6, 13, 26, 53, 120.", var.cache_size_in_gb)
     }
 
 
