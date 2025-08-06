@@ -68,7 +68,7 @@ resource "github_organization_ruleset" "protect_default_branches_small_teams" {
 
   conditions {
     ref_name {
-      include = var.rulesets_settings.protect_default_branches_small_teams.branch_names
+      include = ["~DEFAULT_BRANCH"]
       exclude = []
     }
     ## What we want to do in this rule is to apply it only to filtered repositories
