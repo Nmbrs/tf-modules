@@ -52,3 +52,8 @@ variable "is_tool" {
   description = "Describes if the repo is an internal tool or not"
   type        = bool
 }
+
+variable "is_small_team" {
+  description = "Describes if the repo is used by a small team or not"
+  type        = bool
+}
