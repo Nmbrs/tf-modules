@@ -12,7 +12,7 @@ resource "github_enterprise_organization" "organization" {
 }
 
 resource "github_organization_ruleset" "protect_default_branches_large_teams" {
-  name        = "Protect all main branches"
+  name        = "Protect default branches (large teams)"
   target      = "branch"
   enforcement = "active"
 
@@ -62,7 +62,7 @@ resource "github_organization_ruleset" "protect_default_branches_large_teams" {
 }
 
 resource "github_organization_ruleset" "protect_default_branches_small_teams" {
-  name        = "Protect all main branches"
+  name        = "Protect default branches (small teams)"
   target      = "branch"
   enforcement = "active"
 
