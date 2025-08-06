@@ -16,14 +16,21 @@ variable "display_name" {
 
 
 variable "billing_email" {
-  type = string
+  type    = string
   default = ""
 }
 
 
 variable "rulesets_settings" {
   type = object({
-    protect_all_main_branches = object({
+    protect_default_branches_small_teams = object({
+      branch_names           = list(string)
+      protected_repositories = list(string)
+      excluded_repositories  = list(string)
+      bypass_teams           = list(string)
+    })
+    protect_default_branches_large_teams = object({
+      branch_names           = list(string)
       protected_repositories = list(string)
       excluded_repositories  = list(string)
       bypass_teams           = list(string)
