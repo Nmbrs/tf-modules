@@ -54,3 +54,9 @@ variable "branch_deletion_enabled" {
   type        = bool
   default     = true
 }
+
+variable "is_small_team" {
+  description = "Describes if the repo is used by a small team or not."
+  type        = bool
+  default     = false
+}

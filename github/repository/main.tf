@@ -45,6 +45,13 @@ resource "github_repository_custom_property" "apply_rulesets" {
   property_value = [var.rulesets_enabled]
 }
 
+resource "github_repository_custom_property" "small_team" {
+  repository     = github_repository.repo.name
+  property_name  = "small_team"
+  property_type  = "true_false"
+  property_value = [var.is_small_team]
+}
+
 # github action access configuration
 resource "github_actions_repository_access_level" "organization_level" {
   access_level = "organization"
