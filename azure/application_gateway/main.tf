@@ -152,7 +152,7 @@ resource "azurerm_application_gateway" "main" {
     )
     content {
       name                           = "listener-${local.application_names[http_listener.key]}"
-      frontend_ip_configuration_name = azurerm_public_ip.app_gw.name
+      frontend_ip_configuration_name = azurerm_public_ip.application_gateway.name
       frontend_port_name             = http_listener.value.listener.protocol == "https" ? local.https_frontend_port_name : local.http_frontend_port_name
       host_names                     = [http_listener.value.listener.fqdn]
       protocol                       = title(http_listener.value.listener.protocol)
@@ -239,7 +239,7 @@ resource "azurerm_application_gateway" "main" {
     )
     content {
       name                           = "listener-${local.redirect_url_names[http_listener.key]}"
-      frontend_ip_configuration_name = azurerm_public_ip.app_gw.name
+      frontend_ip_configuration_name = azurerm_public_ip.application_gateway.name
       frontend_port_name             = http_listener.value.listener.protocol == "https" ? local.https_frontend_port_name : local.http_frontend_port_name
       host_names                     = [http_listener.value.listener.fqdn]
       protocol                       = title(http_listener.value.listener.protocol)
@@ -286,7 +286,7 @@ resource "azurerm_application_gateway" "main" {
     )
     content {
       name                           = "listener-${local.redirect_listener_names[http_listener.key]}"
-      frontend_ip_configuration_name = azurerm_public_ip.app_gw.name
+      frontend_ip_configuration_name = azurerm_public_ip.application_gateway.name
       frontend_port_name             = http_listener.value.listener.protocol == "https" ? local.https_frontend_port_name : local.http_frontend_port_name
       host_names                     = [http_listener.value.listener.fqdn]
       protocol                       = title(http_listener.value.listener.protocol)
