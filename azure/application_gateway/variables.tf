@@ -229,22 +229,3 @@ variable "max_instance_count" {
     error_message = format("Invalid value '%s' for variable 'max_instance_count', it must be between 1 and 100.", var.max_instance_count)
   }
 }
-
-variable "waf_policy_settings" {
-  description = "Name of the WAF policy to be associated with the application gateway."
-  type = object({
-    name                = string
-    resource_group_name = string
-  })
-  nullable = false
-
-  validation {
-    condition     = try(length(trimspace(var.waf_policy_settings.name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'waf_policy_settings.name', it must be a non-empty string.", coalesce(var.waf_policy_settings.name, "null"))
-  }
-
-  validation {
-    condition     = try(length(trimspace(var.waf_policy_settings.resource_group_name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'waf_policy_settings.resource_group_name', it must be a non-empty string.", coalesce(var.waf_policy_settings.resource_group_name, "null"))
-  }
-}

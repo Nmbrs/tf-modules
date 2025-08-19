@@ -12,22 +12,80 @@ resource "azurerm_public_ip" "app_gw" {
 }
 
 # ==============================================================================
+# Application Gateway WAF Policy Configuration
+# ==============================================================================
+
+# Default WAF policy for the Application Gateway with all the rules enabled 
+resource "azurerm_web_application_firewall_policy" "application_gateway" {
+  name                = local.waf_policy_name
+  resource_group_name = var.resource_group_name
+  location            = var.location
+
+  managed_rules {
+    managed_rule_set {
+      type    = "OWASP"
+      version = "3.2"
+    }
+    managed_rule_set {
+      type    = "Microsoft_BotManagerRuleSet"
+      version = "1.1"
+    }
+    managed_rule_set {
+      type    = "Microsoft_DefaultRuleSet"
+      version = "1.0"
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [tags, managed_rules, custom_rules]
+  }
+
+}
+
+# ==============================================================================
+# Application Gateway WAF Policy Configuration for each listener
+#
+# Each listener will have its own WAF policy with all the rules enabled 
+# by default at deployment time, then later the rules can be customized 
+# without being managed by Terraform.
+# ==============================================================================
+
+resource "azurerm_web_application_firewall_policy" "listener" {
+  for_each            = { for listener in local.application_names : listener => listener }
+  name                = "waf-${each.key}"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+
+  managed_rules {
+    managed_rule_set {
+      type    = "OWASP"
+      version = "3.2"
+    }
+    managed_rule_set {
+      type    = "Microsoft_BotManagerRuleSet"
+      version = "1.1"
+    }
+    managed_rule_set {
+      type    = "Microsoft_DefaultRuleSet"
+      version = "1.0"
+    }
+  }
+  lifecycle {
+    ignore_changes = [tags, managed_rules, custom_rules]
+  }
+}
+
+# ==============================================================================
 # Application Gateway Configuration
 # ==============================================================================
 
-resource "azurerm_application_gateway" "app_gw" {
-  name                = local.app_gateway_name
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  enable_http2        = true
-  force_firewall_policy_association = (
-    var.waf_policy_settings != "" && var.waf_policy_settings != null ? true : null
-  )
-  firewall_policy_id = (
-    var.waf_policy_settings != "" && var.waf_policy_settings != null ?
-    data.azurerm_web_application_firewall_policy.waf_policy_settings[0].id :
-    null
-  )
+resource "azurerm_application_gateway" "main" {
+  name                              = local.app_gateway_name
+  location                          = var.location
+  resource_group_name               = var.resource_group_name
+  enable_http2                      = true
+  force_firewall_policy_association = true
+  firewall_policy_id                = azurerm_web_application_firewall_policy.application_gateway.id
 
   sku {
     name = "WAF_v2"
@@ -99,6 +157,7 @@ resource "azurerm_application_gateway" "app_gw" {
       host_names                     = [http_listener.value.listener.fqdn]
       protocol                       = title(http_listener.value.listener.protocol)
       ssl_certificate_name           = http_listener.value.listener.protocol == "https" ? http_listener.value.listener.certificate_name : null
+      firewall_policy_id             = azurerm_web_application_firewall_policy.listener[http_listener.value.listener.fqdn].id
     }
   }
 

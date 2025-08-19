@@ -15,6 +15,8 @@ locals {
     lower(var.override_name) :
     lower("agw-${var.company_prefix}-${var.workload}-${var.environment}-${format("%03d", var.sequence_number)}")
   )
+
+  waf_policy_name = "waf-${local.app_gateway_name}"
 }
 
 locals {
