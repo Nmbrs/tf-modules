@@ -1,4 +1,4 @@
-resource "azurerm_public_ip" "app_gw" {
+resource "azurerm_public_ip" "application_gateway" {
   name                = local.public_ip_name
   domain_name_label   = local.app_gateway_dns_label
   location            = var.location
@@ -28,7 +28,7 @@ resource "azurerm_web_application_firewall_policy" "application_gateway" {
     }
     managed_rule_set {
       type    = "Microsoft_BotManagerRuleSet"
-      version = "1.1"
+      version = "1.0"
     }
     managed_rule_set {
       type    = "Microsoft_DefaultRuleSet"
@@ -63,7 +63,7 @@ resource "azurerm_web_application_firewall_policy" "listener" {
     }
     managed_rule_set {
       type    = "Microsoft_BotManagerRuleSet"
-      version = "1.1"
+      version = "1.0"
     }
     managed_rule_set {
       type    = "Microsoft_DefaultRuleSet"
@@ -114,8 +114,8 @@ resource "azurerm_application_gateway" "main" {
   }
 
   frontend_ip_configuration {
-    name                 = azurerm_public_ip.app_gw.name
-    public_ip_address_id = azurerm_public_ip.app_gw.id
+    name                 = azurerm_public_ip.application_gateway.name
+    public_ip_address_id = azurerm_public_ip.application_gateway.id
   }
 
   frontend_port {
@@ -157,7 +157,7 @@ resource "azurerm_application_gateway" "main" {
       host_names                     = [http_listener.value.listener.fqdn]
       protocol                       = title(http_listener.value.listener.protocol)
       ssl_certificate_name           = http_listener.value.listener.protocol == "https" ? http_listener.value.listener.certificate_name : null
-      firewall_policy_id             = azurerm_web_application_firewall_policy.listener[http_listener.value.listener.fqdn].id
+      firewall_policy_id             = azurerm_web_application_firewall_policy.listener[local.application_names[http_listener.key]].id
     }
   }
 
