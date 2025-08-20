@@ -30,10 +30,6 @@ resource "azurerm_web_application_firewall_policy" "application_gateway" {
       type    = "Microsoft_BotManagerRuleSet"
       version = "1.0"
     }
-    managed_rule_set {
-      type    = "Microsoft_DefaultRuleSet"
-      version = "1.0"
-    }
   }
 
   policy_settings {
@@ -68,10 +64,6 @@ resource "azurerm_web_application_firewall_policy" "listener" {
     }
     managed_rule_set {
       type    = "Microsoft_BotManagerRuleSet"
-      version = "1.0"
-    }
-    managed_rule_set {
-      type    = "Microsoft_DefaultRuleSet"
       version = "1.0"
     }
   }
