@@ -14,7 +14,7 @@ The Logs Analytics Workspace Terraform module simplifies the creation and manage
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.117 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
 
 ## Modules
 
@@ -55,34 +55,49 @@ No modules.
 
 A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
 
-## Logs analytics workspace with public access enabled
-
+### Configuring log analytics workspace (using custom naming)
 ```hcl
 module "log_analytics_workspace" {
   source                        = "git::github.com/Nmbrs/tf-modules//azure/logs_analytics_workspace"
-  
-  workload                      = "myworkspace"
+  override_name                 = "log-custom-contoso-prod"  # Custom name, ignores other naming variables
   resource_group_name           = "rg-my-resource-group"
   environment                   = "dev"
   location                      = "westeurope"
   retention_in_days             = 90
-  
-  public_network_access_enabled =  true
+  public_network_access_enabled = false
 }
 ```
 
-## Logs analytics workspace with public access disabled
+### Configuring logs analytics workspace with public access enabled
+
 ```hcl
 module "log_analytics_workspace" {
   source                        = "git::github.com/Nmbrs/tf-modules//azure/logs_analytics_workspace"
-  
-  workload                      = "myworkspace"
+
+  workload                      = "contoso"
+  company_prefix                = "nmbrs"
+  sequence_number               = 1
   resource_group_name           = "rg-my-resource-group"
   environment                   = "dev"
   location                      = "westeurope"
   retention_in_days             = 90
-  
-  public_network_access_enabled =  false
+  public_network_access_enabled = true
+}
+```
+
+### Configuring logs analytics workspace with public access disabled
+```hcl
+module "log_analytics_workspace" {
+  source                        = "git::github.com/Nmbrs/tf-modules//azure/logs_analytics_workspace"
+
+  workload                      = "contoso"
+  company_prefix                = "nmbrs"
+  sequence_number               = 1
+  resource_group_name           = "rg-my-resource-group"
+  environment                   = "dev"
+  location                      = "westeurope"
+  retention_in_days             = 90
+  public_network_access_enabled = disabled
 }
 ```
 <!-- END_TF_DOCS -->
