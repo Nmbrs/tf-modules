@@ -15,7 +15,7 @@ resource "azurerm_public_ip" "application_gateway" {
 # Application Gateway WAF Policy Configuration
 # ==============================================================================
 
-# Default WAF policy for the Application Gateway with all the rules enabled 
+# Default WAF policy for the Application Gateway with all the rules enabled
 resource "azurerm_web_application_firewall_policy" "application_gateway" {
   name                = local.waf_policy_name
   resource_group_name = var.resource_group_name
@@ -36,8 +36,13 @@ resource "azurerm_web_application_firewall_policy" "application_gateway" {
     }
   }
 
+  policy_settings {
+    enabled = true
+    mode    = "Prevention"
+  }
+
   lifecycle {
-    ignore_changes = [tags, managed_rules, custom_rules]
+    ignore_changes = [tags, managed_rules, custom_rules, policy_settings]
   }
 
 }
@@ -45,8 +50,8 @@ resource "azurerm_web_application_firewall_policy" "application_gateway" {
 # ==============================================================================
 # Application Gateway WAF Policy Configuration for each listener
 #
-# Each listener will have its own WAF policy with all the rules enabled 
-# by default at deployment time, then later the rules can be customized 
+# Each listener will have its own WAF policy with all the rules enabled
+# by default at deployment time, then later the rules can be customized
 # without being managed by Terraform.
 # ==============================================================================
 
@@ -70,8 +75,14 @@ resource "azurerm_web_application_firewall_policy" "listener" {
       version = "1.0"
     }
   }
+
+  policy_settings {
+    enabled = true
+    mode    = "Detection"
+  }
+
   lifecycle {
-    ignore_changes = [tags, managed_rules, custom_rules]
+    ignore_changes = [tags, managed_rules, custom_rules, policy_settings]
   }
 }
 
