@@ -20,7 +20,6 @@ variable "billing_email" {
   default = ""
 }
 
-
 variable "rulesets_settings" {
   type = object({
     protect_default_branches_small_teams = object({

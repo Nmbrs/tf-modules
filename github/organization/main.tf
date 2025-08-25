@@ -18,7 +18,7 @@ resource "github_organization_ruleset" "protect_default_branches_large_teams" {
 
   conditions {
     ref_name {
-      include = ["~DEFAULT_BRANCH"]
+      include = var.rulesets_settings.protect_default_branches_large_teams.branch_names
       exclude = []
     }
     ## What we want to do in this rule is to apply it only to filtered repositories
@@ -46,7 +46,7 @@ resource "github_organization_ruleset" "protect_default_branches_large_teams" {
 
 
   dynamic "bypass_actors" {
-    for_each = toset(var.rulesets_settings.protect_default_branches_large_teams.bypass_teams)  
+    for_each = toset(var.rulesets_settings.protect_default_branches_large_teams.bypass_teams)
     content {
       actor_id    = data.github_team.protect_default_branches_large_teams_bypass_team[bypass_actors.value].id
       actor_type  = "Team"
@@ -68,7 +68,7 @@ resource "github_organization_ruleset" "protect_default_branches_small_teams" {
 
   conditions {
     ref_name {
-      include = ["~DEFAULT_BRANCH"]
+      include = var.rulesets_settings.protect_default_branches_small_teams.branch_names
       exclude = []
     }
     ## What we want to do in this rule is to apply it only to filtered repositories
