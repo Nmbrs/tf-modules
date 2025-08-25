@@ -34,7 +34,7 @@ resource "azurerm_web_application_firewall_policy" "application_gateway" {
 
   policy_settings {
     enabled = true
-    mode    = "Prevention"
+    mode    = "Detection"
   }
 
   lifecycle {
