@@ -23,6 +23,7 @@ variable "billing_email" {
 variable "rulesets_settings" {
   type = list(object({
     name                                         = string
+   # protected_branch_list                        = list(string)
     bypass_teams                                 = list(string)
     pull_request_dismiss_stale_reviews_on_push   = bool
     pull_request_required_approving_review_count = number
