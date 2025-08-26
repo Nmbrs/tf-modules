@@ -11,21 +11,22 @@ resource "github_enterprise_organization" "organization" {
   }
 }
 
-resource "github_organization_ruleset" "protect_default_branches_large_teams" {
-  name        = "Protect default branches (large teams)"
+resource "github_organization_ruleset" "rule" {
+  for_each    = { for rule in var.rulesets_settings : rule.name => rule }
+  name        = each.value.name
   target      = "branch"
   enforcement = "active"
 
   conditions {
     ref_name {
-      include = var.rulesets_settings.protect_default_branches_large_teams.branch_names
+      include = local.protect_branch_list
       exclude = []
     }
     ## What we want to do in this rule is to apply it only to filtered repositories
     ## but it's not supported yet byt github modules so we will ignore this section in the lifecycle
     repository_name {
-      include = var.rulesets_settings.protect_default_branches_large_teams.protected_repositories
-      exclude = var.rulesets_settings.protect_default_branches_large_teams.excluded_repositories
+      include = ["~ALL"]
+      exclude = []
     }
   }
 
@@ -33,10 +34,10 @@ resource "github_organization_ruleset" "protect_default_branches_large_teams" {
     update   = false
     deletion = true
     pull_request {
-      dismiss_stale_reviews_on_push     = true
+      dismiss_stale_reviews_on_push     = each.value.pull_request_dismiss_stale_reviews_on_push
       require_code_owner_review         = true
       require_last_push_approval        = true
-      required_approving_review_count   = 2
+      required_approving_review_count   = each.value.pull_request_approvers_count
       required_review_thread_resolution = true
     }
     required_linear_history = false
@@ -46,59 +47,9 @@ resource "github_organization_ruleset" "protect_default_branches_large_teams" {
 
 
   dynamic "bypass_actors" {
-    for_each = toset(var.rulesets_settings.protect_default_branches_large_teams.bypass_teams)
+    for_each = toset(each.value.bypass_teams)
     content {
-      actor_id    = data.github_team.protect_default_branches_large_teams_bypass_team[bypass_actors.value].id
-      actor_type  = "Team"
-      bypass_mode = "always"
-    }
-  }
-
-  lifecycle {
-    ignore_changes = [
-      conditions[0].repository_name
-    ]
-  }
-}
-
-resource "github_organization_ruleset" "protect_default_branches_small_teams" {
-  name        = "Protect default branches (small teams)"
-  target      = "branch"
-  enforcement = "active"
-
-  conditions {
-    ref_name {
-      include = var.rulesets_settings.protect_default_branches_small_teams.branch_names
-      exclude = []
-    }
-    ## What we want to do in this rule is to apply it only to filtered repositories
-    ## but it's not supported yet byt github modules so we will ignore this section in the lifecycle
-    repository_name {
-      include = var.rulesets_settings.protect_default_branches_small_teams.protected_repositories
-      exclude = var.rulesets_settings.protect_default_branches_small_teams.excluded_repositories
-    }
-  }
-
-  rules {
-    update   = false
-    deletion = true
-    pull_request {
-      dismiss_stale_reviews_on_push     = true
-      require_code_owner_review         = true
-      require_last_push_approval        = true
-      required_approving_review_count   = 1
-      required_review_thread_resolution = true
-    }
-    required_linear_history = false
-    non_fast_forward        = true
-    required_signatures     = false
-  }
-
-
-  dynamic "bypass_actors" {
-    for_each = toset(var.rulesets_settings.protect_default_branches_small_teams.bypass_teams)
-    content {
-      actor_id    = data.github_team.protect_default_branches_small_teams_bypass_team[bypass_actors.value].id
+      actor_id    = data.github_team.bypass_team[bypass_actors.value].id
       actor_type  = "Team"
       bypass_mode = "always"
     }
