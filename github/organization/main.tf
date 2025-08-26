@@ -37,7 +37,7 @@ resource "github_organization_ruleset" "rule" {
       dismiss_stale_reviews_on_push     = each.value.pull_request_dismiss_stale_reviews_on_push
       require_code_owner_review         = true
       require_last_push_approval        = true
-      required_approving_review_count   = each.value.pull_request_approvers_count
+      required_approving_review_count   = each.value.pull_request_required_approving_review_count
       required_review_thread_resolution = true
     }
     required_linear_history = false
