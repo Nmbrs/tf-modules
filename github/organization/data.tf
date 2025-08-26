@@ -3,6 +3,6 @@ data "github_enterprise" "enterprise" {
 }
 
 data "github_team" "bypass_team" {
-  for_each = { for rule in var.rulesets_settings : rule.name => rule }
+  for_each = toset(flatten([for rule in var.rulesets_settings : rule.bypass_teams]))
   slug     = each.value
 }
