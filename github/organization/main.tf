@@ -19,7 +19,7 @@ resource "github_organization_ruleset" "rule" {
 
   conditions {
     ref_name {
-      include = local.protect_branch_list #each.value.protected_branch_list
+      include = each.value.protected_branch_list
       exclude = []
     }
     ## What we want to do in this rule is to apply it only to filtered repositories
@@ -40,7 +40,7 @@ resource "github_organization_ruleset" "rule" {
     dynamic "pull_request" {
       for_each = each.value.pull_request_required_approving_review_count > 0 ? [true] : []
       content {
-        dismiss_stale_reviews_on_push     = each.value.pull_request_dismiss_stale_reviews_on_push
+        dismiss_stale_reviews_on_push     = true
         require_code_owner_review         = true
         require_last_push_approval        = true
         required_approving_review_count   = each.value.pull_request_required_approving_review_count
