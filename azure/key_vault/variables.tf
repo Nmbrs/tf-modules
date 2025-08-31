@@ -86,3 +86,9 @@ variable "public_network_access_enabled" {
   type        = bool
   default     = false
 }
+
+variable "trusted_services_bypass_firewall_enabled" {
+  description = "Allow trusted Microsoft services to bypass this firewall. When enabled, trusted Microsoft services can access the Key Vault even when network access is restricted."
+  type        = bool
+  default     = false
+}
