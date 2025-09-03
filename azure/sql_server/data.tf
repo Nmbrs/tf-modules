@@ -18,3 +18,13 @@ data "azurerm_storage_account" "auditing_storage_account" {
   name                = var.auditing_settings.storage_account_name
   resource_group_name = var.auditing_settings.storage_account_resource_group
 }
+
+data "azurerm_key_vault" "local_sql_admin_key_vault" {
+  name                = var.local_sql_admin_settings.key_vault_name
+  resource_group_name = var.local_sql_admin_settings.key_vault_resource_group
+}
+
+data "azurerm_key_vault_secret" "local_sql_admin_password" {
+  name         = var.local_sql_admin_settings.key_vault_secret_name
+  key_vault_id = data.azurerm_key_vault.local_sql_admin_key_vault.id
+}
