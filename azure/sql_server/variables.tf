@@ -79,7 +79,8 @@ variable "resource_group_name" {
 variable "network_settings" {
   description = "Public network settings."
   type = object({
-    public_network_access_enabled = bool
+    public_network_access_enabled            = bool
+    trusted_services_bypass_firewall_enabled = bool
     allowed_subnets = list(object({
       subnet_resource_group_name = string
       virtual_network_name       = string

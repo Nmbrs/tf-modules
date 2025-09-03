@@ -33,6 +33,7 @@ resource "azurerm_mssql_virtual_network_rule" "sql_server_network_rule" {
 # For more information, see: https://learn.microsoft.com/en-us/rest/api/sql/firewall-rules/create-or-update
 
 resource "azurerm_mssql_firewall_rule" "sql_server" {
+  count            = var.network_settings.public_network_access_enabled && var.network_settings.trusted_services_bypass_firewall_enabled ? 1 : 0
   name             = "Allow_Azure_Trusted_Services"
   server_id        = azurerm_mssql_server.sql_server.id
   start_ip_address = "0.0.0.0"
