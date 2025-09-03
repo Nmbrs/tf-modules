@@ -4,9 +4,7 @@ resource "azurerm_mssql_server" "sql_server" {
   location                             = var.location
   version                              = "12.0"
   minimum_tls_version                  = "1.2"
-  administrator_login                  = var.local_sql_admin_settings.local_sql_admin
-  administrator_login_password         = data.azurerm_key_vault_secret.local_sql_admin_password.value
-  public_network_access_enabled        = var.public_network_settings.access_enabled
+  public_network_access_enabled        = var.network_settings.public_network_access_enabled
   outbound_network_restriction_enabled = false
 
   azuread_administrator {
@@ -22,13 +20,24 @@ resource "azurerm_mssql_server" "sql_server" {
 
 resource "azurerm_mssql_virtual_network_rule" "sql_server_network_rule" {
   for_each = {
-    for subnet in var.public_network_settings.allowed_subnets : subnet.subnet_name => subnet
-    if var.public_network_settings.access_enabled
+    for subnet in var.network_settings.allowed_subnets : subnet.subnet_name => subnet
+    if var.network_settings.public_network_access_enabled
   }
   name                                 = each.key
   server_id                            = azurerm_mssql_server.sql_server.id
   subnet_id                            = data.azurerm_subnet.subnet[each.key].id
   ignore_missing_vnet_service_endpoint = false
+}
+
+# The feature "Allow acess to Azure services" can be achieved by setting the start_ip_address and end_ip_address to "0.0.0.0"
+# For more information, see: https://learn.microsoft.com/en-us/rest/api/sql/firewall-rules/create-or-update
+
+resource "azurerm_mssql_firewall_rule" "sql_server" {
+  name             = "Allow_Azure_Trusted_Services"
+  server_id        = azurerm_mssql_server.sql_server.id
+  start_ip_address = "0.0.0.0"
+  end_ip_address   = "0.0.0.0"
+
 }
 
 resource "azurerm_mssql_server_extended_auditing_policy" "sql_auditing" {
