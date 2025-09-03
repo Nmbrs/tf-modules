@@ -110,12 +110,14 @@ variable "auditing_settings" {
   })
 }
 
-variable "local_sql_admin_settings" {
+variable "local_sql_admin_user_settings" {
   description = "The settings necessary for the local SQL admin creation, the username and the key vault settings for the password."
   type = object({
-    local_sql_admin          = string
-    key_vault_name           = string
-    key_vault_resource_group = string
-    key_vault_secret_name    = string
+    local_sql_admin_user = string
+    local_sql_admin_user_password = object({
+      key_vault_name           = string
+      key_vault_resource_group = string
+      key_vault_secret_name    = string
+    })
   })
 }

@@ -7,7 +7,7 @@ resource "azurerm_mssql_server" "sql_server" {
   public_network_access_enabled        = var.network_settings.public_network_access_enabled
   outbound_network_restriction_enabled = false
 
-  administrator_login          = var.local_sql_admin_settings.local_sql_admin
+  administrator_login          = var.local_sql_admin_user_settings.local_sql_admin_user
   administrator_login_password = data.azurerm_key_vault_secret.local_sql_admin_password.value
 
   azuread_administrator {

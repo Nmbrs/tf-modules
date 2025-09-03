@@ -20,11 +20,11 @@ data "azurerm_storage_account" "auditing_storage_account" {
 }
 
 data "azurerm_key_vault" "local_sql_admin_key_vault" {
-  name                = var.local_sql_admin_settings.key_vault_name
-  resource_group_name = var.local_sql_admin_settings.key_vault_resource_group
+  name                = var.local_sql_admin_user_settings.local_sql_admin_user_password.key_vault_name
+  resource_group_name = var.local_sql_admin_user_settings.local_sql_admin_user_password.key_vault_resource_group
 }
 
 data "azurerm_key_vault_secret" "local_sql_admin_password" {
-  name         = var.local_sql_admin_settings.key_vault_secret_name
+  name         = var.local_sql_admin_user_settings.local_sql_admin_user_password.key_vault_secret_name
   key_vault_id = data.azurerm_key_vault.local_sql_admin_key_vault.id
 }
