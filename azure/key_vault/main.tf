@@ -14,7 +14,7 @@ resource "azurerm_key_vault" "key_vault" {
   public_network_access_enabled = var.public_network_access_enabled
 
   network_acls {
-    bypass         = "None"
+    bypass         = var.trusted_services_bypass_firewall_enabled ? "AzureServices" : "None"
     default_action = "Deny"
   }
 
