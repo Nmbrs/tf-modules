@@ -19,7 +19,12 @@ resource "github_repository" "repo" {
   topics = []
 
   lifecycle {
-    ignore_changes = [is_template, description]
+    ignore_changes = [
+      is_template,
+      description,
+      has_discussions,
+      has_issues,
+    ]
   }
 }
 
