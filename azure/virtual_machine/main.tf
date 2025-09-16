@@ -13,7 +13,7 @@ resource "tls_private_key" "ssh" {
 
 resource "azurerm_ssh_public_key" "ssh_public_key" {
   count               = var.os_type == "linux" ? 1 : 0
-  name                = "ssh-${var.vm_name}"
+  name                = "sshkey-${var.vm_name}"
   resource_group_name = var.resource_group_name
   location            = var.location
   public_key          = tls_private_key.ssh[0].public_key_openssh

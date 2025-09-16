@@ -7,12 +7,12 @@ terraform {
 
     tls = {
       source  = "hashicorp/tls"
-      version = "~> 4.0"
+      version = "~> 4.1"
     }
 
     random = {
       source  = "hashicorp/random"
-      version = "~> 3.6"
+      version = "~> 3.7"
     }
   }
 
