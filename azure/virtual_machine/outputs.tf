@@ -26,7 +26,7 @@ output "os_disk" {
   }
 }
 
-output "data_disk" {
+output "data_disks" {
   description = "The details of the virtual machine's data disks."
   value = [for disk in azurerm_managed_disk.data_disks : {
     name                 = disk.name
@@ -36,15 +36,14 @@ output "data_disk" {
   ]
 }
 
-output "network_interfaces" {
+output "network_interface" {
   description = "The details of the virtual machine's network interfaces."
-  value = [for nic in azurerm_network_interface.nic : {
-    name               = nic.name
-    id                 = nic.id
-    private_ip_address = nic.private_ip_address
-    mac_address        = nic.mac_address
+  value = {
+    name               = azurerm_network_interface.nic.name
+    id                 = azurerm_network_interface.nic.id
+    private_ip_address = azurerm_network_interface.nic.private_ip_address
+    mac_address        = azurerm_network_interface.nic.mac_address
     }
-  ]
 }
 
 output "ssh_public_key" {
