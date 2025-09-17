@@ -16,7 +16,7 @@ The `application_gateway` module enables users to easily provision and configure
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.117 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
 
 ## Modules
 
@@ -26,13 +26,14 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [azurerm_application_gateway.app_gw](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_gateway) | resource |
-| [azurerm_public_ip.app_gw](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/public_ip) | resource |
+| [azurerm_application_gateway.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_gateway) | resource |
+| [azurerm_public_ip.application_gateway](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/public_ip) | resource |
+| [azurerm_web_application_firewall_policy.application_gateway](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/web_application_firewall_policy) | resource |
+| [azurerm_web_application_firewall_policy.listener](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/web_application_firewall_policy) | resource |
 | [azurerm_key_vault.certificate](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault) | data source |
 | [azurerm_key_vault_secret.certificate](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
 | [azurerm_subnet.app_gw](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subnet) | data source |
 | [azurerm_user_assigned_identity.certificate](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/user_assigned_identity) | data source |
-| [azurerm_web_application_firewall_policy.waf_policy_settings](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/web_application_firewall_policy) | data source |
 
 ## Inputs
 
@@ -52,7 +53,6 @@ No modules.
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Specifies the name of the resource group where the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_sequence_number"></a> [sequence\_number](#input\_sequence\_number) | A numeric value used to ensure uniqueness for resource names. | `number` | n/a | yes |
 | <a name="input_ssl_certificates"></a> [ssl\_certificates](#input\_ssl\_certificates) | Settings related to SSL certificates that will be installed in the application gateway. | <pre>list(object({<br/>    name                          = string<br/>    key_vault_name                = string<br/>    key_vault_resource_group_name = string<br/>    key_vault_certificate_name    = string<br/>  }))</pre> | `[]` | no |
-| <a name="input_waf_policy_settings"></a> [waf\_policy\_settings](#input\_waf\_policy\_settings) | Name of the WAF policy to be associated with the application gateway. | <pre>object({<br/>    name                = string<br/>    resource_group_name = string<br/>  })</pre> | n/a | yes |
 | <a name="input_workload"></a> [workload](#input\_workload) | Short, descriptive name for the application, service, or workload. Used in resource naming conventions. | `string` | n/a | yes |
 
 ## Outputs
@@ -75,23 +75,25 @@ A number of code snippets demonstrating different use cases for the module have 
 module "application_gateway" {
   source              = "./azure/application_gateway"
   workload            = "contoso"
-  company_prefix      = "nmbrs" 
+  company_prefix      = "nmbrs"
   sequence_number     = 1
   environment         = "dev"
   location            = "westeurope"
   resource_group_name = "rg-contoso-dev"
   min_instance_count  = 2
   max_instance_count  = 10
-  
+
   network_settings = {
     vnet_name                = "vnet-contoso-dev"
     vnet_resource_group_name = "rg-network-dev"
     subnet_name              = "snet-appgateway-001"
   }
+
   managed_identity_settings = {
     name                = "mi-appgateway-certs"
     resource_group_name = "rg-identity-dev"
   }
+
   ssl_certificates = [
     {
       key_vault_resource_group_name = "rg-keyvault-dev"
@@ -170,16 +172,18 @@ module "application_gateway" {
   resource_group_name = "rg-contoso-prod"
   min_instance_count  = 2
   max_instance_count  = 10
-  
+
   network_settings = {
     vnet_name                = "vnet-contoso-prod"
     vnet_resource_group_name = "rg-network-prod"
     subnet_name              = "snet-appgateway-001"
   }
+
   managed_identity_settings = {
     name                = "mi-appgateway-certs"
     resource_group_name = "rg-identity-prod"
   }
+
   ssl_certificates = [
     {
       key_vault_resource_group_name = "rg-keyvault-prod"
@@ -188,6 +192,7 @@ module "application_gateway" {
       name                          = "contoso-com"
     }
   ]
+
   application_backend_settings = [
     {
       routing_rule = {
@@ -234,19 +239,18 @@ module "application_gateway" {
   resource_group_name = "rg-contoso-dev"
   min_instance_count  = 2
   max_instance_count  = 10
-  
-  # WAF policy is optional, set to null if not needed
-  waf_policy_settings = null
-  
+
   network_settings = {
     vnet_name                = "vnet-contoso-dev"
     vnet_resource_group_name = "rg-network-dev"
     subnet_name              = "snet-appgateway-001"
   }
+
   managed_identity_settings = {
     name                = "mi-appgateway-certs"
     resource_group_name = "rg-identity-dev"
   }
+
   ssl_certificates = [
     {
       key_vault_resource_group_name = "rg-keyvault-dev"
@@ -255,6 +259,7 @@ module "application_gateway" {
       name                          = "contoso-com"
     }
   ]
+
   redirect_url_settings = [
     {
       routing_rule = {
@@ -303,21 +308,18 @@ module "application_gateway" {
   resource_group_name = "rg-contoso-dev"
   min_instance_count  = 2
   max_instance_count  = 10
-  
-  waf_policy_settings = {
-    name                = "waf-contoso-dev"
-    resource_group_name = "rg-security-dev"
-  }
-  
-  network_settings = {
+
+ network_settings = {
     vnet_name                = "vnet-contoso-dev"
     vnet_resource_group_name = "rg-network-dev"
     subnet_name              = "snet-appgateway-001"
   }
+
   managed_identity_settings = {
     name                = "mi-appgateway-certs"
     resource_group_name = "rg-identity-dev"
   }
+
   ssl_certificates = [
     {
       key_vault_resource_group_name = "rg-keyvault-dev"
@@ -326,6 +328,7 @@ module "application_gateway" {
       name                          = "contoso-com"
     }
   ]
+
   application_backend_settings = [
     {
       routing_rule = {
@@ -412,22 +415,18 @@ module "application_gateway" {
   resource_group_name = "rg-contoso-prod"
   min_instance_count  = 2
   max_instance_count  = 20
-  
-  waf_policy_settings = {
-    name                = "waf-contoso-prod"
-    resource_group_name = "rg-security-prod"
-  }
-  
+
   network_settings = {
     vnet_name                = "vnet-contoso-prod"
     vnet_resource_group_name = "rg-network-prod"
     subnet_name              = "snet-appgateway-001"
   }
+
   managed_identity_settings = {
     name                = "mi-appgateway-certs-prod"
     resource_group_name = "rg-identity-prod"
   }
-  
+
   # Multiple SSL certificates from different Key Vaults
   ssl_certificates = [
     {
