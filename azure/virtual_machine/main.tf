@@ -143,7 +143,7 @@ resource "azurerm_windows_virtual_machine" "windows_vm" {
   size                  = var.sku_name
   admin_username        = var.admin_username
   admin_password        = random_password.windows_vm[0].result
-  network_interface_ids = [for nic in azurerm_network_interface.nic : nic.id]
+  network_interface_ids = [azurerm_network_interface.nic.id]
 
   os_disk {
     name                 = local.os_disk_name
