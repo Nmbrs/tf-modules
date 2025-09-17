@@ -93,3 +93,9 @@ data "azurerm_api_management" "api_management" {
   name                = var.resource_settings.name
   resource_group_name = var.resource_settings.resource_group_name
 }
+
+data "azurerm_container_registry" "azure_container_registry" {
+  count               = var.resource_settings.type == "azure_container_registry" ? 1 : 0
+  name                = var.resource_settings.name
+  resource_group_name = var.resource_settings.resource_group_name
+}
