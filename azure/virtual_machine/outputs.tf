@@ -1,6 +1,6 @@
 output "name" {
   description = "The virtual machine name."
-  value       = var.vm_name
+  value       = local.vm_name
 }
 
 output "os_type" {
@@ -11,18 +11,18 @@ output "os_type" {
 output "os_image" {
   description = "The details of the virtual machine's operating system  image"
   value = {
-    publisher = local.os_image_settings.publisher
-    offer     = local.os_image_settings.offer
-    sku       = local.os_image_settings.sku
-    version   = local.os_image_settings.version
+    publisher = var.os_image_settings.publisher
+    offer     = var.os_image_settings.offer
+    sku_name  = var.os_image_settings.sku_name
+    version   = var.os_image_settings.version
   }
 }
 
 output "os_disk" {
   description = "The details of the virtual machine's operating system disk."
   value = {
-    name                 = local.os_disk_settings.name
-    storage_account_type = local.os_disk_settings.storage_account_type
+    name                 = local.os_disk_name
+    storage_account_type = var.os_disk_settings.storage_account_type
   }
 }
 
@@ -38,7 +38,7 @@ output "data_disk" {
 
 output "network_interfaces" {
   description = "The details of the virtual machine's network interfaces."
-  value = [for nic in azurerm_network_interface.nics : {
+  value = [for nic in azurerm_network_interface.nic : {
     name               = nic.name
     id                 = nic.id
     private_ip_address = nic.private_ip_address
