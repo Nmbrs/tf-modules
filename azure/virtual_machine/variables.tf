@@ -154,7 +154,6 @@ variable "network_settings" {
 variable "os_disk_settings" {
   description = "O.S. disk to be attached to the deployment."
   type = object({
-    sequence_number      = number
     storage_account_type = string
     caching              = string
   })
@@ -173,6 +172,7 @@ variable "os_disk_settings" {
 variable "data_disks_settings" {
   description = "A list of data disk objects, each containing information about a data disk to be attached to the deployment."
   type = list(object({
+    sequence_number      = number
     storage_account_type = string
     disk_size_gb         = number
     caching              = string
