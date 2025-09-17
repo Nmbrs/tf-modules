@@ -94,7 +94,7 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
   size                            = var.sku_name
   admin_username                  = var.admin_username
   disable_password_authentication = true
-  network_interface_ids           = azurerm_network_interface.nic.id
+  network_interface_ids           = [azurerm_network_interface.nic.id]
 
 
   admin_ssh_key {

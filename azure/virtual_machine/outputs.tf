@@ -43,7 +43,7 @@ output "network_interface" {
     id                 = azurerm_network_interface.nic.id
     private_ip_address = azurerm_network_interface.nic.private_ip_address
     mac_address        = azurerm_network_interface.nic.mac_address
-    }
+  }
 }
 
 output "ssh_public_key" {
