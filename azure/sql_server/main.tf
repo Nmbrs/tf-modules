@@ -15,6 +15,14 @@ resource "azurerm_mssql_server" "sql_server" {
     object_id                   = data.azuread_group.azuread_sql_admin.object_id
   }
 
+  # Add identity to the SQL Server if local.audit_enabled
+  dynamic "identity" {
+    for_each = local.audit_enabled ? [1] : []
+    content {
+      type = "SystemAssigned"
+    }
+  }
+
   lifecycle {
     ignore_changes = [tags]
   }
