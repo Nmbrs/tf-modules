@@ -50,6 +50,7 @@ resource "azurerm_application_gateway" "app_gw" {
     rule_set_version = 3.2
   }
 
+
   gateway_ip_configuration {
     name      = "app-gateway-ip-configuration"
     subnet_id = data.azurerm_subnet.app_gw.id
@@ -266,7 +267,7 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   lifecycle {
-    ignore_changes = [tags, waf_configuration]
+    ignore_changes = [tags, waf_configuration, rewrite_rule_set]
 
     ## Instance count validation
     precondition {
