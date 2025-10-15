@@ -86,6 +86,20 @@ resource "azurerm_application_gateway" "app_gw" {
     }
   }
 
+  # Security
+  rewrite_rule_set {
+    name = "security"
+    rewrite_rule {
+      name = "hsts"
+      rule_sequence = 1
+
+      response_header_configuration {
+        header_name = "Strict-Transport-Security"
+        header_value = "max-age=31536000; includeSubdomains; preload"
+      }
+    }
+  }
+
   # Application Backend Configuration
   dynamic "http_listener" {
     for_each = (
@@ -267,7 +281,7 @@ resource "azurerm_application_gateway" "app_gw" {
   }
 
   lifecycle {
-    ignore_changes = [tags, waf_configuration, rewrite_rule_set]
+    ignore_changes = [tags, waf_configuration]
 
     ## Instance count validation
     precondition {
