@@ -146,6 +146,19 @@ resource "azurerm_application_gateway" "main" {
     }
   }
 
+  rewrite_rule_set {
+    name = "security"
+    rewrite_rule {
+      name = "hsts"
+      rule_sequence = 1
+
+      response_header_configuration {
+        header_name = "Strict-Transport-Security"
+        header_value = "max-age=31536000; includeSubdomains; preload"
+      }
+    }
+  }
+
   # Application Backend Configuration
   dynamic "http_listener" {
     for_each = (
