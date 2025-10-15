@@ -90,11 +90,11 @@ resource "azurerm_application_gateway" "app_gw" {
   rewrite_rule_set {
     name = "security"
     rewrite_rule {
-      name = "hsts"
+      name          = "hsts"
       rule_sequence = 1
 
       response_header_configuration {
-        header_name = "Strict-Transport-Security"
+        header_name  = "Strict-Transport-Security"
         header_value = "max-age=31536000; includeSubdomains; preload"
       }
     }
@@ -183,6 +183,7 @@ resource "azurerm_application_gateway" "app_gw" {
       http_listener_name         = "listener-${local.application_names[request_routing_rule.key]}"
       backend_address_pool_name  = "backend-${local.application_names[request_routing_rule.key]}"
       backend_http_settings_name = "settings-${local.application_names[request_routing_rule.key]}"
+      rewrite_rule_set_name      = "rewrite-security-${local.app_gateway_name}"
     }
   }
 
