@@ -1,5 +1,28 @@
 # Changelog
 
+## [8.9.0](https://github.com/Nmbrs/tf-modules/compare/v8.8.0...v8.9.0) (2025-10-21)
+
+
+### Features
+
+* **aks:** remove module ([#377](https://github.com/Nmbrs/tf-modules/issues/377)) ([e3f65a0](https://github.com/Nmbrs/tf-modules/commit/e3f65a0db155a5640b1e0c8d1d6eb942e3f7a810))
+* **app_configuration:** add module ([#363](https://github.com/Nmbrs/tf-modules/issues/363)) ([8fbb252](https://github.com/Nmbrs/tf-modules/commit/8fbb252138ea289c06bef9973974e0cdb79fecac))
+* **application_gateway:** enhance variables with validations and improved documentation ([#369](https://github.com/Nmbrs/tf-modules/issues/369)) ([8e6a8ef](https://github.com/Nmbrs/tf-modules/commit/8e6a8ef8f6b08b4abbf3c341a872ebde402b6a19))
+* **application_gateway:** standardize module and add configuration options ([#368](https://github.com/Nmbrs/tf-modules/issues/368)) ([d7f9b68](https://github.com/Nmbrs/tf-modules/commit/d7f9b6869c7ed706b985427f8ae0000c2ac84656))
+* **github-module:** add module ([#357](https://github.com/Nmbrs/tf-modules/issues/357)) ([bf63bf5](https://github.com/Nmbrs/tf-modules/commit/bf63bf54cd5ac98a114ba5daf2e5fdb86ec95b28))
+* **github-repository:** add tool poc and internal metadata ([#360](https://github.com/Nmbrs/tf-modules/issues/360)) ([4d61328](https://github.com/Nmbrs/tf-modules/commit/4d613289f978d77a2e5c8e446d6175157e49cf23))
+* **github-repository:** update module to use the official provider ([#359](https://github.com/Nmbrs/tf-modules/issues/359)) ([add4861](https://github.com/Nmbrs/tf-modules/commit/add486183edc897c50b3b8ecc6e853eb3f0ef174))
+* **key_vault:** add control for public network availability ([#365](https://github.com/Nmbrs/tf-modules/issues/365)) ([77b98bd](https://github.com/Nmbrs/tf-modules/commit/77b98bd3482d236a5de860f557683ed6f4e71b27))
+* **key_vault:** allow azure services to bypass network firewall ([#374](https://github.com/Nmbrs/tf-modules/issues/374)) ([e1554bf](https://github.com/Nmbrs/tf-modules/commit/e1554bf5a51539e613eb9183c65fd779060fd1d3))
+* **log_analytics_workspace:** update variables and private access logic ([#373](https://github.com/Nmbrs/tf-modules/issues/373)) ([0df5ab5](https://github.com/Nmbrs/tf-modules/commit/0df5ab547889f53287240fc7d02f718857266f12))
+* **nat_gateway:** enhance NAT gateway module with standardized patterns ([#371](https://github.com/Nmbrs/tf-modules/issues/371)) ([ab1f5a2](https://github.com/Nmbrs/tf-modules/commit/ab1f5a2f2613f9fd55ca7b31a2ef70a1195e0231))
+* **private_endpoint:** add support for app_configuration ([#364](https://github.com/Nmbrs/tf-modules/issues/364)) ([b9f45a1](https://github.com/Nmbrs/tf-modules/commit/b9f45a1cd5ac3223241bca462af6c7b26db29af1))
+* **private_endpoint:** add support to azure container registry ([#376](https://github.com/Nmbrs/tf-modules/issues/376)) ([0b92bb0](https://github.com/Nmbrs/tf-modules/commit/0b92bb0245568fd29f632679f3325c2a1c70f2b7))
+* **redis_cache:** enhance module with standard naming conventions and improved documentation ([#370](https://github.com/Nmbrs/tf-modules/issues/370)) ([a8e1634](https://github.com/Nmbrs/tf-modules/commit/a8e1634415365140e4f9139330eec0de2a38719a))
+* **storage_account:** add control for public network availability  ([#366](https://github.com/Nmbrs/tf-modules/issues/366)) ([4a402d7](https://github.com/Nmbrs/tf-modules/commit/4a402d73bec16c3276e4a42451867288b87ff6c8))
+* **storage_account:** allow azure services to bypass network firewall ([#375](https://github.com/Nmbrs/tf-modules/issues/375)) ([2bd06f1](https://github.com/Nmbrs/tf-modules/commit/2bd06f1d04397b4b931449a30d92a4e53f45142b))
+* **windows_scaleset:** remove module ([#378](https://github.com/Nmbrs/tf-modules/issues/378)) ([b773718](https://github.com/Nmbrs/tf-modules/commit/b773718593edd0b141d86131a2fca04767465117))
+
 ## [8.8.0](https://github.com/Nmbrs/tf-modules/compare/v8.7.0...v8.8.0) (2025-05-21)
 
 
