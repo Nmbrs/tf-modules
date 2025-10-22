@@ -86,16 +86,66 @@ resource "azurerm_application_gateway" "app_gw" {
     }
   }
 
-  # Security
-  rewrite_rule_set {
-    name = "security"
-    rewrite_rule {
-      name          = "hsts"
-      rule_sequence = 1
+  # Security Headers Rewrite Rules
+  dynamic "rewrite_rule_set" {
+    for_each = (
+      length(var.application_backend_settings) != 0 ?
+      var.application_backend_settings :
+      local.default_application_settings
+    )
+    content {
+      name = "rewrite-rules-${local.application_names[rewrite_rule_set.key]}"
 
-      response_header_configuration {
-        header_name  = "Strict-Transport-Security"
-        header_value = "max-age=31536000; includeSubdomains; preload"
+      # HSTS Header - Only if enabled
+      dynamic "rewrite_rule" {
+        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.hsts_enabled ? [1] : []
+        content {
+          name          = "hsts"
+          rule_sequence = 1
+
+          response_header_configuration {
+            header_name  = "Strict-Transport-Security"
+            header_value = "max-age=31536000; includeSubdomains; preload"
+          }
+        }
+      }
+
+      # CSP Header - Only if enabled
+      dynamic "rewrite_rule" {
+        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.csp_enabled ? [1] : []
+        content {
+          name          = "csp"
+          rule_sequence = 2
+
+          response_header_configuration {
+            header_name  = "Content-Security-Policy"
+            header_value = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+          }
+        }
+      }
+
+      # Additional Security Headers - Only if enabled
+      dynamic "rewrite_rule" {
+        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.additional_security_headers_enabled ? [1] : []
+        content {
+          name          = "additional-security-headers"
+          rule_sequence = 3
+
+          response_header_configuration {
+            header_name  = "X-Frame-Options"
+            header_value = "DENY"
+          }
+
+          response_header_configuration {
+            header_name  = "X-Content-Type-Options"
+            header_value = "nosniff"
+          }
+
+          response_header_configuration {
+            header_name  = "X-XSS-Protection"
+            header_value = "1; mode=block"
+          }
+        }
       }
     }
   }
@@ -183,7 +233,11 @@ resource "azurerm_application_gateway" "app_gw" {
       http_listener_name         = "listener-${local.application_names[request_routing_rule.key]}"
       backend_address_pool_name  = "backend-${local.application_names[request_routing_rule.key]}"
       backend_http_settings_name = "settings-${local.application_names[request_routing_rule.key]}"
-      rewrite_rule_set_name      = "rewrite-security-${local.app_gateway_name}"
+      rewrite_rule_set_name      = (
+        request_routing_rule.value.backend.rewrite_rules.headers.hsts_enabled ||
+        request_routing_rule.value.backend.rewrite_rules.headers.csp_enabled ||
+        request_routing_rule.value.backend.rewrite_rules.headers.additional_security_headers_enabled
+      ) ? "rewrite-rules-${local.application_names[request_routing_rule.key]}" : null
     }
   }
 

@@ -93,6 +93,13 @@ variable "application_backend_settings" {
       protocol                      = string
       cookie_based_affinity_enabled = optional(bool, false)
       request_timeout_in_seconds    = optional(number, 30)
+      rewrite_rules = object({
+        headers = object({
+          csp_enabled                         = bool
+          hsts_enabled                        = bool
+          additional_security_headers_enabled = bool
+        })
+      })
       health_probe = object({
         timeout_in_seconds             = number
         evaluation_interval_in_seconds = number
