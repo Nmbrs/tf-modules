@@ -53,6 +53,7 @@ No modules.
 | <a name="input_public_network_access_enabled"></a> [public\_network\_access\_enabled](#input\_public\_network\_access\_enabled) | A condition to indicate if the Key Vault will have public network access (defaults to false). | `bool` | `false` | no |
 | <a name="input_rbac_authorization_enabled"></a> [rbac\_authorization\_enabled](#input\_rbac\_authorization\_enabled) | Boolean flag to specify whether Azure Key Vault uses Role Based Access Control (RBAC) for authorization of data actions. | `bool` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
+| <a name="input_trusted_services_bypass_firewall_enabled"></a> [trusted\_services\_bypass\_firewall\_enabled](#input\_trusted\_services\_bypass\_firewall\_enabled) | Allow trusted Microsoft services to bypass this firewall. When enabled, trusted Microsoft services can access the Key Vault even when network access is restricted. | `bool` | `false` | no |
 | <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the key vault. | `string` | n/a | yes |
 
 ## Outputs
