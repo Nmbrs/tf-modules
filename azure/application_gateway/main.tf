@@ -76,6 +76,8 @@ resource "azurerm_web_application_firewall_policy" "listener" {
   lifecycle {
     ignore_changes = [tags, managed_rules, custom_rules, policy_settings]
   }
+
+  depends_on = [azurerm_application_gateway.main]
 }
 
 # ==============================================================================
