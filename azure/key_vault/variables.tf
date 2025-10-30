@@ -81,6 +81,18 @@ variable "company_prefix" {
   }
 }
 
+variable "sku_name" {
+  description = "The Name of the SKU used for this Key Vault Managed HSM. Currently, only 'Standard_B1' is supported by Azure."
+  type        = string
+  default     = "standard"
+  nullable    = false
+
+  validation {
+    condition     =  contains(["standard", "premium"], var.sku_name)
+    error_message = format("Invalid value '%s' for variable 'sku_name'. Valid options are 'standard', 'premium'.", var.sku_name)
+  }
+}
+
 variable "public_network_access_enabled" {
   description = "A condition to indicate if the Key Vault will have public network access (defaults to false)."
   type        = bool
