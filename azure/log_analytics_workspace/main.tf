@@ -9,6 +9,6 @@ resource "azurerm_log_analytics_workspace" "main" {
   internet_query_enabled     = var.public_network_access_enabled
 
   lifecycle {
-    ignore_changes = [tags, sku, daily_quota_gb]
+    ignore_changes = [tags, sku, daily_quota_gb, reservation_capacity_in_gb_per_day]
   }
 }
