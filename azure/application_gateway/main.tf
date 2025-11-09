@@ -225,7 +225,7 @@ resource "azurerm_application_gateway" "main" {
       host_names                     = [http_listener.value.listener.fqdn]
       protocol                       = title(http_listener.value.listener.protocol)
       ssl_certificate_name           = http_listener.value.listener.protocol == "https" ? http_listener.value.listener.certificate_name : null
-      firewall_policy_id             = azurerm_web_application_firewall_policy.listener[local.application_names[http_listener.key]].id
+      firewall_policy_id             = null # TODO: implement association to azurerm_web_application_firewall_policy.listener[local.application_names[http_listener.key]].id
     }
   }
 
@@ -295,7 +295,7 @@ resource "azurerm_application_gateway" "main" {
       http_listener_name         = "listener-${local.application_names[request_routing_rule.key]}"
       backend_address_pool_name  = "backend-${local.application_names[request_routing_rule.key]}"
       backend_http_settings_name = "settings-${local.application_names[request_routing_rule.key]}"
-      rewrite_rule_set_name      = (
+      rewrite_rule_set_name = (
         request_routing_rule.value.backend.rewrite_rules.headers.hsts_enabled ||
         request_routing_rule.value.backend.rewrite_rules.headers.csp_enabled ||
         request_routing_rule.value.backend.rewrite_rules.headers.additional_security_headers_enabled
