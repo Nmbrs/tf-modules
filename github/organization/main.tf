@@ -1,4 +1,4 @@
-resource "github_enterprise_organization" "organization" {
+resource "github_enterprise_organization" "main" {
   enterprise_id = data.github_enterprise.enterprise.id
   name          = var.name
   display_name  = var.display_name
@@ -63,5 +63,15 @@ resource "github_organization_ruleset" "rule" {
     ignore_changes = [
       conditions[0].repository_name
     ]
+  }
+}
+
+resource "github_actions_organization_permissions" "test" {
+  allowed_actions      = "selected"
+  enabled_repositories = "all"
+
+  allowed_actions_config {
+    github_owned_allowed = true
+    verified_allowed     = true
   }
 }
