@@ -161,7 +161,7 @@ resource "azurerm_application_gateway" "main" {
       dynamic "rewrite_rule" {
         for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.hsts_enabled ? [1] : []
         content {
-          name          = "hsts"
+          name          = "hsts-header"
           rule_sequence = 1
 
           response_header_configuration {
@@ -175,7 +175,7 @@ resource "azurerm_application_gateway" "main" {
       dynamic "rewrite_rule" {
         for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.csp_enabled ? [1] : []
         content {
-          name          = "csp"
+          name          = "csp-header"
           rule_sequence = 2
 
           response_header_configuration {
@@ -185,22 +185,41 @@ resource "azurerm_application_gateway" "main" {
         }
       }
 
-      # Additional Security Headers - Only if enabled
+      # X-Frame-Options Header - Only if enabled
       dynamic "rewrite_rule" {
-        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.additional_security_headers_enabled ? [1] : []
+        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.x_frame_options_enabled ? [1] : []
         content {
-          name          = "additional-security-headers"
+          name          = "x-frame-options-headers"
           rule_sequence = 3
 
           response_header_configuration {
             header_name  = "X-Frame-Options"
             header_value = "DENY"
           }
+        }
+      }
+
+      # X-Content-Type-Options Header - Only if enabled
+      dynamic "rewrite_rule" {
+        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.x_content_type_options_enabled ? [1] : []
+        content {
+          name          = "x-content-type-options-headers"
+          rule_sequence = 4
 
           response_header_configuration {
             header_name  = "X-Content-Type-Options"
             header_value = "nosniff"
           }
+        }
+      }
+
+
+      # X-XSS-Protection Header - Only if enabled
+      dynamic "rewrite_rule" {
+        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.x_xss_protection_enabled ? [1] : []
+        content {
+          name          = "x-xss-protection-headers"
+          rule_sequence = 5
 
           response_header_configuration {
             header_name  = "X-XSS-Protection"
@@ -225,7 +244,7 @@ resource "azurerm_application_gateway" "main" {
       host_names                     = [http_listener.value.listener.fqdn]
       protocol                       = title(http_listener.value.listener.protocol)
       ssl_certificate_name           = http_listener.value.listener.protocol == "https" ? http_listener.value.listener.certificate_name : null
-      firewall_policy_id             = null # TODO: implement association to azurerm_web_application_firewall_policy.listener[local.application_names[http_listener.key]].id
+      firewall_policy_id             = azurerm_web_application_firewall_policy.listener[local.application_names[http_listener.key]].id
     }
   }
 
