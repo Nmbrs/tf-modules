@@ -93,6 +93,15 @@ variable "application_backend_settings" {
       protocol                      = string
       cookie_based_affinity_enabled = optional(bool, false)
       request_timeout_in_seconds    = optional(number, 30)
+      rewrite_rules = object({
+        headers = object({
+          csp_enabled                    = bool
+          hsts_enabled                   = bool
+          x_frame_options_enabled        = bool
+          x_content_type_options_enabled = bool
+          x_xss_protection_enabled       = bool
+        })
+      })
       health_probe = object({
         timeout_in_seconds             = number
         evaluation_interval_in_seconds = number
@@ -227,24 +236,5 @@ variable "max_instance_count" {
   validation {
     condition     = var.max_instance_count >= 1 && var.max_instance_count <= 100
     error_message = format("Invalid value '%s' for variable 'max_instance_count', it must be between 1 and 100.", var.max_instance_count)
-  }
-}
-
-variable "waf_policy_settings" {
-  description = "Name of the WAF policy to be associated with the application gateway."
-  type = object({
-    name                = string
-    resource_group_name = string
-  })
-  nullable = false
-
-  validation {
-    condition     = try(length(trimspace(var.waf_policy_settings.name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'waf_policy_settings.name', it must be a non-empty string.", coalesce(var.waf_policy_settings.name, "null"))
-  }
-
-  validation {
-    condition     = try(length(trimspace(var.waf_policy_settings.resource_group_name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'waf_policy_settings.resource_group_name', it must be a non-empty string.", coalesce(var.waf_policy_settings.resource_group_name, "null"))
   }
 }

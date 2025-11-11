@@ -15,6 +15,8 @@ locals {
     lower(var.override_name) :
     lower("agw-${var.company_prefix}-${var.workload}-${var.environment}-${format("%03d", var.sequence_number)}")
   )
+
+  waf_policy_name = "waf-${local.app_gateway_name}"
 }
 
 locals {
@@ -112,6 +114,13 @@ locals {
         protocol                      = "http"
         cookie_based_affinity_enabled = true
         request_timeout_in_seconds    = local.default_request_timeout_seconds
+        rewrite_rules = {
+          headers = {
+            csp_enabled                         = false
+            hsts_enabled                        = false
+            additional_security_headers_enabled = false
+          }
+        }
         health_probe = {
           timeout_in_seconds             = local.default_health_probe_timeout_seconds
           evaluation_interval_in_seconds = local.default_health_probe_evaluation_interval_seconds
