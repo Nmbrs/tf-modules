@@ -216,7 +216,7 @@ resource "azurerm_application_gateway" "main" {
 
       # X-XSS-Protection Header - Only if enabled
       dynamic "rewrite_rule" {
-        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.x_xss_protection_enabled ? [1] : []
+        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.additional_security_headers_enabled ? [1] : []
         content {
           name          = "x-xss-protection-headers"
           rule_sequence = 5
@@ -317,7 +317,9 @@ resource "azurerm_application_gateway" "main" {
       rewrite_rule_set_name = (
         request_routing_rule.value.backend.rewrite_rules.headers.hsts_enabled ||
         request_routing_rule.value.backend.rewrite_rules.headers.csp_enabled ||
-        request_routing_rule.value.backend.rewrite_rules.headers.additional_security_headers_enabled
+        request_routing_rule.value.backend.rewrite_rules.headers.x_frame_options_enabled ||
+        request_routing_rule.value.backend.rewrite_rules.headers.x_content_type_options_enabled ||
+        request_routing_rule.value.backend.rewrite_rules.headers.x_xss_protection_enabled
       ) ? "rewrite-rules-${local.application_names[request_routing_rule.key]}" : null
     }
   }
