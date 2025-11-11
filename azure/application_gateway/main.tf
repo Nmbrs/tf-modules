@@ -314,13 +314,7 @@ resource "azurerm_application_gateway" "main" {
       http_listener_name         = "listener-${local.application_names[request_routing_rule.key]}"
       backend_address_pool_name  = "backend-${local.application_names[request_routing_rule.key]}"
       backend_http_settings_name = "settings-${local.application_names[request_routing_rule.key]}"
-      rewrite_rule_set_name = (
-        request_routing_rule.value.backend.rewrite_rules.headers.hsts_enabled ||
-        request_routing_rule.value.backend.rewrite_rules.headers.csp_enabled ||
-        request_routing_rule.value.backend.rewrite_rules.headers.x_frame_options_enabled ||
-        request_routing_rule.value.backend.rewrite_rules.headers.x_content_type_options_enabled ||
-        request_routing_rule.value.backend.rewrite_rules.headers.x_xss_protection_enabled
-      ) ? "rewrite-rules-${local.application_names[request_routing_rule.key]}" : null
+      rewrite_rule_set_name      = "rewrite-rules-${local.application_names[request_routing_rule.key]}"
     }
   }
 
