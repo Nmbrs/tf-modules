@@ -216,7 +216,7 @@ resource "azurerm_application_gateway" "main" {
 
       # X-XSS-Protection Header - Only if enabled
       dynamic "rewrite_rule" {
-        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.additional_security_headers_enabled ? [1] : []
+        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.x_xss_protection_enabled ? [1] : []
         content {
           name          = "x-xss-protection-headers"
           rule_sequence = 5
