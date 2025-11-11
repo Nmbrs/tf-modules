@@ -11,7 +11,7 @@ resource "github_enterprise_organization" "main" {
   }
 }
 
-resource "github_organization_ruleset" "rule" {
+resource "github_organization_ruleset" "organization" {
   for_each    = { for rule in var.rulesets_settings : rule.name => rule }
   name        = each.value.name
   target      = "branch"
@@ -66,7 +66,7 @@ resource "github_organization_ruleset" "rule" {
   }
 }
 
-resource "github_actions_organization_permissions" "test" {
+resource "github_actions_organization_permissions" "organization" {
   allowed_actions      = "selected"
   enabled_repositories = "all"
 
