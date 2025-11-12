@@ -189,3 +189,22 @@ variable "data_disks_settings" {
     error_message = "At least one 'caching' property from 'data_disks' is invalid. Valid options are 'None', 'ReadOnly','ReadWrite'."
   }
 }
+
+variable "managed_identity_settings" {
+  description = "Settings related to the managed identity. If null, no managed identity will be assigned to the VM."
+  type = object({
+    name                = string
+    resource_group_name = string
+  })
+  nullable = true
+  default  = null
+
+  validation {
+    condition = (
+      var.managed_identity_settings == null ||
+      (try(length(trimspace(var.managed_identity_settings.name)) > 0, false) &&
+      try(length(trimspace(var.managed_identity_settings.resource_group_name)) > 0, false))
+    )
+    error_message = "When managed_identity_settings is provided, both 'name' and 'resource_group_name' must be non-empty strings."
+  }
+}

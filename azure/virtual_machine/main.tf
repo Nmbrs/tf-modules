@@ -115,6 +115,14 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
     version   = var.os_image_settings.version
   }
 
+  dynamic "identity" {
+    for_each = var.managed_identity_settings != null ? [1] : []
+    content {
+      type         = "UserAssigned"
+      identity_ids = [data.azurerm_user_assigned_identity.vm[0].id]
+    }
+  }
+
   lifecycle {
     ignore_changes = [tags]
   }
@@ -156,6 +164,14 @@ resource "azurerm_windows_virtual_machine" "windows_vm" {
     offer     = var.os_image_settings.offer
     sku       = var.os_image_settings.sku_name
     version   = var.os_image_settings.version
+  }
+
+  dynamic "identity" {
+    for_each = var.managed_identity_settings != null ? [1] : []
+    content {
+      type         = "UserAssigned"
+      identity_ids = [data.azurerm_user_assigned_identity.vm[0].id]
+    }
   }
 
   lifecycle {

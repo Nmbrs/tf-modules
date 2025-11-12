@@ -1,6 +1,4 @@
 locals {
-  # Application Gateway name: Must be unique within subscription
-  # Format: agw-{company}-{workload}-{env}-{location}-{seq}
   vm_name = (var.override_name != null ?
     lower(var.override_name) :
     lower("vm${var.workload}${var.environment}${format("%03d", var.sequence_number)}")
