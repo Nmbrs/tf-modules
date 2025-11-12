@@ -1,12 +1,13 @@
 variable "override_name" {
   description = "Optional override for naming logic."
   type        = string
-  default     = null
   nullable    = true
+  default     = null
+
 
   validation {
     condition     = var.override_name == null || try(length(trimspace(var.override_name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'override_name', it must be null or a non-empty string.", coalesce(var.override_name, "null"))
+    error_message = format("Invalid value '%s' for variable 'override_name', it must be not null or a non-empty string.", coalesce(var.override_name, "null"))
   }
 }
 
@@ -15,10 +16,9 @@ variable "workload" {
   type        = string
   nullable    = true
 
-  # Limit the workload to 6 characters
   validation {
-    condition     = var.workload == null || try(length(trimspace(var.workload)) > 0 && length(trimspace(var.workload)) <= 6, false)
-    error_message = format("Invalid value '%s' for variable 'workload', it must be null or a non-empty string with a maximum of 6 characters.", coalesce(var.workload, "null"))
+    condition     = var.workload == null || try(length(trimspace(var.workload)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'workload', it must be not null or a non-empty string.", coalesce(var.workload, "null"))
   }
 }
 
@@ -50,8 +50,8 @@ variable "environment" {
   nullable    = false
 
   validation {
-    condition     = contains(["dev", "test", "prod", "sand", "stag"], var.environment)
-    error_message = format("Invalid value '%s' for variable 'environment', valid options are 'dev', 'test', 'prod', 'sand', 'stag'.", var.environment)
+    condition     = contains(["dev", "test", "prod", "sand", "stage"], var.environment)
+    error_message = format("Invalid value '%s' for variable 'environment', valid options are 'dev', 'test', 'prod', 'sand', 'stage'.", var.environment)
   }
 }
 

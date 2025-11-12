@@ -160,5 +160,11 @@ resource "azurerm_windows_virtual_machine" "windows_vm" {
 
   lifecycle {
     ignore_changes = [tags]
+
+    ## Windows NETBIOS name limitation validation
+    precondition {
+      condition     = length(local.vm_name) <= 15
+      error_message = format("Invalid VM name '%s' for Windows virtual machine. The computer name must be 15 characters or less due to NETBIOS limitations. Current length: %d characters.", local.vm_name, length(local.vm_name))
+    }
   }
 }
