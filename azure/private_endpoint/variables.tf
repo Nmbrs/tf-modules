@@ -29,8 +29,8 @@ variable "resource_settings" {
     }
   )
   validation {
-    condition     = contains(["app_service", "storage_account_blob", "storage_account_table", "storage_account_file", "sql_server", "key_vault", "service_bus", "eventgrid_domain", "eventgrid_topic", "container_registry", "cosmos_db_nosql", "cosmos_db_mongodb", "redis_cache", "api_management", "app_configuration", "azure_container_registry", "synapse_workspace"], var.resource_settings.type)
-    error_message = format("Invalid value '%s' for variable 'resource_settings.type'. Valid options are 'app_service', 'storage_account_blob', 'storage_account_table', 'storage_account_file', 'sql_server', 'key_vault', 'service_bus', 'eventgrid_domain', 'eventgrid_topic', 'container_registry', 'cosmos_db_nosql', 'cosmos_db_mongodb', 'redis_cache', 'api_management', 'app_configuration', 'azure_container_registry','synapse_workspace'.", var.resource_settings.type)
+    condition     = contains(["app_service", "storage_account_blob", "storage_account_table", "storage_account_file", "sql_server", "key_vault", "service_bus", "eventgrid_domain", "eventgrid_topic", "container_registry", "cosmos_db_nosql", "cosmos_db_mongodb", "redis_cache", "api_management", "app_configuration", "azure_container_registry", "synapse_sqlpool", "synapse_sqlserverless", "synapse_dev", "synapse_web"], var.resource_settings.type)
+    error_message = format("Invalid value '%s' for variable 'resource_settings.type'. Valid options are 'app_service', 'storage_account_blob', 'storage_account_table', 'storage_account_file', 'sql_server', 'key_vault', 'service_bus', 'eventgrid_domain', 'eventgrid_topic', 'container_registry', 'cosmos_db_nosql', 'cosmos_db_mongodb', 'redis_cache', 'api_management', 'app_configuration', 'azure_container_registry','synapse_sqlpool', 'synapse_sqlserverless', 'synapse_dev', 'synapse_web'.", var.resource_settings.type)
   }
 }
 

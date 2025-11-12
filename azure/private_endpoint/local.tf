@@ -18,7 +18,10 @@ locals {
     api_management           = data.azurerm_api_management.api_management,
     app_configuration        = data.azurerm_app_configuration.app_configuration,
     azure_container_registry = data.azurerm_container_registry.azure_container_registry,
-    synapse_workspace        = data.azurerm_synapse_workspace.synapse_workspace,
+    synapse_sqlpool          = data.azurerm_synapse_workspace.synapse,
+    synapse_sqlserverless    = data.azurerm_synapse_workspace.synapse,
+    synapse_dev              = data.azurerm_synapse_workspace.synapse,
+    synapse_web              = data.azurerm_synapse_workspace.synapse,
     # Add more resource types and corresponding data blocks as needed
   }
 
@@ -40,6 +43,9 @@ locals {
     "api_management"           = "Gateway"
     "app_configuration"        = "configurationStores"
     "azure_container_registry" = "registry"
-    "synapse_workspace"        = "Sql"
+    "synapse_sqlpool"          = "Sql"
+    "synapse_sqlserverless"    = "SqlOnDemand"
+    "synapse_dev"              = "Dev"
+    "synapse_web"              = "web"
   }
 }
