@@ -20,3 +20,8 @@ data "azurerm_user_assigned_identity" "certificate" {
   name                = var.managed_identity_settings.name
   resource_group_name = var.managed_identity_settings.resource_group_name
 }
+
+data "azurerm_log_analytics_workspace" "diagnostics" {
+  name                = var.diagnostic_settings.log_analytics_workspace.name
+  resource_group_name = var.diagnostic_settings.log_analytics_workspace.resource_group
+}

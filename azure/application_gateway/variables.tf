@@ -238,3 +238,21 @@ variable "max_instance_count" {
     error_message = format("Invalid value '%s' for variable 'max_instance_count', it must be between 1 and 100.", var.max_instance_count)
   }
 }
+
+variable "diagnostic_settings" {
+  description = "Diagnostic settings configuration for Application Gateway"
+  type = object({
+    log_analytics_workspace = object({
+      name           = string
+      resource_group = string
+    })
+
+    logs = optional(object({
+      access_log_enabled      = bool
+      performance_log_enabled = bool
+      firewall_log_enable     = bool
+    }))
+    metrics_enabled = bool
+  })
+  nullable = false
+}
