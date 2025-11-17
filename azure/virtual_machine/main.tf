@@ -108,12 +108,19 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
     storage_account_type = var.os_disk_settings.storage_account_type
   }
 
-  source_image_reference {
-    publisher = var.os_image_settings.publisher
-    offer     = var.os_image_settings.offer
-    sku       = var.os_image_settings.sku_name
-    version   = var.os_image_settings.version
+  # Use source_image_reference for marketplace images
+  dynamic "source_image_reference" {
+    for_each = var.os_image_settings.source == "marketplace" ? [1] : []
+    content {
+      publisher = var.os_image_settings.publisher
+      offer     = var.os_image_settings.offer
+      sku       = var.os_image_settings.sku_name
+      version   = var.os_image_settings.version
+    }
   }
+
+  # Use source_image_id for Shared Image Gallery images
+  source_image_id = var.os_image_settings.source == "shared_gallery" ? data.azurerm_shared_image.vm[0].id : null
 
   dynamic "identity" {
     for_each = var.managed_identity_settings != null ? [1] : []
@@ -159,12 +166,19 @@ resource "azurerm_windows_virtual_machine" "windows_vm" {
     storage_account_type = var.os_disk_settings.storage_account_type
   }
 
-  source_image_reference {
-    publisher = var.os_image_settings.publisher
-    offer     = var.os_image_settings.offer
-    sku       = var.os_image_settings.sku_name
-    version   = var.os_image_settings.version
+  # Use source_image_reference for marketplace images
+  dynamic "source_image_reference" {
+    for_each = var.os_image_settings.source == "marketplace" ? [1] : []
+    content {
+      publisher = var.os_image_settings.publisher
+      offer     = var.os_image_settings.offer
+      sku       = var.os_image_settings.sku_name
+      version   = var.os_image_settings.version
+    }
   }
+
+  # Use source_image_id for Shared Image Gallery images
+  source_image_id = var.os_image_settings.source == "shared_gallery" ? data.azurerm_shared_image.vm[0].id : null
 
   dynamic "identity" {
     for_each = var.managed_identity_settings != null ? [1] : []

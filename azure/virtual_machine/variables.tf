@@ -84,32 +84,53 @@ variable "os_type" {
 }
 
 variable "os_image_settings" {
-  description = "The operating system image for a virtual machine."
+  description = "The operating system image for a virtual machine. Supports both marketplace images and Shared Image Gallery images."
   type = object({
-    publisher = string
-    offer     = string
-    sku_name  = string
-    version   = string
+    source = string # "marketplace" or "shared_gallery"
+
+    # Marketplace image fields (required when source = "marketplace")
+    publisher = optional(string)
+    offer     = optional(string)
+    sku_name  = optional(string)
+    version   = optional(string)
+
+    # Shared Image Gallery fields (required when source = "shared_gallery")
+    gallery_name                = optional(string)
+    gallery_resource_group_name = optional(string)
+    image_name                  = optional(string)
+    image_version               = optional(string)
   })
 
   validation {
-    condition     = can(coalesce(trimspace(var.os_image_settings.publisher)))
-    error_message = format("Invalid value '%s' for variable 'os_image.publisher', It must be non-empty string values.", var.os_image_settings.publisher)
+    condition     = contains(["marketplace", "shared_gallery"], var.os_image_settings.source)
+    error_message = "Invalid value for 'os_image_settings.source'. Valid options are 'marketplace' or 'shared_gallery'."
   }
 
   validation {
-    condition     = can(coalesce(trimspace(var.os_image_settings.offer)))
-    error_message = format("Invalid value '%s' for variable 'os_image.offer', It must be non-empty string values.", var.os_image_settings.offer)
-  }
-
-  validation {
-    condition     = can(coalesce(trimspace(var.os_image_settings.sku_name)))
-    error_message = format("Invalid value '%s' for variable 'os_image.sku', It must be non-empty string values.", var.os_image_settings.sku_name)
-  }
-
-  validation {
-    condition     = can(coalesce(trimspace(var.os_image_settings.version)))
-    error_message = format("Invalid value '%s' for variable 'os_image.version', It must be non-empty string values.", var.os_image_settings.version)
+    condition = (
+      var.os_image_settings.source == "marketplace" ?
+      alltrue([
+        var.os_image_settings.publisher != null,
+        var.os_image_settings.offer != null,
+        var.os_image_settings.sku_name != null,
+        var.os_image_settings.version != null,
+        try(length(trimspace(var.os_image_settings.publisher)) > 0, false),
+        try(length(trimspace(var.os_image_settings.offer)) > 0, false),
+        try(length(trimspace(var.os_image_settings.sku_name)) > 0, false),
+        try(length(trimspace(var.os_image_settings.version)) > 0, false)
+      ]) :
+      alltrue([
+        var.os_image_settings.gallery_name != null,
+        var.os_image_settings.gallery_resource_group_name != null,
+        var.os_image_settings.image_name != null,
+        var.os_image_settings.image_version != null,
+        try(length(trimspace(var.os_image_settings.gallery_name)) > 0, false),
+        try(length(trimspace(var.os_image_settings.gallery_resource_group_name)) > 0, false),
+        try(length(trimspace(var.os_image_settings.image_name)) > 0, false),
+        try(length(trimspace(var.os_image_settings.image_version)) > 0, false)
+      ])
+    )
+    error_message = "When source='marketplace', you must provide: publisher, offer, sku_name, and version. When source='shared_gallery', you must provide: gallery_name, gallery_resource_group_name, image_name, and image_version. All fields must be non-empty strings."
   }
 
 }

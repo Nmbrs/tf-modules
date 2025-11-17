@@ -93,6 +93,7 @@ module "virtual_machine_windows" {
   os_type             = "windows"
 
   os_image_settings = {
+    source    = "marketplace"
     publisher = "MicrosoftWindowsServer"
     offer     = "WindowsServer"
     sku_name  = "2016-Datacenter"
@@ -126,6 +127,7 @@ module "virtual_machine_windows" {
   os_type             = "windows"
 
   os_image_settings = {
+    source    = "marketplace"
     publisher = "MicrosoftWindowsServer"
     offer     = "WindowsServer"
     sku_name  = "2016-Datacenter"
@@ -160,6 +162,7 @@ module "virtual_machine_linux" {
   os_type             = "linux"
 
   os_image_settings = {
+    source    = "marketplace"
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-jammy"
     sku_name  = "22_04-lts-gen2"
@@ -194,6 +197,7 @@ module "virtual_machine_linux" {
   os_type             = "linux"
 
   os_image_settings = {
+    source    = "marketplace"
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-jammy"
     sku_name  = "22_04-lts-gen2"
@@ -246,6 +250,7 @@ module "virtual_machine_linux" {
   os_type             = "linux"
 
   os_image_settings = {
+    source    = "marketplace"
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-jammy"
     sku_name  = "22_04-lts-gen2"
@@ -271,7 +276,105 @@ module "virtual_machine_linux" {
 }
 ```
 
+## Linux VM from Shared Image Gallery
+
+```hcl
+module "virtual_machine_linux_gallery" {
+  source = "git::https://github.com/Nmbrs/tf-modules.git//azure/virtual_machine"
+
+  workload            = "webapp"
+  sequence_number     = 1
+  environment         = "prod"
+  location            = "westeurope"
+  resource_group_name = "rg-virtual-machines"
+  sku_name            = "Standard_D2s_v3"
+  os_type             = "linux"
+
+  # Use custom image from Shared Image Gallery
+  os_image_settings = {
+    source                      = "shared_gallery"
+    gallery_name                = "myimagegallery"
+    gallery_resource_group_name = "rg-images"
+    image_name                  = "ubuntu-22-04-hardened"
+    image_version               = "1.0.0"
+  }
+
+  os_disk_settings = {
+    caching              = "ReadWrite"
+    storage_account_type = "Premium_LRS"
+  }
+
+  network_settings = {
+    vnet_resource_group_name = "rg-network"
+    vnet_name                = "vnet-prod-001"
+    subnet_name              = "snet-prod-001"
+  }
+}
+```
+
+## Windows VM from Shared Image Gallery
+
+```hcl
+module "virtual_machine_windows_gallery" {
+  source = "git::https://github.com/Nmbrs/tf-modules.git//azure/virtual_machine"
+
+  override_name       = "vmwinapp01"
+  environment         = "prod"
+  location            = "westeurope"
+  resource_group_name = "rg-virtual-machines"
+  sku_name            = "Standard_D4s_v3"
+  os_type             = "windows"
+
+  # Use custom Windows image from Shared Image Gallery
+  os_image_settings = {
+    source                      = "shared_gallery"
+    gallery_name                = "myimagegallery"
+    gallery_resource_group_name = "rg-images"
+    image_name                  = "windows-server-2022-hardened"
+    image_version               = "2.1.0"
+  }
+
+  os_disk_settings = {
+    caching              = "ReadWrite"
+    storage_account_type = "Premium_LRS"
+  }
+
+  network_settings = {
+    vnet_resource_group_name = "rg-network"
+    vnet_name                = "vnet-prod-001"
+    subnet_name              = "snet-prod-001"
+  }
+
+  # Optional: Assign managed identity for accessing Azure resources
+  managed_identity_settings = {
+    name                = "mi-vm-prod"
+    resource_group_name = "rg-identity"
+  }
+}
+```
+
 ## Important Notes
+
+### Image Source Options
+
+The module supports two image sources via the `os_image_settings.source` field:
+
+1. **Marketplace Images** (`source = "marketplace"`):
+   - Use Azure Marketplace images from Microsoft, Canonical, RedHat, etc.
+   - Required fields: `publisher`, `offer`, `sku_name`, `version`
+   - Example: Ubuntu 22.04, Windows Server 2022, etc.
+   - Use `version = "latest"` to always get the latest image version
+
+2. **Shared Image Gallery** (`source = "shared_gallery"`):
+   - Use custom images from your Azure Shared Image Gallery
+   - Required fields: `gallery_name`, `gallery_resource_group_name`, `image_name`, `image_version`
+   - Use this for:
+     - Custom hardened or pre-configured OS images
+     - Golden images with pre-installed software
+     - Compliance-approved base images
+     - Company-standard VM templates
+
+**Note**: The two image sources are completely decoupled. Simply set the `source` field and provide the appropriate fields for your chosen source. The module handles the rest automatically.
 
 ### Naming Convention
 

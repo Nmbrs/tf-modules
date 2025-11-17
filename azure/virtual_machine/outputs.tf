@@ -9,12 +9,19 @@ output "os_type" {
 }
 
 output "os_image" {
-  description = "The details of the virtual machine's operating system  image"
+  description = "The details of the virtual machine's operating system image"
   value = {
-    publisher = var.os_image_settings.publisher
-    offer     = var.os_image_settings.offer
-    sku_name  = var.os_image_settings.sku_name
-    version   = var.os_image_settings.version
+    source = var.os_image_settings.source
+    # Marketplace image details (populated when source = "marketplace")
+    publisher = var.os_image_settings.source == "marketplace" ? var.os_image_settings.publisher : null
+    offer     = var.os_image_settings.source == "marketplace" ? var.os_image_settings.offer : null
+    sku_name  = var.os_image_settings.source == "marketplace" ? var.os_image_settings.sku_name : null
+    version   = var.os_image_settings.source == "marketplace" ? var.os_image_settings.version : null
+    # Shared Image Gallery details (populated when source = "shared_gallery")
+    gallery_name                = var.os_image_settings.source == "shared_gallery" ? var.os_image_settings.gallery_name : null
+    gallery_resource_group_name = var.os_image_settings.source == "shared_gallery" ? var.os_image_settings.gallery_resource_group_name : null
+    image_name                  = var.os_image_settings.source == "shared_gallery" ? var.os_image_settings.image_name : null
+    image_version               = var.os_image_settings.source == "shared_gallery" ? var.os_image_settings.image_version : null
   }
 }
 
