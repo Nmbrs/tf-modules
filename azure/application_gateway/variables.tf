@@ -243,14 +243,14 @@ variable "diagnostic_settings" {
   description = "Diagnostic settings configuration for Application Gateway"
   type = object({
     log_analytics_workspace = object({
-      name           = string
+      name                = string
       resource_group_name = string
     })
 
     logs = optional(object({
       access_log_enabled      = bool
       performance_log_enabled = bool
-      firewall_log_enable     = bool
+      firewall_log_enabled    = bool
     }))
     metrics_enabled = bool
   })
