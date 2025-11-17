@@ -23,5 +23,5 @@ data "azurerm_user_assigned_identity" "certificate" {
 
 data "azurerm_log_analytics_workspace" "diagnostics" {
   name                = var.diagnostic_settings.log_analytics_workspace.name
-  resource_group_name = var.diagnostic_settings.log_analytics_workspace.resource_group
+  resource_group_name = var.diagnostic_settings.log_analytics_workspace.resource_group_name
 }

@@ -244,7 +244,7 @@ variable "diagnostic_settings" {
   type = object({
     log_analytics_workspace = object({
       name           = string
-      resource_group = string
+      resource_group_name = string
     })
 
     logs = optional(object({
