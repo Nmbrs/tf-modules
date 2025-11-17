@@ -7,7 +7,7 @@ variable "override_name" {
 
   validation {
     condition     = var.override_name == null || try(length(trimspace(var.override_name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'override_name', it must be not null or a non-empty string.", coalesce(var.override_name, "null"))
+    error_message = format("Invalid value '%s' for variable 'override_name', it must be null or a non-empty string.", coalesce(var.override_name, "null"))
   }
 }
 
@@ -18,7 +18,7 @@ variable "workload" {
 
   validation {
     condition     = var.workload == null || try(length(trimspace(var.workload)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'workload', it must be not null or a non-empty string.", coalesce(var.workload, "null"))
+    error_message = format("Invalid value '%s' for variable 'workload', it must be null or a non-empty string.", coalesce(var.workload, "null"))
   }
 }
 
@@ -50,8 +50,8 @@ variable "environment" {
   nullable    = false
 
   validation {
-    condition     = contains(["dev", "test", "prod", "sand", "stage"], var.environment)
-    error_message = format("Invalid value '%s' for variable 'environment', valid options are 'dev', 'test', 'prod', 'sand', 'stage'.", var.environment)
+    condition     = contains(["dev", "test", "prod", "sand", "stag"], var.environment)
+    error_message = format("Invalid value '%s' for variable 'environment', valid options are 'dev', 'test', 'prod', 'sand', 'stag'.", var.environment)
   }
 }
 
@@ -74,7 +74,7 @@ variable "sku_name" {
 }
 
 variable "os_type" {
-  description = "Type of virtual machine to be created. Acceptable values are 'dev', 'test', 'prod' or 'sand'."
+  description = "Type of operating system to be installed on the virtual machine. Acceptable values are 'linux', 'windows'."
   type        = string
 
   validation {
