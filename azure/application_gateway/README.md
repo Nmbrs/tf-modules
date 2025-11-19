@@ -102,6 +102,20 @@ module "application_gateway" {
       name                          = "contoso-com"
     }
   ]
+
+  diagnostic_settings = {
+    log_analytics_workspace = {
+      name                = "law-contoso-dev"
+      resource_group_name = "rg-monitoring-dev"
+    }
+    logs = {
+      access_log_enabled      = true
+      performance_log_enabled = true
+      firewall_log_enabled    = true
+    }
+    metrics_enabled = true
+  }
+
   application_backend_settings = [
     {
       routing_rule = {
@@ -112,23 +126,30 @@ module "application_gateway" {
         protocol         = "https"
         certificate_name = "contoso-com"
       }
-      backend = [
-        {
-          fqdns                         = ["app1.azurewebsites.net", "app1.myotherdomain.com"]
-          port                          = 443
-          protocol                      = "https"
-          cookie_based_affinity_enabled = false
-          request_timeout_in_seconds    = 30
-          health_probe = {
-            fqdn                           = "app1.contoso.com"
-            timeout_in_seconds             = 30
-            evaluation_interval_in_seconds = 30
-            unhealthy_treshold_count       = 3
-            path                           = "/health"
-            status_codes                   = ["200"]
+      backend = {
+        fqdns                         = ["app1.azurewebsites.net", "app1.myotherdomain.com"]
+        port                          = 443
+        protocol                      = "https"
+        cookie_based_affinity_enabled = false
+        request_timeout_in_seconds    = 30
+        rewrite_rules = {
+          headers = {
+            csp_enabled                    = true
+            hsts_enabled                   = true
+            x_frame_options_enabled        = true
+            x_content_type_options_enabled = true
+            x_xss_protection_enabled       = true
           }
         }
-      ]
+        health_probe = {
+          fqdn                           = "app1.contoso.com"
+          timeout_in_seconds             = 30
+          evaluation_interval_in_seconds = 30
+          unhealthy_treshold_count       = 3
+          path                           = "/health"
+          status_codes                   = ["200"]
+        }
+      }
     },
     {
       routing_rule = {
@@ -139,23 +160,30 @@ module "application_gateway" {
         protocol         = "https"
         certificate_name = "contoso-com"
       }
-      backend = [
-        {
-          fqdns                         = ["app2.azurewebsites.net"]
-          port                          = 443
-          protocol                      = "https"
-          cookie_based_affinity_enabled = false
-          request_timeout_in_seconds    = 30
-          health_probe = {
-            fqdn                           = "app2.contoso.com"
-            timeout_in_seconds             = 30
-            evaluation_interval_in_seconds = 30
-            unhealthy_treshold_count       = 3
-            path                           = "/health"
-            status_codes                   = ["200"]
+      backend = {
+        fqdns                         = ["app2.azurewebsites.net"]
+        port                          = 443
+        protocol                      = "https"
+        cookie_based_affinity_enabled = false
+        request_timeout_in_seconds    = 30
+        rewrite_rules = {
+          headers = {
+            csp_enabled                    = true
+            hsts_enabled                   = true
+            x_frame_options_enabled        = true
+            x_content_type_options_enabled = true
+            x_xss_protection_enabled       = true
           }
         }
-      ]
+        health_probe = {
+          fqdn                           = "app2.contoso.com"
+          timeout_in_seconds             = 30
+          evaluation_interval_in_seconds = 30
+          unhealthy_treshold_count       = 3
+          path                           = "/health"
+          status_codes                   = ["200"]
+        }
+      }
     }
   ]
 }
@@ -193,6 +221,19 @@ module "application_gateway" {
     }
   ]
 
+  diagnostic_settings = {
+    log_analytics_workspace = {
+      name                = "law-contoso-prod"
+      resource_group_name = "rg-monitoring-prod"
+    }
+    logs = {
+      access_log_enabled      = true
+      performance_log_enabled = true
+      firewall_log_enabled    = true
+    }
+    metrics_enabled = true
+  }
+
   application_backend_settings = [
     {
       routing_rule = {
@@ -203,23 +244,30 @@ module "application_gateway" {
         protocol         = "https"
         certificate_name = "contoso-com"
       }
-      backend = [
-        {
-          fqdns                         = ["api-backend.azurewebsites.net"]
-          port                          = 443
-          protocol                      = "https"
-          cookie_based_affinity_enabled = false
-          request_timeout_in_seconds    = 30
-          health_probe = {
-            fqdn                           = "api.contoso.com"
-            timeout_in_seconds             = 30
-            evaluation_interval_in_seconds = 30
-            unhealthy_treshold_count       = 3
-            path                           = "/health"
-            status_codes                   = ["200"]
+      backend = {
+        fqdns                         = ["api-backend.azurewebsites.net"]
+        port                          = 443
+        protocol                      = "https"
+        cookie_based_affinity_enabled = false
+        request_timeout_in_seconds    = 30
+        rewrite_rules = {
+          headers = {
+            csp_enabled                    = true
+            hsts_enabled                   = true
+            x_frame_options_enabled        = true
+            x_content_type_options_enabled = true
+            x_xss_protection_enabled       = true
           }
         }
-      ]
+        health_probe = {
+          fqdn                           = "api.contoso.com"
+          timeout_in_seconds             = 30
+          evaluation_interval_in_seconds = 30
+          unhealthy_treshold_count       = 3
+          path                           = "/health"
+          status_codes                   = ["200"]
+        }
+      }
     }
   ]
 }
@@ -259,6 +307,19 @@ module "application_gateway" {
       name                          = "contoso-com"
     }
   ]
+
+  diagnostic_settings = {
+    log_analytics_workspace = {
+      name                = "law-contoso-dev"
+      resource_group_name = "rg-monitoring-dev"
+    }
+    logs = {
+      access_log_enabled      = true
+      performance_log_enabled = true
+      firewall_log_enabled    = true
+    }
+    metrics_enabled = true
+  }
 
   redirect_url_settings = [
     {
@@ -329,6 +390,19 @@ module "application_gateway" {
     }
   ]
 
+  diagnostic_settings = {
+    log_analytics_workspace = {
+      name                = "law-contoso-dev"
+      resource_group_name = "rg-monitoring-dev"
+    }
+    logs = {
+      access_log_enabled      = true
+      performance_log_enabled = true
+      firewall_log_enabled    = true
+    }
+    metrics_enabled = true
+  }
+
   application_backend_settings = [
     {
       routing_rule = {
@@ -339,23 +413,30 @@ module "application_gateway" {
         protocol         = "https"
         certificate_name = "contoso-com"
       }
-      backend = [
-        {
-          fqdns                         = ["app1.azurewebsites.net", "app1.myotherdomain.com"]
-          port                          = 443
-          protocol                      = "https"
-          cookie_based_affinity_enabled = false
-          request_timeout_in_seconds    = 30
-          health_probe = {
-            fqdn                           = "app1.contoso.com"
-            timeout_in_seconds             = 30
-            evaluation_interval_in_seconds = 30
-            unhealthy_treshold_count       = 3
-            path                           = "/health"
-            status_codes                   = ["200"]
+      backend = {
+        fqdns                         = ["app1.azurewebsites.net", "app1.myotherdomain.com"]
+        port                          = 443
+        protocol                      = "https"
+        cookie_based_affinity_enabled = false
+        request_timeout_in_seconds    = 30
+        rewrite_rules = {
+          headers = {
+            csp_enabled                    = true
+            hsts_enabled                   = true
+            x_frame_options_enabled        = true
+            x_content_type_options_enabled = true
+            x_xss_protection_enabled       = true
           }
         }
-      ]
+        health_probe = {
+          fqdn                           = "app1.contoso.com"
+          timeout_in_seconds             = 30
+          evaluation_interval_in_seconds = 30
+          unhealthy_treshold_count       = 3
+          path                           = "/health"
+          status_codes                   = ["200"]
+        }
+      }
     },
     {
       routing_rule = {
@@ -366,23 +447,30 @@ module "application_gateway" {
         protocol         = "https"
         certificate_name = "contoso-com"
       }
-      backend = [
-        {
-          fqdns                         = ["app2.azurewebsites.net"]
-          port                          = 443
-          protocol                      = "https"
-          cookie_based_affinity_enabled = false
-          request_timeout_in_seconds    = 30
-          health_probe = {
-            fqdn                           = "app2.contoso.com"
-            timeout_in_seconds             = 30
-            evaluation_interval_in_seconds = 30
-            unhealthy_treshold_count       = 3
-            path                           = "/health"
-            status_codes                   = ["200"]
+      backend = {
+        fqdns                         = ["app2.azurewebsites.net"]
+        port                          = 443
+        protocol                      = "https"
+        cookie_based_affinity_enabled = false
+        request_timeout_in_seconds    = 30
+        rewrite_rules = {
+          headers = {
+            csp_enabled                    = true
+            hsts_enabled                   = true
+            x_frame_options_enabled        = true
+            x_content_type_options_enabled = true
+            x_xss_protection_enabled       = true
           }
         }
-      ]
+        health_probe = {
+          fqdn                           = "app2.contoso.com"
+          timeout_in_seconds             = 30
+          evaluation_interval_in_seconds = 30
+          unhealthy_treshold_count       = 3
+          path                           = "/health"
+          status_codes                   = ["200"]
+        }
+      }
     }
   ]
   redirect_listener_settings = [
@@ -442,6 +530,19 @@ module "application_gateway" {
       name                          = "mydomain-com"
     }
   ]
+
+  diagnostic_settings = {
+    log_analytics_workspace = {
+      name                = "law-contoso-prod"
+      resource_group_name = "rg-monitoring-prod"
+    }
+    logs = {
+      access_log_enabled      = true
+      performance_log_enabled = true
+      firewall_log_enabled    = true
+    }
+    metrics_enabled = true
+  }
 }
 ```
 <!-- END_TF_DOCS -->

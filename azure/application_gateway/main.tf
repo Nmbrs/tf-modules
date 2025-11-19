@@ -271,7 +271,7 @@ resource "azurerm_application_gateway" "main" {
       name                                      = "probe-${local.application_names[probe.key]}"
       protocol                                  = title(probe.value.backend.protocol)
       path                                      = probe.value.backend.health_probe.path
-      port                                      = title(probe.value.backend.port)
+      port                                      = probe.value.backend.port
       pick_host_name_from_backend_http_settings = false
       host                                      = probe.value.backend.health_probe.fqdn
       timeout                                   = probe.value.backend.health_probe.timeout_in_seconds
@@ -419,6 +419,16 @@ resource "azurerm_application_gateway" "main" {
     precondition {
       condition     = var.min_instance_count <= var.max_instance_count
       error_message = format("Invalid configuration: minimum instance count (%s) must be less than or equal to maximum instance count (%s).", var.min_instance_count, var.max_instance_count)
+    }
+
+    ## Naming validation: Ensure either override_name is provided OR all naming components are provided
+    precondition {
+      condition = var.override_name != null || (
+        var.workload != null &&
+        var.company_prefix != null &&
+        var.sequence_number != null
+      )
+      error_message = "Invalid naming configuration: Either 'override_name' must be provided, or all of 'workload', 'company_prefix', and 'sequence_number' must be provided for automatic naming."
     }
   }
 }
