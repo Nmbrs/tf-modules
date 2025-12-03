@@ -21,6 +21,15 @@ resource "azurerm_key_vault" "key_vault" {
   lifecycle {
     ignore_changes = [tags]
 
+    ## Naming validation: Ensure either override_name is provided OR all naming components are provided
+    precondition {
+      condition = var.override_name != null || (
+        var.workload != null &&
+        var.company_prefix != null
+      )
+      error_message = "Invalid naming configuration: Either 'override_name' must be provided, or both 'workload' and 'company_prefix' must be provided for automatic naming."
+    }
+
     ## access policies validation
     precondition {
       condition     = (var.rbac_authorization_enabled && length(var.access_policies) == 0 || !var.rbac_authorization_enabled)
