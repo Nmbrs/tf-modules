@@ -11,6 +11,7 @@ variable "workload" {
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string
+  nullable    = false
 }
 
 variable "location" {
@@ -38,5 +39,3 @@ variable "capacity" {
     error_message = format("Invalid value '%s' for variable 'capacity', valid options are 0, 1, 2, 4, 8, 16.", var.capacity)
   }
 }
-
-

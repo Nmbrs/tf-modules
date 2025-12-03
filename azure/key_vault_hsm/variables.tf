@@ -21,11 +21,7 @@ variable "location" {
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string
-
-  validation {
-    condition     = contains(["dev", "test", "prod", "sand", "stag"], var.environment)
-    error_message = format("Invalid value '%s' for variable 'environment'. Valid options are 'dev', 'test', 'prod', 'sand', 'stag'.", var.environment)
-  }
+  nullable    = false
 }
 
 variable "admin_group_names" {

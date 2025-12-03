@@ -19,8 +19,9 @@ variable "location" {
 }
 
 variable "environment" {
-  description = "(Optional) The environment in which the resource should be provisioned."
+  description = "The environment in which the resource should be provisioned."
   type        = string
+  nullable    = false
 }
 
 variable "resource_group_name" {

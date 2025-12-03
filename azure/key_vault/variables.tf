@@ -21,6 +21,7 @@ variable "location" {
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string
+  nullable    = false
 }
 
 variable "external_usage" {
@@ -88,7 +89,7 @@ variable "sku_name" {
   nullable    = false
 
   validation {
-    condition     =  contains(["standard", "premium"], var.sku_name)
+    condition     = contains(["standard", "premium"], var.sku_name)
     error_message = format("Invalid value '%s' for variable 'sku_name'. Valid options are 'standard', 'premium'.", var.sku_name)
   }
 }
