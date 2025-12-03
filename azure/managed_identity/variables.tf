@@ -9,9 +9,9 @@ variable "workload" {
 }
 
 variable "environment" {
-  description = "Defines the environment to provision the resources."
+  description = "The environment in which the resource should be provisioned."
   type        = string
-
+  nullable    = false
 }
 
 variable "location" {

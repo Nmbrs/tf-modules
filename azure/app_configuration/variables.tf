@@ -36,11 +36,7 @@ variable "workload" {
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string
-
-  validation {
-    condition     = contains(["dev", "test", "prod", "stag", "sand"], var.environment)
-    error_message = format("Invalid value '%s' for variable 'environment'. Valid options are 'dev', 'test', 'prod', 'stag', 'sand'.", var.environment)
-  }
+  nullable    = false
 }
 
 variable "location" {
