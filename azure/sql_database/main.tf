@@ -1,11 +1,11 @@
 resource "azurerm_mssql_database" "main" {
   name            = local.sql_database_name
   server_id       = data.azurerm_mssql_server.sql_server.id
-  sku_name        = var.elastic_pool_settings != null && var.elastic_pool_settings.name != null ? null : var.sku_name
+  sku_name        = var.elastic_pool_settings != null ? null : var.sku_name
   collation       = var.collation
   license_type    = var.license_type
-  elastic_pool_id = var.elastic_pool_settings != null && var.elastic_pool_settings.name != null ? data.azurerm_mssql_elasticpool.sql_elasticpool[0].id : null
-  max_size_gb     = var.elastic_pool_settings != null && var.elastic_pool_settings.name != null ? 1024 : var.max_size_gb
+  elastic_pool_id = var.elastic_pool_settings != null ? data.azurerm_mssql_elasticpool.sql_elasticpool[0].id : null
+  max_size_gb     = var.elastic_pool_settings != null ? 1024 : var.max_size_gb
 
   short_term_retention_policy {
     retention_days           = local.backup_settings.pitr_backup_retention_days
