@@ -22,12 +22,9 @@ variable "location" {
 }
 
 variable "environment" {
-  description = "Defines the environment to provision the resources."
+  description = "The environment in which the resource should be provisioned."
   type        = string
-  validation {
-    condition     = contains(["dev", "test", "sand", "prod"], var.environment)
-    error_message = format("Invalid value '%s' for variable 'environment', valid options are 'dev', 'test', 'sand', 'prod'.", var.environment)
-  }
+  nullable    = false
 }
 
 variable "sql_server_settings" {

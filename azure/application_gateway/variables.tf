@@ -58,11 +58,6 @@ variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string
   nullable    = false
-
-  validation {
-    condition     = contains(["dev", "test", "prod", "sand", "stag"], var.environment)
-    error_message = format("Invalid value '%s' for variable 'environment', valid options are 'dev', 'test', 'prod', 'sand', 'stag'.", var.environment)
-  }
 }
 
 variable "resource_group_name" {
@@ -93,6 +88,15 @@ variable "application_backend_settings" {
       protocol                      = string
       cookie_based_affinity_enabled = optional(bool, false)
       request_timeout_in_seconds    = optional(number, 30)
+      rewrite_rules = object({
+        headers = object({
+          csp_enabled                    = bool
+          hsts_enabled                   = bool
+          x_frame_options_enabled        = bool
+          x_content_type_options_enabled = bool
+          x_xss_protection_enabled       = bool
+        })
+      })
       health_probe = object({
         timeout_in_seconds             = number
         evaluation_interval_in_seconds = number
@@ -230,21 +234,20 @@ variable "max_instance_count" {
   }
 }
 
-variable "waf_policy_settings" {
-  description = "Name of the WAF policy to be associated with the application gateway."
+variable "diagnostic_settings" {
+  description = "Diagnostic settings configuration for Application Gateway"
   type = object({
-    name                = string
-    resource_group_name = string
+    log_analytics_workspace = object({
+      name                = string
+      resource_group_name = string
+    })
+
+    logs = optional(object({
+      access_log_enabled      = bool
+      performance_log_enabled = bool
+      firewall_log_enabled    = bool
+    }))
+    metrics_enabled = bool
   })
   nullable = false
-
-  validation {
-    condition     = try(length(trimspace(var.waf_policy_settings.name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'waf_policy_settings.name', it must be a non-empty string.", coalesce(var.waf_policy_settings.name, "null"))
-  }
-
-  validation {
-    condition     = try(length(trimspace(var.waf_policy_settings.resource_group_name)) > 0, false)
-    error_message = format("Invalid value '%s' for variable 'waf_policy_settings.resource_group_name', it must be a non-empty string.", coalesce(var.waf_policy_settings.resource_group_name, "null"))
-  }
 }

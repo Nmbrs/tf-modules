@@ -7,14 +7,14 @@ resource "azurerm_key_vault" "key_vault" {
   resource_group_name = var.resource_group_name
   tenant_id           = data.azurerm_client_config.current.tenant_id
 
-  sku_name                      = "standard"
+  sku_name                      = var.sku_name
   soft_delete_retention_days    = 31
   purge_protection_enabled      = true
   enable_rbac_authorization     = var.rbac_authorization_enabled
   public_network_access_enabled = var.public_network_access_enabled
 
   network_acls {
-    bypass         = "None"
+    bypass         = var.trusted_services_bypass_firewall_enabled ? "AzureServices" : "None"
     default_action = "Deny"
   }
 

@@ -19,8 +19,9 @@ variable "location" {
 }
 
 variable "environment" {
-  description = "(Optional) The environment in which the resource should be provisioned."
+  description = "The environment in which the resource should be provisioned."
   type        = string
+  nullable    = false
 }
 
 variable "resource_group_name" {
@@ -84,4 +85,10 @@ variable "public_network_access_enabled" {
   description = "A condition to indicate if the Storage Account will have public network access (defaults to false)."
   type        = bool
   default     = false
+}
+
+variable "trusted_services_bypass_firewall_enabled" {
+  description = "Allow trusted Microsoft services to bypass this firewall. When enabled, trusted Microsoft services can access the Storage Account even when network access is restricted."
+  type        = bool
+  default     = true
 }

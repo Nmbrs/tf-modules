@@ -21,6 +21,7 @@ variable "location" {
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string
+  nullable    = false
 }
 
 variable "external_usage" {
@@ -81,8 +82,26 @@ variable "company_prefix" {
   }
 }
 
+variable "sku_name" {
+  description = "The Name of the SKU used for this Key Vault Managed HSM. Currently, only 'Standard_B1' is supported by Azure."
+  type        = string
+  default     = "standard"
+  nullable    = false
+
+  validation {
+    condition     = contains(["standard", "premium"], var.sku_name)
+    error_message = format("Invalid value '%s' for variable 'sku_name'. Valid options are 'standard', 'premium'.", var.sku_name)
+  }
+}
+
 variable "public_network_access_enabled" {
   description = "A condition to indicate if the Key Vault will have public network access (defaults to false)."
   type        = bool
   default     = false
+}
+
+variable "trusted_services_bypass_firewall_enabled" {
+  description = "Allow trusted Microsoft services to bypass this firewall. When enabled, trusted Microsoft services can access the Key Vault even when network access is restricted."
+  type        = bool
+  default     = true
 }

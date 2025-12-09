@@ -11,8 +11,9 @@ resource "azurerm_storage_account" "storage_account" {
   allow_nested_items_to_be_public = var.public_network_access_enabled
 
   network_rules {
-    default_action             = "Deny"
-    bypass                     = ["None"]
+    bypass         = var.trusted_services_bypass_firewall_enabled ? ["AzureServices", "Logging", "Metrics"] : ["None"]
+    default_action = "Deny"
+
     ip_rules                   = []
     virtual_network_subnet_ids = []
   }

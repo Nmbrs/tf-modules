@@ -21,8 +21,7 @@ data "azurerm_user_assigned_identity" "certificate" {
   resource_group_name = var.managed_identity_settings.resource_group_name
 }
 
-data "azurerm_web_application_firewall_policy" "waf_policy_settings" {
-  count               = var.waf_policy_settings != "" && var.waf_policy_settings != null ? 1 : 0
-  name                = var.waf_policy_settings.name
-  resource_group_name = var.waf_policy_settings.resource_group_name
+data "azurerm_log_analytics_workspace" "diagnostics" {
+  name                = var.diagnostic_settings.log_analytics_workspace.name
+  resource_group_name = var.diagnostic_settings.log_analytics_workspace.resource_group_name
 }

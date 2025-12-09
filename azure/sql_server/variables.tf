@@ -21,15 +21,10 @@ variable "workload" {
   }
 }
 
-variable "company_prefix" {
-  description = "Short, unique prefix for the company / organization."
+variable "environment" {
+  description = "The environment in which the resource should be provisioned."
   type        = string
-  nullable    = true
-
-  validation {
-    condition     = var.company_prefix == null || try(length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5, false)
-    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", coalesce(var.company_prefix, "null"))
-  }
+  nullable    = false
 }
 
 variable "sequence_number" {
@@ -51,17 +46,6 @@ variable "location" {
   validation {
     condition     = length(trimspace(var.location)) > 0
     error_message = format("Invalid value '%s' for variable 'location', it must be a non-empty string.", var.location)
-  }
-}
-
-variable "environment" {
-  description = "The environment in which the resource should be provisioned."
-  type        = string
-  nullable    = false
-
-  validation {
-    condition     = contains(["dev", "test", "prod", "sand", "stag"], var.environment)
-    error_message = format("Invalid value '%s' for variable 'environment', valid options are 'dev', 'test', 'prod', 'sand', 'stag'.", var.environment)
   }
 }
 
