@@ -37,14 +37,15 @@ resource "azurerm_mssql_server" "main" {
       error_message = "Invalid naming configuration: Either 'override_name' must be provided, or all of 'workload', 'company_prefix', and 'sequence_number' must be provided for automatic naming."
     }
 
-    ## Auditing validation: Ensure auditing_settings is provided for prod and sand environments
+    ## Auditing validation: Ensure auditing_settings is provided for audited environments
     precondition {
       condition = (
         var.auditing_settings != null ||
-        !contains(["prod", "sand"], var.environment)
+        !local.audit_enabled
       )
       error_message = format(
-        "Invalid configuration: 'auditing_settings' must be provided when environment is 'prod' or 'sand'. Current environment: '%s'.",
+        "Invalid configuration: 'auditing_settings' must be provided when environment is one of: %s. Current environment: '%s'.",
+        join(", ", local.audited_environments),
         var.environment
       )
     }
