@@ -1,5 +1,5 @@
-resource "azurerm_mssql_server" "sql_server" {
-  name                                 = var.override_name != "" && var.override_name != null ? var.override_name : local.sql_server_name
+resource "azurerm_mssql_server" "main" {
+  name                                 = local.sql_server_name
   resource_group_name                  = var.resource_group_name
   location                             = var.location
   version                              = "12.0"
@@ -26,6 +26,28 @@ resource "azurerm_mssql_server" "sql_server" {
 
   lifecycle {
     ignore_changes = [tags]
+
+    ## Naming validation: Ensure either override_name is provided OR all naming components are provided
+    precondition {
+      condition = var.override_name != null || (
+        var.workload != null &&
+        var.company_prefix != null &&
+        var.sequence_number != null
+      )
+      error_message = "Invalid naming configuration: Either 'override_name' must be provided, or all of 'workload', 'company_prefix', and 'sequence_number' must be provided for automatic naming."
+    }
+
+    ## Auditing validation: Ensure auditing_settings is provided for prod and sand environments
+    precondition {
+      condition = (
+        var.auditing_settings != null ||
+        !contains(["prod", "sand"], var.environment)
+      )
+      error_message = format(
+        "Invalid configuration: 'auditing_settings' must be provided when environment is 'prod' or 'sand'. Current environment: '%s'.",
+        var.environment
+      )
+    }
   }
 }
 
@@ -35,7 +57,7 @@ resource "azurerm_mssql_virtual_network_rule" "sql_server_network_rule" {
     if var.network_settings.public_network_access_enabled
   }
   name                                 = each.key
-  server_id                            = azurerm_mssql_server.sql_server.id
+  server_id                            = azurerm_mssql_server.main.id
   subnet_id                            = data.azurerm_subnet.subnet[each.key].id
   ignore_missing_vnet_service_endpoint = false
 }
@@ -46,7 +68,7 @@ resource "azurerm_mssql_virtual_network_rule" "sql_server_network_rule" {
 resource "azurerm_mssql_firewall_rule" "sql_server" {
   count            = var.network_settings.public_network_access_enabled && var.network_settings.trusted_services_bypass_firewall_enabled ? 1 : 0
   name             = "Allow_Azure_Trusted_Services"
-  server_id        = azurerm_mssql_server.sql_server.id
+  server_id        = azurerm_mssql_server.main.id
   start_ip_address = "0.0.0.0"
   end_ip_address   = "0.0.0.0"
 
@@ -54,7 +76,7 @@ resource "azurerm_mssql_firewall_rule" "sql_server" {
 
 resource "azurerm_mssql_server_extended_auditing_policy" "sql_auditing" {
   count                                   = local.audit_enabled ? 1 : 0
-  server_id                               = azurerm_mssql_server.sql_server.id
+  server_id                               = azurerm_mssql_server.main.id
   storage_endpoint                        = data.azurerm_storage_account.auditing_storage_account[0].primary_blob_endpoint
   storage_account_access_key              = data.azurerm_storage_account.auditing_storage_account[0].primary_access_key
   storage_account_access_key_is_secondary = false

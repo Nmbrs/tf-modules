@@ -21,10 +21,15 @@ variable "workload" {
   }
 }
 
-variable "environment" {
-  description = "The environment in which the resource should be provisioned."
+variable "company_prefix" {
+  description = "Short, unique prefix for the company / organization."
   type        = string
-  nullable    = false
+  nullable    = true
+
+  validation {
+    condition     = var.company_prefix == null || try(length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5, false)
+    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", coalesce(var.company_prefix, "null"))
+  }
 }
 
 variable "sequence_number" {
@@ -49,6 +54,17 @@ variable "location" {
   }
 }
 
+variable "environment" {
+  description = "The environment in which the resource should be provisioned."
+  type        = string
+  nullable    = false
+
+  validation {
+    condition     = contains(["dev", "test", "prod", "sand", "stag"], var.environment)
+    error_message = format("Invalid value '%s' for variable 'environment'. Valid options are 'dev', 'test', 'prod', 'sand', 'stag'.", var.environment)
+  }
+}
+
 variable "resource_group_name" {
   description = "Specifies the name of the resource group where the resource should be provisioned."
   type        = string
@@ -58,20 +74,6 @@ variable "resource_group_name" {
     condition     = length(trimspace(var.resource_group_name)) > 0
     error_message = format("Invalid value '%s' for variable 'resource_group_name', it must be a non-empty string.", var.resource_group_name)
   }
-}
-
-variable "network_settings" {
-  description = "Public network settings."
-  type = object({
-    public_network_access_enabled            = bool
-    trusted_services_bypass_firewall_enabled = bool
-    allowed_subnets = list(object({
-      subnet_resource_group_name = string
-      virtual_network_name       = string
-      subnet_name                = string
-    }))
-  })
-  nullable = false
 }
 
 variable "azuread_sql_admin" {
@@ -87,11 +89,13 @@ variable "azuread_authentication_only_enabled" {
 }
 
 variable "auditing_settings" {
-  description = "The settings necessary for the storage account auditing, the name and the resource group."
+  description = "The settings necessary for the storage account auditing. Required for prod and sand environments, optional for others."
   type = object({
     storage_account_name           = string
     storage_account_resource_group = string
   })
+  default  = null
+  nullable = true
 }
 
 variable "local_sql_admin_user_settings" {
@@ -104,4 +108,22 @@ variable "local_sql_admin_user_settings" {
       key_vault_secret_name    = string
     })
   })
+}
+
+variable "network_settings" {
+  description = "Network configuration settings for the SQL Server, including public access, firewall rules, and allowed subnets."
+  type = object({
+    public_network_access_enabled            = bool
+    trusted_services_bypass_firewall_enabled = bool
+    allowed_subnets = list(object({
+      subnet_name                = string
+      virtual_network_name       = string
+      subnet_resource_group_name = string
+    }))
+  })
+
+  validation {
+    condition     = var.network_settings.public_network_access_enabled || length(var.network_settings.allowed_subnets) == 0
+    error_message = "Invalid configuration: 'allowed_subnets' can only be specified when 'public_network_access_enabled' is true."
+  }
 }
