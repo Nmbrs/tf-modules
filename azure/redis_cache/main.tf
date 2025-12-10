@@ -1,4 +1,4 @@
-resource "azurerm_redis_cache" "redis" {
+resource "azurerm_redis_cache" "main" {
   name                          = local.redis_cache_name
   location                      = var.location
   resource_group_name           = var.resource_group_name
@@ -33,6 +33,16 @@ resource "azurerm_redis_cache" "redis" {
 
   lifecycle {
     ignore_changes = [tags]
+
+    ## Naming validation: Ensure either override_name is provided OR all naming components are provided
+    precondition {
+      condition = var.override_name != null || (
+        var.workload != null &&
+        var.company_prefix != null &&
+        var.sequence_number != null
+      )
+      error_message = "Invalid naming configuration: Either 'override_name' must be provided, or all of 'workload', 'company_prefix', and 'sequence_number' must be provided for automatic naming."
+    }
 
     ## cache_size_in_gb validation
     precondition {
