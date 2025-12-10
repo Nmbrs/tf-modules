@@ -160,7 +160,8 @@ variable "subnets" {
             "Microsoft.Web/serverFarms",
             "NGINX.NGINXPLUS/nginxDeployments",
             "PaloAltoNetworks.Cloudngfw/firewalls",
-            "Qumulo.Storage/fileSystems"
+            "Qumulo.Storage/fileSystems",
+            "GitHub.Network/networkSettings"
           ],
         delegation)
       ])

@@ -55,6 +55,7 @@ locals {
     "NGINX.NGINXPLUS/nginxDeployments"                = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
     "PaloAltoNetworks.Cloudngfw/firewalls"            = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
     "Qumulo.Storage/fileSystems"                      = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
+    "GitHub.Network/networkSettings"                  = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
   }
 
   vnet_name = "vnet-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.naming_count)}"
