@@ -132,6 +132,15 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
 
   lifecycle {
     ignore_changes = [tags]
+
+    ## Naming validation: Ensure either override_name is provided OR all naming components are provided
+    precondition {
+      condition = var.override_name != null || (
+        var.workload != null &&
+        var.sequence_number != null
+      )
+      error_message = "Invalid naming configuration: Either 'override_name' must be provided, or both 'workload' and 'sequence_number' must be provided for automatic naming."
+    }
   }
 }
 
@@ -190,6 +199,15 @@ resource "azurerm_windows_virtual_machine" "windows_vm" {
 
   lifecycle {
     ignore_changes = [tags]
+
+    ## Naming validation: Ensure either override_name is provided OR all naming components are provided
+    precondition {
+      condition = var.override_name != null || (
+        var.workload != null &&
+        var.sequence_number != null
+      )
+      error_message = "Invalid naming configuration: Either 'override_name' must be provided, or both 'workload' and 'sequence_number' must be provided for automatic naming."
+    }
 
     ## Windows NETBIOS name limitation validation
     precondition {
