@@ -18,6 +18,8 @@ locals {
     api_management           = data.azurerm_api_management.api_management,
     app_configuration        = data.azurerm_app_configuration.app_configuration,
     azure_container_registry = data.azurerm_container_registry.azure_container_registry,
+    datafactory              = data.azurerm_data_factory.datafactory,
+    datafactory_portal       = data.azurerm_data_factory.datafactory_portal,
     # Add more resource types and corresponding data blocks as needed
   }
 
@@ -39,5 +41,7 @@ locals {
     "api_management"           = "Gateway"
     "app_configuration"        = "configurationStores"
     "azure_container_registry" = "registry"
+    "datafactory"              = "dataFactory"
+    "datafactory_portal"       = "portal"
   }
 }
