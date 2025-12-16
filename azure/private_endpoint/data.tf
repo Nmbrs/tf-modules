@@ -100,14 +100,14 @@ data "azurerm_container_registry" "azure_container_registry" {
   resource_group_name = var.resource_settings.resource_group_name
 }
 
-data "azurerm_data_factory" "datafactory" {
-  count               = var.resource_settings.type == "datafactory" ? 1 : 0
+data "azurerm_data_factory" "data_factory" {
+  count               = var.resource_settings.type == "data_factory" ? 1 : 0
   name                = var.resource_settings.name
   resource_group_name = var.resource_settings.resource_group_name
 }
 
-data "azurerm_data_factory" "datafactory_portal" {
-  count               = var.resource_settings.type == "datafactory_portal" ? 1 : 0
+data "azurerm_data_factory" "data_factory_portal" {
+  count               = var.resource_settings.type == "data_factory_portal" ? 1 : 0
   name                = var.resource_settings.name
   resource_group_name = var.resource_settings.resource_group_name
 }
