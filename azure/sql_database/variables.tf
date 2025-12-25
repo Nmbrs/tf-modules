@@ -1,11 +1,23 @@
 
 variable "workload" {
-  description = "Name of the database to create"
+  description = "Short, descriptive name for the application, service, or workload. Used in resource naming conventions."
   type        = string
+  nullable    = true
 
   validation {
-    condition     = can(coalesce(var.workload))
-    error_message = format("Invalid value '%s' for variable 'workload'. It must be a non-empty string.", var.workload)
+    condition     = var.workload == null || try(length(trimspace(var.workload)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'workload', it must be null or a non-empty string.", coalesce(var.workload, "null"))
+  }
+}
+
+variable "company_prefix" {
+  description = "Short, unique prefix for the company or organization. Used in naming for uniqueness. Must be 1-5 characters."
+  type        = string
+  nullable    = true
+
+  validation {
+    condition     = var.company_prefix == null || try(length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5, false)
+    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", coalesce(var.company_prefix, "null"))
   }
 }
 
@@ -36,11 +48,13 @@ variable "sql_server_settings" {
 }
 
 variable "elastic_pool_settings" {
-  description = "SQL server settings."
+  description = "SQL elastic pool settings. Optional - if not provided, database will use standalone SKU."
   type = object({
     name                = string
     resource_group_name = string
   })
+  default  = null
+  nullable = true
 }
 
 variable "collation" {
@@ -76,12 +90,13 @@ variable "max_size_gb" {
   default     = 250
 }
 
-variable "instance_count" {
-  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention."
+variable "sequence_number" {
+  description = "A numeric value used to ensure uniqueness for resource names."
   type        = number
+  nullable    = true
 
   validation {
-    condition     = var.instance_count >= 1 && var.instance_count <= 999
-    error_message = format("Invalid value '%s' for variable 'instance_count'. It must be between 1 and 999.", var.instance_count)
+    condition     = var.sequence_number == null || try(var.sequence_number >= 1 && var.sequence_number <= 999, false)
+    error_message = format("Invalid value '%s' for variable 'sequence_number', it must be null or a number between 1 and 999.", coalesce(var.sequence_number, "null"))
   }
 }
