@@ -5,8 +5,8 @@ data "azuread_group" "azuread_sql_admin" {
 
 data "azurerm_subnet" "subnet" {
   for_each = {
-    for subnet in var.public_network_settings.allowed_subnets : subnet.subnet_name => subnet
-    if var.public_network_settings.access_enabled
+    for subnet in var.network_settings.allowed_subnets : subnet.subnet_name => subnet
+    if var.network_settings.public_network_access_enabled
   }
   name                 = each.value.subnet_name
   virtual_network_name = each.value.virtual_network_name
@@ -14,17 +14,17 @@ data "azurerm_subnet" "subnet" {
 }
 
 data "azurerm_storage_account" "auditing_storage_account" {
-  count               = local.audit_enabled ? 1 : 0
-  name                = var.storage_account_auditing_settings.storage_account_name
-  resource_group_name = var.storage_account_auditing_settings.storage_account_resource_group
+  count               = var.auditing_settings != null && local.audit_enabled ? 1 : 0
+  name                = var.auditing_settings.storage_account_name
+  resource_group_name = var.auditing_settings.storage_account_resource_group
 }
 
 data "azurerm_key_vault" "local_sql_admin_key_vault" {
-  name                = var.local_sql_admin_settings.key_vault_name
-  resource_group_name = var.local_sql_admin_settings.key_vault_resource_group
+  name                = var.local_sql_admin_user_settings.local_sql_admin_user_password.key_vault_name
+  resource_group_name = var.local_sql_admin_user_settings.local_sql_admin_user_password.key_vault_resource_group
 }
 
 data "azurerm_key_vault_secret" "local_sql_admin_password" {
-  name         = var.local_sql_admin_settings.key_vault_secret_name
+  name         = var.local_sql_admin_user_settings.local_sql_admin_user_password.key_vault_secret_name
   key_vault_id = data.azurerm_key_vault.local_sql_admin_key_vault.id
 }
