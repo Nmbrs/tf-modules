@@ -437,34 +437,34 @@ resource "azurerm_application_gateway" "main" {
 # ==============================================================================
 # Application Gateway Logs
 # ==============================================================================
-# resource "azurerm_monitor_diagnostic_setting" "app_gateway" {
-#   name                       = "diag-${local.app_gateway_name}"
-#   target_resource_id         = azurerm_application_gateway.main.id
-#   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.diagnostics.id
+resource "azurerm_monitor_diagnostic_setting" "app_gateway" {
+  name                       = "diag-${local.app_gateway_name}"
+  target_resource_id         = azurerm_application_gateway.main.id
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.diagnostics.id
 
-#   dynamic "enabled_log" {
-#     for_each = try(var.diagnostic_settings.logs.access_log_enabled, true) ? ["ApplicationGatewayAccessLog"] : []
-#     content {
-#       category = enabled_log.value
-#     }
-#   }
+  dynamic "enabled_log" {
+    for_each = try(var.diagnostic_settings.logs.access_log_enabled, true) ? ["ApplicationGatewayAccessLog"] : []
+    content {
+      category = enabled_log.value
+    }
+  }
 
-#   dynamic "enabled_log" {
-#     for_each = try(var.diagnostic_settings.logs.performance_log_enabled, true) ? ["ApplicationGatewayPerformanceLog"] : []
-#     content {
-#       category = enabled_log.value
-#     }
-#   }
+  dynamic "enabled_log" {
+    for_each = try(var.diagnostic_settings.logs.performance_log_enabled, true) ? ["ApplicationGatewayPerformanceLog"] : []
+    content {
+      category = enabled_log.value
+    }
+  }
 
-#   dynamic "enabled_log" {
-#     for_each = try(var.diagnostic_settings.logs.firewall_log_enabled, true) ? ["ApplicationGatewayFirewallLog"] : []
-#     content {
-#       category = enabled_log.value
-#     }
-#   }
+  dynamic "enabled_log" {
+    for_each = try(var.diagnostic_settings.logs.firewall_log_enabled, true) ? ["ApplicationGatewayFirewallLog"] : []
+    content {
+      category = enabled_log.value
+    }
+  }
 
-#   metric {
-#     category = "AllMetrics"
-#     enabled  = var.diagnostic_settings.metrics_enabled
-#   }
-# }
+  metric {
+    category = "AllMetrics"
+    enabled  = var.diagnostic_settings.metrics_enabled
+  }
+}
