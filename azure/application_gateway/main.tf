@@ -51,32 +51,32 @@ resource "azurerm_web_application_firewall_policy" "application_gateway" {
 # without being managed by Terraform.
 # ==============================================================================
 
-# resource "azurerm_web_application_firewall_policy" "listener" {
-#   for_each            = { for listener in local.application_names : listener => listener }
-#   name                = "waf-${each.key}"
-#   resource_group_name = var.resource_group_name
-#   location            = var.location
+resource "azurerm_web_application_firewall_policy" "listener" {
+  for_each            = { for listener in local.application_names : listener => listener }
+  name                = "waf-${each.key}"
+  resource_group_name = var.resource_group_name
+  location            = var.location
 
-#   managed_rules {
-#     managed_rule_set {
-#       type    = "OWASP"
-#       version = "3.2"
-#     }
-#     managed_rule_set {
-#       type    = "Microsoft_BotManagerRuleSet"
-#       version = "1.0"
-#     }
-#   }
+  managed_rules {
+    managed_rule_set {
+      type    = "OWASP"
+      version = "3.2"
+    }
+    managed_rule_set {
+      type    = "Microsoft_BotManagerRuleSet"
+      version = "1.0"
+    }
+  }
 
-#   policy_settings {
-#     enabled = true
-#     mode    = "Detection"
-#   }
+  policy_settings {
+    enabled = true
+    mode    = "Detection"
+  }
 
-#   lifecycle {
-#     ignore_changes = [tags, managed_rules, custom_rules, policy_settings]
-#   }
-# }
+  lifecycle {
+    ignore_changes = [tags, managed_rules, custom_rules, policy_settings]
+  }
+}
 
 # ==============================================================================
 # Application Gateway Configuration
@@ -244,7 +244,7 @@ resource "azurerm_application_gateway" "main" {
       host_names                     = [http_listener.value.listener.fqdn]
       protocol                       = title(http_listener.value.listener.protocol)
       ssl_certificate_name           = http_listener.value.listener.protocol == "https" ? http_listener.value.listener.certificate_name : null
-      firewall_policy_id             = null#azurerm_web_application_firewall_policy.listener[local.application_names[http_listener.key]].id
+      firewall_policy_id             = azurerm_web_application_firewall_policy.listener[local.application_names[http_listener.key]].id
     }
   }
 
