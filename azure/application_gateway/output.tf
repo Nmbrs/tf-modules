@@ -1,6 +1,6 @@
 output "name" {
   description = "The application gateway full name."
-  value       = azurerm_application_gateway.app_gw.name
+  value       = azurerm_application_gateway.main.name
 }
 
 output "workload" {
@@ -9,16 +9,16 @@ output "workload" {
 }
 
 output "id" {
-  description = "The application gateway  gateway  ID."
-  value       = azurerm_application_gateway.app_gw.id
+  description = "The application gateway ID."
+  value       = azurerm_application_gateway.main.id
 }
 
 output "public_ip_address" {
-  value       = azurerm_public_ip.app_gw.ip_address
-  description = "Output of the public IP address"
+  description = "The public IP address of the application gateway."
+  value       = azurerm_public_ip.application_gateway.ip_address
 }
 
 output "public_ip_fqdn" {
-  value       = azurerm_public_ip.app_gw.fqdn
-  description = "Output of the public IP FQDN"
+  description = "The public IP FQDN of the application gateway."
+  value       = azurerm_public_ip.application_gateway.fqdn
 }

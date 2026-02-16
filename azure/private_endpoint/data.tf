@@ -40,6 +40,12 @@ data "azurerm_key_vault" "key_vault" {
   resource_group_name = var.resource_settings.resource_group_name
 }
 
+data "azurerm_app_configuration" "app_configuration" {
+  count               = var.resource_settings.type == "app_configuration" ? 1 : 0
+  name                = var.resource_settings.name
+  resource_group_name = var.resource_settings.resource_group_name
+}
+
 data "azurerm_servicebus_namespace" "service_bus" {
   count               = var.resource_settings.type == "service_bus" ? 1 : 0
   name                = var.resource_settings.name
@@ -78,6 +84,30 @@ data "azurerm_cosmosdb_account" "cosmos_db_mongodb" {
 
 data "azurerm_redis_cache" "redis_cache" {
   count               = var.resource_settings.type == "redis_cache" ? 1 : 0
+  name                = var.resource_settings.name
+  resource_group_name = var.resource_settings.resource_group_name
+}
+
+data "azurerm_api_management" "api_management" {
+  count               = var.resource_settings.type == "api_management" ? 1 : 0
+  name                = var.resource_settings.name
+  resource_group_name = var.resource_settings.resource_group_name
+}
+
+data "azurerm_container_registry" "azure_container_registry" {
+  count               = var.resource_settings.type == "azure_container_registry" ? 1 : 0
+  name                = var.resource_settings.name
+  resource_group_name = var.resource_settings.resource_group_name
+}
+
+data "azurerm_data_factory" "data_factory" {
+  count               = var.resource_settings.type == "data_factory" ? 1 : 0
+  name                = var.resource_settings.name
+  resource_group_name = var.resource_settings.resource_group_name
+}
+
+data "azurerm_data_factory" "data_factory_portal" {
+  count               = var.resource_settings.type == "data_factory_portal" ? 1 : 0
   name                = var.resource_settings.name
   resource_group_name = var.resource_settings.resource_group_name
 }

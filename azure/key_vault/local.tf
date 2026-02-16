@@ -1,5 +1,9 @@
 locals {
-  key_vault_name = lower("kv-nmbrs-${var.workload}-${var.external_usage ? "e" : "i"}-${var.environment}")
+  key_vault_name = (
+    var.override_name != null && var.override_name != "" ?
+    lower(var.override_name) :
+    lower("kv-${var.company_prefix}-${var.workload}-${var.external_usage ? "e" : "i"}-${var.environment}")
+  )
 
   certificates_full_permissions = ["Backup", "Create", "Delete", "DeleteIssuers", "Get", "GetIssuers", "Import", "List", "ListIssuers", "ManageContacts", "ManageIssuers", "Purge", "Recover", "Restore", "SetIssuers", "Update"]
   keys_full_permissions         = []

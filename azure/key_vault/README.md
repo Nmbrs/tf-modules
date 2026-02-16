@@ -1,3 +1,4 @@
+<!-- BEGIN_TF_DOCS -->
 # Key Vault Module
 
 ## Sumary
@@ -16,13 +17,13 @@ keyvault when need.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.70 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.117 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.70 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
 
 ## Modules
 
@@ -33,6 +34,7 @@ No modules.
 | Name | Type |
 |------|------|
 | [azurerm_key_vault.key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault) | resource |
+| [azurerm_key_vault_access_policy.administrators_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
 | [azurerm_key_vault_access_policy.default_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
 | [azurerm_key_vault_access_policy.readers_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
 | [azurerm_key_vault_access_policy.writers_policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
@@ -42,12 +44,16 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_access_policies"></a> [access\_policies](#input\_access\_policies) | (Optional) Access policies created for the Azure Key Vault. | <pre>list(object({<br>    name      = string<br>    object_id = string<br>    type      = string<br>  }))</pre> | `[]` | no |
-| <a name="input_enable_rbac_authorization"></a> [enable\_rbac\_authorization](#input\_enable\_rbac\_authorization) | Boolean flag to specify whether Azure Key Vault uses Role Based Access Control (RBAC) for authorization of data actions. | `bool` | n/a | yes |
+| <a name="input_access_policies"></a> [access\_policies](#input\_access\_policies) | (Optional) Access policies created for the Azure Key Vault. | <pre>list(object({<br/>    name      = string<br/>    object_id = string<br/>    type      = string<br/>  }))</pre> | `[]` | no |
+| <a name="input_company_prefix"></a> [company\_prefix](#input\_company\_prefix) | Short, unique prefix for the company or organization. Used in naming for uniqueness. Must be 1-5 characters. | `string` | `"nmbrs"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_external_usage"></a> [external\_usage](#input\_external\_usage) | (Optional) Specifies whether the keyvault should be used internally or externally. | `bool` | `true` | no |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
+| <a name="input_override_name"></a> [override\_name](#input\_override\_name) | Override the name of the key vault, to bypass naming convention | `string` | `null` | no |
+| <a name="input_public_network_access_enabled"></a> [public\_network\_access\_enabled](#input\_public\_network\_access\_enabled) | A condition to indicate if the Key Vault will have public network access (defaults to false). | `bool` | `false` | no |
+| <a name="input_rbac_authorization_enabled"></a> [rbac\_authorization\_enabled](#input\_rbac\_authorization\_enabled) | Boolean flag to specify whether Azure Key Vault uses Role Based Access Control (RBAC) for authorization of data actions. | `bool` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
+| <a name="input_trusted_services_bypass_firewall_enabled"></a> [trusted\_services\_bypass\_firewall\_enabled](#input\_trusted\_services\_bypass\_firewall\_enabled) | Allow trusted Microsoft services to bypass this firewall. When enabled, trusted Microsoft services can access the Key Vault even when network access is restricted. | `bool` | `false` | no |
 | <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the key vault. | `string` | n/a | yes |
 
 ## Outputs
@@ -83,13 +89,13 @@ module "key_vault" {
 
 ```hcl
 module "key_vault" {
-  source                    = "git::github.com/Nmbrs/tf-modules//azure/key_vault"
-  workload                  = "demo"
-  resource_group_name       = "rg-demo"
-  external_usage            = true
-  environment               = "dev"
-  location                  = "westeurope"
-  enable_rbac_authorization = true
+  source                     = "git::github.com/Nmbrs/tf-modules//azure/key_vault"
+  workload                   = "demo"
+  resource_group_name        = "rg-demo"
+  external_usage             = true
+  environment                = "dev"
+  location                   = "westeurope"
+  rbac_authorization_enabled = true
   access_policies = [
     {
       name      = "SquadX"
@@ -180,3 +186,4 @@ The code below exemplifies how to configure the list of policies
     },
   ]
 ```
+<!-- END_TF_DOCS -->

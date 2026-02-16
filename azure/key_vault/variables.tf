@@ -1,8 +1,3 @@
-variable "resource_group_name" {
-  type        = string
-  description = "The name of an existing Resource Group."
-}
-
 variable "workload" {
   description = "The workload name of the key vault."
   type        = string
@@ -13,6 +8,11 @@ variable "workload" {
   }
 }
 
+variable "resource_group_name" {
+  type        = string
+  description = "The name of an existing Resource Group."
+}
+
 variable "location" {
   description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
   type        = string
@@ -21,6 +21,7 @@ variable "location" {
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string
+  nullable    = false
 }
 
 variable "external_usage" {
@@ -59,7 +60,49 @@ variable "access_policies" {
   }
 }
 
-variable "enable_rbac_authorization" {
+variable "rbac_authorization_enabled" {
   description = "Boolean flag to specify whether Azure Key Vault uses Role Based Access Control (RBAC) for authorization of data actions."
   type        = bool
+}
+
+variable "override_name" {
+  description = "Override the name of the key vault, to bypass naming convention"
+  type        = string
+  default     = null
+  nullable    = true
+}
+
+variable "company_prefix" {
+  description = "Short, unique prefix for the company or organization. Used in naming for uniqueness. Must be 1-5 characters."
+  type        = string
+  nullable    = true
+
+  validation {
+    condition     = var.company_prefix == null || try(length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5, false)
+    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", coalesce(var.company_prefix, "null"))
+  }
+}
+
+variable "sku_name" {
+  description = "The Name of the SKU used for this Key Vault Managed HSM. Currently, only 'Standard_B1' is supported by Azure."
+  type        = string
+  default     = "standard"
+  nullable    = false
+
+  validation {
+    condition     = contains(["standard", "premium"], var.sku_name)
+    error_message = format("Invalid value '%s' for variable 'sku_name'. Valid options are 'standard', 'premium'.", var.sku_name)
+  }
+}
+
+variable "public_network_access_enabled" {
+  description = "A condition to indicate if the Key Vault will have public network access (defaults to false)."
+  type        = bool
+  default     = false
+}
+
+variable "trusted_services_bypass_firewall_enabled" {
+  description = "Allow trusted Microsoft services to bypass this firewall. When enabled, trusted Microsoft services can access the Key Vault even when network access is restricted."
+  type        = bool
+  default     = true
 }
