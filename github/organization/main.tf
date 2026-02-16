@@ -25,7 +25,7 @@ resource "github_organization_ruleset" "organization" {
     ## What we want to do in this rule is to apply it only to filtered repositories
     ## but it's not supported yet byt github modules so we will ignore this section in the lifecycle
     repository_name {
-      include = ["*"]
+      include = ["~ALL"]
       exclude = []
     }
   }
@@ -60,9 +60,10 @@ resource "github_organization_ruleset" "organization" {
   }
 
   lifecycle {
-    ignore_changes = [
-      conditions[0].repository_name
-    ]
+    ignore_changes = all
+    # ignore_changes = [
+    #   conditions[0].repository_name
+    # ]
   }
 }
 
