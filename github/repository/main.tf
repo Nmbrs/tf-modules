@@ -3,7 +3,6 @@ resource "github_repository" "repo" {
   description            = var.description
   visibility             = var.visibility
   has_discussions        = false
-  has_downloads          = false
   has_issues             = false
   has_projects           = false
   has_wiki               = false

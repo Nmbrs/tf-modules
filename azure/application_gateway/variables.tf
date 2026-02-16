@@ -1,31 +1,74 @@
-variable "workload" {
-  description = "The name of the workload associated with the resource."
+variable "override_name" {
+  description = "Optional override for naming logic."
   type        = string
-}
-
-variable "resource_group_name" {
-  type        = string
-  description = "The name of an existing Resource Group."
-}
-
-variable "naming_count" {
-  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention."
-  type        = number
+  default     = null
+  nullable    = true
 
   validation {
-    condition     = var.naming_count >= 1 && var.naming_count <= 999
-    error_message = format("Invalid value '%s' for variable 'naming_count'. It must be between 1 and 999.", var.naming_count)
+    condition     = var.override_name == null || try(length(trimspace(var.override_name)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'override_name', it must be null or a non-empty string.", coalesce(var.override_name, "null"))
+  }
+}
+
+variable "workload" {
+  description = "Short, descriptive name for the application, service, or workload. Used in resource naming conventions."
+  type        = string
+  nullable    = true
+
+  validation {
+    condition     = var.workload == null || try(length(trimspace(var.workload)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'workload', it must be null or a non-empty string.", coalesce(var.workload, "null"))
+  }
+}
+
+variable "company_prefix" {
+  description = "Short, unique prefix for the company / organization."
+  type        = string
+  nullable    = true
+
+  validation {
+    condition     = var.company_prefix == null || try(length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5, false)
+    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", coalesce(var.company_prefix, "null"))
+  }
+}
+
+variable "sequence_number" {
+  description = "A numeric value used to ensure uniqueness for resource names."
+  type        = number
+  nullable    = true
+
+  validation {
+    condition     = var.sequence_number == null || try(var.sequence_number >= 1 && var.sequence_number <= 999, false)
+    error_message = format("Invalid value '%s' for variable 'sequence_number', it must be null or a number between 1 and 999.", coalesce(var.sequence_number, "null"))
+  }
+}
+
+variable "location" {
+  description = "Specifies Azure location where the resources should be provisioned. For an exhaustive list of locations, please use the command 'az account list-locations -o table'."
+  type        = string
+  nullable    = false
+
+  validation {
+    condition     = length(trimspace(var.location)) > 0
+    error_message = format("Invalid value '%s' for variable 'location', it must be a non-empty string.", var.location)
   }
 }
 
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string
+  nullable    = false
 }
 
-variable "location" {
-  description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
+variable "resource_group_name" {
+  description = "Specifies the name of the resource group where the resource should be provisioned."
   type        = string
+  nullable    = false
+
+  validation {
+    condition     = length(trimspace(var.resource_group_name)) > 0
+    error_message = format("Invalid value '%s' for variable 'resource_group_name', it must be a non-empty string.", var.resource_group_name)
+  }
 }
 
 variable "application_backend_settings" {
@@ -45,6 +88,15 @@ variable "application_backend_settings" {
       protocol                      = string
       cookie_based_affinity_enabled = optional(bool, false)
       request_timeout_in_seconds    = optional(number, 30)
+      rewrite_rules = object({
+        headers = object({
+          csp_enabled                    = bool
+          hsts_enabled                   = bool
+          x_frame_options_enabled        = bool
+          x_content_type_options_enabled = bool
+          x_xss_protection_enabled       = bool
+        })
+      })
       health_probe = object({
         timeout_in_seconds             = number
         evaluation_interval_in_seconds = number
@@ -55,8 +107,8 @@ variable "application_backend_settings" {
       })
     })
   }))
-
-  default = []
+  default  = []
+  nullable = false
 }
 
 variable "redirect_url_settings" {
@@ -76,8 +128,8 @@ variable "redirect_url_settings" {
       include_query_string = optional(bool, false)
     })
   }))
-
-  default = []
+  default  = []
+  nullable = false
 }
 
 variable "redirect_listener_settings" {
@@ -97,7 +149,8 @@ variable "redirect_listener_settings" {
       include_query_string = bool
     })
   }))
-  default = []
+  default  = []
+  nullable = false
 }
 
 variable "network_settings" {
@@ -107,14 +160,42 @@ variable "network_settings" {
     vnet_resource_group_name = string
     subnet_name              = string
   })
+
+  nullable = false
+
+  validation {
+    condition     = try(length(trimspace(var.network_settings.vnet_name)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'network_settings.vnet_name', it must be a non-empty string.", coalesce(var.network_settings.vnet_name, "null"))
+  }
+
+  validation {
+    condition     = try(length(trimspace(var.network_settings.vnet_resource_group_name)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'network_settings.vnet_resource_group_name', it must be a non-empty string.", coalesce(var.network_settings.vnet_resource_group_name, "null"))
+  }
+
+  validation {
+    condition     = try(length(trimspace(var.network_settings.subnet_name)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'network_settings.subnet_name', it must be a non-empty string.", coalesce(var.network_settings.subnet_name, "null"))
+  }
 }
 
 variable "managed_identity_settings" {
-  description = "A list of settings related to the app gateway managed identity used to retrieve SSL certificates."
+  description = "Settings related to the app gateway managed identity used to retrieve SSL certificates."
   type = object({
     name                = string
     resource_group_name = string
   })
+  nullable = false
+
+  validation {
+    condition     = try(length(trimspace(var.managed_identity_settings.name)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'managed_identity_settings.name', it must be a non-empty string.", coalesce(var.managed_identity_settings.name, "null"))
+  }
+
+  validation {
+    condition     = try(length(trimspace(var.managed_identity_settings.resource_group_name)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'managed_identity_settings.resource_group_name', it must be a non-empty string.", coalesce(var.managed_identity_settings.resource_group_name, "null"))
+  }
 }
 
 variable "ssl_certificates" {
@@ -125,25 +206,48 @@ variable "ssl_certificates" {
     key_vault_resource_group_name = string
     key_vault_certificate_name    = string
   }))
-  default = []
+  default  = []
+  nullable = false
 }
 
 variable "min_instance_count" {
   description = "The minimum number of instances the application gateway will have."
   type        = number
   default     = 2
+  nullable    = false
+
+  validation {
+    condition     = var.min_instance_count >= 1 && var.min_instance_count <= 100
+    error_message = format("Invalid value '%s' for variable 'min_instance_count', it must be between 1 and 100.", var.min_instance_count)
+  }
 }
 
 variable "max_instance_count" {
   description = "The maximum number of instances the application gateway will have."
   type        = number
   default     = 10
+  nullable    = false
+
+  validation {
+    condition     = var.max_instance_count >= 1 && var.max_instance_count <= 100
+    error_message = format("Invalid value '%s' for variable 'max_instance_count', it must be between 1 and 100.", var.max_instance_count)
+  }
 }
 
-variable "waf_policy_settings" {
-  description = "Name of the WAF policy to be associated with the application gateway."
+variable "diagnostic_settings" {
+  description = "Diagnostic settings configuration for Application Gateway"
   type = object({
-    name                = string
-    resource_group_name = string
+    log_analytics_workspace = object({
+      name                = string
+      resource_group_name = string
+    })
+
+    logs = optional(object({
+      access_log_enabled      = bool
+      performance_log_enabled = bool
+      firewall_log_enabled    = bool
+    }))
+    metrics_enabled = bool
   })
+  nullable = false
 }

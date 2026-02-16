@@ -16,6 +16,7 @@ variable "location" {
 variable "environment" {
   description = "The environment in which the resource should be provisioned."
   type        = string
+  nullable    = false
 }
 
 variable "address_spaces" {
@@ -159,7 +160,8 @@ variable "subnets" {
             "Microsoft.Web/serverFarms",
             "NGINX.NGINXPLUS/nginxDeployments",
             "PaloAltoNetworks.Cloudngfw/firewalls",
-            "Qumulo.Storage/fileSystems"
+            "Qumulo.Storage/fileSystems",
+            "GitHub.Network/networkSettings"
           ],
         delegation)
       ])
