@@ -58,6 +58,6 @@ resource "github_repository_custom_property" "small_team" {
 
 # github action access configuration
 resource "github_actions_repository_access_level" "organization_level" {
-  access_level = "organization"
+  access_level = var.github_actions_access_level
   repository   = github_repository.repo.name
 }

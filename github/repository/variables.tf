@@ -43,6 +43,16 @@ variable "purpose" {
   }
 }
 
+variable "github_actions_access_level" {
+  description = "Defines the level of access to GitHub Actions for this repository."
+  type        = string
+
+  validation {
+    condition     = contains(["none", "organization", "enterprise"], var.github_actions_access_level)
+    error_message = format("Invalid value '%s' for variable 'github_actions_access_level', valid options are 'none', 'organization', 'enterprise'.", var.github_actions_access_level)
+  }
+}
+
 variable "rulesets_enabled" {
   description = "Enable or disable branch protection rules for this repository."
   type        = bool
