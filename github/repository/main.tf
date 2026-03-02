@@ -27,6 +27,21 @@ resource "github_repository" "repo" {
   }
 }
 
+# githbub actions environments
+resource "github_repository_environment" "environment" {
+  for_each            = toset(local.environments)
+  environment         = each.value
+  repository          = github_repository.repo.name
+  prevent_self_review = true
+  reviewers {
+    teams = [data.github_team.reviewer_team.id]
+  }
+  deployment_branch_policy {
+    protected_branches     = false
+    custom_branch_policies = true
+  }
+}
+
 # repository metadata settings
 resource "github_repository_custom_property" "purpose" {
   repository     = github_repository.repo.name
@@ -39,7 +54,7 @@ resource "github_repository_custom_property" "owner" {
   repository     = github_repository.repo.name
   property_name  = "owner"
   property_type  = "single_select"
-  property_value = [var.owner]
+  property_value = [local.owner_team]
 }
 
 resource "github_repository_custom_property" "apply_rulesets" {
