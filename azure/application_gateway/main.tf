@@ -292,6 +292,7 @@ resource "azurerm_application_gateway" "main" {
     )
     content {
       name                                = "settings-${local.application_names[backend_http_settings.key]}"
+      affinity_cookie_name                = backend_http_settings.value.backend.cookie_based_affinity_enabled ? "ApplicationGatewayAffinity" : null # ApplicationGatewayAffinity is the Default cookie name
       cookie_based_affinity               = backend_http_settings.value.backend.cookie_based_affinity_enabled ? "Enabled" : "Disabled"
       port                                = backend_http_settings.value.backend.port
       protocol                            = title(backend_http_settings.value.backend.protocol)

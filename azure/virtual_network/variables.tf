@@ -109,14 +109,14 @@ variable "subnets" {
       for subnet in var.subnets : alltrue([
         for delegation in subnet.delegations : contains(
           [
-            "Microsoft.AISupercomputer/accounts/jobs",
-            "Microsoft.AISupercomputer/accounts/models",
-            "Microsoft.AISupercomputer/accounts/npu",
+            "Dell.Storage/fileSystems",
+            "GitHub.Network/networkSettings",
+            "Informatica.DataManagement/organizations",
+            "Microsoft.AVS/PrivateClouds",
             "Microsoft.ApiManagement/service",
             "Microsoft.Apollo/npu",
             "Microsoft.App/environments",
-            "Microsoft.App/testClients",
-            "Microsoft.AVS/PrivateClouds",
+            "Microsoft.AzureCommunicationsGateway/networkSettings",
             "Microsoft.AzureCosmosDB/clusters",
             "Microsoft.BareMetal/AzureHostedService",
             "Microsoft.BareMetal/AzureVMware",
@@ -125,10 +125,10 @@ variable "subnets" {
             "Microsoft.CloudTest/hostedpools",
             "Microsoft.CloudTest/images",
             "Microsoft.CloudTest/pools",
-            "Microsoft.Codespaces/plans",
             "Microsoft.ContainerInstance/containerGroups",
             "Microsoft.ContainerService/managedClusters",
             "Microsoft.DBforMySQL/flexibleServers",
+            "Microsoft.DBforMySQL/servers",
             "Microsoft.DBforMySQL/serversv2",
             "Microsoft.DBforPostgreSQL/flexibleServers",
             "Microsoft.DBforPostgreSQL/serversv2",
@@ -136,21 +136,30 @@ variable "subnets" {
             "Microsoft.Databricks/workspaces",
             "Microsoft.DelegatedNetwork/controller",
             "Microsoft.DevCenter/networkConnection",
+            "Microsoft.DevOpsInfrastructure/pools",
             "Microsoft.DocumentDB/cassandraClusters",
             "Microsoft.Fidalgo/networkSettings",
             "Microsoft.HardwareSecurityModules/dedicatedHSMs",
             "Microsoft.Kusto/clusters",
             "Microsoft.LabServices/labplans",
+            "Microsoft.LiftrPilot/networkInjections",
             "Microsoft.Logic/integrationServiceEnvironments",
+            "Microsoft.MachineLearningServices/workspaceComputes",
             "Microsoft.MachineLearningServices/workspaces",
+            "Microsoft.MessagingConnectors/connectors",
+            "Microsoft.Netapp/elasticVolumes",
+            "Microsoft.Netapp/scaleVolumes",
             "Microsoft.Netapp/volumes",
+            "Microsoft.Network/applicationGateways",
             "Microsoft.Network/dnsResolvers",
-            "Microsoft.Orbital/orbitalGateways",
+            "Microsoft.Network/networkWatchers",
+            "Microsoft.PowerAutomate/hostedRpa",
             "Microsoft.PowerPlatform/enterprisePolicies",
             "Microsoft.PowerPlatform/vnetaccesslinks",
+            "Microsoft.RedHatOpenShift/hcpOpenShiftClusters",
             "Microsoft.ServiceFabricMesh/networks",
-            "Microsoft.Singularity/accounts/jobs",
-            "Microsoft.Singularity/accounts/models",
+            "Microsoft.ServiceNetworking/trafficControllers",
+            "Microsoft.Singularity/accounts/networks",
             "Microsoft.Singularity/accounts/npu",
             "Microsoft.Sql/managedInstances",
             "Microsoft.StoragePool/diskPools",
@@ -159,14 +168,15 @@ variable "subnets" {
             "Microsoft.Web/hostingEnvironments",
             "Microsoft.Web/serverFarms",
             "NGINX.NGINXPLUS/nginxDeployments",
+            "Oracle.Database/networkAttachments",
             "PaloAltoNetworks.Cloudngfw/firewalls",
+            "PureStorage.Block/storagePools",
             "Qumulo.Storage/fileSystems",
-            "GitHub.Network/networkSettings"
           ],
         delegation)
       ])
     ])
-    error_message = "At least one of the values from 'delegations' property from one of the 'subnets' is invalid. Valid options are 'Microsoft.AISupercomputer/accounts/jobs', 'Microsoft.AISupercomputer/accounts/models', 'Microsoft.AISupercomputer/accounts/npu', 'Microsoft.AVS/PrivateClouds', 'Microsoft.ApiManagement/service', 'Microsoft.Apollo/npu', 'Microsoft.AzureCosmosDB/clusters', 'Microsoft.BareMetal/AzureHostedService', 'Microsoft.BareMetal/AzureVMware', 'Microsoft.BareMetal/CrayServers', 'Microsoft.Batch/batchAccounts', 'Microsoft.CloudTest/hostedpools', 'Microsoft.CloudTest/images', 'Microsoft.CloudTest/pools', 'Microsoft.Codespaces/plans', 'Microsoft.ContainerInstance/containerGroups', 'Microsoft.ContainerService/managedClusters', 'Microsoft.DBforMySQL/flexibleServers', 'Microsoft.DBforMySQL/serversv2', 'Microsoft.DBforPostgreSQL/flexibleServers', 'Microsoft.DBforPostgreSQL/serversv2', 'Microsoft.DBforPostgreSQL/singleServers', 'Microsoft.Databricks/workspaces', 'Microsoft.DelegatedNetwork/controller', 'Microsoft.DevCenter/networkConnection', 'Microsoft.DocumentDB/cassandraClusters', 'Microsoft.Fidalgo/networkSettings', 'Microsoft.HardwareSecurityModules/dedicatedHSMs', 'Microsoft.Kusto/clusters', 'Microsoft.LabServices/labplans', 'Microsoft.Logic/integrationServiceEnvironments', 'Microsoft.MachineLearningServices/workspaces', 'Microsoft.Netapp/volumes', 'Microsoft.Network/dnsResolvers', 'Microsoft.Orbital/orbitalGateways', 'Microsoft.PowerPlatform/enterprisePolicies', 'Microsoft.PowerPlatform/vnetaccesslinks', 'Microsoft.ServiceFabricMesh/networks', 'Microsoft.Singularity/accounts/jobs', 'Microsoft.Singularity/accounts/models', 'Microsoft.Singularity/accounts/npu', 'Microsoft.Sql/managedInstances', 'Microsoft.StoragePool/diskPools', 'Microsoft.StreamAnalytics/streamingJobs', 'Microsoft.Synapse/workspaces', 'Microsoft.Web/hostingEnvironments', 'Microsoft.Web/serverFarms', 'NGINX.NGINXPLUS/nginxDeployments', 'PaloAltoNetworks.Cloudngfw/firewalls'."
+    error_message = "At least one of the values from 'delegations' property from one of the 'subnets' is invalid. Valid options are 'Dell.Storage/fileSystems', 'GitHub.Network/networkSettings', 'Informatica.DataManagement/organizations', 'Microsoft.AVS/PrivateClouds', 'Microsoft.ApiManagement/service', 'Microsoft.Apollo/npu', 'Microsoft.App/environments', 'Microsoft.AzureCommunicationsGateway/networkSettings', 'Microsoft.AzureCosmosDB/clusters', 'Microsoft.BareMetal/AzureHostedService', 'Microsoft.BareMetal/AzureVMware', 'Microsoft.BareMetal/CrayServers', 'Microsoft.Batch/batchAccounts', 'Microsoft.CloudTest/hostedpools', 'Microsoft.CloudTest/images', 'Microsoft.CloudTest/pools', 'Microsoft.ContainerInstance/containerGroups', 'Microsoft.ContainerService/managedClusters', 'Microsoft.DBforMySQL/flexibleServers', 'Microsoft.DBforMySQL/servers', 'Microsoft.DBforMySQL/serversv2', 'Microsoft.DBforPostgreSQL/flexibleServers', 'Microsoft.DBforPostgreSQL/serversv2', 'Microsoft.DBforPostgreSQL/singleServers', 'Microsoft.Databricks/workspaces', 'Microsoft.DelegatedNetwork/controller', 'Microsoft.DevCenter/networkConnection', 'Microsoft.DevOpsInfrastructure/pools', 'Microsoft.DocumentDB/cassandraClusters', 'Microsoft.Fidalgo/networkSettings', 'Microsoft.HardwareSecurityModules/dedicatedHSMs', 'Microsoft.Kusto/clusters', 'Microsoft.LabServices/labplans', 'Microsoft.LiftrPilot/networkInjections', 'Microsoft.Logic/integrationServiceEnvironments', 'Microsoft.MachineLearningServices/workspaceComputes', 'Microsoft.MachineLearningServices/workspaces', 'Microsoft.MessagingConnectors/connectors', 'Microsoft.Netapp/elasticVolumes', 'Microsoft.Netapp/scaleVolumes', 'Microsoft.Netapp/volumes', 'Microsoft.Network/applicationGateways', 'Microsoft.Network/dnsResolvers', 'Microsoft.Network/networkWatchers', 'Microsoft.PowerAutomate/hostedRpa', 'Microsoft.PowerPlatform/enterprisePolicies', 'Microsoft.PowerPlatform/vnetaccesslinks', 'Microsoft.RedHatOpenShift/hcpOpenShiftClusters', 'Microsoft.ServiceFabricMesh/networks', 'Microsoft.ServiceNetworking/trafficControllers', 'Microsoft.Singularity/accounts/networks', 'Microsoft.Singularity/accounts/npu', 'Microsoft.Sql/managedInstances', 'Microsoft.StoragePool/diskPools', 'Microsoft.StreamAnalytics/streamingJobs', 'Microsoft.Synapse/workspaces', 'Microsoft.Web/hostingEnvironments', 'Microsoft.Web/serverFarms', 'NGINX.NGINXPLUS/nginxDeployments', 'Oracle.Database/networkAttachments', 'PaloAltoNetworks.Cloudngfw/firewalls', 'PureStorage.Block/storagePools', 'Qumulo.Storage/fileSystems'."
   }
 
   validation {
