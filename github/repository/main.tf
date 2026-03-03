@@ -32,10 +32,16 @@ resource "github_repository_environment" "environment" {
   for_each            = toset(local.environments)
   environment         = each.value
   repository          = github_repository.repo.name
-  prevent_self_review = true
-  reviewers {
-    teams = [data.github_team.reviewer_team.id]
+  prevent_self_review = false
+  can_admins_bypass   = true
+
+  dynamic "reviewers" {
+    for_each = each.value == local.development_environment_name ? [] : [1]
+    content {
+      teams = [data.github_team.reviewer_team.id]
+    }
   }
+
   deployment_branch_policy {
     protected_branches     = false
     custom_branch_policies = true
