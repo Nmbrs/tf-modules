@@ -1,4 +1,4 @@
-resource "azurerm_public_ip" "main" {
+resource "azurerm_public_ip" "vpn_gateway" {
   name                = local.public_ip_name
   domain_name_label   = local.vpn_gateway_name
   location            = var.location
@@ -20,13 +20,12 @@ resource "azurerm_virtual_network_gateway" "main" {
   vpn_type = "RouteBased"
 
   active_active = false
-  enable_bgp    = false
   sku           = var.sku_name
   generation    = local.sku_generation[var.sku_name]
 
   ip_configuration {
-    name                          = azurerm_public_ip.main.name
-    public_ip_address_id          = azurerm_public_ip.main.id
+    name                          = azurerm_public_ip.vpn_gateway.name
+    public_ip_address_id          = azurerm_public_ip.vpn_gateway.id
     private_ip_address_allocation = "Dynamic"
     subnet_id                     = data.azurerm_subnet.subnet.id
   }
