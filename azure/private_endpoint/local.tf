@@ -1,6 +1,7 @@
 locals {
-  private_endpoint_name   = "pep-${var.resource_settings.name}"
-  service_connection_name = "sc-${var.resource_settings.name}"
+  private_endpoint_name   = "pep-${var.resource_settings.name}-${var.resource_settings.type}"
+  service_connection_name = "sc-${var.resource_settings.name}-${var.resource_settings.type}"
+
   resource_data_blocks = {
     app_service              = data.azurerm_windows_web_app.app_service,
     storage_account_blob     = data.azurerm_storage_account.storage_account_blob,
@@ -18,6 +19,8 @@ locals {
     api_management           = data.azurerm_api_management.api_management,
     app_configuration        = data.azurerm_app_configuration.app_configuration,
     azure_container_registry = data.azurerm_container_registry.azure_container_registry,
+    data_factory             = data.azurerm_data_factory.data_factory,
+    data_factory_portal      = data.azurerm_data_factory.data_factory_portal,
     # Add more resource types and corresponding data blocks as needed
   }
 
@@ -39,5 +42,7 @@ locals {
     "api_management"           = "Gateway"
     "app_configuration"        = "configurationStores"
     "azure_container_registry" = "registry"
+    "data_factory"             = "dataFactory"
+    "data_factory_portal"      = "portal"
   }
 }

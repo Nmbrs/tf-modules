@@ -20,6 +20,15 @@ resource "azurerm_storage_account" "storage_account" {
 
   lifecycle {
     ignore_changes = [tags]
+
+    ## Naming validation: Ensure either override_name is provided OR all naming components are provided
+    precondition {
+      condition = var.override_name != null || (
+        var.workload != null &&
+        var.company_prefix != null
+      )
+      error_message = "Invalid naming configuration: Either 'override_name' must be provided, or both 'workload' and 'company_prefix' must be provided for automatic naming."
+    }
   }
 
 }
