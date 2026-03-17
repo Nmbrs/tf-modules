@@ -121,4 +121,14 @@ variable "network_settings" {
     condition     = var.network_settings.public_network_access_enabled || length(var.network_settings.allowed_subnets) == 0
     error_message = "Invalid configuration: 'allowed_subnets' can only be specified when 'public_network_access_enabled' is true."
   }
+
+  validation {
+    condition = alltrue([
+      for s in var.network_settings.allowed_subnets :
+      length(trimspace(s.subnet_name)) > 0 &&
+      length(trimspace(s.virtual_network_name)) > 0 &&
+      length(trimspace(s.subnet_resource_group_name)) > 0
+    ])
+    error_message = "Invalid value in 'allowed_subnets': 'subnet_name', 'virtual_network_name', and 'subnet_resource_group_name' must all be non-empty strings."
+  }
 }
