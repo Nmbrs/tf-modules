@@ -11,11 +11,6 @@ variable "name" {
 variable "description" {
   type        = string
   description = "Description of the repository"
-
-  validation {
-    condition     = can(coalesce(var.description))
-    error_message = format("Invalid value '%s' for variable 'description'. They must be non-empty string values.", var.description)
-  }
 }
 
 variable "visibility" {
@@ -38,17 +33,40 @@ variable "owner" {
   }
 }
 
-variable "is_internal" {
+variable "purpose" {
   description = "Describes if the repo is used internally only or not"
-  type        = bool
+  type        = string
+
+  validation {
+    condition     = contains(["internal", "tool", "poc", "product"], var.purpose)
+    error_message = format("Invalid value '%s' for variable 'visibility', valid options are 'internal', 'tool', 'poc', 'product'.", var.purpose)
+  }
 }
 
-variable "is_poc" {
-  description = "Describes if the repo is used for poc or not"
-  type        = bool
+variable "github_actions_access_level" {
+  description = "Defines the level of access to GitHub Actions for this repository."
+  type        = string
+
+  validation {
+    condition     = contains(["none", "organization", "enterprise"], var.github_actions_access_level)
+    error_message = format("Invalid value '%s' for variable 'github_actions_access_level', valid options are 'none', 'organization', 'enterprise'.", var.github_actions_access_level)
+  }
 }
 
-variable "is_tool" {
-  description = "Describes if the repo is an internal tool or not"
+variable "rulesets_enabled" {
+  description = "Enable or disable branch protection rules for this repository."
   type        = bool
+  default     = true
+}
+
+variable "branch_deletion_enabled" {
+  description = "Allow or prevent deletion of branches in this repository."
+  type        = bool
+  default     = true
+}
+
+variable "is_small_team" {
+  description = "Describes if the repo is used by a small team or not."
+  type        = bool
+  default     = false
 }
