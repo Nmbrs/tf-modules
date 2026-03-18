@@ -3,7 +3,7 @@ resource "azurerm_mssql_database" "main" {
   server_id       = data.azurerm_mssql_server.sql_server.id
   sku_name        = var.elastic_pool_settings != null ? null : var.sku_name
   collation       = var.collation
-  license_type    = var.license_type
+  license_type    = var.elastic_pool_settings != null ? null : var.license_type
   elastic_pool_id = var.elastic_pool_settings != null ? data.azurerm_mssql_elasticpool.sql_elasticpool[0].id : null
   max_size_gb     = var.elastic_pool_settings != null ? 1024 : var.max_size_gb
 

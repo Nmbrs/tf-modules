@@ -3,7 +3,7 @@ locals {
   # Example: sqldb-analytics-prod-westeurope-001
   sql_database_name = (
     var.override_name != null ?
-    lower(var.override_name) :
+    var.override_name :
     lower("sqldb-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.sequence_number)}")
   )
 
