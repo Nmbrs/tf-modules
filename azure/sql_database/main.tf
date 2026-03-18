@@ -29,10 +29,9 @@ resource "azurerm_mssql_database" "main" {
     precondition {
       condition = var.override_name != null || (
         var.workload != null &&
-        var.company_prefix != null &&
         var.sequence_number != null
       )
-      error_message = "Invalid naming configuration: Either 'override_name' must be provided, or all of 'workload', 'company_prefix', and 'sequence_number' must be provided for automatic naming."
+      error_message = "Invalid naming configuration: Either 'override_name' must be provided, or both 'workload' and 'sequence_number' must be provided for automatic naming."
     }
   }
 }

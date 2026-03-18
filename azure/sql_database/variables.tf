@@ -10,16 +10,6 @@ variable "workload" {
   }
 }
 
-variable "company_prefix" {
-  description = "Short, unique prefix for the company or organization. Used in naming for uniqueness. Must be 1-5 characters."
-  type        = string
-  nullable    = true
-
-  validation {
-    condition     = var.company_prefix == null || try(length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5, false)
-    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", coalesce(var.company_prefix, "null"))
-  }
-}
 
 variable "override_name" {
   description = "Override the name of the SQL database, to bypass naming convention"

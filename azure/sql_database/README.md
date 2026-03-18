@@ -35,7 +35,6 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_collation"></a> [collation](#input\_collation) | The collation to use for the database | `string` | `"SQL_Latin1_General_CP1_CI_AS"` | no |
-| <a name="input_company_prefix"></a> [company\_prefix](#input\_company\_prefix) | Short, unique prefix for the company or organization. Used in naming for uniqueness. Must be 1-5 characters. | `string` | n/a | yes |
 | <a name="input_elastic_pool_settings"></a> [elastic\_pool\_settings](#input\_elastic\_pool\_settings) | SQL elastic pool settings. Optional - if not provided, database will use standalone SKU. | <pre>object({<br/>    name                = string<br/>    resource_group_name = string<br/>  })</pre> | `null` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_license_type"></a> [license\_type](#input\_license\_type) | The license type to apply for this database | `string` | `"BasePrice"` | no |
@@ -55,7 +54,6 @@ No modules.
 | <a name="output_id"></a> [id](#output\_id) | n/a |
 | <a name="output_name"></a> [name](#output\_name) | n/a |
 | <a name="output_workload"></a> [workload](#output\_workload) | n/a |
-
 <!-- END_TF_DOCS -->
 ## How to use it?
 
@@ -68,7 +66,7 @@ module "sql_database" {
   source = "./azure/sql_database"
 
   workload        = "analytics"
-  company_prefix  = "nmbrs"
+
   sequence_number = 1
   location        = "westeurope"
   environment     = "prod"
@@ -90,7 +88,7 @@ module "sql_database" {
   source = "./azure/sql_database"
 
   workload        = "reporting"
-  company_prefix  = "nmbrs"
+
   sequence_number = 1
   location        = "westeurope"
   environment     = "prod"
@@ -113,7 +111,7 @@ module "sql_database" {
   source = "./azure/sql_database"
 
   workload        = "webapp"
-  company_prefix  = "nmbrs"
+
   sequence_number = 1
   location        = "westeurope"
   environment     = "prod"
