@@ -26,6 +26,11 @@ variable "override_name" {
   type        = string
   default     = null
   nullable    = true
+
+  validation {
+    condition     = var.override_name == null || try(length(trimspace(var.override_name)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'override_name', it must be null or a non-empty string.", coalesce(var.override_name, "null"))
+  }
 }
 
 variable "location" {
@@ -45,6 +50,11 @@ variable "sql_server_settings" {
     name                = string
     resource_group_name = string
   })
+
+  validation {
+    condition     = length(trimspace(var.sql_server_settings.name)) > 0 && length(trimspace(var.sql_server_settings.resource_group_name)) > 0
+    error_message = "Invalid value in 'sql_server_settings': 'name' and 'resource_group_name' must be non-empty strings."
+  }
 }
 
 variable "elastic_pool_settings" {

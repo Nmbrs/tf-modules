@@ -1,11 +1,15 @@
-output "sql_database_name" {
+output "name" {
   value = azurerm_mssql_database.main.name
 }
 
-output "sql_database_id" {
+output "workload" {
+  value = var.workload
+}
+
+output "id" {
   value = azurerm_mssql_database.main.id
 }
 
-output "sql_database_collation" {
+output "collation" {
   value = azurerm_mssql_database.main.collation
 }
