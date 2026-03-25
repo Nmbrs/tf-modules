@@ -1,13 +1,46 @@
-variable "resource_group_name" {
-  description = "Resource group name for where the virtual gateway will be created"
+variable "override_name" {
+  description = "Optional override for naming logic."
   type        = string
+  default     = null
+  nullable    = true
 
+  validation {
+    condition     = var.override_name == null || try(length(trimspace(var.override_name)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'override_name', it must be null or a non-empty string.", coalesce(var.override_name, "null"))
+  }
 }
 
 variable "workload" {
-  description = "The workload name of the virtual gateway."
+  description = "Short, descriptive name for the application, service, or workload. Used in resource naming conventions."
   type        = string
+  nullable    = true
 
+  validation {
+    condition     = var.workload == null || try(length(trimspace(var.workload)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'workload', it must be null or a non-empty string.", coalesce(var.workload, "null"))
+  }
+}
+
+variable "company_prefix" {
+  description = "Short, unique prefix for the company / organization."
+  type        = string
+  nullable    = true
+
+  validation {
+    condition     = var.company_prefix == null || try(length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5, false)
+    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", coalesce(var.company_prefix, "null"))
+  }
+}
+
+variable "sequence_number" {
+  description = "A numeric value used to ensure uniqueness for resource names."
+  type        = number
+  nullable    = true
+
+  validation {
+    condition     = var.sequence_number == null || try(var.sequence_number >= 1 && var.sequence_number <= 999, false)
+    error_message = format("Invalid value '%s' for variable 'sequence_number', it must be null or a number between 1 and 999.", coalesce(var.sequence_number, "null"))
+  }
 }
 
 variable "environment" {
@@ -17,29 +50,50 @@ variable "environment" {
 }
 
 variable "location" {
-  description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
+  description = "Specifies Azure location where the resources should be provisioned. For an exhaustive list of locations, please use the command 'az account list-locations -o table'."
   type        = string
-}
-
-variable "vnet_name" {
-  description = "Name of the Vnet that will be added to the virtual gateway"
-  type        = string
-
-}
-
-variable "vnet_resource_group_name" {
-  description = "Resource group of the Vnet that will be added to the virtual gateway"
-  type        = string
-}
-
-variable "address_spaces" {
-  description = "The address space out of which IP addresses for vpn clients will be taken. You can provide more than one address space, e.g. in CIDR notation"
-  type        = list(string)
-  default     = []
+  nullable    = false
 
   validation {
-    condition     = alltrue([for address_space in var.address_spaces : can(cidrhost(address_space, 0))])
-    error_message = "At least one of the values from 'address_spaces' property is invalid. They must be valid CIDR blocks."
+    condition     = length(trimspace(var.location)) > 0
+    error_message = format("Invalid value '%s' for variable 'location', it must be a non-empty string.", var.location)
+  }
+}
+
+variable "resource_group_name" {
+  description = "Specifies the name of the resource group where the resource should be provisioned."
+  type        = string
+  nullable    = false
+
+  validation {
+    condition     = length(trimspace(var.resource_group_name)) > 0
+    error_message = format("Invalid value '%s' for variable 'resource_group_name', it must be a non-empty string.", var.resource_group_name)
+  }
+}
+
+variable "network_settings" {
+  description = "Settings related to the network connectivity of the VPN gateway."
+  type = object({
+    vnet_name                = string
+    vnet_resource_group_name = string
+    address_spaces           = optional(list(string), [])
+  })
+
+  nullable = false
+
+  validation {
+    condition     = try(length(trimspace(var.network_settings.vnet_name)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'network_settings.vnet_name', it must be a non-empty string.", coalesce(var.network_settings.vnet_name, "null"))
+  }
+
+  validation {
+    condition     = try(length(trimspace(var.network_settings.vnet_resource_group_name)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'network_settings.vnet_resource_group_name', it must be a non-empty string.", coalesce(var.network_settings.vnet_resource_group_name, "null"))
+  }
+
+  validation {
+    condition     = alltrue([for address_space in var.network_settings.address_spaces : can(cidrhost(address_space, 0))])
+    error_message = "At least one of the values from 'network_settings.address_spaces' property is invalid. They must be valid CIDR blocks."
   }
 }
 
@@ -51,25 +105,5 @@ variable "sku_name" {
   validation {
     condition     = contains(["Basic", "Standard", "HighPerformance", "UltraPerformance", "ErGw1AZ", "ErGw2AZ", "ErGw3AZ", "VpnGw1", "VpnGw2", "VpnGw3", "VpnGw4", "VpnGw5", "VpnGw1AZ", "VpnGw2AZ", "VpnGw3AZ", "VpnGw4AZ", "VpnGw5AZ"], var.sku_name)
     error_message = format("Invalid value '%s' for variable 'sku_name', valid options are 'Basic', 'Standard', 'HighPerformance', 'UltraPerformance', 'ErGw1AZ', 'ErGw2AZ', 'ErGw3AZ', 'VpnGw1', 'VpnGw2', 'VpnGw3', 'VpnGw4', 'VpnGw5', 'VpnGw1AZ', 'VpnGw2AZ', 'VpnGw3AZ', 'VpnGw4AZ', 'VpnGw5AZ'.", var.sku_name)
-  }
-}
-
-variable "generation" {
-  description = "The Generation of the Virtual Network gateway."
-  type        = string
-  default     = "Generation1"
-  validation {
-    condition     = contains(["Generation1", "Generation2", "None"], var.generation)
-    error_message = format("Invalid value '%s' for variable 'generation', valid options are 'Generation1', 'Generation2', 'None'.", var.generation)
-  }
-}
-
-variable "naming_count" {
-  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention."
-  type        = number
-
-  validation {
-    condition     = var.naming_count >= 1 && var.naming_count <= 999
-    error_message = format("Invalid value '%s' for variable 'naming_count'. It must be between 1 and 999.", var.naming_count)
   }
 }

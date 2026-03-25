@@ -1,13 +1,3 @@
-data "azurerm_client_config" "current" {}
-
-data "azurerm_subnet" "subnet" {
-  # The ID of the gateway subnet of a virtual network in which the virtual network gateway will be created. It is mandatory that the associated subnet is named GatewaySubnet. 
-  # Therefore, each virtual network can contain at most a single Virtual Network Gateway.
-  name                 = "GatewaySubnet"
-  virtual_network_name = var.vnet_name
-  resource_group_name  = var.vnet_resource_group_name
-}
-
 resource "azurerm_public_ip" "vpn_gateway" {
   name                = local.public_ip_name
   domain_name_label   = local.vpn_gateway_name
@@ -21,18 +11,17 @@ resource "azurerm_public_ip" "vpn_gateway" {
   }
 }
 
-resource "azurerm_virtual_network_gateway" "vpn_gateway" {
+resource "azurerm_virtual_network_gateway" "main" {
   name                = local.vpn_gateway_name
   location            = var.location
-  resource_group_name = var.vnet_resource_group_name
+  resource_group_name = var.network_settings.vnet_resource_group_name
 
   type     = "Vpn"
   vpn_type = "RouteBased"
 
   active_active = false
-  enable_bgp    = false
   sku           = var.sku_name
-  generation    = var.generation
+  generation    = local.sku_generation[var.sku_name]
 
   ip_configuration {
     name                          = azurerm_public_ip.vpn_gateway.name
@@ -42,7 +31,7 @@ resource "azurerm_virtual_network_gateway" "vpn_gateway" {
   }
 
   vpn_client_configuration {
-    address_space        = var.address_spaces
+    address_space        = var.network_settings.address_spaces
     vpn_client_protocols = ["OpenVPN"]
 
     # Learn more about Azure AD authentication https://learn.microsoft.com/en-us/azure/vpn-gateway/openvpn-azure-ad-tenant
@@ -51,7 +40,20 @@ resource "azurerm_virtual_network_gateway" "vpn_gateway" {
     aad_issuer   = local.aad_issuer_url
   }
 
+  custom_route {
+    address_prefixes = []
+  }
+
   lifecycle {
     ignore_changes = [tags]
+
+    precondition {
+      condition = var.override_name != null || (
+        var.workload != null &&
+        var.company_prefix != null &&
+        var.sequence_number != null
+      )
+      error_message = "Invalid naming configuration: Either 'override_name' must be provided, or all of 'workload', 'company_prefix', and 'sequence_number' must be provided for automatic naming."
+    }
   }
 }
