@@ -156,9 +156,6 @@ resource "azurerm_application_gateway" "main" {
     )
     content {
       name = "rewrite-rules-${local.application_names[rewrite_rule_set.key]}"
-    rewrite_rule {
-      fdgjkldfjkljkgdfjk
-    }
     }
   }
 
@@ -233,7 +230,7 @@ resource "azurerm_application_gateway" "main" {
       pick_host_name_from_backend_address = false
     }
   }
- 
+
   dynamic "request_routing_rule" {
     for_each = (
       length(var.application_backend_settings) != 0 ?
