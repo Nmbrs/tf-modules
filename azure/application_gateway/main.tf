@@ -343,7 +343,7 @@ resource "azurerm_application_gateway" "main" {
   }
 
   lifecycle {
-    ignore_changes = [tags, waf_configuration, rewrite_rule_set]
+    ignore_changes = [tags, waf_configuration, rewrite_rule_set["rewrite_rule"]]
 
     ## Instance count validation
     precondition {
