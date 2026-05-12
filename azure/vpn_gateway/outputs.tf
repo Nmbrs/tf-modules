@@ -1,6 +1,6 @@
 output "name" {
   description = "The VPN gateway full name."
-  value       = azurerm_virtual_network_gateway.vpn_gateway.name
+  value       = azurerm_virtual_network_gateway.main.name
 }
 
 output "workload" {
@@ -10,6 +10,5 @@ output "workload" {
 
 output "id" {
   description = "The VPN gateway ID."
-  value       = azurerm_virtual_network_gateway.vpn_gateway.id
-
+  value       = azurerm_virtual_network_gateway.main.id
 }
