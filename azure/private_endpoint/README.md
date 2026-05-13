@@ -70,7 +70,7 @@ module "private_endpoint" {
   location            = "westeurope"
   resource_settings = {
     name                = "as-web-test"
-    type                = "app_service"
+    type                = "app_service_windows"
     resource_group_name = "rg-resource-rg"
   }
   network_settings = {
