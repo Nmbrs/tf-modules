@@ -4,8 +4,26 @@ data "azurerm_subnet" "subnet" {
   resource_group_name  = var.network_settings.vnet_resource_group_name
 }
 
-data "azurerm_windows_web_app" "app_service" {
-  count               = var.resource_settings.type == "app_service" ? 1 : 0
+data "azurerm_windows_web_app" "app_service_windows" {
+  count               = var.resource_settings.type == "app_service_windows" ? 1 : 0
+  name                = var.resource_settings.name
+  resource_group_name = var.resource_settings.resource_group_name
+}
+
+data "azurerm_linux_web_app" "app_service_linux" {
+  count               = var.resource_settings.type == "app_service_linux" ? 1 : 0
+  name                = var.resource_settings.name
+  resource_group_name = var.resource_settings.resource_group_name
+}
+
+data "azurerm_windows_function_app" "function_app_windows" {
+  count               = var.resource_settings.type == "function_app_windows" ? 1 : 0
+  name                = var.resource_settings.name
+  resource_group_name = var.resource_settings.resource_group_name
+}
+
+data "azurerm_linux_function_app" "function_app_linux" {
+  count               = var.resource_settings.type == "function_app_linux" ? 1 : 0
   name                = var.resource_settings.name
   resource_group_name = var.resource_settings.resource_group_name
 }
