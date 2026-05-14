@@ -46,7 +46,7 @@ resource "azurerm_virtual_network_gateway" "main" {
   }
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [tags, custom_route]
 
     precondition {
       condition = var.override_name != null || (
