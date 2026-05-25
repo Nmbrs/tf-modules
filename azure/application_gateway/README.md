@@ -132,15 +132,7 @@ module "application_gateway" {
         protocol                      = "https"
         cookie_based_affinity_enabled = false
         request_timeout_in_seconds    = 30
-        rewrite_rules = {
-          headers = {
-            csp_enabled                    = true
-            hsts_enabled                   = true
-            x_frame_options_enabled        = true
-            x_content_type_options_enabled = true
-            x_xss_protection_enabled       = true
-          }
-        }
+
         health_probe = {
           fqdn                           = "app1.contoso.com"
           timeout_in_seconds             = 30
@@ -166,15 +158,7 @@ module "application_gateway" {
         protocol                      = "https"
         cookie_based_affinity_enabled = false
         request_timeout_in_seconds    = 30
-        rewrite_rules = {
-          headers = {
-            csp_enabled                    = true
-            hsts_enabled                   = true
-            x_frame_options_enabled        = true
-            x_content_type_options_enabled = true
-            x_xss_protection_enabled       = true
-          }
-        }
+
         health_probe = {
           fqdn                           = "app2.contoso.com"
           timeout_in_seconds             = 30
@@ -250,15 +234,7 @@ module "application_gateway" {
         protocol                      = "https"
         cookie_based_affinity_enabled = false
         request_timeout_in_seconds    = 30
-        rewrite_rules = {
-          headers = {
-            csp_enabled                    = true
-            hsts_enabled                   = true
-            x_frame_options_enabled        = true
-            x_content_type_options_enabled = true
-            x_xss_protection_enabled       = true
-          }
-        }
+
         health_probe = {
           fqdn                           = "api.contoso.com"
           timeout_in_seconds             = 30
@@ -419,15 +395,7 @@ module "application_gateway" {
         protocol                      = "https"
         cookie_based_affinity_enabled = false
         request_timeout_in_seconds    = 30
-        rewrite_rules = {
-          headers = {
-            csp_enabled                    = true
-            hsts_enabled                   = true
-            x_frame_options_enabled        = true
-            x_content_type_options_enabled = true
-            x_xss_protection_enabled       = true
-          }
-        }
+
         health_probe = {
           fqdn                           = "app1.contoso.com"
           timeout_in_seconds             = 30
@@ -453,15 +421,7 @@ module "application_gateway" {
         protocol                      = "https"
         cookie_based_affinity_enabled = false
         request_timeout_in_seconds    = 30
-        rewrite_rules = {
-          headers = {
-            csp_enabled                    = true
-            hsts_enabled                   = true
-            x_frame_options_enabled        = true
-            x_content_type_options_enabled = true
-            x_xss_protection_enabled       = true
-          }
-        }
+
         health_probe = {
           fqdn                           = "app2.contoso.com"
           timeout_in_seconds             = 30

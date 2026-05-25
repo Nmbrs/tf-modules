@@ -7,18 +7,19 @@ The module ensures compliance with specified policies and implements the Terrafo
 
 > Note: Before you create a VPN gateway, you must create a gateway subnet. The gateway subnet contains the IP addresses that the virtual network gateway VMs and services use. When you create your virtual network gateway, gateway VMs are deployed to the gateway subnet and configured with the required VPN gateway settings. Never deploy anything else (for example, additional VMs) to the gateway subnet. The gateway subnet must be named ‘GatewaySubnet’ to work properly. Naming the gateway subnet ‘GatewaySubnet’ lets Azure know that this is the subnet to which it should deploy the virtual network gateway VMs and services.
 
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.70 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.117 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.79.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
 
 ## Modules
 
@@ -29,7 +30,7 @@ No modules.
 | Name | Type |
 |------|------|
 | [azurerm_public_ip.vpn_gateway](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/public_ip) | resource |
-| [azurerm_virtual_network_gateway.vpn_gateway](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network_gateway) | resource |
+| [azurerm_virtual_network_gateway.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network_gateway) | resource |
 | [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) | data source |
 | [azurerm_subnet.subnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subnet) | data source |
 
@@ -37,16 +38,15 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_address_spaces"></a> [address\_spaces](#input\_address\_spaces) | The address space out of which IP addresses for vpn clients will be taken. You can provide more than one address space, e.g. in CIDR notation | `list(string)` | `[]` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | Defines the environment to provision the resources. | `string` | n/a | yes |
-| <a name="input_generation"></a> [generation](#input\_generation) | The Generation of the Virtual Network gateway. | `string` | `"Generation1"` | no |
-| <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_naming_count"></a> [naming\_count](#input\_naming\_count) | A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention. | `number` | n/a | yes |
-| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Resource group name for where the virtual gateway will be created | `string` | n/a | yes |
+| <a name="input_company_prefix"></a> [company\_prefix](#input\_company\_prefix) | Short, unique prefix for the company / organization. | `string` | n/a | yes |
+| <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
+| <a name="input_location"></a> [location](#input\_location) | Specifies Azure location where the resources should be provisioned. For an exhaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
+| <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | Settings related to the network connectivity of the VPN gateway. | <pre>object({<br/>    vnet_name                = string<br/>    vnet_resource_group_name = string<br/>    address_spaces           = optional(list(string), [])<br/>  })</pre> | n/a | yes |
+| <a name="input_override_name"></a> [override\_name](#input\_override\_name) | Optional override for naming logic. | `string` | `null` | no |
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Specifies the name of the resource group where the resource should be provisioned. | `string` | n/a | yes |
+| <a name="input_sequence_number"></a> [sequence\_number](#input\_sequence\_number) | A numeric value used to ensure uniqueness for resource names. | `number` | n/a | yes |
 | <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | Configuration of the size and capacity of the virtual network gateway. | `string` | `"VpnGw1"` | no |
-| <a name="input_vnet_name"></a> [vnet\_name](#input\_vnet\_name) | Name of the Vnet that will be added to the virtual gateway | `string` | n/a | yes |
-| <a name="input_vnet_resource_group_name"></a> [vnet\_resource\_group\_name](#input\_vnet\_resource\_group\_name) | Resource group of the Vnet that will be added to the virtual gateway | `string` | n/a | yes |
-| <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the virtual gateway. | `string` | n/a | yes |
+| <a name="input_workload"></a> [workload](#input\_workload) | Short, descriptive name for the application, service, or workload. Used in resource naming conventions. | `string` | n/a | yes |
 
 ## Outputs
 
@@ -55,23 +55,66 @@ No modules.
 | <a name="output_id"></a> [id](#output\_id) | The VPN gateway ID. |
 | <a name="output_name"></a> [name](#output\_name) | The VPN gateway full name. |
 | <a name="output_workload"></a> [workload](#output\_workload) | The VPN gateway workload. |
-
+<!-- END_TF_DOCS -->
 ## How to use it?
 
 A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
 
-## Virtual Gateway
+### VPN Gateway with default SKU
 
 ```hcl
 module "vpn_gateway" {
-  source                   = "git::github.com/Nmbrs/tf-modules//azure/vpn_gateway?ref=main"
-  workload                 = "testvpn"
-  naming_count             = 1
-  environment              = "dev"
-  location                 = "westeurope"
-  resource_group_name      = rg-virtualgateway
-  vnet_name                = "vnet-myvnet-dev-001"
-  vnet_resource_group_name = "rg-vnet"
-  address_spaces = ["10.2.0.0/24"]
+  source              = "git::github.com/Nmbrs/tf-modules//azure/vpn_gateway"
+  workload            = "corp"
+  company_prefix      = "nmbrs"
+  sequence_number     = 1
+  environment         = "prod"
+  location            = "westeurope"
+  resource_group_name = "rg-networks-prod"
+
+  network_settings = {
+    vnet_name                = "vnet-vpn-prod-westeurope-001"
+    vnet_resource_group_name = "rg-networks-prod"
+    address_spaces           = ["172.25.0.0/24"]
+  }
+}
+```
+
+### VPN Gateway with a higher SKU
+
+```hcl
+module "vpn_gateway" {
+  source              = "git::github.com/Nmbrs/tf-modules//azure/vpn_gateway"
+  workload            = "corp"
+  company_prefix      = "nmbrs"
+  sequence_number     = 1
+  environment         = "prod"
+  location            = "westeurope"
+  resource_group_name = "rg-networks-prod"
+  sku_name            = "VpnGw3AZ"
+
+  network_settings = {
+    vnet_name                = "vnet-vpn-prod-westeurope-001"
+    vnet_resource_group_name = "rg-networks-prod"
+    address_spaces           = ["172.25.0.0/24"]
+  }
+}
+```
+
+### VPN Gateway with a custom name override
+
+```hcl
+module "vpn_gateway" {
+  source              = "git::github.com/Nmbrs/tf-modules//azure/vpn_gateway"
+  override_name       = "my-custom-vpng-name"
+  environment         = "prod"
+  location            = "westeurope"
+  resource_group_name = "rg-networks-prod"
+
+  network_settings = {
+    vnet_name                = "vnet-vpn-prod-westeurope-001"
+    vnet_resource_group_name = "rg-networks-prod"
+    address_spaces           = ["172.25.0.0/24"]
+  }
 }
 ```

@@ -3,7 +3,10 @@ locals {
   service_connection_name = "sc-${var.resource_settings.name}-${var.resource_settings.type}"
 
   resource_data_blocks = {
-    app_service              = data.azurerm_windows_web_app.app_service,
+    app_service_windows      = data.azurerm_windows_web_app.app_service_windows,
+    app_service_linux        = data.azurerm_linux_web_app.app_service_linux,
+    function_app_windows     = data.azurerm_windows_function_app.function_app_windows,
+    function_app_linux       = data.azurerm_linux_function_app.function_app_linux,
     storage_account_blob     = data.azurerm_storage_account.storage_account_blob,
     storage_account_table    = data.azurerm_storage_account.storage_account_table,
     storage_account_file     = data.azurerm_storage_account.storage_account_file,
@@ -26,7 +29,10 @@ locals {
 
   # For more information on subresource names: https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview
   subresource_name = {
-    "app_service"              = "sites"
+    "app_service_windows"      = "sites"
+    "app_service_linux"        = "sites"
+    "function_app_windows"     = "sites"
+    "function_app_linux"       = "sites"
     "storage_account_blob"     = "blob"
     "storage_account_table"    = "table"
     "storage_account_file"     = "file"
