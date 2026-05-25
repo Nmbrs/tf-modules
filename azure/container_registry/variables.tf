@@ -1,11 +1,13 @@
 variable "workload" {
+  # Max length derivation: ACR name limit (50) - "cr" prefix (2) - company_prefix max (5) - environment max ("stage", 5) = 38.
+  # See https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcontainerregistry
   description = "The workload name of the container registry."
   type        = string
   nullable    = true
 
   validation {
-    condition     = var.workload == null || try(length(trimspace(var.workload)) > 0 && length(var.workload) <= 13, false)
-    error_message = format("Invalid value '%s' for variable 'workload'. It must be a non-empty string with a maximum of 13 characters.", coalesce(var.workload, "null"))
+    condition     = var.workload == null || try(length(trimspace(var.workload)) > 0 && length(var.workload) <= 38, false)
+    error_message = format("Invalid value '%s' for variable 'workload'. It must be a non-empty string with a maximum of 38 characters.", coalesce(var.workload, "null"))
   }
 
   validation {
@@ -26,7 +28,7 @@ variable "resource_group_name" {
 }
 
 variable "location" {
-  description = "The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'."
+  description = "The location where the resources will be deployed in Azure. For an exhaustive list of locations, please use the command 'az account list-locations -o table'."
   type        = string
   nullable    = false
 }
