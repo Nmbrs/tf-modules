@@ -126,13 +126,13 @@ module "container_registry" {
 
 ### Naming Validation
 - Either `override_name` must be provided, OR both `workload` and `company_prefix` must be provided
-- `workload` must be 1-13 characters (letters and numbers only)
+- `workload` must be 1-38 characters (letters and numbers only)
 - `company_prefix` must be 1-5 characters
 
 ### SKU Validation
-- `public_network_access_enabled` can only be `false` with Premium SKU
-- `trusted_services_bypass_firewall_enabled` can only be `true` with Premium SKU
-- For Basic/Standard SKUs, these options are automatically configured
+- `public_network_access_enabled` can only be `false` when `sku_name = "Premium"` (private link is Premium-only)
+- `trusted_services_bypass_firewall_enabled` can only be `true` when `sku_name = "Premium"` **and** `public_network_access_enabled = false` (bypass is only meaningful in private mode)
+- For Basic/Standard SKUs you must explicitly set `public_network_access_enabled = true` and `trusted_services_bypass_firewall_enabled = false`
 
 ## Notes
 
