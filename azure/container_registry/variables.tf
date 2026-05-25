@@ -74,14 +74,14 @@ variable "sku_name" {
 }
 
 variable "public_network_access_enabled" {
-  description = "Whether public network access is allowed for the container registry. Only applicable for Premium SKU."
+  description = "Whether public network access is allowed. Default 'false' keeps the registry private (accessed only via private endpoint) and requires sku_name = 'Premium'. For 'Basic' or 'Standard' you must explicitly set this to true, since those SKUs do not support private link."
   type        = bool
   default     = false
   nullable    = false
 }
 
 variable "trusted_services_bypass_firewall_enabled" {
-  description = "Allow trusted Microsoft services to bypass this firewall. When enabled, trusted Microsoft services can access the Container Registry even when network access is restricted."
+  description = "Allow trusted Microsoft services (e.g. AKS, ACI) to reach the registry despite the firewall. Only valid on Premium in private mode (public_network_access_enabled = false); has no effect on a public registry."
   type        = bool
   default     = true
   nullable    = false

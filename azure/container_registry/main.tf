@@ -4,7 +4,7 @@ resource "azurerm_container_registry" "main" {
   location                      = var.location
   sku                           = var.sku_name
   admin_enabled                 = false
-  public_network_access_enabled = local.public_network_access
+  public_network_access_enabled = var.public_network_access_enabled
   network_rule_bypass_option    = local.network_rule_bypass
 
   dynamic "network_rule_set" {
@@ -33,10 +33,13 @@ resource "azurerm_container_registry" "main" {
       error_message = "Invalid configuration: 'public_network_access_enabled' can only be set to false when 'sku_name' is 'Premium'. For 'Basic' and 'Standard' SKUs, public network access is always enabled."
     }
 
-    ## SKU validation for network rule bypass
+    ## Trusted services bypass is only meaningful on Premium in private mode (public access disabled).
+    ## Network rules are Premium-only, and bypass has nothing to bypass when public access is enabled.
     precondition {
-      condition     = var.sku_name == "Premium" || var.trusted_services_bypass_firewall_enabled == false
-      error_message = "Invalid configuration: 'trusted_services_bypass_firewall_enabled' can only be set to true when 'sku_name' is 'Premium'. For 'Basic' and 'Standard' SKUs, network rules are not supported."
+      condition = var.trusted_services_bypass_firewall_enabled == false || (
+        var.sku_name == "Premium" && var.public_network_access_enabled == false
+      )
+      error_message = "Invalid configuration: 'trusted_services_bypass_firewall_enabled' can only be true when sku_name = 'Premium' AND public_network_access_enabled = false (private mode). On public registries there is nothing to bypass."
     }
   }
 }

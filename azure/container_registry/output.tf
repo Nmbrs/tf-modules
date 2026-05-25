@@ -25,7 +25,3 @@ output "admin_password" {
   sensitive   = true
 }
 
-output "identity" {
-  description = "The identity block of the Container Registry."
-  value       = azurerm_container_registry.main.identity
-}
