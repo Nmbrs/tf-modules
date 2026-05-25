@@ -12,16 +12,3 @@ output "login_server" {
   description = "The URL that can be used to log into the container registry."
   value       = azurerm_container_registry.main.login_server
 }
-
-output "admin_username" {
-  description = "The username associated with the Container Registry admin account."
-  value       = azurerm_container_registry.main.admin_username
-  sensitive   = true
-}
-
-output "admin_password" {
-  description = "The password associated with the Container Registry admin account."
-  value       = azurerm_container_registry.main.admin_password
-  sensitive   = true
-}
-

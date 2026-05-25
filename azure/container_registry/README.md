@@ -8,7 +8,7 @@ This module creates an Azure Container Registry with flexible naming options and
 - **SKU-based Configuration**: Automatic handling of network rules based on SKU tier
 - **Global Uniqueness**: Uses company_prefix + workload + environment for naming
 - **Validation**: Comprehensive lifecycle preconditions for naming and SKU compatibility
-- **Security**: Disabled admin access and public network access by default
+- **Security**: Public network access disabled by default; admin user is permanently disabled
 
 ## Naming Convention
 
@@ -36,10 +36,9 @@ module "container_registry" {
   environment         = "prod"
   company_prefix      = "nmbrs"
 
-  sku_name                                  = "Premium"
-  admin_enabled                             = false
-  public_network_access_enabled             = false
-  trusted_services_bypass_firewall_enabled  = true
+  sku_name                                 = "Premium"
+  public_network_access_enabled            = false
+  trusted_services_bypass_firewall_enabled = true
 }
 ```
 
@@ -54,11 +53,7 @@ module "container_registry" {
   environment         = "dev"
   company_prefix      = "nmbrs"
 
-  sku_name      = "Basic"
-  admin_enabled = false
-
-  # Note: public_network_access_enabled is automatically set to true for Basic SKU
-  # Note: trusted_services_bypass_firewall_enabled must be false for Basic SKU
+  sku_name                                 = "Basic"
   public_network_access_enabled            = true
   trusted_services_bypass_firewall_enabled = false
 }
@@ -74,30 +69,9 @@ module "container_registry" {
   location            = "westeurope"
   environment         = "test"
 
-  sku_name                                  = "Premium"
-  admin_enabled                             = false
-  public_network_access_enabled             = false
-  trusted_services_bypass_firewall_enabled  = true
-}
-```
-
-### Example 4: Standard SKU with Admin Enabled
-```hcl
-module "container_registry" {
-  source = "../../modules/azure/container_registry"
-
-  workload            = "legacyapp"
-  resource_group_name = "rg-containerimages-sand"
-  location            = "northeurope"
-  environment         = "sand"
-  company_prefix      = "nmbrs"
-
-  sku_name      = "Standard"
-  admin_enabled = true
-
-  # Note: public_network_access_enabled must be true for Standard SKU
-  public_network_access_enabled            = true
-  trusted_services_bypass_firewall_enabled = false
+  sku_name                                 = "Premium"
+  public_network_access_enabled            = false
+  trusted_services_bypass_firewall_enabled = true
 }
 ```
 
@@ -137,7 +111,6 @@ module "container_registry" {
 | `workload` | string | null | Workload name (required if override_name not provided) |
 | `company_prefix` | string | null | Company prefix, 1-5 chars (required if override_name not provided) |
 | `override_name` | string | null | Override automatic naming |
-| `admin_enabled` | bool | false | Enable admin user account |
 | `public_network_access_enabled` | bool | false | Enable public network access (Premium only) |
 | `trusted_services_bypass_firewall_enabled` | bool | true | Allow trusted Azure services to bypass firewall |
 
@@ -148,9 +121,6 @@ module "container_registry" {
 | `id` | The ID of the Container Registry | No |
 | `name` | The name of the Container Registry | No |
 | `login_server` | The URL for logging into the registry | No |
-| `admin_username` | Admin username | Yes |
-| `admin_password` | Admin password | Yes |
-| `identity` | Identity block of the registry | No |
 
 ## Validation Rules
 
@@ -168,7 +138,7 @@ module "container_registry" {
 
 - Container Registry names must be globally unique across all Azure subscriptions
 - Container Registry names cannot contain dashes or special characters
-- Admin access is disabled by default for security
+- Admin user is permanently disabled — authenticate via Entra ID, role assignments (AcrPull/AcrPush), or Premium scope-map tokens
 - Public network access is disabled by default (Premium SKU)
 - Tags are managed externally (lifecycle ignore_changes)
 
