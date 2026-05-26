@@ -13,7 +13,7 @@ resource "azurerm_private_endpoint" "endpoint" {
   }
 
   private_dns_zone_group {
-    name                 = lower(element(split("/", var.private_dns_zone_id), length(split("/", var.private_dns_zone_id)) - 1))
+    name                 = lower(reverse(split("/", var.private_dns_zone_id))[0])
     private_dns_zone_ids = [var.private_dns_zone_id]
   }
 
