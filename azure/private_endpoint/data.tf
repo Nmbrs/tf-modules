@@ -112,20 +112,8 @@ data "azurerm_api_management" "api_management" {
   resource_group_name = var.resource_settings.resource_group_name
 }
 
-data "azurerm_container_registry" "azure_container_registry" {
-  count               = var.resource_settings.type == "azure_container_registry" ? 1 : 0
-  name                = var.resource_settings.name
-  resource_group_name = var.resource_settings.resource_group_name
-}
-
 data "azurerm_data_factory" "data_factory" {
-  count               = var.resource_settings.type == "data_factory" ? 1 : 0
-  name                = var.resource_settings.name
-  resource_group_name = var.resource_settings.resource_group_name
-}
-
-data "azurerm_data_factory" "data_factory_portal" {
-  count               = var.resource_settings.type == "data_factory_portal" ? 1 : 0
+  count               = contains(["data_factory", "data_factory_portal"], var.resource_settings.type) ? 1 : 0
   name                = var.resource_settings.name
   resource_group_name = var.resource_settings.resource_group_name
 }
