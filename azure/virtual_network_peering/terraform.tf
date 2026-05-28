@@ -1,8 +1,9 @@
 terraform {
   required_providers {
     azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.117"
+      source                = "hashicorp/azurerm"
+      version               = "~> 3.117"
+      configuration_aliases = [azurerm.source, azurerm.destination]
     }
   }
 

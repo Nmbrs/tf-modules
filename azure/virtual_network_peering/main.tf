@@ -1,14 +1,17 @@
 data "azurerm_virtual_network" "vnet_source" {
+  provider            = azurerm.source
   name                = var.vnet_source.name
   resource_group_name = var.vnet_source.resource_group_name
 }
 
 data "azurerm_virtual_network" "vnet_destination" {
+  provider            = azurerm.destination
   name                = var.vnet_destination.name
   resource_group_name = var.vnet_destination.resource_group_name
 }
 
 resource "azurerm_virtual_network_peering" "vnet_source" {
+  provider                     = azurerm.source
   name                         = local.source_peering_name
   virtual_network_name         = var.vnet_source.name
   resource_group_name          = var.vnet_source.resource_group_name
@@ -20,6 +23,7 @@ resource "azurerm_virtual_network_peering" "vnet_source" {
 }
 
 resource "azurerm_virtual_network_peering" "vnet_destnation" {
+  provider                     = azurerm.destination
   name                         = local.destination_peering_name
   virtual_network_name         = var.vnet_destination.name
   resource_group_name          = var.vnet_destination.resource_group_name

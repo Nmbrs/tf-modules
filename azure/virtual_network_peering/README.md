@@ -4,6 +4,8 @@
 
 The `virtual_network_peering` module supports the connection between two or more Virtual Networks in Azure. The virtual networks appear as one for connectivity purposes. The traffic between hosts in peered virtual networks uses the Microsoft backbone infrastructure. Like traffic between virtual machines in the same network, traffic is routed through Microsoft's private network only.
 
+The module supports peering VNets that live in the **same subscription** or in **different subscriptions**. It declares two required provider configuration aliases — `azurerm.source` and `azurerm.destination` — so each side of the peering is created with credentials scoped to the subscription that owns the corresponding VNet. For same-subscription peerings, point both aliases at the same provider.
+
 ## Requirements
 
 | Name | Version |
@@ -45,9 +47,19 @@ No outputs.
 
 A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
 
+### Same-subscription peering
+
+Wire both `azurerm.source` and `azurerm.destination` to the default `azurerm` provider.
+
 ```hcl
 module "virtual_network_peering" {
   source = "git::github.com/Nmbrs/tf-modules//azure/virtual_network_peering"
+
+  providers = {
+    azurerm.source      = azurerm
+    azurerm.destination = azurerm
+  }
+
   vnet_source = {
     name                         = "vnet-dev-westeu-1000"
     resource_group_name          = "rg-vnet-01"
@@ -59,6 +71,49 @@ module "virtual_network_peering" {
   vnet_destination = {
     name                         = "vnet-dev-westeu-1001"
     resource_group_name          = "rg-vnet-01"
+    allow_forwarded_traffic      = true
+    allow_gateway_transit        = true
+    allow_virtual_network_access = true
+    use_remote_gateways          = false
+  }
+}
+```
+
+### Cross-subscription peering
+
+Declare a second `azurerm` provider aliased to the remote subscription, then pass each provider to the matching module alias.
+
+```hcl
+provider "azurerm" {
+  features {}
+  # default provider — source VNet's subscription
+}
+
+provider "azurerm" {
+  alias           = "hub"
+  subscription_id = "00000000-0000-0000-0000-000000000000"
+  features {}
+}
+
+module "virtual_network_peering" {
+  source = "git::github.com/Nmbrs/tf-modules//azure/virtual_network_peering"
+
+  providers = {
+    azurerm.source      = azurerm
+    azurerm.destination = azurerm.hub
+  }
+
+  vnet_source = {
+    name                         = "vnet-spoke-dev-westeu-001"
+    resource_group_name          = "rg-networks-dev"
+    allow_forwarded_traffic      = true
+    allow_gateway_transit        = false
+    allow_virtual_network_access = true
+    use_remote_gateways          = true
+  }
+  vnet_destination = {
+    name                         = "vnet-hub-westeu-001"
+    resource_group_name          = "rg-we-networking"
     allow_forwarded_traffic      = true
     allow_gateway_transit        = true
     allow_virtual_network_access = true
