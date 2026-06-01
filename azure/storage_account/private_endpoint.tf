@@ -1,6 +1,6 @@
 module "private_endpoint" {
-  source   = "git::github.com/Nmbrs/tf-modules//azure/private_endpoint?ref=feef6f5d286325f373a6edc382c3c00897fe46b9"
-  for_each = toset(["blob", "table", "file", "queue"])
+  source   = "git::github.com/Nmbrs/tf-modules//azure/private_endpoint?ref=49dc7f61a161fb90b42471ba30c15157384b6035"
+  for_each = toset(local.private_endpoint_subresources)
 
   resource_group_name = var.resource_group_name
   location            = var.location
