@@ -116,7 +116,9 @@ variable "network_settings" {
   })
 }
 
-variable "private_dns_zone_id" {
-  description = "Resource ID of the private DNS zone used by the key vault private endpoint (typically `privatelink.vaultcore.azure.net`)."
-  type        = string
+variable "private_dns_zone_ids" {
+  description = "Resource IDs of the private DNS zones, keyed by subresource. Required keys: `vault` (typically `privatelink.vaultcore.azure.net`)."
+  type = object({
+    vault = string
+  })
 }
