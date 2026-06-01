@@ -20,18 +20,21 @@ variable "network_settings" {
 }
 
 variable "resource_settings" {
-  description = "Defines the settings for the associated resources, specifying the name, and the resource group for it."
+  description = <<-EOT
+    Defines the settings for the resource the private endpoint will connect to.
+
+    - `name`: the workload identifier, used to compose the PEP name (`pep-<name>-<subresource_name>`).
+    - `resource_id`: the full Azure resource ID of the target (e.g. the `.id` output of the resource's module).
+    - `subresource_name`: the Azure private-link subresource (e.g. `blob`, `vault`, `sites`, `SQL`). For the full list of valid values per resource type, see:
+      https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview#private-link-resource
+  EOT
   type = object(
     {
-      name                = string
-      type                = string
-      resource_group_name = string
+      name             = string
+      resource_id      = string
+      subresource_name = string
     }
   )
-  validation {
-    condition     = contains(["app_service", "storage_account_blob", "storage_account_table", "storage_account_file", "sql_server", "key_vault", "service_bus", "eventgrid_domain", "eventgrid_topic", "container_registry", "cosmos_db_nosql", "cosmos_db_mongodb", "redis_cache", "api_management", "app_configuration", "azure_container_registry", "data_factory", "data_factory_portal"], var.resource_settings.type)
-    error_message = format("Invalid value '%s' for variable 'resource_settings.type'. Valid options are 'app_service', 'storage_account_blob', 'storage_account_table', 'storage_account_file', 'sql_server', 'key_vault', 'service_bus', 'eventgrid_domain', 'eventgrid_topic', 'container_registry', 'cosmos_db_nosql', 'cosmos_db_mongodb', 'redis_cache', 'api_management', 'app_configuration', 'azure_container_registry', 'data_factory', 'data_factory_portal'.", var.resource_settings.type)
-  }
 }
 
 variable "private_dns_zone_id" {

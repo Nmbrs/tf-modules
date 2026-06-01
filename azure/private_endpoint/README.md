@@ -1,11 +1,4 @@
 <!-- BEGIN_TF_DOCS -->
-# Private Endpoint
-
-## Sumary
-
-The `private_endpoint` module is a Terraform abstraction that that implements all the necessary
-Terraform code to create and manage private endpoints in Azure, that connects you privately and securely to a private dns zone and allows private traffic to reach the service.
-
 ## Requirements
 
 | Name | Version |
@@ -28,22 +21,7 @@ No modules.
 | Name | Type |
 |------|------|
 | [azurerm_private_endpoint.endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
-| [azurerm_api_management.api_management](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/api_management) | data source |
-| [azurerm_app_configuration.app_configuration](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/app_configuration) | data source |
-| [azurerm_container_registry.container_registry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/container_registry) | data source |
-| [azurerm_cosmosdb_account.cosmos_db_mongodb](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/cosmosdb_account) | data source |
-| [azurerm_cosmosdb_account.cosmos_db_nosql](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/cosmosdb_account) | data source |
-| [azurerm_eventgrid_domain.eventgrid_domain](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/eventgrid_domain) | data source |
-| [azurerm_eventgrid_topic.eventgrid_topic](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/eventgrid_topic) | data source |
-| [azurerm_key_vault.key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault) | data source |
-| [azurerm_mssql_server.sql_server](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/mssql_server) | data source |
-| [azurerm_redis_cache.redis_cache](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/redis_cache) | data source |
-| [azurerm_servicebus_namespace.service_bus](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/servicebus_namespace) | data source |
-| [azurerm_storage_account.storage_account_blob](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/storage_account) | data source |
-| [azurerm_storage_account.storage_account_file](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/storage_account) | data source |
-| [azurerm_storage_account.storage_account_table](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/storage_account) | data source |
 | [azurerm_subnet.subnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subnet) | data source |
-| [azurerm_windows_web_app.app_service](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/windows_web_app) | data source |
 
 ## Inputs
 
@@ -53,11 +31,16 @@ No modules.
 | <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | Defines the network settings for the resources, specifying the subnet, virtual network name, and the resource group for the virtual network. | <pre>object(<br/>    {<br/>      subnet_name              = string<br/>      vnet_name                = string<br/>      vnet_resource_group_name = string<br/>    }<br/>  )</pre> | n/a | yes |
 | <a name="input_private_dns_zone_id"></a> [private\_dns\_zone\_id](#input\_private\_dns\_zone\_id) | Defines the private dns zone resource ID. | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
-| <a name="input_resource_settings"></a> [resource\_settings](#input\_resource\_settings) | Defines the settings for the associated resources, specifying the name, and the resource group for it. | <pre>object(<br/>    {<br/>      name                = string<br/>      type                = string<br/>      resource_group_name = string<br/>    }<br/>  )</pre> | n/a | yes |
+| <a name="input_resource_settings"></a> [resource\_settings](#input\_resource\_settings) | Defines the settings for the resource the private endpoint will connect to.<br/><br/>- `name`: the workload identifier, used to compose the PEP name (`pep-<name>-<subresource_name>`).<br/>- `resource_id`: the full Azure resource ID of the target (e.g. the `.id` output of the resource's module).<br/>- `subresource_name`: the Azure private-link subresource (e.g. `blob`, `vault`, `sites`, `SQL`). For the full list of valid values per resource type, see:<br/>  https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview#private-link-resource | <pre>object(<br/>    {<br/>      name             = string<br/>      resource_id      = string<br/>      subresource_name = string<br/>    }<br/>  )</pre> | n/a | yes |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_id"></a> [id](#output\_id) | The private endpoint ID. |
+| <a name="output_name"></a> [name](#output\_name) | The private endpoint name. |
+| <a name="output_network_interface_id"></a> [network\_interface\_id](#output\_network\_interface\_id) | The ID of the network interface associated with the private endpoint. |
+| <a name="output_private_ip_address"></a> [private\_ip\_address](#output\_private\_ip\_address) | The private IP address associated with the private endpoint. |
 
 ## How to use it?
 
@@ -69,16 +52,16 @@ module "private_endpoint" {
   resource_group_name = "rg-myrg"
   location            = "westeurope"
   resource_settings = {
-    name                = "as-web-test"
-    type                = "app_service"
-    resource_group_name = "rg-resource-rg"
+    name             = "as-web-test"
+    resource_id      = "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/rg-resource-rg/providers/Microsoft.Web/sites/as-web-test"
+    subresource_name = "sites"
   }
   network_settings = {
     vnet_name                = "vnet-mynetwork"
     subnet_name              = "snet-mysnet-002"
     vnet_resource_group_name = "rg-networks"
   }
-  private_dns_zone_id = "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/my-rg/providers/Microsoft.Network/privateDnsZones/privatednszone.com"
+  private_dns_zone_id = "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/my-rg/providers/Microsoft.Network/privateDnsZones/privatelink.azurewebsites.net"
 }
 ```
 <!-- END_TF_DOCS -->
