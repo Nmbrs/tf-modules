@@ -10,4 +10,6 @@ locals {
 
   # Compute whether auditing is enabled for the current environment
   audit_enabled = contains(local.audited_environments, var.environment)
+
+  private_endpoint_subresources = ["sqlServer"]
 }

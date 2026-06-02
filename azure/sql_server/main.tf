@@ -4,7 +4,7 @@ resource "azurerm_mssql_server" "main" {
   location                             = var.location
   version                              = "12.0"
   minimum_tls_version                  = "1.2"
-  public_network_access_enabled        = var.network_settings.public_network_access_enabled
+  public_network_access_enabled        = var.firewall_settings.public_network_access_enabled
   outbound_network_restriction_enabled = false
 
   administrator_login          = var.local_sql_admin_user_settings.local_sql_admin_user
@@ -54,8 +54,8 @@ resource "azurerm_mssql_server" "main" {
 
 resource "azurerm_mssql_virtual_network_rule" "sql_server_network_rule" {
   for_each = {
-    for subnet in var.network_settings.allowed_subnets : subnet.subnet_name => subnet
-    if var.network_settings.public_network_access_enabled
+    for subnet in var.firewall_settings.allowed_subnets : subnet.subnet_name => subnet
+    if var.firewall_settings.public_network_access_enabled
   }
   name                                 = each.key
   server_id                            = azurerm_mssql_server.main.id
@@ -67,7 +67,7 @@ resource "azurerm_mssql_virtual_network_rule" "sql_server_network_rule" {
 # For more information, see: https://learn.microsoft.com/en-us/rest/api/sql/firewall-rules/create-or-update
 
 resource "azurerm_mssql_firewall_rule" "sql_server" {
-  count            = var.network_settings.public_network_access_enabled && var.network_settings.trusted_services_bypass_firewall_enabled ? 1 : 0
+  count            = var.firewall_settings.public_network_access_enabled && var.firewall_settings.trusted_services_bypass_firewall_enabled ? 1 : 0
   name             = "Allow_Azure_Trusted_Services"
   server_id        = azurerm_mssql_server.main.id
   start_ip_address = "0.0.0.0"

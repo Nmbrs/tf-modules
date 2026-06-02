@@ -66,13 +66,14 @@ No modules.
 
 ## How to use it?
 
-A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
+The module always provisions a private endpoint for the SQL Server (`sqlServer` subresource). Every caller must supply `network_settings` and `private_dns_zone_ids.sqlServer`. The `firewall_settings` variable is optional and defaults to a private-only posture (no public network access, no allowed subnets, trusted-service bypass enabled) — omit it entirely to use the defaults, or override specific fields as shown in the third example. The examples below assume the relevant subnet and the `privatelink.database.windows.net` DNS zone already exist.
 
 ### SQL Server for production with auditing
 
 ```hcl
 module "sql_server" {
-  source              = "git::github.com/Nmbrs/tf-modules//azure/sql_server"
+  source = "git::github.com/Nmbrs/tf-modules//azure/sql_server"
+
   workload            = "analytics"
   company_prefix      = "nmbrs"
   sequence_number     = 1
@@ -90,15 +91,19 @@ module "sql_server" {
     }
   }
 
-  network_settings = {
-    public_network_access_enabled            = false
-    trusted_services_bypass_firewall_enabled = false
-    allowed_subnets                          = []
-  }
-
   auditing_settings = {
     storage_account_name           = "stnmbrsauditprod"
     storage_account_resource_group = "rg-audit-prod"
+  }
+
+  network_settings = {
+    subnet_name              = "snet-private-endpoints"
+    vnet_name                = "vnet-myenv"
+    vnet_resource_group_name = "rg-networking"
+  }
+
+  private_dns_zone_ids = {
+    sqlServer = module.dns_zone_sql.id
   }
 }
 ```
@@ -107,7 +112,8 @@ module "sql_server" {
 
 ```hcl
 module "sql_server" {
-  source              = "git::github.com/Nmbrs/tf-modules//azure/sql_server"
+  source = "git::github.com/Nmbrs/tf-modules//azure/sql_server"
+
   workload            = "myapp"
   company_prefix      = "nmbrs"
   sequence_number     = 1
@@ -126,18 +132,25 @@ module "sql_server" {
   }
 
   network_settings = {
-    public_network_access_enabled            = false
-    trusted_services_bypass_firewall_enabled = false
-    allowed_subnets                          = []
+    subnet_name              = "snet-private-endpoints"
+    vnet_name                = "vnet-myenv"
+    vnet_resource_group_name = "rg-networking"
+  }
+
+  private_dns_zone_ids = {
+    sqlServer = module.dns_zone_sql.id
   }
 }
 ```
 
 ### SQL Server with public access and VNet rules
 
+Use this variant when the SQL Server must remain reachable from public networks alongside the private endpoint (e.g., legacy clients or managed identities outside the VNet). `firewall_settings.allowed_subnets` creates VNet rules for subnets that should still reach the server over the public endpoint; it is only honoured when `public_network_access_enabled = true`.
+
 ```hcl
 module "sql_server" {
-  source              = "git::github.com/Nmbrs/tf-modules//azure/sql_server"
+  source = "git::github.com/Nmbrs/tf-modules//azure/sql_server"
+
   workload            = "webapp"
   company_prefix      = "nmbrs"
   sequence_number     = 1
@@ -155,14 +168,13 @@ module "sql_server" {
     }
   }
 
-  network_settings = {
-    public_network_access_enabled            = true
-    trusted_services_bypass_firewall_enabled = true
+  firewall_settings = {
+    public_network_access_enabled = true
     allowed_subnets = [
       {
-        subnet_name                = "snet-app-001"
-        virtual_network_name       = "vnet-nmbrs-prod-westeurope-001"
-        subnet_resource_group_name = "rg-network-prod"
+        subnet_name              = "snet-app-001"
+        vnet_name                = "vnet-nmbrs-prod-westeurope-001"
+        vnet_resource_group_name = "rg-network-prod"
       }
     ]
   }
@@ -171,6 +183,16 @@ module "sql_server" {
     storage_account_name           = "stnmbrsauditprod"
     storage_account_resource_group = "rg-audit-prod"
   }
+
+  network_settings = {
+    subnet_name              = "snet-private-endpoints"
+    vnet_name                = "vnet-myenv"
+    vnet_resource_group_name = "rg-networking"
+  }
+
+  private_dns_zone_ids = {
+    sqlServer = module.dns_zone_sql.id
+  }
 }
 ```
 
@@ -178,7 +200,8 @@ module "sql_server" {
 
 ```hcl
 module "sql_server" {
-  source              = "git::github.com/Nmbrs/tf-modules//azure/sql_server"
+  source = "git::github.com/Nmbrs/tf-modules//azure/sql_server"
+
   override_name       = "sqls-my-custom-name-001"
   resource_group_name = "rg-sql-prod"
   location            = "westeurope"
@@ -194,15 +217,19 @@ module "sql_server" {
     }
   }
 
-  network_settings = {
-    public_network_access_enabled            = false
-    trusted_services_bypass_firewall_enabled = false
-    allowed_subnets                          = []
-  }
-
   auditing_settings = {
     storage_account_name           = "stnmbrsauditprod"
     storage_account_resource_group = "rg-audit-prod"
+  }
+
+  network_settings = {
+    subnet_name              = "snet-private-endpoints"
+    vnet_name                = "vnet-myenv"
+    vnet_resource_group_name = "rg-networking"
+  }
+
+  private_dns_zone_ids = {
+    sqlServer = module.dns_zone_sql.id
   }
 }
 ```

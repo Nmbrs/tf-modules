@@ -5,12 +5,12 @@ data "azuread_group" "azuread_sql_admin" {
 
 data "azurerm_subnet" "subnet" {
   for_each = {
-    for subnet in var.network_settings.allowed_subnets : subnet.subnet_name => subnet
-    if var.network_settings.public_network_access_enabled
+    for subnet in var.firewall_settings.allowed_subnets : subnet.subnet_name => subnet
+    if var.firewall_settings.public_network_access_enabled
   }
   name                 = each.value.subnet_name
-  virtual_network_name = each.value.virtual_network_name
-  resource_group_name  = each.value.subnet_resource_group_name
+  virtual_network_name = each.value.vnet_name
+  resource_group_name  = each.value.vnet_resource_group_name
 }
 
 data "azurerm_storage_account" "auditing_storage_account" {

@@ -105,30 +105,52 @@ variable "local_sql_admin_user_settings" {
   })
 }
 
-variable "network_settings" {
-  description = "Network configuration settings for the SQL Server, including public access, firewall rules, and allowed subnets."
+variable "firewall_settings" {
+  description = "Firewall configuration for the SQL Server: public access, trusted-service bypass, and allowed subnets for VNet rules. All fields are optional and default to a secure-by-default posture (no public access, no allowed subnets, trusted-service bypass enabled)."
   type = object({
-    public_network_access_enabled            = bool
-    trusted_services_bypass_firewall_enabled = bool
-    allowed_subnets = list(object({
-      subnet_name                = string
-      virtual_network_name       = string
-      subnet_resource_group_name = string
-    }))
+    public_network_access_enabled            = optional(bool, false)
+    trusted_services_bypass_firewall_enabled = optional(bool, true)
+    allowed_subnets = optional(list(object({
+      subnet_name              = string
+      vnet_name                = string
+      vnet_resource_group_name = string
+    })), [])
   })
+  default = {}
 
   validation {
-    condition     = var.network_settings.public_network_access_enabled || length(var.network_settings.allowed_subnets) == 0
-    error_message = "Invalid configuration: 'allowed_subnets' can only be specified when 'public_network_access_enabled' is true."
+    condition     = var.firewall_settings.public_network_access_enabled || length(var.firewall_settings.allowed_subnets) == 0
+    error_message = "Invalid 'firewall_settings': 'allowed_subnets' can only be specified when 'public_network_access_enabled' is true."
   }
 
   validation {
     condition = alltrue([
-      for s in var.network_settings.allowed_subnets :
+      for s in var.firewall_settings.allowed_subnets :
       length(trimspace(s.subnet_name)) > 0 &&
-      length(trimspace(s.virtual_network_name)) > 0 &&
-      length(trimspace(s.subnet_resource_group_name)) > 0
+      length(trimspace(s.vnet_name)) > 0 &&
+      length(trimspace(s.vnet_resource_group_name)) > 0
     ])
-    error_message = "Invalid value in 'allowed_subnets': 'subnet_name', 'virtual_network_name', and 'subnet_resource_group_name' must all be non-empty strings."
+    error_message = "Invalid value in 'firewall_settings.allowed_subnets': 'subnet_name', 'vnet_name', and 'vnet_resource_group_name' must all be non-empty strings."
   }
+
+  validation {
+    condition     = length(var.firewall_settings.allowed_subnets) == length(distinct([for s in var.firewall_settings.allowed_subnets : s.subnet_name]))
+    error_message = "Invalid value in 'firewall_settings.allowed_subnets': 'subnet_name' must be unique across all entries."
+  }
+}
+
+variable "network_settings" {
+  description = "Network settings for the SQL Server private endpoint."
+  type = object({
+    subnet_name              = string
+    vnet_name                = string
+    vnet_resource_group_name = string
+  })
+}
+
+variable "private_dns_zone_ids" {
+  description = "Resource IDs of the private DNS zones, keyed by subresource. Required keys: `sqlServer` (typically `privatelink.database.windows.net`)."
+  type = object({
+    sqlServer = string
+  })
 }
