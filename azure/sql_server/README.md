@@ -16,12 +16,14 @@ The `sql_server` module provides a comprehensive Terraform solution for deployin
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 3.7.0 |
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 3.8.0 |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint) | git::github.com/Nmbrs/tf-modules//azure/private_endpoint | 49dc7f61a161fb90b42471ba30c15157384b6035 |
 
 ## Resources
 
@@ -32,7 +34,6 @@ No modules.
 | [azurerm_mssql_server_extended_auditing_policy.sql_auditing](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_server_extended_auditing_policy) | resource |
 | [azurerm_mssql_virtual_network_rule.sql_server_network_rule](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_virtual_network_rule) | resource |
 | [azuread_group.azuread_sql_admin](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/group) | data source |
-| [azurerm_key_vault.local_sql_admin_key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault) | data source |
 | [azurerm_key_vault_secret.local_sql_admin_password](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
 | [azurerm_storage_account.auditing_storage_account](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/storage_account) | data source |
 | [azurerm_subnet.subnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subnet) | data source |
@@ -41,15 +42,15 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_admin_settings"></a> [admin\_settings](#input\_admin\_settings) | Administrative access for the SQL Server: Azure AD group, AAD-only mode, and the local SQL admin used at server creation (Azure requires a local admin even when AAD-only mode is enabled). The local admin password is read from a Key Vault secret identified by the vault's resource ID and the secret name. | <pre>object({<br/>    azuread_group_name                  = string<br/>    azuread_authentication_only_enabled = optional(bool, true)<br/>    local_username                      = string<br/>    local_password_secret = object({<br/>      key_vault_id = string<br/>      secret_name  = string<br/>    })<br/>  })</pre> | n/a | yes |
 | <a name="input_auditing_settings"></a> [auditing\_settings](#input\_auditing\_settings) | The settings necessary for the storage account auditing. Required for prod and sand environments, optional for others. | <pre>object({<br/>    storage_account_name           = string<br/>    storage_account_resource_group = string<br/>  })</pre> | `null` | no |
-| <a name="input_azuread_authentication_only_enabled"></a> [azuread\_authentication\_only\_enabled](#input\_azuread\_authentication\_only\_enabled) | Specifies if only Azure AD authentication is allowed | `bool` | `true` | no |
-| <a name="input_azuread_sql_admin"></a> [azuread\_sql\_admin](#input\_azuread\_sql\_admin) | The name of the admin (Azure AD group) that will be SQL Server admin | `string` | n/a | yes |
 | <a name="input_company_prefix"></a> [company\_prefix](#input\_company\_prefix) | Short, unique prefix for the company / organization. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
-| <a name="input_local_sql_admin_user_settings"></a> [local\_sql\_admin\_user\_settings](#input\_local\_sql\_admin\_user\_settings) | The settings necessary for the local SQL admin creation, the username and the key vault settings for the password. | <pre>object({<br/>    local_sql_admin_user = string<br/>    local_sql_admin_user_password = object({<br/>      key_vault_name           = string<br/>      key_vault_resource_group = string<br/>      key_vault_secret_name    = string<br/>    })<br/>  })</pre> | n/a | yes |
+| <a name="input_firewall_settings"></a> [firewall\_settings](#input\_firewall\_settings) | Firewall configuration for the SQL Server: public access, trusted-service bypass, and allowed subnets for VNet rules. All fields are optional and default to a secure-by-default posture (no public access, no allowed subnets, trusted-service bypass enabled). | <pre>object({<br/>    public_network_access_enabled            = optional(bool, false)<br/>    trusted_services_bypass_firewall_enabled = optional(bool, true)<br/>    allowed_subnets = optional(list(object({<br/>      subnet_name              = string<br/>      vnet_name                = string<br/>      vnet_resource_group_name = string<br/>    })), [])<br/>  })</pre> | `{}` | no |
 | <a name="input_location"></a> [location](#input\_location) | Specifies Azure location where the resources should be provisioned. For an exhaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | Network configuration settings for the SQL Server, including public access, firewall rules, and allowed subnets. | <pre>object({<br/>    public_network_access_enabled            = bool<br/>    trusted_services_bypass_firewall_enabled = bool<br/>    allowed_subnets = list(object({<br/>      subnet_name                = string<br/>      virtual_network_name       = string<br/>      subnet_resource_group_name = string<br/>    }))<br/>  })</pre> | n/a | yes |
+| <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | Network settings for the SQL Server private endpoint. | <pre>object({<br/>    subnet_name              = string<br/>    vnet_name                = string<br/>    vnet_resource_group_name = string<br/>  })</pre> | n/a | yes |
 | <a name="input_override_name"></a> [override\_name](#input\_override\_name) | Optional override for naming logic. | `string` | `null` | no |
+| <a name="input_private_dns_zone_ids"></a> [private\_dns\_zone\_ids](#input\_private\_dns\_zone\_ids) | Resource IDs of the private DNS zones, keyed by subresource. Required keys: `sqlServer` (typically `privatelink.database.windows.net`). | <pre>object({<br/>    sqlServer = string<br/>  })</pre> | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Specifies the name of the resource group where the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_sequence_number"></a> [sequence\_number](#input\_sequence\_number) | A numeric value used to ensure uniqueness for resource names. | `number` | n/a | yes |
 | <a name="input_workload"></a> [workload](#input\_workload) | Short, descriptive name for the application, service, or workload. Used in resource naming conventions. | `string` | n/a | yes |
