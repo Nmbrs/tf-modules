@@ -80,14 +80,12 @@ module "sql_server" {
   resource_group_name = "rg-sql-prod"
   location            = "westeurope"
   environment         = "prod"
-  azuread_sql_admin   = "sg-sql-admins"
-
-  local_sql_admin_user_settings = {
-    local_sql_admin_user = "sqlcloudadmin"
-    local_sql_admin_user_password = {
-      key_vault_name           = "kv-nmbrs-secrets-prod"
-      key_vault_resource_group = "rg-keyvault-prod"
-      key_vault_secret_name    = "sql-admin-password"
+  admin_settings = {
+    azuread_group_name = "sg-sql-admins"
+    local_username     = "sqlcloudadmin"
+    local_password_secret = {
+      key_vault_id = module.secrets_prod.id
+      secret_name  = "sql-admin-password"
     }
   }
 
@@ -120,14 +118,12 @@ module "sql_server" {
   resource_group_name = "rg-sql-dev"
   location            = "westeurope"
   environment         = "dev"
-  azuread_sql_admin   = "sg-sql-admins-dev"
-
-  local_sql_admin_user_settings = {
-    local_sql_admin_user = "sqladmin"
-    local_sql_admin_user_password = {
-      key_vault_name           = "kv-nmbrs-secrets-dev"
-      key_vault_resource_group = "rg-keyvault-dev"
-      key_vault_secret_name    = "sql-admin-password"
+  admin_settings = {
+    azuread_group_name = "sg-sql-admins-dev"
+    local_username     = "sqladmin"
+    local_password_secret = {
+      key_vault_id = module.secrets_dev.id
+      secret_name  = "sql-admin-password"
     }
   }
 
@@ -157,14 +153,12 @@ module "sql_server" {
   resource_group_name = "rg-sql-prod"
   location            = "westeurope"
   environment         = "prod"
-  azuread_sql_admin   = "sg-sql-admins"
-
-  local_sql_admin_user_settings = {
-    local_sql_admin_user = "sqlcloudadmin"
-    local_sql_admin_user_password = {
-      key_vault_name           = "kv-nmbrs-secrets-prod"
-      key_vault_resource_group = "rg-keyvault-prod"
-      key_vault_secret_name    = "sql-admin-password"
+  admin_settings = {
+    azuread_group_name = "sg-sql-admins"
+    local_username     = "sqlcloudadmin"
+    local_password_secret = {
+      key_vault_id = module.secrets_prod.id
+      secret_name  = "sql-admin-password"
     }
   }
 
@@ -206,14 +200,12 @@ module "sql_server" {
   resource_group_name = "rg-sql-prod"
   location            = "westeurope"
   environment         = "prod"
-  azuread_sql_admin   = "sg-sql-admins"
-
-  local_sql_admin_user_settings = {
-    local_sql_admin_user = "sqlcloudadmin"
-    local_sql_admin_user_password = {
-      key_vault_name           = "kv-nmbrs-secrets-prod"
-      key_vault_resource_group = "rg-keyvault-prod"
-      key_vault_secret_name    = "sql-admin-password"
+  admin_settings = {
+    azuread_group_name = "sg-sql-admins"
+    local_username     = "sqlcloudadmin"
+    local_password_secret = {
+      key_vault_id = module.secrets_prod.id
+      secret_name  = "sql-admin-password"
     }
   }
 

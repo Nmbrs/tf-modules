@@ -71,16 +71,32 @@ variable "resource_group_name" {
   }
 }
 
-variable "azuread_sql_admin" {
-  description = "The name of the admin (Azure AD group) that will be SQL Server admin"
-  type        = string
-  nullable    = false
-}
+variable "admin_settings" {
+  description = "Administrative access for the SQL Server: Azure AD group, AAD-only mode, and the local SQL admin used at server creation (Azure requires a local admin even when AAD-only mode is enabled). The local admin password is read from a Key Vault secret identified by the vault's resource ID and the secret name."
+  type = object({
+    azuread_group_name                  = string
+    azuread_authentication_only_enabled = optional(bool, true)
+    local_username                      = string
+    local_password_secret = object({
+      key_vault_id = string
+      secret_name  = string
+    })
+  })
 
-variable "azuread_authentication_only_enabled" {
-  description = "Specifies if only Azure AD authentication is allowed"
-  type        = bool
-  default     = true
+  validation {
+    condition     = length(trimspace(var.admin_settings.azuread_group_name)) > 0
+    error_message = "Invalid value for 'admin_settings.azuread_group_name'. It must be a non-empty string."
+  }
+
+  validation {
+    condition     = length(trimspace(var.admin_settings.local_username)) > 0
+    error_message = "Invalid value for 'admin_settings.local_username'. It must be a non-empty string."
+  }
+
+  validation {
+    condition     = !contains(["admin", "administrator", "sa", "root", "dbmanager", "loginmanager", "dbo", "guest", "public"], lower(trimspace(var.admin_settings.local_username)))
+    error_message = "Invalid value for 'admin_settings.local_username'. Azure rejects reserved SQL login names: admin, administrator, sa, root, dbmanager, loginmanager, dbo, guest, public."
+  }
 }
 
 variable "auditing_settings" {
@@ -91,18 +107,6 @@ variable "auditing_settings" {
   })
   default  = null
   nullable = true
-}
-
-variable "local_sql_admin_user_settings" {
-  description = "The settings necessary for the local SQL admin creation, the username and the key vault settings for the password."
-  type = object({
-    local_sql_admin_user = string
-    local_sql_admin_user_password = object({
-      key_vault_name           = string
-      key_vault_resource_group = string
-      key_vault_secret_name    = string
-    })
-  })
 }
 
 variable "firewall_settings" {
