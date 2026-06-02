@@ -16,9 +16,8 @@ resource "azurerm_mssql_server" "main" {
     object_id                   = data.azuread_group.azuread_sql_admin.object_id
   }
 
-  # Add identity to the SQL Server if local.audit_enabled
   dynamic "identity" {
-    for_each = local.audit_enabled ? [1] : []
+    for_each = local.auditing_enabled ? [1] : []
     content {
       type = "SystemAssigned"
     }
@@ -35,19 +34,6 @@ resource "azurerm_mssql_server" "main" {
         var.sequence_number != null
       )
       error_message = "Invalid naming configuration: Either 'override_name' must be provided, or all of 'workload', 'company_prefix', and 'sequence_number' must be provided for automatic naming."
-    }
-
-    ## Auditing validation: Ensure auditing_settings is provided for audited environments
-    precondition {
-      condition = (
-        var.auditing_settings != null ||
-        !local.audit_enabled
-      )
-      error_message = format(
-        "Invalid configuration: 'auditing_settings' must be provided when environment is one of: %s. Current environment: '%s'.",
-        join(", ", local.audited_environments),
-        var.environment
-      )
     }
   }
 }
@@ -76,7 +62,7 @@ resource "azurerm_mssql_firewall_rule" "sql_server" {
 }
 
 resource "azurerm_mssql_server_extended_auditing_policy" "sql_auditing" {
-  count                                   = local.audit_enabled ? 1 : 0
+  count                                   = local.auditing_enabled ? 1 : 0
   server_id                               = azurerm_mssql_server.main.id
   storage_endpoint                        = data.azurerm_storage_account.auditing_storage_account[0].primary_blob_endpoint
   storage_account_access_key              = data.azurerm_storage_account.auditing_storage_account[0].primary_access_key
