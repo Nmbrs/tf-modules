@@ -69,6 +69,51 @@ variable "capacity" {
   }
 }
 
+variable "premium_messaging_partitions" {
+  description = "Number of messaging partitions for a Premium namespace. Only honored when `sku_name = \"Premium\"` — must be 0 for Basic/Standard. Valid values: 0, 1, 2, 4. Changing this forces resource recreation."
+  type        = number
+  default     = 0
+
+  validation {
+    condition     = contains([0, 1, 2, 4], var.premium_messaging_partitions)
+    error_message = format("Invalid value '%s' for variable 'premium_messaging_partitions', valid options are 0, 1, 2, 4.", var.premium_messaging_partitions)
+  }
+}
+
+variable "firewall_settings" {
+  description = "Firewall configuration for the Service Bus namespace: public access, trusted-service bypass, and allowed subnets for VNet rules. All fields are optional and default to a secure-by-default posture (no public access, no allowed subnets, trusted-service bypass enabled). VNet rules (`allowed_subnets`) require the Premium SKU at the Azure API level."
+  type = object({
+    public_network_access_enabled            = optional(bool, false)
+    trusted_services_bypass_firewall_enabled = optional(bool, true)
+    allowed_subnets = optional(list(object({
+      subnet_name              = string
+      vnet_name                = string
+      vnet_resource_group_name = string
+    })), [])
+  })
+  default = {}
+
+  validation {
+    condition     = var.firewall_settings.public_network_access_enabled || length(var.firewall_settings.allowed_subnets) == 0
+    error_message = "Invalid 'firewall_settings': 'allowed_subnets' can only be specified when 'public_network_access_enabled' is true."
+  }
+
+  validation {
+    condition = alltrue([
+      for s in var.firewall_settings.allowed_subnets :
+      length(trimspace(s.subnet_name)) > 0 &&
+      length(trimspace(s.vnet_name)) > 0 &&
+      length(trimspace(s.vnet_resource_group_name)) > 0
+    ])
+    error_message = "Invalid value in 'firewall_settings.allowed_subnets': 'subnet_name', 'vnet_name', and 'vnet_resource_group_name' must all be non-empty strings."
+  }
+
+  validation {
+    condition     = length(var.firewall_settings.allowed_subnets) == length(distinct([for s in var.firewall_settings.allowed_subnets : s.subnet_name]))
+    error_message = "Invalid value in 'firewall_settings.allowed_subnets': 'subnet_name' must be unique across all entries."
+  }
+}
+
 variable "network_settings" {
   description = "Network settings for the service bus private endpoint."
   type = object({
