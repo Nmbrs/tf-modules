@@ -29,7 +29,6 @@ The Service Bus module is a Terraform module that provides a convenient way to c
 | Name | Type |
 | ---- | ---- |
 | [azurerm_servicebus_namespace.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/servicebus_namespace) | resource |
-| [azurerm_subnet.allowed_subnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subnet) | data source |
 
 ## Inputs
 
@@ -38,12 +37,11 @@ The Service Bus module is a Terraform module that provides a convenient way to c
 | <a name="input_capacity"></a> [capacity](#input\_capacity) | The number of message units (resource isolation at the CPU and memory level so that each customer workload runs in isolation). | `number` | `0` | no |
 | <a name="input_company_prefix"></a> [company\_prefix](#input\_company\_prefix) | Short, unique prefix for the company or organization. Used in naming for uniqueness. Must be 1-5 characters. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
-| <a name="input_firewall_settings"></a> [firewall\_settings](#input\_firewall\_settings) | Firewall configuration for the Service Bus namespace: public access, trusted-service bypass, and allowed subnets for VNet rules. All fields are optional and default to a secure-by-default posture (no public access, no allowed subnets, trusted-service bypass enabled). VNet rules (`allowed_subnets`) require the Premium SKU at the Azure API level. | <pre>object({<br/>    public_network_access_enabled            = optional(bool, false)<br/>    trusted_services_bypass_firewall_enabled = optional(bool, true)<br/>    allowed_subnets = optional(list(object({<br/>      subnet_name              = string<br/>      vnet_name                = string<br/>      vnet_resource_group_name = string<br/>    })), [])<br/>  })</pre> | `{}` | no |
+| <a name="input_firewall_settings"></a> [firewall\_settings](#input\_firewall\_settings) | Firewall configuration: public access, trusted-service bypass, and allowed subnets for VNet rules. All fields are optional and default to a secure-by-default posture (no public access, no allowed subnets, trusted-service bypass enabled). | <pre>object({<br/>    public_network_access_enabled            = optional(bool, false)<br/>    trusted_services_bypass_firewall_enabled = optional(bool, true)<br/>    allowed_subnet_ids                       = optional(list(string), [])<br/>  })</pre> | `{}` | no |
 | <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | Network settings for the service bus private endpoint. | <pre>object({<br/>    subnet_name              = string<br/>    vnet_name                = string<br/>    vnet_resource_group_name = string<br/>  })</pre> | n/a | yes |
 | <a name="input_override_name"></a> [override\_name](#input\_override\_name) | Override the name of the service bus namespace, to bypass naming convention. | `string` | `null` | no |
 | <a name="input_premium_messaging_partitions"></a> [premium\_messaging\_partitions](#input\_premium\_messaging\_partitions) | Number of messaging partitions for a Premium namespace. Only honored when `sku_name = "Premium"` — must be 0 for Basic/Standard. Valid values: 0, 1, 2, 4. Changing this forces resource recreation. | `number` | `0` | no |
-| <a name="input_private_dns_zone_ids"></a> [private\_dns\_zone\_ids](#input\_private\_dns\_zone\_ids) | Resource IDs of the private DNS zones, keyed by subresource. Required keys: `namespace` (typically `privatelink.servicebus.windows.net`). | <pre>object({<br/>    namespace = string<br/>  })</pre> | n/a | yes |
+| <a name="input_private_endpoint_settings"></a> [private\_endpoint\_settings](#input\_private\_endpoint\_settings) | Settings for the private endpoint provisioned by this module. `subnet_id` is the resource ID of the subnet where the PEP NIC lands. `private_dns_zone_ids` maps each required subresource to its private DNS zone resource ID. | <pre>object({<br/>    subnet_id = string<br/>    private_dns_zone_ids = object({<br/>      namespace = string<br/>    })<br/>  })</pre> | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
 | <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | Configuration of the size and capacity of the service bus. | `string` | n/a | yes |
 | <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the service bus namespace. | `string` | n/a | yes |
@@ -60,7 +58,7 @@ The Service Bus module is a Terraform module that provides a convenient way to c
 
 ## How to use it?
 
-The module always provisions a private endpoint for the service bus namespace (`namespace` subresource). Every caller must supply `network_settings` and `private_dns_zone_ids.namespace`. The `firewall_settings` variable is optional and defaults to a private-only posture (no public network access, no allowed subnets, trusted-service bypass enabled) — omit it entirely to use the defaults, or override specific fields as shown in the Premium-with-VNet-rules example. The examples below assume the relevant subnet and the `privatelink.servicebus.windows.net` DNS zone already exist.
+The module always provisions a private endpoint for the service bus namespace (`namespace` subresource). Every caller must supply `private_endpoint_settings` (the PEP subnet ID + DNS zone ID). The `firewall_settings` variable is optional and defaults to a secure-by-default posture (no public network access, no allowed subnets, trusted-service bypass enabled) — omit it entirely to use the defaults, or override specific fields as shown in the Premium-with-VNet-rules example. The examples below assume the relevant subnet and the `privatelink.servicebus.windows.net` DNS zone already exist.
 
 ### Service Bus - Basic Tier
 
@@ -76,14 +74,11 @@ module "service_bus" {
   sku_name            = "Basic"
   capacity            = 0
 
-  network_settings = {
-    subnet_name              = "snet-private-endpoints"
-    vnet_name                = "vnet-myenv"
-    vnet_resource_group_name = "rg-networking"
-  }
-
-  private_dns_zone_ids = {
-    namespace = module.dns_zone_servicebus.id
+  private_endpoint_settings = {
+    subnet_id = "/subscriptions/.../subnets/snet-private-endpoints"
+    private_dns_zone_ids = {
+      namespace = module.dns_zone_servicebus.id
+    }
   }
 }
 ```
@@ -103,21 +98,18 @@ module "service_bus" {
   capacity                     = 1
   premium_messaging_partitions = 1
 
-  network_settings = {
-    subnet_name              = "snet-private-endpoints"
-    vnet_name                = "vnet-myenv"
-    vnet_resource_group_name = "rg-networking"
-  }
-
-  private_dns_zone_ids = {
-    namespace = module.dns_zone_servicebus.id
+  private_endpoint_settings = {
+    subnet_id = "/subscriptions/.../subnets/snet-private-endpoints"
+    private_dns_zone_ids = {
+      namespace = module.dns_zone_servicebus.id
+    }
   }
 }
 ```
 
 ### Service Bus - Premium with public access and VNet rules
 
-Use this variant when the Premium namespace must remain reachable from public networks alongside the private endpoint and you want to restrict that public path to specific VNet subnets. `firewall_settings.allowed_subnets` creates VNet rules; it is only honoured when `sku_name = "Premium"` and `public_network_access_enabled = true`.
+Use this variant when the Premium namespace must remain reachable from public networks alongside the private endpoint and you want to restrict that public path to specific VNet subnets. `firewall_settings.allowed_subnet_ids` creates VNet rules; it is only honoured when `sku_name = "Premium"` and `public_network_access_enabled = true`.
 
 ```hcl
 module "service_bus" {
@@ -134,23 +126,16 @@ module "service_bus" {
 
   firewall_settings = {
     public_network_access_enabled = true
-    allowed_subnets = [
-      {
-        subnet_name              = "snet-app-001"
-        vnet_name                = "vnet-nmbrs-prod-westeurope-001"
-        vnet_resource_group_name = "rg-network-prod"
-      }
+    allowed_subnet_ids = [
+      "/subscriptions/.../subnets/snet-app-001",
     ]
   }
 
-  network_settings = {
-    subnet_name              = "snet-private-endpoints"
-    vnet_name                = "vnet-myenv"
-    vnet_resource_group_name = "rg-networking"
-  }
-
-  private_dns_zone_ids = {
-    namespace = module.dns_zone_servicebus.id
+  private_endpoint_settings = {
+    subnet_id = "/subscriptions/.../subnets/snet-private-endpoints"
+    private_dns_zone_ids = {
+      namespace = module.dns_zone_servicebus.id
+    }
   }
 }
 ```
@@ -168,14 +153,11 @@ module "service_bus" {
   sku_name            = "Standard"
   capacity            = 0
 
-  network_settings = {
-    subnet_name              = "snet-private-endpoints"
-    vnet_name                = "vnet-myenv"
-    vnet_resource_group_name = "rg-networking"
-  }
-
-  private_dns_zone_ids = {
-    namespace = module.dns_zone_servicebus.id
+  private_endpoint_settings = {
+    subnet_id = "/subscriptions/.../subnets/snet-private-endpoints"
+    private_dns_zone_ids = {
+      namespace = module.dns_zone_servicebus.id
+    }
   }
 }
 ```
