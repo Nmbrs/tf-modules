@@ -1,5 +1,5 @@
-resource "azurerm_servicebus_namespace" "service_bus" {
-  name                = "sb-nmbrs-${var.workload}-${var.environment}"
+resource "azurerm_servicebus_namespace" "main" {
+  name                = local.service_bus_name
   location            = var.location
   resource_group_name = var.resource_group_name
   sku                 = var.sku_name
@@ -8,6 +8,15 @@ resource "azurerm_servicebus_namespace" "service_bus" {
 
   lifecycle {
     ignore_changes = [tags]
+
+    ## Naming validation: Ensure either override_name is provided OR all naming components are provided
+    precondition {
+      condition = var.override_name != null || (
+        var.workload != null &&
+        var.company_prefix != null
+      )
+      error_message = "Invalid naming configuration: Either 'override_name' must be provided, or both 'workload' and 'company_prefix' must be provided for automatic naming."
+    }
 
     ## capacity validation
     precondition {
@@ -26,4 +35,3 @@ resource "azurerm_servicebus_namespace" "service_bus" {
     }
   }
 }
-
