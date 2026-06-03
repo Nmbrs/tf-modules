@@ -8,4 +8,20 @@ locals {
   auditing_enabled = var.auditing_settings != null
 
   private_endpoint_subresources = ["sqlServer"]
+
+  parsed_allowed_subnets = [
+    for id in var.firewall_settings.allowed_subnet_ids : {
+      id          = id
+      subnet_name = regex("/subnets/([^/]+)$", id)[0]
+      vnet_name   = regex("/virtualNetworks/([^/]+)/", id)[0]
+    }
+  ]
+
+  vnet_rules = var.firewall_settings.public_network_access_enabled ? {
+    for s in local.parsed_allowed_subnets :
+    "${s.vnet_name}/${s.subnet_name}" => {
+      name      = s.subnet_name
+      subnet_id = s.id
+    }
+  } : {}
 }

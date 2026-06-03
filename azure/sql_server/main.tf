@@ -39,13 +39,10 @@ resource "azurerm_mssql_server" "main" {
 }
 
 resource "azurerm_mssql_virtual_network_rule" "sql_server_network_rule" {
-  for_each = {
-    for subnet in var.firewall_settings.allowed_subnets : subnet.subnet_name => subnet
-    if var.firewall_settings.public_network_access_enabled
-  }
-  name                                 = each.key
+  for_each                             = local.vnet_rules
+  name                                 = each.value.name
   server_id                            = azurerm_mssql_server.main.id
-  subnet_id                            = data.azurerm_subnet.subnet[each.key].id
+  subnet_id                            = each.value.subnet_id
   ignore_missing_vnet_service_endpoint = false
 }
 

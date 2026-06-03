@@ -1,5 +1,5 @@
 module "private_endpoint" {
-  source   = "git::github.com/Nmbrs/tf-modules//azure/private_endpoint?ref=49dc7f61a161fb90b42471ba30c15157384b6035"
+  source   = "git::github.com/Nmbrs/tf-modules//azure/private_endpoint?ref=f41a116c9f31892191b5e3f146a1e361bfc57322"
   for_each = toset(local.private_endpoint_subresources)
 
   resource_group_name = var.resource_group_name
@@ -11,6 +11,6 @@ module "private_endpoint" {
     subresource_name = each.key
   }
 
-  network_settings    = var.network_settings
-  private_dns_zone_id = var.private_dns_zone_ids[each.key]
+  subnet_id           = var.private_endpoint_settings.subnet_id
+  private_dns_zone_id = var.private_endpoint_settings.private_dns_zone_ids[each.key]
 }
