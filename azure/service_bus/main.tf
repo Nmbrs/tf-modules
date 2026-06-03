@@ -70,5 +70,17 @@ resource "azurerm_servicebus_namespace" "main" {
       condition     = length(var.firewall_settings.allowed_subnet_ids) == 0 || var.sku_name == "Premium"
       error_message = format("Invalid 'firewall_settings.allowed_subnet_ids': VNet rules require the 'Premium' SKU. Current SKU: '%s'.", var.sku_name)
     }
+
+    ## private_endpoint_settings validation — required for Premium SKU
+    precondition {
+      condition     = var.sku_name != "Premium" || var.private_endpoint_settings != null
+      error_message = "Invalid configuration: 'private_endpoint_settings' must be provided when 'sku_name' is 'Premium'."
+    }
+
+    ## private_endpoint_settings validation — forbidden on non-Premium SKUs
+    precondition {
+      condition     = var.sku_name == "Premium" || var.private_endpoint_settings == null
+      error_message = format("Invalid configuration: 'private_endpoint_settings' must be null when 'sku_name' is '%s' (Azure only supports private endpoints on the Premium tier of Service Bus).", var.sku_name)
+    }
   }
 }

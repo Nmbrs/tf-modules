@@ -58,9 +58,11 @@ The Service Bus module is a Terraform module that provides a convenient way to c
 
 ## How to use it?
 
-The module always provisions a private endpoint for the service bus namespace (`namespace` subresource). Every caller must supply `private_endpoint_settings` (the PEP subnet ID + DNS zone ID). The `firewall_settings` variable is optional and defaults to a secure-by-default posture (no public network access, no allowed subnets, trusted-service bypass enabled) — omit it entirely to use the defaults, or override specific fields as shown in the Premium-with-VNet-rules example. The examples below assume the relevant subnet and the `privatelink.servicebus.windows.net` DNS zone already exist.
+Private endpoint support for Azure Service Bus is gated by the **Premium** tier — Basic and Standard tiers cannot have private endpoints. The module reflects this with `private_endpoint_settings`: it is **required for Premium**, and must be **null (omitted) for Basic/Standard**. Plan-time preconditions enforce both directions.
 
-### Service Bus - Basic Tier
+The `firewall_settings` variable is optional and defaults to a secure-by-default posture (no public network access, no allowed subnets, trusted-service bypass enabled) — omit it entirely to use the defaults, or override specific fields as shown in the Premium-with-VNet-rules example. The examples below assume the relevant subnet and the `privatelink.servicebus.windows.net` DNS zone already exist.
+
+### Service Bus - Basic Tier (no private endpoint)
 
 ```hcl
 module "service_bus" {
@@ -74,12 +76,7 @@ module "service_bus" {
   sku_name            = "Basic"
   capacity            = 0
 
-  private_endpoint_settings = {
-    subnet_id = "/subscriptions/.../subnets/snet-private-endpoints"
-    private_dns_zone_ids = {
-      namespace = module.dns_zone_servicebus.id
-    }
-  }
+  # private_endpoint_settings is omitted — Basic/Standard tiers do not support private endpoints
 }
 ```
 
@@ -146,12 +143,13 @@ module "service_bus" {
 module "service_bus" {
   source = "git::github.com/Nmbrs/tf-modules//azure/service_bus"
 
-  override_name       = "sb-my-custom-name"
-  environment         = "dev"
-  location            = "westeurope"
-  resource_group_name = "rg-service-bus"
-  sku_name            = "Standard"
-  capacity            = 0
+  override_name                = "sb-my-custom-name"
+  environment                  = "dev"
+  location                     = "westeurope"
+  resource_group_name          = "rg-service-bus"
+  sku_name                     = "Premium"
+  capacity                     = 1
+  premium_messaging_partitions = 1
 
   private_endpoint_settings = {
     subnet_id = "/subscriptions/.../subnets/snet-private-endpoints"

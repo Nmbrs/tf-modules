@@ -106,11 +106,13 @@ variable "firewall_settings" {
 }
 
 variable "private_endpoint_settings" {
-  description = "Settings for the private endpoint provisioned by this module. `subnet_id` is the resource ID of the subnet where the PEP NIC lands. `private_dns_zone_ids` maps each required subresource to its private DNS zone resource ID."
+  description = "Settings for the private endpoint. Required when `sku_name = \"Premium\"` (Azure only supports private endpoints on the Premium tier of Service Bus). Must be `null` on Basic/Standard."
   type = object({
     subnet_id = string
     private_dns_zone_ids = object({
       namespace = string
     })
   })
+  default  = null
+  nullable = true
 }
