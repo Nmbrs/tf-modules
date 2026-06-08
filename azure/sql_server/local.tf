@@ -1,8 +1,10 @@
 locals {
+  sequence_suffix = var.sequence_number == null ? "" : "-${format("%03d", var.sequence_number)}"
+
   sql_server_name = (
     var.override_name != null ?
     lower(var.override_name) :
-    lower("sqls-${var.company_prefix}-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.sequence_number)}")
+    lower("sqls-${var.company_prefix}-${var.workload}-${var.environment}-${var.location}${local.sequence_suffix}")
   )
 
   auditing_enabled = var.auditing_settings != null

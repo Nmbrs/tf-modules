@@ -33,8 +33,9 @@ variable "company_prefix" {
 }
 
 variable "sequence_number" {
-  description = "A numeric value used to ensure uniqueness for resource names."
+  description = "Optional numeric instance counter, zero-padded as `-NNN` suffix. Use only when provisioning multiple SQL Servers for the same workload/env/region (e.g., sharding). Omit for the common single-instance case."
   type        = number
+  default     = null
   nullable    = true
 
   validation {

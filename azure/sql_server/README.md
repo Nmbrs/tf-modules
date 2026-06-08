@@ -67,6 +67,8 @@ The `sql_server` module provides a comprehensive Terraform solution for deployin
 
 The module always provisions a private endpoint for the SQL Server (`sqlServer` subresource). Every caller must supply `private_endpoint_settings` with the subnet ID where the PEP NIC lands and the resource ID of the `privatelink.database.windows.net` DNS zone. The `firewall_settings` variable is optional and defaults to a private-only posture (no public network access, no allowed subnets, trusted-service bypass enabled) — omit it entirely to use the defaults, or override specific fields as shown in the third example.
 
+`sequence_number` is optional and intended only for power-user scenarios where multiple SQL Servers share the same workload/env/region (e.g., sharding). Omit it for the common single-instance case. When supplied, it is appended to the resource name as a zero-padded `-NNN` suffix.
+
 ### SQL Server for production with auditing
 
 ```hcl
@@ -75,7 +77,6 @@ module "sql_server" {
 
   workload            = "analytics"
   company_prefix      = "nmbrs"
-  sequence_number     = 1
   resource_group_name = "rg-sql-prod"
   location            = "westeurope"
   environment         = "prod"
@@ -110,7 +111,6 @@ module "sql_server" {
 
   workload            = "myapp"
   company_prefix      = "nmbrs"
-  sequence_number     = 1
   resource_group_name = "rg-sql-dev"
   location            = "westeurope"
   environment         = "dev"
@@ -142,7 +142,6 @@ module "sql_server" {
 
   workload            = "webapp"
   company_prefix      = "nmbrs"
-  sequence_number     = 1
   resource_group_name = "rg-sql-prod"
   location            = "westeurope"
   environment         = "prod"
