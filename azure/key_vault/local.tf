@@ -5,6 +5,8 @@ locals {
     lower("kv-${var.company_prefix}-${var.workload}-${var.external_usage ? "e" : "i"}-${var.environment}")
   )
 
+  private_endpoint_subresources = ["vault"]
+
   certificates_full_permissions = ["Backup", "Create", "Delete", "DeleteIssuers", "Get", "GetIssuers", "Import", "List", "ListIssuers", "ManageContacts", "ManageIssuers", "Purge", "Recover", "Restore", "SetIssuers", "Update"]
   keys_full_permissions         = []
   secrets_full_permissions      = ["Backup", "Delete", "Get", "List", "Purge", "Recover", "Restore", "Set"]
