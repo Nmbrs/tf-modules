@@ -6,5 +6,5 @@ locals {
     lower("cr${var.company_prefix}${var.workload}${var.environment}")
   )
 
-  network_rule_bypass = var.trusted_services_bypass_firewall_enabled ? "AzureServices" : "None"
+  network_rule_bypass = var.firewall_settings.trusted_services_bypass_firewall_enabled ? "AzureServices" : "None"
 }

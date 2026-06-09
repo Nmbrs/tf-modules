@@ -73,16 +73,11 @@ variable "sku_name" {
   }
 }
 
-variable "public_network_access_enabled" {
-  description = "Whether public network access is allowed. Default 'false' keeps the registry private (accessed only via private endpoint) and requires sku_name = 'Premium'. For 'Basic' or 'Standard' you must explicitly set this to true, since those SKUs do not support private link."
-  type        = bool
-  default     = false
-  nullable    = false
-}
-
-variable "trusted_services_bypass_firewall_enabled" {
-  description = "Allow trusted Microsoft services (e.g. AKS, ACI) to reach the registry despite the firewall. Only valid on Premium in private mode (public_network_access_enabled = false); has no effect on a public registry."
-  type        = bool
-  default     = true
-  nullable    = false
+variable "firewall_settings" {
+  description = "Firewall configuration: public access and trusted-service bypass. Custom 2-field shape for Container Registry — the standard pattern's `allowed_subnet_ids` is omitted because Azure deprecated VNet rules for ACR and the azurerm provider no longer exposes them. `public_network_access_enabled = false` keeps the registry private (accessed only via private endpoint) and requires `sku_name = 'Premium'`. `trusted_services_bypass_firewall_enabled` only applies on Premium in private mode."
+  type = object({
+    public_network_access_enabled            = optional(bool, false)
+    trusted_services_bypass_firewall_enabled = optional(bool, true)
+  })
+  default = {}
 }

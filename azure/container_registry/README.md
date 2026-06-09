@@ -23,9 +23,12 @@ module "container_registry" {
   environment         = "prod"
   company_prefix      = "nmbrs"
 
-  sku_name                                 = "Premium"
-  public_network_access_enabled            = false
-  trusted_services_bypass_firewall_enabled = true
+  sku_name = "Premium"
+
+  firewall_settings = {
+    public_network_access_enabled            = false
+    trusted_services_bypass_firewall_enabled = true
+  }
 }
 ```
 
@@ -41,9 +44,12 @@ module "container_registry" {
   environment         = "dev"
   company_prefix      = "nmbrs"
 
-  sku_name                                 = "Basic"
-  public_network_access_enabled            = true
-  trusted_services_bypass_firewall_enabled = false
+  sku_name = "Basic"
+
+  firewall_settings = {
+    public_network_access_enabled            = true
+    trusted_services_bypass_firewall_enabled = false
+  }
 }
 ```
 
@@ -58,8 +64,11 @@ module "container_registry" {
   location            = "westeurope"
   environment         = "test"
 
-  sku_name                                 = "Premium"
-  public_network_access_enabled            = false
-  trusted_services_bypass_firewall_enabled = true
+  sku_name = "Premium"
+
+  firewall_settings = {
+    public_network_access_enabled            = false
+    trusted_services_bypass_firewall_enabled = true
+  }
 }
 ```
