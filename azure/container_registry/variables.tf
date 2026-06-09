@@ -81,3 +81,15 @@ variable "firewall_settings" {
   })
   default = {}
 }
+
+variable "private_endpoint_settings" {
+  description = "Settings for the private endpoint. Required when `sku_name` is `Premium`; must be null otherwise (Basic/Standard tiers do not support private endpoints). `subnet_id` is the resource ID of the subnet where the PEP NIC lands. `private_dns_zone_ids` maps each required subresource to its private DNS zone resource ID."
+  type = object({
+    subnet_id = string
+    private_dns_zone_ids = object({
+      registry = string
+    })
+  })
+  default  = null
+  nullable = true
+}

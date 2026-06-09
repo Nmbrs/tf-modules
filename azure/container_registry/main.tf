@@ -41,5 +41,11 @@ resource "azurerm_container_registry" "main" {
       )
       error_message = "Invalid configuration: 'firewall_settings.trusted_services_bypass_firewall_enabled' can only be true when sku_name = 'Premium' AND firewall_settings.public_network_access_enabled = false (private mode). On public registries there is nothing to bypass."
     }
+
+    ## Private endpoint is supported only on the Premium SKU.
+    precondition {
+      condition     = var.sku_name == "Premium" || var.private_endpoint_settings == null
+      error_message = format("Invalid configuration: 'private_endpoint_settings' must be null when 'sku_name' is '%s'. Private endpoints are only supported on the 'Premium' tier.", var.sku_name)
+    }
   }
 }
