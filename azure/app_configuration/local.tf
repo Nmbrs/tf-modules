@@ -4,4 +4,6 @@ locals {
     lower(var.override_name) :
     lower("appcs-${var.company_prefix}-${var.workload}-${var.environment}")
   )
+
+  private_endpoint_subresources = ["configurationStores"]
 }

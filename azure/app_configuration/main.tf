@@ -17,5 +17,15 @@ resource "azurerm_app_configuration" "main" {
       )
       error_message = "Invalid naming configuration: Either 'override_name' must be provided, or both 'workload' and 'company_prefix' must be provided for automatic naming."
     }
+
+    precondition {
+      condition     = !contains(["standard", "premium"], lower(var.sku_name)) || var.private_endpoint_settings != null
+      error_message = "Invalid configuration: 'private_endpoint_settings' must be provided when 'sku_name' is 'standard' or 'premium'."
+    }
+
+    precondition {
+      condition     = contains(["standard", "premium"], lower(var.sku_name)) || var.private_endpoint_settings == null
+      error_message = format("Invalid configuration: 'private_endpoint_settings' must be null when 'sku_name' is '%s'. Private endpoints are only supported on the 'standard' or 'premium' tier.", var.sku_name)
+    }
   }
 }

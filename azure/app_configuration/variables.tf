@@ -77,3 +77,15 @@ variable "public_network_access_enabled" {
   type        = bool
   default     = false
 }
+
+variable "private_endpoint_settings" {
+  description = "Settings for the private endpoint. Required when `sku_name` is `standard` or `premium`; must be null otherwise (Free/Developer tiers do not support private endpoints). `subnet_id` is the resource ID of the subnet where the PEP NIC lands. `private_dns_zone_ids` maps each required subresource to its private DNS zone resource ID."
+  type = object({
+    subnet_id = string
+    private_dns_zone_ids = object({
+      configurationStores = string
+    })
+  })
+  default  = null
+  nullable = true
+}
