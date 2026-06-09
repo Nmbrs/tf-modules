@@ -42,7 +42,7 @@ The Azure Redis Cache module is a Terraform module that provides an easy and con
 | <a name="input_private_endpoint_settings"></a> [private\_endpoint\_settings](#input\_private\_endpoint\_settings) | Settings for the private endpoint provisioned by this module. `subnet_id` is the resource ID of the subnet where the PEP NIC lands. `private_dns_zone_ids` maps each required subresource to its private DNS zone resource ID. | <pre>object({<br/>    subnet_id = string<br/>    private_dns_zone_ids = object({<br/>      redisCache = string<br/>    })<br/>  })</pre> | n/a | yes |
 | <a name="input_public_network_access_enabled"></a> [public\_network\_access\_enabled](#input\_public\_network\_access\_enabled) | Whether or not public network access is allowed for this Redis instance. | `bool` | `false` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Specifies the name of the resource group where the resource should be provisioned. | `string` | n/a | yes |
-| <a name="input_sequence_number"></a> [sequence\_number](#input\_sequence\_number) | A numeric value used to ensure uniqueness for resource names. | `number` | n/a | yes |
+| <a name="input_sequence_number"></a> [sequence\_number](#input\_sequence\_number) | Optional numeric instance counter, zero-padded as `-NNN` suffix. Use only when provisioning multiple Redis caches for the same workload/env/region (e.g., sharding). Omit for the common single-instance case. | `number` | `null` | no |
 | <a name="input_shard_count"></a> [shard\_count](#input\_shard\_count) | The number of shards for the Redis cluster. Only required when using a Premium SKU. | `number` | `0` | no |
 | <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | Configuration of the size and capacity of the Redis cache. | `string` | n/a | yes |
 | <a name="input_workload"></a> [workload](#input\_workload) | Short, descriptive name for the application, service, or workload. Used in resource naming conventions. | `string` | n/a | yes |
@@ -67,6 +67,8 @@ The Azure Redis Cache module is a Terraform module that provides an easy and con
 
 The module always provisions a private endpoint for the Redis cache (`redisCache` subresource). Every caller must supply `private_endpoint_settings` with the subnet ID where the PEP NIC lands and the resource ID of the `privatelink.redis.cache.windows.net` DNS zone. `public_network_access_enabled` defaults to `false` (PEP-only posture); set it to `true` only when public reachability is genuinely needed alongside the private endpoint.
 
+`sequence_number` is optional and intended only for power-user scenarios where multiple Redis caches share the same workload/env/region (e.g., sharding). Omit it for the common single-instance case. When supplied, it is appended to the resource name as a zero-padded `-NNN` suffix.
+
 ### Basic Redis Cache (Minimal Configuration)
 
 This example shows the minimum required configuration for a Basic Redis cache.
@@ -77,7 +79,6 @@ module "redis_cache" {
 
   workload            = "shared"
   company_prefix      = "nmbrs"
-  sequence_number     = 1
   environment         = "dev"
   location            = "westeurope"
   resource_group_name = "rg-yha-dev"
@@ -104,7 +105,6 @@ module "redis_cache" {
 
   workload            = "auth"
   company_prefix      = "nmbrs"
-  sequence_number     = 2
   environment         = "prod"
   location            = "westeurope"
   resource_group_name = "rg-module-prod"
@@ -131,7 +131,6 @@ module "redis_cache" {
 
   workload            = "session"
   company_prefix      = "nmbrs"
-  sequence_number     = 1
   environment         = "prod"
   location            = "westeurope"
   resource_group_name = "rg-try-prod"
@@ -159,7 +158,6 @@ module "redis_cache" {
 
   workload            = "analytics"
   company_prefix      = "nmbrs"
-  sequence_number     = 1
   environment         = "prod"
   location            = "westeurope"
   resource_group_name = "rg-logs-prod"

@@ -1,9 +1,11 @@
 locals {
+  sequence_suffix = var.sequence_number == null ? "" : "-${format("%03d", var.sequence_number)}"
+
   # Redis Cache naming following standard conventions
-  # Format: redis-{company}-{workload}-{env}-{location}-{seq}
+  # Format: redis-{company}-{workload}-{env}-{location}[-{seq}]
   redis_cache_name = (var.override_name != null ?
     lower(var.override_name) :
-    lower("redis-${var.company_prefix}-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.sequence_number)}")
+    lower("redis-${var.company_prefix}-${var.workload}-${var.environment}-${var.location}${local.sequence_suffix}")
   )
 
   private_endpoint_subresources = ["redisCache"]
