@@ -33,8 +33,9 @@ variable "company_prefix" {
 }
 
 variable "sequence_number" {
-  description = "A numeric value used to ensure uniqueness for resource names."
+  description = "Optional numeric instance counter, zero-padded as `-NNN` suffix. Use only when provisioning multiple Redis caches for the same workload/env/region (e.g., sharding). Omit for the common single-instance case."
   type        = number
+  default     = null
   nullable    = true
 
   validation {
@@ -110,4 +111,14 @@ variable "public_network_access_enabled" {
   type        = bool
   default     = false
   nullable    = false
+}
+
+variable "private_endpoint_settings" {
+  description = "Settings for the private endpoint provisioned by this module. `subnet_id` is the resource ID of the subnet where the PEP NIC lands. `private_dns_zone_ids` maps each required subresource to its private DNS zone resource ID."
+  type = object({
+    subnet_id = string
+    private_dns_zone_ids = object({
+      redisCache = string
+    })
+  })
 }
