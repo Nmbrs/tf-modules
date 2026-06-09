@@ -5,6 +5,8 @@ locals {
     lower(var.override_name) :
     lower("redis-${var.company_prefix}-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.sequence_number)}")
   )
+
+  private_endpoint_subresources = ["redisCache"]
 }
 
 locals {

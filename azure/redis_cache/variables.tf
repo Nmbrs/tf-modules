@@ -111,3 +111,13 @@ variable "public_network_access_enabled" {
   default     = false
   nullable    = false
 }
+
+variable "private_endpoint_settings" {
+  description = "Settings for the private endpoint provisioned by this module. `subnet_id` is the resource ID of the subnet where the PEP NIC lands. `private_dns_zone_ids` maps each required subresource to its private DNS zone resource ID."
+  type = object({
+    subnet_id = string
+    private_dns_zone_ids = object({
+      redisCache = string
+    })
+  })
+}
