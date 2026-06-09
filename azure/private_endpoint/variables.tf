@@ -8,30 +8,27 @@ variable "location" {
   type        = string
 }
 
-variable "network_settings" {
-  description = "Defines the network settings for the resources, specifying the subnet, virtual network name, and the resource group for the virtual network."
-  type = object(
-    {
-      subnet_name              = string
-      vnet_name                = string
-      vnet_resource_group_name = string
-    }
-  )
+variable "subnet_id" {
+  description = "The full Azure resource ID of the subnet where the private endpoint NIC will be created."
+  type        = string
 }
 
 variable "resource_settings" {
-  description = "Defines the settings for the associated resources, specifying the name, and the resource group for it."
+  description = <<-EOT
+    Defines the settings for the resource the private endpoint will connect to.
+
+    - `name`: the workload identifier, used to compose the PEP name (`pep-<name>-<subresource_name>`).
+    - `resource_id`: the full Azure resource ID of the target (e.g. the `.id` output of the resource's module).
+    - `subresource_name`: the Azure private-link subresource (e.g. `blob`, `vault`, `sites`, `SQL`). For the full list of valid values per resource type, see:
+      https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview#private-link-resource
+  EOT
   type = object(
     {
-      name                = string
-      type                = string
-      resource_group_name = string
+      name             = string
+      resource_id      = string
+      subresource_name = string
     }
   )
-  validation {
-    condition     = contains(["app_service_windows", "app_service_linux", "function_app_windows", "function_app_linux", "storage_account_blob", "storage_account_table", "storage_account_file", "sql_server", "key_vault", "service_bus", "eventgrid_domain", "eventgrid_topic", "container_registry", "cosmos_db_nosql", "cosmos_db_mongodb", "redis_cache", "api_management", "app_configuration", "azure_container_registry", "data_factory", "data_factory_portal"], var.resource_settings.type)
-    error_message = format("Invalid value '%s' for variable 'resource_settings.type'. Valid options are 'app_service_windows', 'app_service_linux', 'function_app_windows', 'function_app_linux', 'storage_account_blob', 'storage_account_table', 'storage_account_file', 'sql_server', 'key_vault', 'service_bus', 'eventgrid_domain', 'eventgrid_topic', 'container_registry', 'cosmos_db_nosql', 'cosmos_db_mongodb', 'redis_cache', 'api_management', 'app_configuration', 'azure_container_registry', 'data_factory', 'data_factory_portal'.", var.resource_settings.type)
-  }
 }
 
 variable "private_dns_zone_id" {
