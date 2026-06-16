@@ -40,9 +40,6 @@ No modules.
 | [azuredevops_group_membership.project_default_team_membership](https://registry.terraform.io/providers/microsoft/azuredevops/latest/docs/resources/group_membership) | resource |
 | [azuredevops_group_membership.readers](https://registry.terraform.io/providers/microsoft/azuredevops/latest/docs/resources/group_membership) | resource |
 | [azuredevops_project.project](https://registry.terraform.io/providers/microsoft/azuredevops/latest/docs/resources/project) | resource |
-| [azuredevops_group.aad_administrators](https://registry.terraform.io/providers/microsoft/azuredevops/latest/docs/data-sources/group) | data source |
-| [azuredevops_group.aad_contributors](https://registry.terraform.io/providers/microsoft/azuredevops/latest/docs/data-sources/group) | data source |
-| [azuredevops_group.aad_readers](https://registry.terraform.io/providers/microsoft/azuredevops/latest/docs/data-sources/group) | data source |
 | [azuredevops_group.contributors](https://registry.terraform.io/providers/microsoft/azuredevops/latest/docs/data-sources/group) | data source |
 | [azuredevops_group.project_administrators](https://registry.terraform.io/providers/microsoft/azuredevops/latest/docs/data-sources/group) | data source |
 | [azuredevops_group.project_default_team](https://registry.terraform.io/providers/microsoft/azuredevops/latest/docs/data-sources/group) | data source |
@@ -52,10 +49,10 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_administrators_groups"></a> [administrators\_groups](#input\_administrators\_groups) | List of groups that will be administrators at the Azure DevOps project | `list(string)` | n/a | yes |
-| <a name="input_contributors_groups"></a> [contributors\_groups](#input\_contributors\_groups) | List of groups that will be contributors at the Azure DevOps project | `list(string)` | n/a | yes |
+| <a name="input_administrators_group_descriptors"></a> [administrators\_group\_descriptors](#input\_administrators\_group\_descriptors) | Descriptors of the groups that will be administrators at the Azure DevOps project. Resolve the AAD group descriptors once at the root module and pass them in, rather than having this module look each group up per instance. | `list(string)` | n/a | yes |
+| <a name="input_contributors_group_descriptors"></a> [contributors\_group\_descriptors](#input\_contributors\_group\_descriptors) | Descriptors of the groups that will be contributors at the Azure DevOps project. Resolve the AAD group descriptors once at the root module and pass them in, rather than having this module look each group up per instance. | `list(string)` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | The name of the Azure Dev Ops project | `string` | n/a | yes |
-| <a name="input_readers_groups"></a> [readers\_groups](#input\_readers\_groups) | List of groups that will be readers at the Azure DevOps project | `list(string)` | n/a | yes |
+| <a name="input_readers_group_descriptors"></a> [readers\_group\_descriptors](#input\_readers\_group\_descriptors) | Descriptors of the groups that will be readers at the Azure DevOps project. Resolve the AAD group descriptors once at the root module and pass them in, rather than having this module look each group up per instance. | `list(string)` | n/a | yes |
 
 ## Outputs
 
@@ -66,12 +63,20 @@ No outputs.
 A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
 
 ```hcl
+# Resolve each distinct AAD group once at the root module, then pass descriptors
+# into each project instance. This avoids a per-project org-wide group lookup.
+data "azuredevops_group" "aad" {
+  for_each = toset(["sg-owners", "sg-domain-admin", "sg-all-developers"])
+  name     = each.value
+}
+
 module "azuredevops_project" {
-  source                = "git::github.com/Nmbrs/tf-modules//azuredevops/project"
-  name                  = "internaltools"
-  group_owners          = ["sg-owners"]
-  group_administrators  = ["sg-domain-admin]
-  group_readers         = ["sg-all-developers"]
+  source = "git::github.com/Nmbrs/tf-modules//azuredevops/project"
+  name   = "internaltools"
+
+  contributors_group_descriptors   = [data.azuredevops_group.aad["sg-owners"].descriptor]
+  administrators_group_descriptors = [data.azuredevops_group.aad["sg-domain-admin"].descriptor]
+  readers_group_descriptors        = [data.azuredevops_group.aad["sg-all-developers"].descriptor]
 }
 ```
 <!-- END_TF_DOCS -->

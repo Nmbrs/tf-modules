@@ -28,18 +28,18 @@ variable "name" {
   }
 }
 
-variable "contributors_groups" {
-  description = "List of groups that will be contributors at the Azure DevOps project"
+variable "contributors_group_descriptors" {
+  description = "Descriptors of the groups that will be contributors at the Azure DevOps project. Resolve the AAD group descriptors once at the root module and pass them in, rather than having this module look each group up per instance."
   type        = list(string)
 }
 
-variable "administrators_groups" {
-  description = "List of groups that will be administrators at the Azure DevOps project"
+variable "administrators_group_descriptors" {
+  description = "Descriptors of the groups that will be administrators at the Azure DevOps project. Resolve the AAD group descriptors once at the root module and pass them in, rather than having this module look each group up per instance."
   type        = list(string)
 }
 
-variable "readers_groups" {
-  description = "List of groups that will be readers at the Azure DevOps project"
+variable "readers_group_descriptors" {
+  description = "Descriptors of the groups that will be readers at the Azure DevOps project. Resolve the AAD group descriptors once at the root module and pass them in, rather than having this module look each group up per instance."
   type        = list(string)
 }
 
