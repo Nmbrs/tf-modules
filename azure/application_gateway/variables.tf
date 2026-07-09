@@ -83,7 +83,8 @@ variable "application_backend_settings" {
       certificate_name = optional(string, null)
     })
     backend = object({
-      fqdns                         = list(string)
+      fqdns                         = optional(list(string), [])
+      ip_addresses                  = optional(list(string), [])
       port                          = number
       protocol                      = string
       cookie_based_affinity_enabled = optional(bool, false)
@@ -100,6 +101,14 @@ variable "application_backend_settings" {
   }))
   default  = []
   nullable = false
+
+  validation {
+    condition = alltrue([
+      for application in var.application_backend_settings :
+      length(application.backend.fqdns) > 0 || length(application.backend.ip_addresses) > 0
+    ])
+    error_message = "Each backend must define at least one target in either 'fqdns' or 'ip_addresses'."
+  }
 }
 
 variable "redirect_url_settings" {

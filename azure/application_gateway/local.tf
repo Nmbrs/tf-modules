@@ -110,6 +110,7 @@ locals {
       }
       backend = {
         fqdns                         = ["contoso.com"]
+        ip_addresses                  = []
         port                          = local.http_port
         protocol                      = "http"
         cookie_based_affinity_enabled = true

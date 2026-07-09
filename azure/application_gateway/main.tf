@@ -185,8 +185,9 @@ resource "azurerm_application_gateway" "main" {
     )
 
     content {
-      name  = "backend-${local.application_names[backend_address_pool.key]}"
-      fqdns = backend_address_pool.value.backend.fqdns
+      name         = "backend-${local.application_names[backend_address_pool.key]}"
+      fqdns        = length(backend_address_pool.value.backend.fqdns) > 0 ? backend_address_pool.value.backend.fqdns : null
+      ip_addresses = length(backend_address_pool.value.backend.ip_addresses) > 0 ? backend_address_pool.value.backend.ip_addresses : null
     }
   }
 
