@@ -201,30 +201,6 @@ variable "ssl_certificates" {
   nullable = false
 }
 
-variable "min_instance_count" {
-  description = "The minimum number of instances the application gateway will have."
-  type        = number
-  default     = 2
-  nullable    = false
-
-  validation {
-    condition     = var.min_instance_count >= 1 && var.min_instance_count <= 100
-    error_message = format("Invalid value '%s' for variable 'min_instance_count', it must be between 1 and 100.", var.min_instance_count)
-  }
-}
-
-variable "max_instance_count" {
-  description = "The maximum number of instances the application gateway will have."
-  type        = number
-  default     = 10
-  nullable    = false
-
-  validation {
-    condition     = var.max_instance_count >= 1 && var.max_instance_count <= 100
-    error_message = format("Invalid value '%s' for variable 'max_instance_count', it must be between 1 and 100.", var.max_instance_count)
-  }
-}
-
 variable "diagnostic_settings" {
   description = "Diagnostic settings configuration for Application Gateway"
   type = object({
