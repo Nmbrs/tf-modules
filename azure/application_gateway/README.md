@@ -1,21 +1,21 @@
-<!-- BEGIN_TF_DOCS -->
 # Application gateway Module
 
 ## Sumary
 
 The `application_gateway` module enables users to easily provision and configure Azure Application Gateway resources for entry points of traffic and load balancing to the apps. It simplifies the process of setting up Application Gateway, allowing you to define key parameters such as resource name, location, etc all while maintaining infrastructure as code.
 
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.117 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
 
 ## Modules
@@ -25,27 +25,28 @@ No modules.
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [azurerm_application_gateway.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_gateway) | resource |
+| [azurerm_monitor_diagnostic_setting.app_gateway](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting) | resource |
 | [azurerm_public_ip.application_gateway](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/public_ip) | resource |
 | [azurerm_web_application_firewall_policy.application_gateway](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/web_application_firewall_policy) | resource |
 | [azurerm_web_application_firewall_policy.listener](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/web_application_firewall_policy) | resource |
 | [azurerm_key_vault.certificate](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault) | data source |
 | [azurerm_key_vault_secret.certificate](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
+| [azurerm_log_analytics_workspace.diagnostics](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/log_analytics_workspace) | data source |
 | [azurerm_subnet.app_gw](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subnet) | data source |
 | [azurerm_user_assigned_identity.certificate](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/user_assigned_identity) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_application_backend_settings"></a> [application\_backend\_settings](#input\_application\_backend\_settings) | A list of settings for the application backends that the app gateway will serve. | <pre>list(object({<br/>    routing_rule = object({<br/>      priority = number<br/>    })<br/>    listener = object({<br/>      fqdn             = string<br/>      protocol         = string<br/>      certificate_name = optional(string, null)<br/>    })<br/>    backend = object({<br/>      fqdns                         = list(string)<br/>      port                          = number<br/>      protocol                      = string<br/>      cookie_based_affinity_enabled = optional(bool, false)<br/>      request_timeout_in_seconds    = optional(number, 30)<br/>      health_probe = object({<br/>        timeout_in_seconds             = number<br/>        evaluation_interval_in_seconds = number<br/>        unhealthy_treshold_count       = number<br/>        fqdn                           = string<br/>        path                           = string<br/>        status_codes                   = list(string)<br/>      })<br/>    })<br/>  }))</pre> | `[]` | no |
 | <a name="input_company_prefix"></a> [company\_prefix](#input\_company\_prefix) | Short, unique prefix for the company / organization. | `string` | n/a | yes |
+| <a name="input_diagnostic_settings"></a> [diagnostic\_settings](#input\_diagnostic\_settings) | Diagnostic settings configuration for Application Gateway | <pre>object({<br/>    log_analytics_workspace = object({<br/>      name                = string<br/>      resource_group_name = string<br/>    })<br/><br/>    logs = optional(object({<br/>      access_log_enabled      = bool<br/>      performance_log_enabled = bool<br/>      firewall_log_enabled    = bool<br/>    }))<br/>    metrics_enabled = bool<br/>  })</pre> | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | Specifies Azure location where the resources should be provisioned. For an exhaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
 | <a name="input_managed_identity_settings"></a> [managed\_identity\_settings](#input\_managed\_identity\_settings) | Settings related to the app gateway managed identity used to retrieve SSL certificates. | <pre>object({<br/>    name                = string<br/>    resource_group_name = string<br/>  })</pre> | n/a | yes |
-| <a name="input_max_instance_count"></a> [max\_instance\_count](#input\_max\_instance\_count) | The maximum number of instances the application gateway will have. | `number` | `10` | no |
-| <a name="input_min_instance_count"></a> [min\_instance\_count](#input\_min\_instance\_count) | The minimum number of instances the application gateway will have. | `number` | `2` | no |
 | <a name="input_network_settings"></a> [network\_settings](#input\_network\_settings) | Settings related to the network connectivity of the application gateway. | <pre>object({<br/>    vnet_name                = string<br/>    vnet_resource_group_name = string<br/>    subnet_name              = string<br/>  })</pre> | n/a | yes |
 | <a name="input_override_name"></a> [override\_name](#input\_override\_name) | Optional override for naming logic. | `string` | `null` | no |
 | <a name="input_redirect_listener_settings"></a> [redirect\_listener\_settings](#input\_redirect\_listener\_settings) | A list of settings for the listeners redirection that the app gateway will serve. | <pre>list(object({<br/>    routing_rule = object({<br/>      priority = number<br/>    })<br/>    listener = object({<br/>      fqdn             = string<br/>      protocol         = string<br/>      certificate_name = optional(string, null)<br/>    })<br/>    target = object({<br/>      listener_name        = string<br/>      include_path         = bool<br/>      include_query_string = bool<br/>    })<br/>  }))</pre> | `[]` | no |
@@ -58,12 +59,13 @@ No modules.
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_id"></a> [id](#output\_id) | The application gateway ID. |
 | <a name="output_name"></a> [name](#output\_name) | The application gateway full name. |
 | <a name="output_public_ip_address"></a> [public\_ip\_address](#output\_public\_ip\_address) | The public IP address of the application gateway. |
 | <a name="output_public_ip_fqdn"></a> [public\_ip\_fqdn](#output\_public\_ip\_fqdn) | The public IP FQDN of the application gateway. |
 | <a name="output_workload"></a> [workload](#output\_workload) | The application gateway workload name. |
+<!-- END_TF_DOCS -->
 
 ## How to use it?
 
@@ -80,8 +82,6 @@ module "application_gateway" {
   environment         = "dev"
   location            = "westeurope"
   resource_group_name = "rg-contoso-dev"
-  min_instance_count  = 2
-  max_instance_count  = 10
 
   network_settings = {
     vnet_name                = "vnet-contoso-dev"
@@ -182,8 +182,6 @@ module "application_gateway" {
   environment         = "prod"
   location            = "westeurope"
   resource_group_name = "rg-contoso-prod"
-  min_instance_count  = 2
-  max_instance_count  = 10
 
   network_settings = {
     vnet_name                = "vnet-contoso-prod"
@@ -261,8 +259,6 @@ module "application_gateway" {
   environment         = "dev"
   location            = "westeurope"
   resource_group_name = "rg-contoso-dev"
-  min_instance_count  = 2
-  max_instance_count  = 10
 
   network_settings = {
     vnet_name                = "vnet-contoso-dev"
@@ -343,8 +339,6 @@ module "application_gateway" {
   environment         = "dev"
   location            = "westeurope"
   resource_group_name = "rg-contoso-dev"
-  min_instance_count  = 2
-  max_instance_count  = 10
 
  network_settings = {
     vnet_name                = "vnet-contoso-dev"
@@ -461,8 +455,6 @@ module "application_gateway" {
   environment         = "prod"
   location            = "westeurope"
   resource_group_name = "rg-contoso-prod"
-  min_instance_count  = 2
-  max_instance_count  = 20
 
   network_settings = {
     vnet_name                = "vnet-contoso-prod"
@@ -505,4 +497,3 @@ module "application_gateway" {
   }
 }
 ```
-<!-- END_TF_DOCS -->

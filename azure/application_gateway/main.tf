@@ -95,9 +95,12 @@ resource "azurerm_application_gateway" "main" {
     tier = "WAF_v2"
   }
 
+  # Bounds are seeded on creation only. The block is required because v2 SKUs
+  # must declare either autoscale_configuration or sku.capacity, but its values
+  # are ignored on subsequent applies (see lifecycle block below).
   autoscale_configuration {
-    min_capacity = var.min_instance_count
-    max_capacity = var.max_instance_count
+    min_capacity = local.initial_min_instance_count
+    max_capacity = local.initial_max_instance_count
   }
 
   identity {
@@ -346,6 +349,9 @@ resource "azurerm_application_gateway" "main" {
     ignore_changes = [
       tags,
       waf_configuration,
+      # Instance counts are managed by an external process after creation.
+      # Terraform seeds the initial bounds and then stops tracking them.
+      autoscale_configuration,
       # Rewrite rules within each set are managed by an external process.
       # Terraform manages the empty rewrite_rule_set (name and lifecycle) but must
       # not overwrite the rewrite_rule entries populated externally.
@@ -453,12 +459,6 @@ resource "azurerm_application_gateway" "main" {
       rewrite_rule_set[98].rewrite_rule,
       rewrite_rule_set[99].rewrite_rule,
     ]
-
-    ## Instance count validation
-    precondition {
-      condition     = var.min_instance_count <= var.max_instance_count
-      error_message = format("Invalid configuration: minimum instance count (%s) must be less than or equal to maximum instance count (%s).", var.min_instance_count, var.max_instance_count)
-    }
 
     ## Naming validation: Ensure either override_name is provided OR all naming components are provided
     precondition {

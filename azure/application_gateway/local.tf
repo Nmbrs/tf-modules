@@ -54,6 +54,15 @@ locals {
 }
 
 locals {
+  # Autoscale bounds applied only when the gateway is first created.
+  # Afterwards the capacity is owned by an external process, so the
+  # autoscale_configuration block is ignored by the lifecycle rules and these
+  # values have no effect on already deployed gateways.
+  initial_min_instance_count = 2
+  initial_max_instance_count = 10
+}
+
+locals {
   # FQDN to resource name transformation
   # Transforms FQDNs to valid Azure resource names by:
   # - Replacing dots with hyphens
