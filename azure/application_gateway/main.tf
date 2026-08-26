@@ -108,13 +108,6 @@ resource "azurerm_application_gateway" "main" {
     identity_ids = [data.azurerm_user_assigned_identity.certificate.id]
   }
 
-  waf_configuration {
-    enabled          = true
-    firewall_mode    = "Prevention"
-    rule_set_version = 3.2
-  }
-
-
   gateway_ip_configuration {
     name      = "app-gateway-ip-configuration"
     subnet_id = data.azurerm_subnet.app_gw.id
@@ -348,7 +341,6 @@ resource "azurerm_application_gateway" "main" {
   lifecycle {
     ignore_changes = [
       tags,
-      waf_configuration,
       # Instance counts are managed by an external process after creation.
       # Terraform seeds the initial bounds and then stops tracking them.
       autoscale_configuration,
