@@ -209,11 +209,11 @@ variable "diagnostic_settings" {
       resource_group_name = string
     })
 
-    logs = optional(object({
+    logs = object({
       access_log_enabled      = bool
       performance_log_enabled = bool
       firewall_log_enabled    = bool
-    }))
+    })
     metrics_enabled = bool
   })
   nullable = false

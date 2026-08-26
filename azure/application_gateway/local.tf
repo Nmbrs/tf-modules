@@ -135,3 +135,16 @@ locals {
     }
   ]
 }
+
+locals {
+  # Log categories to enable on the diagnostic setting.
+  diagnostic_log_categories = compact([
+    var.diagnostic_settings.logs.access_log_enabled ? "ApplicationGatewayAccessLog" : "",
+    var.diagnostic_settings.logs.performance_log_enabled ? "ApplicationGatewayPerformanceLog" : "",
+    var.diagnostic_settings.logs.firewall_log_enabled ? "ApplicationGatewayFirewallLog" : "",
+  ])
+
+  # The provider rejects a diagnostic setting that has no enabled log or metric,
+  # so the resource is skipped entirely when the caller disables everything.
+  diagnostics_enabled = length(local.diagnostic_log_categories) > 0 || var.diagnostic_settings.metrics_enabled
+}
