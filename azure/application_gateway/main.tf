@@ -468,33 +468,31 @@ resource "azurerm_application_gateway" "main" {
 # Application Gateway Logs
 # ==============================================================================
 resource "azurerm_monitor_diagnostic_setting" "app_gateway" {
+  count                      = local.diagnostics_enabled ? 1 : 0
   name                       = "diag-${local.app_gateway_name}"
   target_resource_id         = azurerm_application_gateway.main.id
-  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.diagnostics.id
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.diagnostics[0].id
 
   dynamic "enabled_log" {
-    for_each = try(var.diagnostic_settings.logs.access_log_enabled, true) ? ["ApplicationGatewayAccessLog"] : []
+    for_each = local.diagnostic_log_categories
     content {
       category = enabled_log.value
     }
   }
 
-  dynamic "enabled_log" {
-    for_each = try(var.diagnostic_settings.logs.performance_log_enabled, true) ? ["ApplicationGatewayPerformanceLog"] : []
+  dynamic "metric" {
+    for_each = var.diagnostic_settings.metrics_enabled ? ["AllMetrics"] : []
     content {
-      category = enabled_log.value
+      category = metric.value
+      enabled  = true
     }
   }
+}
 
-  dynamic "enabled_log" {
-    for_each = try(var.diagnostic_settings.logs.firewall_log_enabled, true) ? ["ApplicationGatewayFirewallLog"] : []
-    content {
-      category = enabled_log.value
-    }
-  }
-
-  metric {
-    category = "AllMetrics"
-    enabled  = var.diagnostic_settings.metrics_enabled
-  }
+# The diagnostic setting became conditional, which changes its address from
+# '.app_gateway' to '.app_gateway[0]'. Without this, gateways provisioned before
+# the change would have their diagnostic setting destroyed and recreated.
+moved {
+  from = azurerm_monitor_diagnostic_setting.app_gateway
+  to   = azurerm_monitor_diagnostic_setting.app_gateway[0]
 }
