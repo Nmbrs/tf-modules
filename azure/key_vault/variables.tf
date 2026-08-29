@@ -106,3 +106,19 @@ variable "trusted_services_bypass_firewall_enabled" {
   type        = bool
   default     = true
 }
+
+variable "network_settings" {
+  description = "Network settings for the key vault private endpoint."
+  type = object({
+    subnet_name              = string
+    vnet_name                = string
+    vnet_resource_group_name = string
+  })
+}
+
+variable "private_dns_zone_ids" {
+  description = "Resource IDs of the private DNS zones, keyed by subresource. Required keys: `vault` (typically `privatelink.vaultcore.azure.net`)."
+  type = object({
+    vault = string
+  })
+}

@@ -1,11 +1,58 @@
-variable "resource_group_name" {
-  description = "The name of the resource group to create the SQL Server in"
+variable "override_name" {
+  description = "Optional override for naming logic."
   type        = string
+  default     = null
+  nullable    = true
+
+  validation {
+    condition     = var.override_name == null || try(length(trimspace(var.override_name)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'override_name', it must be null or a non-empty string.", coalesce(var.override_name, "null"))
+  }
+}
+
+variable "workload" {
+  description = "Short, descriptive name for the application, service, or workload. Used in resource naming conventions."
+  type        = string
+  nullable    = true
+
+  validation {
+    condition     = var.workload == null || try(length(trimspace(var.workload)) > 0, false)
+    error_message = format("Invalid value '%s' for variable 'workload', it must be null or a non-empty string.", coalesce(var.workload, "null"))
+  }
+}
+
+variable "company_prefix" {
+  description = "Short, unique prefix for the company / organization."
+  type        = string
+  nullable    = true
+
+  validation {
+    condition     = var.company_prefix == null || try(length(trimspace(var.company_prefix)) > 0 && length(var.company_prefix) <= 5, false)
+    error_message = format("Invalid value '%s' for variable 'company_prefix', it must be a non-empty string with a maximum of 5 characters.", coalesce(var.company_prefix, "null"))
+  }
+}
+
+variable "sequence_number" {
+  description = "Optional numeric instance counter, zero-padded as `-NNN` suffix. Use only when provisioning multiple SQL Servers for the same workload/env/region (e.g., sharding). Omit for the common single-instance case."
+  type        = number
+  default     = null
+  nullable    = true
+
+  validation {
+    condition     = var.sequence_number == null || try(var.sequence_number >= 1 && var.sequence_number <= 999, false)
+    error_message = format("Invalid value '%s' for variable 'sequence_number', it must be null or a number between 1 and 999.", coalesce(var.sequence_number, "null"))
+  }
 }
 
 variable "location" {
-  description = "The location where the SQL Server will be created"
+  description = "Specifies Azure location where the resources should be provisioned. For an exhaustive list of locations, please use the command 'az account list-locations -o table'."
   type        = string
+  nullable    = false
+
+  validation {
+    condition     = length(trimspace(var.location)) > 0
+    error_message = format("Invalid value '%s' for variable 'location', it must be a non-empty string.", var.location)
+  }
 }
 
 variable "environment" {
@@ -14,70 +61,86 @@ variable "environment" {
   nullable    = false
 }
 
-variable "workload" {
-  description = "The name of the SQL Server that will be created"
+variable "resource_group_name" {
+  description = "Specifies the name of the resource group where the resource should be provisioned."
   type        = string
+  nullable    = false
 
   validation {
-    condition     = can(coalesce(var.workload))
-    error_message = "The 'workload' value is invalid. It must be a non-empty string."
+    condition     = length(trimspace(var.resource_group_name)) > 0
+    error_message = format("Invalid value '%s' for variable 'resource_group_name', it must be a non-empty string.", var.resource_group_name)
   }
 }
 
-variable "override_name" {
-  description = "Overrides the name of the SQL Server that will be created"
-  type        = string
-  default     = null
-  nullable    = true
-}
-
-variable "azuread_sql_admin" {
-  description = "The name of the admin (Azure AD group) that will be SQL Server admin"
-  type        = string
-}
-
-variable "public_network_settings" {
-  description = "Public network settings."
+variable "admin_settings" {
+  description = "Administrative access for the SQL Server: Azure AD group, AAD-only mode, and the local SQL admin used at server creation (Azure requires a local admin even when AAD-only mode is enabled). The local admin password is read from a Key Vault secret identified by the vault's resource ID and the secret name."
   type = object({
-    access_enabled = bool
-    allowed_subnets = list(object({
-      subnet_resource_group_name = string
-      virtual_network_name       = string
-      subnet_name                = string
-    }))
+    azuread_group_name                  = string
+    azuread_authentication_only_enabled = optional(bool, true)
+    local_username                      = string
+    local_password_secret = object({
+      key_vault_id = string
+      secret_name  = string
+    })
   })
+
+  validation {
+    condition     = length(trimspace(var.admin_settings.azuread_group_name)) > 0
+    error_message = "Invalid value for 'admin_settings.azuread_group_name'. It must be a non-empty string."
+  }
+
+  validation {
+    condition     = length(trimspace(var.admin_settings.local_username)) > 0
+    error_message = "Invalid value for 'admin_settings.local_username'. It must be a non-empty string."
+  }
+
+  validation {
+    condition     = !contains(["admin", "administrator", "sa", "root", "dbmanager", "loginmanager", "dbo", "guest", "public"], lower(trimspace(var.admin_settings.local_username)))
+    error_message = "Invalid value for 'admin_settings.local_username'. Azure rejects reserved SQL login names: admin, administrator, sa, root, dbmanager, loginmanager, dbo, guest, public."
+  }
 }
 
-variable "azuread_authentication_only_enabled" {
-  description = "Specifies if only Azure AD authentication is allowed"
-  type        = bool
-  default     = true
-}
-
-variable "storage_account_auditing_settings" {
-  description = "The settings necessary for the storage account auditing, the name and the resource group."
+variable "auditing_settings" {
+  description = "The settings necessary for the storage account auditing. Required for prod and sand environments, optional for others."
   type = object({
     storage_account_name           = string
     storage_account_resource_group = string
   })
+  default  = null
+  nullable = true
 }
 
-variable "local_sql_admin_settings" {
-  description = "The settings necessary for the local SQL admin creation, the username and the key vault settings for the password."
+variable "firewall_settings" {
+  description = "Firewall configuration: public access, trusted-service bypass, and allowed subnets for VNet rules. All fields are optional and default to a secure-by-default posture (no public access, no allowed subnets, trusted-service bypass enabled)."
   type = object({
-    local_sql_admin          = string
-    key_vault_name           = string
-    key_vault_resource_group = string
-    key_vault_secret_name    = string
+    public_network_access_enabled            = optional(bool, false)
+    trusted_services_bypass_firewall_enabled = optional(bool, true)
+    allowed_subnet_ids                       = optional(list(string), [])
   })
-}
-
-variable "instance_count" {
-  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention."
-  type        = number
+  default = {}
 
   validation {
-    condition     = var.instance_count >= 1 && var.instance_count <= 999
-    error_message = format("Invalid value '%s' for variable 'instance_count'. It must be between 1 and 999.", var.instance_count)
+    condition     = var.firewall_settings.public_network_access_enabled || length(var.firewall_settings.allowed_subnet_ids) == 0
+    error_message = "Invalid 'firewall_settings': 'allowed_subnet_ids' can only be specified when 'public_network_access_enabled' is true."
   }
+
+  validation {
+    condition     = alltrue([for id in var.firewall_settings.allowed_subnet_ids : length(trimspace(id)) > 0])
+    error_message = "Invalid value in 'firewall_settings.allowed_subnet_ids': all subnet IDs must be non-empty strings."
+  }
+
+  validation {
+    condition     = length(var.firewall_settings.allowed_subnet_ids) == length(distinct(var.firewall_settings.allowed_subnet_ids))
+    error_message = "Invalid value in 'firewall_settings.allowed_subnet_ids': subnet IDs must be unique across all entries."
+  }
+}
+
+variable "private_endpoint_settings" {
+  description = "Settings for the private endpoint provisioned by this module. `subnet_id` is the resource ID of the subnet where the PEP NIC lands. `private_dns_zone_ids` maps each required subresource to its private DNS zone resource ID."
+  type = object({
+    subnet_id = string
+    private_dns_zone_ids = object({
+      sqlServer = string
+    })
+  })
 }

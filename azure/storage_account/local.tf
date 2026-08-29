@@ -4,4 +4,6 @@ locals {
     lower(var.override_name) :
     lower("sa${var.company_prefix}${var.workload}${var.environment}")
   )
+
+  private_endpoint_subresources = ["blob", "table", "file", "queue"]
 }

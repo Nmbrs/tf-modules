@@ -93,3 +93,22 @@ variable "trusted_services_bypass_firewall_enabled" {
   type        = bool
   default     = true
 }
+
+variable "network_settings" {
+  description = "Network settings shared by all storage account private endpoints."
+  type = object({
+    subnet_name              = string
+    vnet_name                = string
+    vnet_resource_group_name = string
+  })
+}
+
+variable "private_dns_zone_ids" {
+  description = "Resource IDs of the private DNS zones used by each storage account private endpoint. Required keys: `blob`, `table`, `file`, `queue`."
+  type = object({
+    blob  = string
+    table = string
+    file  = string
+    queue = string
+  })
+}
