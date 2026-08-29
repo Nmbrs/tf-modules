@@ -1,59 +1,70 @@
-<!-- BEGIN_TF_DOCS -->
 # Azure App Configuration Terraform Module
 
 ## Summary
 
 This module provisions an Azure App Configuration resource with secure-by-default settings, standardized naming, and input validation. It is designed for composable use in larger infrastructure deployments and follows repository-wide conventions for variables and naming logic.
 
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.117 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+| ---- | ------ | ------- |
+| <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint) | git::github.com/Nmbrs/tf-modules//azure/private_endpoint | f41a116c9f31892191b5e3f146a1e361bfc57322 |
 
 ## Resources
 
 | Name | Type |
-|------|------|
-| [azurerm_app_configuration.app_configuration](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_configuration) | resource |
+| ---- | ---- |
+| [azurerm_app_configuration.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_configuration) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_company_prefix"></a> [company\_prefix](#input\_company\_prefix) | Short, unique prefix for the company or organization. Used in naming for uniqueness. Must be 1-5 characters. | `string` | `"nmbrs"` | no |
+| ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_company_prefix"></a> [company\_prefix](#input\_company\_prefix) | Short, unique prefix for the company / organization. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
-| <a name="input_location"></a> [location](#input\_location) | The location where the resources will be deployed in Azure. For an exhaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
-| <a name="input_override_name"></a> [override\_name](#input\_override\_name) | Override the name of the App Configuration, to bypass naming convention. | `string` | `null` | no |
+| <a name="input_location"></a> [location](#input\_location) | Specifies Azure location where the resources should be provisioned. For an exhaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
+| <a name="input_override_name"></a> [override\_name](#input\_override\_name) | Optional override for naming logic. | `string` | `null` | no |
+| <a name="input_private_endpoint_settings"></a> [private\_endpoint\_settings](#input\_private\_endpoint\_settings) | Settings for the private endpoint. Required when `sku_name` is `standard` or `premium`; must be null otherwise (Free/Developer tiers do not support private endpoints). `subnet_id` is the resource ID of the subnet where the PEP NIC lands. `private_dns_zone_ids` maps each required subresource to its private DNS zone resource ID. | <pre>object({<br/>    subnet_id = string<br/>    private_dns_zone_ids = object({<br/>      configurationStores = string<br/>    })<br/>  })</pre> | `null` | no |
 | <a name="input_public_network_access_enabled"></a> [public\_network\_access\_enabled](#input\_public\_network\_access\_enabled) | A condition to indicate if the App Configuration will have public network access (defaults to false). | `bool` | `false` | no |
-| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of an existing Resource Group. | `string` | n/a | yes |
-| <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | The SKU name of the App Configuration. Possible values are 'free', 'standard', and 'premium'. Defaults to 'free'. | `string` | `"free"` | no |
-| <a name="input_workload"></a> [workload](#input\_workload) | The workload name of the App Configuration. | `string` | n/a | yes |
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Specifies the name of the resource group where the resource should be provisioned. | `string` | n/a | yes |
+| <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | The SKU name of the App Configuration. | `string` | `"developer"` | no |
+| <a name="input_workload"></a> [workload](#input\_workload) | Short, descriptive name for the application, service, or workload. Used in resource naming conventions. | `string` | n/a | yes |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+| ---- | ----------- |
+| <a name="output_endpoint"></a> [endpoint](#output\_endpoint) | The endpoint used to access the App Configuration. |
+| <a name="output_id"></a> [id](#output\_id) | The App Configuration ID. |
+| <a name="output_name"></a> [name](#output\_name) | The App Configuration full name. |
+| <a name="output_workload"></a> [workload](#output\_workload) | The App Configuration workload. |
+<!-- END_TF_DOCS -->
 
 ## How to use it?
 
+Private endpoint support for Azure App Configuration is gated by tier — only the **Standard** and **Premium** SKUs support private endpoints (Free and Developer do not). The module reflects this with `private_endpoint_settings`: it is **required for Standard/Premium** and must be **null (omitted) for Free/Developer**. Plan-time preconditions enforce both directions.
+
 A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
 
-### App configuration at free tier
+### App Configuration at free tier
 
 ```hcl
 module "app_configuration" {
-  source              = "./azure/app_configuration"
+  source              = "git::github.com/Nmbrs/tf-modules//azure/app_configuration"
   workload            = "myapp"
   company_prefix      = "nmbrs"
   resource_group_name = "rg-apps"
@@ -62,4 +73,58 @@ module "app_configuration" {
   sku_name            = "free"
 }
 ```
-<!-- END_TF_DOCS -->
+
+### App Configuration at standard tier with private endpoint
+
+```hcl
+module "app_configuration" {
+  source              = "git::github.com/Nmbrs/tf-modules//azure/app_configuration"
+  workload            = "myapp"
+  company_prefix      = "nmbrs"
+  resource_group_name = "rg-apps"
+  location            = "westeurope"
+  environment         = "prod"
+  sku_name            = "standard"
+
+  private_endpoint_settings = {
+    subnet_id = "/subscriptions/.../subnets/snet-private-endpoints"
+    private_dns_zone_ids = {
+      configurationStores = module.dns_zone_appcs.id
+    }
+  }
+}
+```
+
+### App Configuration at standard tier with public network access alongside the private endpoint
+
+```hcl
+module "app_configuration" {
+  source                        = "git::github.com/Nmbrs/tf-modules//azure/app_configuration"
+  workload                      = "myapp"
+  company_prefix                = "nmbrs"
+  resource_group_name           = "rg-apps"
+  location                      = "westeurope"
+  environment                   = "prod"
+  sku_name                      = "standard"
+  public_network_access_enabled = true
+
+  private_endpoint_settings = {
+    subnet_id = "/subscriptions/.../subnets/snet-private-endpoints"
+    private_dns_zone_ids = {
+      configurationStores = module.dns_zone_appcs.id
+    }
+  }
+}
+```
+
+### App Configuration with a custom name override
+
+```hcl
+module "app_configuration" {
+  source              = "git::github.com/Nmbrs/tf-modules//azure/app_configuration"
+  override_name       = "my-custom-appcs-name"
+  resource_group_name = "rg-apps"
+  location            = "westeurope"
+  environment         = "prod"
+}
+```
