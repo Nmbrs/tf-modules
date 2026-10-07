@@ -1,11 +1,26 @@
+# The local SQL admin password is generated once, at creation, purely to guarantee a
+# strong starting value. It is deliberately never stored or surfaced: rotation happens
+# out-of-band (Azure Portal / az sql server update --admin-password) whenever the account
+# is actually needed. Terraform cannot drift on it because the Azure API never returns
+# the admin password, so no lifecycle block is required to keep external resets.
+resource "random_password" "local_sql_admin" {
+  length           = 32
+  special          = true
+  override_special = "!#%*()-_=+[]{}<>:?"
+  min_upper        = 2
+  min_lower        = 2
+  min_numeric      = 2
+  min_special      = 2
+}
+
 resource "azurerm_mssql_server" "sql_server" {
   name                                 = var.override_name != "" && var.override_name != null ? var.override_name : local.sql_server_name
   resource_group_name                  = var.resource_group_name
   location                             = var.location
   version                              = "12.0"
   minimum_tls_version                  = "1.2"
-  administrator_login                  = var.local_sql_admin_settings.local_sql_admin
-  administrator_login_password         = data.azurerm_key_vault_secret.local_sql_admin_password.value
+  administrator_login                  = var.local_sql_admin
+  administrator_login_password         = random_password.local_sql_admin.result
   public_network_access_enabled        = var.public_network_settings.access_enabled
   outbound_network_restriction_enabled = false
 
