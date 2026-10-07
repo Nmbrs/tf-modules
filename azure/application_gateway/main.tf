@@ -95,22 +95,18 @@ resource "azurerm_application_gateway" "main" {
     tier = "WAF_v2"
   }
 
+  # Bounds are seeded on creation only. The block is required because v2 SKUs
+  # must declare either autoscale_configuration or sku.capacity, but its values
+  # are ignored on subsequent applies (see lifecycle block below).
   autoscale_configuration {
-    min_capacity = var.min_instance_count
-    max_capacity = var.max_instance_count
+    min_capacity = local.initial_min_instance_count
+    max_capacity = local.initial_max_instance_count
   }
 
   identity {
     type         = "UserAssigned"
     identity_ids = [data.azurerm_user_assigned_identity.certificate.id]
   }
-
-  waf_configuration {
-    enabled          = true
-    firewall_mode    = "Prevention"
-    rule_set_version = 3.2
-  }
-
 
   gateway_ip_configuration {
     name      = "app-gateway-ip-configuration"
@@ -345,7 +341,9 @@ resource "azurerm_application_gateway" "main" {
   lifecycle {
     ignore_changes = [
       tags,
-      waf_configuration,
+      # Instance counts are managed by an external process after creation.
+      # Terraform seeds the initial bounds and then stops tracking them.
+      autoscale_configuration,
       # Rewrite rules within each set are managed by an external process.
       # Terraform manages the empty rewrite_rule_set (name and lifecycle) but must
       # not overwrite the rewrite_rule entries populated externally.
@@ -454,12 +452,6 @@ resource "azurerm_application_gateway" "main" {
       rewrite_rule_set[99].rewrite_rule,
     ]
 
-    ## Instance count validation
-    precondition {
-      condition     = var.min_instance_count <= var.max_instance_count
-      error_message = format("Invalid configuration: minimum instance count (%s) must be less than or equal to maximum instance count (%s).", var.min_instance_count, var.max_instance_count)
-    }
-
     ## Naming validation: Ensure either override_name is provided OR all naming components are provided
     precondition {
       condition = var.override_name != null || (
@@ -476,33 +468,31 @@ resource "azurerm_application_gateway" "main" {
 # Application Gateway Logs
 # ==============================================================================
 resource "azurerm_monitor_diagnostic_setting" "app_gateway" {
+  count                      = local.diagnostics_enabled ? 1 : 0
   name                       = "diag-${local.app_gateway_name}"
   target_resource_id         = azurerm_application_gateway.main.id
-  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.diagnostics.id
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.diagnostics[0].id
 
   dynamic "enabled_log" {
-    for_each = try(var.diagnostic_settings.logs.access_log_enabled, true) ? ["ApplicationGatewayAccessLog"] : []
+    for_each = local.diagnostic_log_categories
     content {
       category = enabled_log.value
     }
   }
 
-  dynamic "enabled_log" {
-    for_each = try(var.diagnostic_settings.logs.performance_log_enabled, true) ? ["ApplicationGatewayPerformanceLog"] : []
+  dynamic "metric" {
+    for_each = var.diagnostic_settings.metrics_enabled ? ["AllMetrics"] : []
     content {
-      category = enabled_log.value
+      category = metric.value
+      enabled  = true
     }
   }
+}
 
-  dynamic "enabled_log" {
-    for_each = try(var.diagnostic_settings.logs.firewall_log_enabled, true) ? ["ApplicationGatewayFirewallLog"] : []
-    content {
-      category = enabled_log.value
-    }
-  }
-
-  metric {
-    category = "AllMetrics"
-    enabled  = var.diagnostic_settings.metrics_enabled
-  }
+# The diagnostic setting became conditional, which changes its address from
+# '.app_gateway' to '.app_gateway[0]'. Without this, gateways provisioned before
+# the change would have their diagnostic setting destroyed and recreated.
+moved {
+  from = azurerm_monitor_diagnostic_setting.app_gateway
+  to   = azurerm_monitor_diagnostic_setting.app_gateway[0]
 }

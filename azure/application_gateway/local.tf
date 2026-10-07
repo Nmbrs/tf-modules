@@ -54,6 +54,15 @@ locals {
 }
 
 locals {
+  # Autoscale bounds applied only when the gateway is first created.
+  # Afterwards the capacity is owned by an external process, so the
+  # autoscale_configuration block is ignored by the lifecycle rules and these
+  # values have no effect on already deployed gateways.
+  initial_min_instance_count = 2
+  initial_max_instance_count = 10
+}
+
+locals {
   # FQDN to resource name transformation
   # Transforms FQDNs to valid Azure resource names by:
   # - Replacing dots with hyphens
@@ -125,4 +134,17 @@ locals {
       }
     }
   ]
+}
+
+locals {
+  # Log categories to enable on the diagnostic setting.
+  diagnostic_log_categories = compact([
+    var.diagnostic_settings.logs.access_log_enabled ? "ApplicationGatewayAccessLog" : "",
+    var.diagnostic_settings.logs.performance_log_enabled ? "ApplicationGatewayPerformanceLog" : "",
+    var.diagnostic_settings.logs.firewall_log_enabled ? "ApplicationGatewayFirewallLog" : "",
+  ])
+
+  # The provider rejects a diagnostic setting that has no enabled log or metric,
+  # so the resource is skipped entirely when the caller disables everything.
+  diagnostics_enabled = length(local.diagnostic_log_categories) > 0 || var.diagnostic_settings.metrics_enabled
 }
