@@ -38,9 +38,9 @@ No modules.
 | <a name="input_elastic_pool_settings"></a> [elastic\_pool\_settings](#input\_elastic\_pool\_settings) | SQL elastic pool settings. Optional - if not provided, database will use standalone SKU. | <pre>object({<br/>    name                = string<br/>    resource_group_name = string<br/>  })</pre> | `null` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_license_type"></a> [license\_type](#input\_license\_type) | The license type to apply for this database | `string` | `"BasePrice"` | no |
-| <a name="input_max_size_gb"></a> [max\_size\_gb](#input\_max\_size\_gb) | The maximum size of the database in gigabytes, if it's inside an elastic pool this will be ignored and will use 1TB as max size. | `number` | `250` | no |
+| <a name="input_max_size_gb"></a> [max\_size\_gb](#input\_max\_size\_gb) | The initial maximum size of the database in gigabytes. Only applied at creation: later changes are ignored by Terraform, as scaling is an operational task. If it's inside an elastic pool this will be ignored and will use 1TB as max size. | `number` | `250` | no |
 | <a name="input_override_name"></a> [override\_name](#input\_override\_name) | Override the name of the SQL database, to bypass naming convention | `string` | `null` | no |
-| <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | The name of the SKU used by the database | `string` | `"S0"` | no |
+| <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | The initial SKU of the database (compute tier and size). Only applied at creation: later changes are ignored by Terraform, as scaling is an operational task. | `string` | `"S0"` | no |
 | <a name="input_sql_server_settings"></a> [sql\_server\_settings](#input\_sql\_server\_settings) | SQL server settings. | <pre>object({<br/>    name                = string<br/>    resource_group_name = string<br/>  })</pre> | n/a | yes |
 | <a name="input_workload"></a> [workload](#input\_workload) | Short, descriptive name for the application, service, or workload. Used in resource naming conventions. | `string` | n/a | yes |
 
@@ -54,6 +54,8 @@ No modules.
 | <a name="output_workload"></a> [workload](#output\_workload) | The SQL database workload name. |
 <!-- END_TF_DOCS -->
 ## How to use it?
+
+> **Scaling is managed outside Terraform.** `sku_name` and `max_size_gb` are only applied when the database is created. Terraform ignores later changes to them (and to the live values), so scale the database through the Azure Portal, CLI or autoscaling instead of changing the module inputs.
 
 A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
 

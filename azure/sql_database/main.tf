@@ -28,7 +28,9 @@ resource "azurerm_mssql_database" "main" {
   }
 
   lifecycle {
-    ignore_changes = [tags]
+    # sku_name and max_size_gb are operational (scaling) parameters: they only set the initial
+    # values at creation and are expected to be changed out-of-band afterwards.
+    ignore_changes = [tags, sku_name, max_size_gb]
 
     ## Naming validation: Ensure either override_name is provided OR the required naming components are provided
     precondition {

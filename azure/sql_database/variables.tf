@@ -68,7 +68,7 @@ variable "license_type" {
 }
 
 variable "sku_name" {
-  description = "The name of the SKU used by the database"
+  description = "The initial SKU of the database (compute tier and size). Only applied at creation: later changes are ignored by Terraform, as scaling is an operational task."
   type        = string
   default     = "S0"
 
@@ -79,7 +79,7 @@ variable "sku_name" {
 }
 
 variable "max_size_gb" {
-  description = "The maximum size of the database in gigabytes, if it's inside an elastic pool this will be ignored and will use 1TB as max size."
+  description = "The initial maximum size of the database in gigabytes. Only applied at creation: later changes are ignored by Terraform, as scaling is an operational task. If it's inside an elastic pool this will be ignored and will use 1TB as max size."
   type        = number
   default     = 250
 }
