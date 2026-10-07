@@ -46,7 +46,12 @@ resource "azurerm_virtual_network_gateway" "main" {
   }
 
   lifecycle {
-    ignore_changes = [tags, custom_route]
+    ignore_changes = [
+      tags,
+      custom_route,
+      # Root certificates are managed outside of Terraform (e.g. portal)
+      vpn_client_configuration[0].root_certificate,
+    ]
 
     precondition {
       condition = var.override_name != null || (
