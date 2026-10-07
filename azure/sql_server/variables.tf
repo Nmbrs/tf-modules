@@ -101,7 +101,7 @@ variable "admin_settings" {
 }
 
 variable "auditing_settings" {
-  description = "The settings necessary for the storage account auditing. Required for prod and sand environments, optional for others."
+  description = "The settings necessary for the storage account auditing."
   type = object({
     storage_account_name           = string
     storage_account_resource_group = string

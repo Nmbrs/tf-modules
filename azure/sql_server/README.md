@@ -10,13 +10,14 @@ The `sql_server` module provides a comprehensive Terraform solution for deployin
 | Name | Version |
 | ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
+| <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) | ~> 3.10 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.117 |
 
 ## Providers
 
 | Name | Version |
 | ---- | ------- |
-| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 3.8.0 |
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 3.10.0 |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
 
 ## Modules
@@ -42,7 +43,7 @@ The `sql_server` module provides a comprehensive Terraform solution for deployin
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_admin_settings"></a> [admin\_settings](#input\_admin\_settings) | Administrative access for the SQL Server: Azure AD group, AAD-only mode, and the local SQL admin used at server creation (Azure requires a local admin even when AAD-only mode is enabled). The local admin password is read from a Key Vault secret identified by the vault's resource ID and the secret name. | <pre>object({<br/>    azuread_group_name                  = string<br/>    azuread_authentication_only_enabled = optional(bool, true)<br/>    local_username                      = string<br/>    local_password_secret = object({<br/>      key_vault_id = string<br/>      secret_name  = string<br/>    })<br/>  })</pre> | n/a | yes |
-| <a name="input_auditing_settings"></a> [auditing\_settings](#input\_auditing\_settings) | The settings necessary for the storage account auditing. Required for prod and sand environments, optional for others. | <pre>object({<br/>    storage_account_name           = string<br/>    storage_account_resource_group = string<br/>  })</pre> | `null` | no |
+| <a name="input_auditing_settings"></a> [auditing\_settings](#input\_auditing\_settings) | The settings necessary for the storage account auditing. | <pre>object({<br/>    storage_account_name           = string<br/>    storage_account_resource_group = string<br/>  })</pre> | `null` | no |
 | <a name="input_company_prefix"></a> [company\_prefix](#input\_company\_prefix) | Short, unique prefix for the company / organization. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_firewall_settings"></a> [firewall\_settings](#input\_firewall\_settings) | Firewall configuration: public access, trusted-service bypass, and allowed subnets for VNet rules. All fields are optional and default to a secure-by-default posture (no public access, no allowed subnets, trusted-service bypass enabled). | <pre>object({<br/>    public_network_access_enabled            = optional(bool, false)<br/>    trusted_services_bypass_firewall_enabled = optional(bool, true)<br/>    allowed_subnet_ids                       = optional(list(string), [])<br/>  })</pre> | `{}` | no |
@@ -50,7 +51,7 @@ The `sql_server` module provides a comprehensive Terraform solution for deployin
 | <a name="input_override_name"></a> [override\_name](#input\_override\_name) | Optional override for naming logic. | `string` | `null` | no |
 | <a name="input_private_endpoint_settings"></a> [private\_endpoint\_settings](#input\_private\_endpoint\_settings) | Settings for the private endpoint provisioned by this module. `subnet_id` is the resource ID of the subnet where the PEP NIC lands. `private_dns_zone_ids` maps each required subresource to its private DNS zone resource ID. | <pre>object({<br/>    subnet_id = string<br/>    private_dns_zone_ids = object({<br/>      sqlServer = string<br/>    })<br/>  })</pre> | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Specifies the name of the resource group where the resource should be provisioned. | `string` | n/a | yes |
-| <a name="input_sequence_number"></a> [sequence\_number](#input\_sequence\_number) | A numeric value used to ensure uniqueness for resource names. | `number` | n/a | yes |
+| <a name="input_sequence_number"></a> [sequence\_number](#input\_sequence\_number) | Optional numeric instance counter, zero-padded as `-NNN` suffix. Use only when provisioning multiple SQL Servers for the same workload/env/region (e.g., sharding). Omit for the common single-instance case. | `number` | `null` | no |
 | <a name="input_workload"></a> [workload](#input\_workload) | Short, descriptive name for the application, service, or workload. Used in resource naming conventions. | `string` | n/a | yes |
 
 ## Outputs

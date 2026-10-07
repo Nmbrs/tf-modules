@@ -45,7 +45,7 @@ resource "azurerm_mssql_virtual_network_rule" "sql_server_network_rule" {
   ignore_missing_vnet_service_endpoint = false
 }
 
-# The feature "Allow acess to Azure services" can be achieved by setting the start_ip_address and end_ip_address to "0.0.0.0"
+# The feature "Allow access to Azure services" can be achieved by setting the start_ip_address and end_ip_address to "0.0.0.0"
 # For more information, see: https://learn.microsoft.com/en-us/rest/api/sql/firewall-rules/create-or-update
 
 resource "azurerm_mssql_firewall_rule" "sql_server" {
@@ -54,7 +54,6 @@ resource "azurerm_mssql_firewall_rule" "sql_server" {
   server_id        = azurerm_mssql_server.main.id
   start_ip_address = "0.0.0.0"
   end_ip_address   = "0.0.0.0"
-
 }
 
 resource "azurerm_mssql_server_extended_auditing_policy" "sql_auditing" {
