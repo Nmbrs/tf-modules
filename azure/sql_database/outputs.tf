@@ -1,15 +1,19 @@
 output "name" {
-  value = azurerm_mssql_database.main.name
+  description = "The name of the SQL database."
+  value       = azurerm_mssql_database.main.name
 }
 
 output "workload" {
-  value = var.workload
+  description = "The SQL database workload name."
+  value       = var.workload
 }
 
 output "id" {
-  value = azurerm_mssql_database.main.id
+  description = "The SQL database ID."
+  value       = azurerm_mssql_database.main.id
 }
 
 output "collation" {
-  value = azurerm_mssql_database.main.collation
+  description = "The collation of the SQL database."
+  value       = azurerm_mssql_database.main.collation
 }

@@ -1,3 +1,8 @@
+moved {
+  from = azurerm_mssql_database.sql_database
+  to   = azurerm_mssql_database.main
+}
+
 resource "azurerm_mssql_database" "main" {
   name            = local.sql_database_name
   server_id       = data.azurerm_mssql_server.sql_server.id
@@ -25,13 +30,10 @@ resource "azurerm_mssql_database" "main" {
   lifecycle {
     ignore_changes = [tags]
 
-    ## Naming validation: Ensure either override_name is provided OR all naming components are provided
+    ## Naming validation: Ensure either override_name is provided OR the required naming components are provided
     precondition {
-      condition = var.override_name != null || (
-        var.workload != null &&
-        var.sequence_number != null
-      )
-      error_message = "Invalid naming configuration: Either 'override_name' must be provided, or both 'workload' and 'sequence_number' must be provided for automatic naming."
+      condition     = var.override_name != null || var.workload != null
+      error_message = "Invalid naming configuration: Either 'override_name' must be provided, or 'workload' must be provided for automatic naming."
     }
   }
 }

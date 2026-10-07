@@ -10,7 +10,6 @@ variable "workload" {
   }
 }
 
-
 variable "override_name" {
   description = "Override the name of the SQL database, to bypass naming convention"
   type        = string
@@ -21,11 +20,6 @@ variable "override_name" {
     condition     = var.override_name == null || try(length(trimspace(var.override_name)) > 0, false)
     error_message = format("Invalid value '%s' for variable 'override_name', it must be null or a non-empty string.", coalesce(var.override_name, "null"))
   }
-}
-
-variable "location" {
-  description = "The location where the SQL Server will be created"
-  type        = string
 }
 
 variable "environment" {
@@ -88,15 +82,4 @@ variable "max_size_gb" {
   description = "The maximum size of the database in gigabytes, if it's inside an elastic pool this will be ignored and will use 1TB as max size."
   type        = number
   default     = 250
-}
-
-variable "sequence_number" {
-  description = "A numeric value used to ensure uniqueness for resource names."
-  type        = number
-  nullable    = true
-
-  validation {
-    condition     = var.sequence_number == null || try(var.sequence_number >= 1 && var.sequence_number <= 999, false)
-    error_message = format("Invalid value '%s' for variable 'sequence_number', it must be null or a number between 1 and 999.", coalesce(var.sequence_number, "null"))
-  }
 }

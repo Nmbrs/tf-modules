@@ -1,10 +1,10 @@
 locals {
-  # SQL Database naming pattern: sqldb-{workload}-{env}-{location}-{seq}
-  # Example: sqldb-analytics-prod-westeurope-001
-  sql_database_name = (
-    var.override_name != null ?
-    var.override_name :
-    lower("sqldb-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.sequence_number)}")
+  # SQL Database naming following standard conventions
+  # Format: sqldb-{workload}-{env}
+  # Example: sqldb-analytics-prod
+  sql_database_name = (var.override_name != null ?
+    lower(var.override_name) :
+    lower("sqldb-${var.workload}-${var.environment}")
   )
 
   long_term_retention_policy_enabled = var.environment == "prod"
