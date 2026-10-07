@@ -1,5 +1,7 @@
 locals {
-  sql_database_name                  = "sqldb-${var.workload}-${var.environment}-${var.location}-${format("%03d", var.instance_count)}"
+  sequence_suffix = var.sequence_number == null ? "" : "-${format("%03d", var.sequence_number)}"
+
+  sql_database_name                  = "sqldb-${var.workload}-${var.environment}-${var.location}${local.sequence_suffix}"
   long_term_retention_policy_enabled = var.environment == "prod"
   backup_settings = {
     pitr_backup_retention_days  = 14

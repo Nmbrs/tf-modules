@@ -76,12 +76,14 @@ variable "max_size_gb" {
   default     = 250
 }
 
-variable "instance_count" {
-  description = "A numeric sequence number used for naming the resource. It ensures a unique identifier for each resource instance within the naming convention."
+variable "sequence_number" {
+  description = "Optional numeric instance counter, zero-padded as `-NNN` suffix. Use only when provisioning multiple SQL Databases for the same workload/env/region. Omit for the common single-instance case."
   type        = number
+  default     = null
+  nullable    = true
 
   validation {
-    condition     = var.instance_count >= 1 && var.instance_count <= 999
-    error_message = format("Invalid value '%s' for variable 'instance_count'. It must be between 1 and 999.", var.instance_count)
+    condition     = var.sequence_number == null || try(var.sequence_number >= 1 && var.sequence_number <= 999, false)
+    error_message = format("Invalid value '%s' for variable 'sequence_number', it must be null or a number between 1 and 999.", coalesce(var.sequence_number, "null"))
   }
 }
