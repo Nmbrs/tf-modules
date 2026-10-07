@@ -95,22 +95,18 @@ resource "azurerm_application_gateway" "main" {
     tier = "WAF_v2"
   }
 
+  # Bounds are seeded on creation only. The block is required because v2 SKUs
+  # must declare either autoscale_configuration or sku.capacity, but its values
+  # are ignored on subsequent applies (see lifecycle block below).
   autoscale_configuration {
-    min_capacity = var.min_instance_count
-    max_capacity = var.max_instance_count
+    min_capacity = local.initial_min_instance_count
+    max_capacity = local.initial_max_instance_count
   }
 
   identity {
     type         = "UserAssigned"
     identity_ids = [data.azurerm_user_assigned_identity.certificate.id]
   }
-
-  waf_configuration {
-    enabled          = true
-    firewall_mode    = "Prevention"
-    rule_set_version = 3.2
-  }
-
 
   gateway_ip_configuration {
     name      = "app-gateway-ip-configuration"
@@ -147,7 +143,7 @@ resource "azurerm_application_gateway" "main" {
     }
   }
 
-  # Security Headers Rewrite Rules
+  # Rewrite Rule Sets - one empty set per listener, rules managed externally
   dynamic "rewrite_rule_set" {
     for_each = (
       length(var.application_backend_settings) != 0 ?
@@ -156,77 +152,6 @@ resource "azurerm_application_gateway" "main" {
     )
     content {
       name = "rewrite-rules-${local.application_names[rewrite_rule_set.key]}"
-
-      # HSTS Header - Only if enabled
-      dynamic "rewrite_rule" {
-        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.hsts_enabled ? [1] : []
-        content {
-          name          = "hsts-header"
-          rule_sequence = 1
-
-          response_header_configuration {
-            header_name  = "Strict-Transport-Security"
-            header_value = "max-age=31536000; includeSubdomains; preload"
-          }
-        }
-      }
-
-      # CSP Header - Only if enabled
-      dynamic "rewrite_rule" {
-        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.csp_enabled ? [1] : []
-        content {
-          name          = "csp-header"
-          rule_sequence = 2
-
-          response_header_configuration {
-            header_name  = "Content-Security-Policy"
-            header_value = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
-          }
-        }
-      }
-
-      # X-Frame-Options Header - Only if enabled
-      dynamic "rewrite_rule" {
-        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.x_frame_options_enabled ? [1] : []
-        content {
-          name          = "x-frame-options-headers"
-          rule_sequence = 3
-
-          response_header_configuration {
-            header_name  = "X-Frame-Options"
-            header_value = "DENY"
-          }
-        }
-      }
-
-      # X-Content-Type-Options Header - Only if enabled
-      dynamic "rewrite_rule" {
-        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.x_content_type_options_enabled ? [1] : []
-        content {
-          name          = "x-content-type-options-headers"
-          rule_sequence = 4
-
-          response_header_configuration {
-            header_name  = "X-Content-Type-Options"
-            header_value = "nosniff"
-          }
-        }
-      }
-
-
-      # X-XSS-Protection Header - Only if enabled
-      dynamic "rewrite_rule" {
-        for_each = rewrite_rule_set.value.backend.rewrite_rules.headers.x_xss_protection_enabled ? [1] : []
-        content {
-          name          = "x-xss-protection-headers"
-          rule_sequence = 5
-
-          response_header_configuration {
-            header_name  = "X-XSS-Protection"
-            header_value = "1; mode=block"
-          }
-        }
-      }
     }
   }
 
@@ -414,13 +339,118 @@ resource "azurerm_application_gateway" "main" {
   }
 
   lifecycle {
-    ignore_changes = [tags, waf_configuration]
-
-    ## Instance count validation
-    precondition {
-      condition     = var.min_instance_count <= var.max_instance_count
-      error_message = format("Invalid configuration: minimum instance count (%s) must be less than or equal to maximum instance count (%s).", var.min_instance_count, var.max_instance_count)
-    }
+    ignore_changes = [
+      tags,
+      # Instance counts are managed by an external process after creation.
+      # Terraform seeds the initial bounds and then stops tracking them.
+      autoscale_configuration,
+      # Rewrite rules within each set are managed by an external process.
+      # Terraform manages the empty rewrite_rule_set (name and lifecycle) but must
+      # not overwrite the rewrite_rule entries populated externally.
+      # Ideally we would use rewrite_rule_set[*].rewrite_rule but Terraform does not
+      # support wildcards in ignore_changes (see hashicorp/terraform#5666).
+      # As a workaround we enumerate indices 0-99 to cover all possible sets.
+      rewrite_rule_set[0].rewrite_rule,
+      rewrite_rule_set[1].rewrite_rule,
+      rewrite_rule_set[2].rewrite_rule,
+      rewrite_rule_set[3].rewrite_rule,
+      rewrite_rule_set[4].rewrite_rule,
+      rewrite_rule_set[5].rewrite_rule,
+      rewrite_rule_set[6].rewrite_rule,
+      rewrite_rule_set[7].rewrite_rule,
+      rewrite_rule_set[8].rewrite_rule,
+      rewrite_rule_set[9].rewrite_rule,
+      rewrite_rule_set[10].rewrite_rule,
+      rewrite_rule_set[11].rewrite_rule,
+      rewrite_rule_set[12].rewrite_rule,
+      rewrite_rule_set[13].rewrite_rule,
+      rewrite_rule_set[14].rewrite_rule,
+      rewrite_rule_set[15].rewrite_rule,
+      rewrite_rule_set[16].rewrite_rule,
+      rewrite_rule_set[17].rewrite_rule,
+      rewrite_rule_set[18].rewrite_rule,
+      rewrite_rule_set[19].rewrite_rule,
+      rewrite_rule_set[20].rewrite_rule,
+      rewrite_rule_set[21].rewrite_rule,
+      rewrite_rule_set[22].rewrite_rule,
+      rewrite_rule_set[23].rewrite_rule,
+      rewrite_rule_set[24].rewrite_rule,
+      rewrite_rule_set[25].rewrite_rule,
+      rewrite_rule_set[26].rewrite_rule,
+      rewrite_rule_set[27].rewrite_rule,
+      rewrite_rule_set[28].rewrite_rule,
+      rewrite_rule_set[29].rewrite_rule,
+      rewrite_rule_set[30].rewrite_rule,
+      rewrite_rule_set[31].rewrite_rule,
+      rewrite_rule_set[32].rewrite_rule,
+      rewrite_rule_set[33].rewrite_rule,
+      rewrite_rule_set[34].rewrite_rule,
+      rewrite_rule_set[35].rewrite_rule,
+      rewrite_rule_set[36].rewrite_rule,
+      rewrite_rule_set[37].rewrite_rule,
+      rewrite_rule_set[38].rewrite_rule,
+      rewrite_rule_set[39].rewrite_rule,
+      rewrite_rule_set[40].rewrite_rule,
+      rewrite_rule_set[41].rewrite_rule,
+      rewrite_rule_set[42].rewrite_rule,
+      rewrite_rule_set[43].rewrite_rule,
+      rewrite_rule_set[44].rewrite_rule,
+      rewrite_rule_set[45].rewrite_rule,
+      rewrite_rule_set[46].rewrite_rule,
+      rewrite_rule_set[47].rewrite_rule,
+      rewrite_rule_set[48].rewrite_rule,
+      rewrite_rule_set[49].rewrite_rule,
+      rewrite_rule_set[50].rewrite_rule,
+      rewrite_rule_set[51].rewrite_rule,
+      rewrite_rule_set[52].rewrite_rule,
+      rewrite_rule_set[53].rewrite_rule,
+      rewrite_rule_set[54].rewrite_rule,
+      rewrite_rule_set[55].rewrite_rule,
+      rewrite_rule_set[56].rewrite_rule,
+      rewrite_rule_set[57].rewrite_rule,
+      rewrite_rule_set[58].rewrite_rule,
+      rewrite_rule_set[59].rewrite_rule,
+      rewrite_rule_set[60].rewrite_rule,
+      rewrite_rule_set[61].rewrite_rule,
+      rewrite_rule_set[62].rewrite_rule,
+      rewrite_rule_set[63].rewrite_rule,
+      rewrite_rule_set[64].rewrite_rule,
+      rewrite_rule_set[65].rewrite_rule,
+      rewrite_rule_set[66].rewrite_rule,
+      rewrite_rule_set[67].rewrite_rule,
+      rewrite_rule_set[68].rewrite_rule,
+      rewrite_rule_set[69].rewrite_rule,
+      rewrite_rule_set[70].rewrite_rule,
+      rewrite_rule_set[71].rewrite_rule,
+      rewrite_rule_set[72].rewrite_rule,
+      rewrite_rule_set[73].rewrite_rule,
+      rewrite_rule_set[74].rewrite_rule,
+      rewrite_rule_set[75].rewrite_rule,
+      rewrite_rule_set[76].rewrite_rule,
+      rewrite_rule_set[77].rewrite_rule,
+      rewrite_rule_set[78].rewrite_rule,
+      rewrite_rule_set[79].rewrite_rule,
+      rewrite_rule_set[80].rewrite_rule,
+      rewrite_rule_set[81].rewrite_rule,
+      rewrite_rule_set[82].rewrite_rule,
+      rewrite_rule_set[83].rewrite_rule,
+      rewrite_rule_set[84].rewrite_rule,
+      rewrite_rule_set[85].rewrite_rule,
+      rewrite_rule_set[86].rewrite_rule,
+      rewrite_rule_set[87].rewrite_rule,
+      rewrite_rule_set[88].rewrite_rule,
+      rewrite_rule_set[89].rewrite_rule,
+      rewrite_rule_set[90].rewrite_rule,
+      rewrite_rule_set[91].rewrite_rule,
+      rewrite_rule_set[92].rewrite_rule,
+      rewrite_rule_set[93].rewrite_rule,
+      rewrite_rule_set[94].rewrite_rule,
+      rewrite_rule_set[95].rewrite_rule,
+      rewrite_rule_set[96].rewrite_rule,
+      rewrite_rule_set[97].rewrite_rule,
+      rewrite_rule_set[98].rewrite_rule,
+      rewrite_rule_set[99].rewrite_rule,
+    ]
 
     ## Naming validation: Ensure either override_name is provided OR all naming components are provided
     precondition {
@@ -438,33 +468,31 @@ resource "azurerm_application_gateway" "main" {
 # Application Gateway Logs
 # ==============================================================================
 resource "azurerm_monitor_diagnostic_setting" "app_gateway" {
+  count                      = local.diagnostics_enabled ? 1 : 0
   name                       = "diag-${local.app_gateway_name}"
   target_resource_id         = azurerm_application_gateway.main.id
-  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.diagnostics.id
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.diagnostics[0].id
 
   dynamic "enabled_log" {
-    for_each = try(var.diagnostic_settings.logs.access_log_enabled, true) ? ["ApplicationGatewayAccessLog"] : []
+    for_each = local.diagnostic_log_categories
     content {
       category = enabled_log.value
     }
   }
 
-  dynamic "enabled_log" {
-    for_each = try(var.diagnostic_settings.logs.performance_log_enabled, true) ? ["ApplicationGatewayPerformanceLog"] : []
+  dynamic "metric" {
+    for_each = var.diagnostic_settings.metrics_enabled ? ["AllMetrics"] : []
     content {
-      category = enabled_log.value
+      category = metric.value
+      enabled  = true
     }
   }
+}
 
-  dynamic "enabled_log" {
-    for_each = try(var.diagnostic_settings.logs.firewall_log_enabled, true) ? ["ApplicationGatewayFirewallLog"] : []
-    content {
-      category = enabled_log.value
-    }
-  }
-
-  metric {
-    category = "AllMetrics"
-    enabled  = var.diagnostic_settings.metrics_enabled
-  }
+# The diagnostic setting became conditional, which changes its address from
+# '.app_gateway' to '.app_gateway[0]'. Without this, gateways provisioned before
+# the change would have their diagnostic setting destroyed and recreated.
+moved {
+  from = azurerm_monitor_diagnostic_setting.app_gateway
+  to   = azurerm_monitor_diagnostic_setting.app_gateway[0]
 }

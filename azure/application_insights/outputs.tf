@@ -1,6 +1,6 @@
 output "name" {
-  value       = azurerm_application_insights.insights.name
-  description = "The Application Insight component name."
+  description = "The Application Insights component name."
+  value       = azurerm_application_insights.main.name
 }
 
 output "workload" {
@@ -9,24 +9,23 @@ output "workload" {
 }
 
 output "id" {
-  value       = azurerm_application_insights.insights.app_id
-  description = "The ID of the Application Insights component."
+  description = "The ARM resource ID of the Application Insights component."
+  value       = azurerm_application_insights.main.id
 }
 
 output "app_id" {
-  value       = azurerm_application_insights.insights.app_id
   description = "The App ID associated with this Application Insights component."
+  value       = azurerm_application_insights.main.app_id
 }
 
 output "instrumentation_key" {
   description = "The Instrumentation Key for this Application Insights component."
-  value       = azurerm_application_insights.insights.instrumentation_key
+  value       = azurerm_application_insights.main.instrumentation_key
   sensitive   = true
 }
 
 output "connection_string" {
   description = "The Connection String for this Application Insights component."
-  value       = azurerm_application_insights.insights.connection_string
+  value       = azurerm_application_insights.main.connection_string
   sensitive   = true
 }
-
