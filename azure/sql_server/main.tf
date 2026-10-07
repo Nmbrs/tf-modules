@@ -1,3 +1,17 @@
+# The local SQL admin password is generated once, at creation, only to guarantee a strong
+# starting value. It is never output. The team resets it out-of-band (Azure Portal /
+# az sql server update --admin-password) when the account is needed, and the lifecycle
+# block on the server makes Terraform ignore any later change to it.
+resource "random_password" "local_sql_admin" {
+  length           = 32
+  special          = true
+  override_special = "!#%*()-_=+[]{}<>:?"
+  min_upper        = 2
+  min_lower        = 2
+  min_numeric      = 2
+  min_special      = 2
+}
+
 resource "azurerm_mssql_server" "main" {
   name                                 = local.sql_server_name
   resource_group_name                  = var.resource_group_name
@@ -8,7 +22,7 @@ resource "azurerm_mssql_server" "main" {
   outbound_network_restriction_enabled = false
 
   administrator_login          = var.admin_settings.local_username
-  administrator_login_password = data.azurerm_key_vault_secret.local_sql_admin_password.value
+  administrator_login_password = random_password.local_sql_admin.result
 
   azuread_administrator {
     azuread_authentication_only = var.admin_settings.azuread_authentication_only_enabled
@@ -24,7 +38,7 @@ resource "azurerm_mssql_server" "main" {
   }
 
   lifecycle {
-    ignore_changes = [tags]
+    ignore_changes = [tags, administrator_login_password]
 
     ## Naming validation: Ensure either override_name is provided OR all required naming components are provided
     precondition {

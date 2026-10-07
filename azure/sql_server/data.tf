@@ -8,8 +8,3 @@ data "azurerm_storage_account" "auditing_storage_account" {
   name                = var.auditing_settings.storage_account_name
   resource_group_name = var.auditing_settings.storage_account_resource_group
 }
-
-data "azurerm_key_vault_secret" "local_sql_admin_password" {
-  name         = var.admin_settings.local_password_secret.secret_name
-  key_vault_id = var.admin_settings.local_password_secret.key_vault_id
-}
