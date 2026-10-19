@@ -2,7 +2,7 @@ resource "azurerm_private_endpoint" "endpoint" {
   name                          = local.private_endpoint_name
   location                      = var.location
   resource_group_name           = var.resource_group_name
-  subnet_id                     = data.azurerm_subnet.subnet.id
+  subnet_id                     = var.subnet_id
   custom_network_interface_name = "nic-${local.private_endpoint_name}"
 
   private_service_connection {

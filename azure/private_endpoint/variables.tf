@@ -8,15 +8,9 @@ variable "location" {
   type        = string
 }
 
-variable "network_settings" {
-  description = "Defines the network settings for the resources, specifying the subnet, virtual network name, and the resource group for the virtual network."
-  type = object(
-    {
-      subnet_name              = string
-      vnet_name                = string
-      vnet_resource_group_name = string
-    }
-  )
+variable "subnet_id" {
+  description = "The full Azure resource ID of the subnet where the private endpoint NIC will be created."
+  type        = string
 }
 
 variable "resource_settings" {
