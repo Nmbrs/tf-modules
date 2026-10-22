@@ -1,45 +1,48 @@
-<!-- BEGIN_TF_DOCS -->
 # Redis Cache Module
 
 ## Summary
 
-The Azure Redis Cache module is a Terraform module that provides an easy and consistent way to create and manage Redis cache instances in Azure. This module enforces organization-specific naming conventions and security policies while simplifying the provisioning process.
+The Azure Redis Cache module is a Terraform module that provides an easy and consistent way to create and manage Redis cache instances in Azure. This module enforces organization-specific naming conventions and security policies while simplifying the provisioning process. A private endpoint is always provisioned (subresource `redisCache`); callers supply the subnet and DNS zone via `private_endpoint_settings`.
 
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, < 2.0.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.117 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+| ---- | ------ | ------- |
+| <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint) | git::github.com/Nmbrs/tf-modules//azure/private_endpoint | f41a116c9f31892191b5e3f146a1e361bfc57322 |
 
 ## Resources
 
 | Name | Type |
-|------|------|
-| [azurerm_redis_cache.redis](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/redis_cache) | resource |
+| ---- | ---- |
+| [azurerm_redis_cache.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/redis_cache) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_cache_size_in_gb"></a> [cache\_size\_in\_gb](#input\_cache\_size\_in\_gb) | The size of the Redis cache per instance in gigabytes (GB). | `number` | n/a | yes |
 | <a name="input_company_prefix"></a> [company\_prefix](#input\_company\_prefix) | Short, unique prefix for the company / organization. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resource should be provisioned. | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | Specifies Azure location where the resources should be provisioned. For an exhaustive list of locations, please use the command 'az account list-locations -o table'. | `string` | n/a | yes |
 | <a name="input_override_name"></a> [override\_name](#input\_override\_name) | Optional override for naming logic. | `string` | `null` | no |
+| <a name="input_private_endpoint_settings"></a> [private\_endpoint\_settings](#input\_private\_endpoint\_settings) | Settings for the private endpoint provisioned by this module. `subnet_id` is the resource ID of the subnet where the PEP NIC lands. `private_dns_zone_ids` maps each required subresource to its private DNS zone resource ID. | <pre>object({<br/>    subnet_id = string<br/>    private_dns_zone_ids = object({<br/>      redisCache = string<br/>    })<br/>  })</pre> | n/a | yes |
 | <a name="input_public_network_access_enabled"></a> [public\_network\_access\_enabled](#input\_public\_network\_access\_enabled) | Whether or not public network access is allowed for this Redis instance. | `bool` | `false` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Specifies the name of the resource group where the resource should be provisioned. | `string` | n/a | yes |
-| <a name="input_sequence_number"></a> [sequence\_number](#input\_sequence\_number) | A numeric value used to ensure uniqueness for resource names. | `number` | n/a | yes |
+| <a name="input_sequence_number"></a> [sequence\_number](#input\_sequence\_number) | Optional numeric instance counter, zero-padded as `-NNN` suffix. Use only when provisioning multiple Redis caches for the same workload/env/region (e.g., sharding). Omit for the common single-instance case. | `number` | `null` | no |
 | <a name="input_shard_count"></a> [shard\_count](#input\_shard\_count) | The number of shards for the Redis cluster. Only required when using a Premium SKU. | `number` | `0` | no |
 | <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | Configuration of the size and capacity of the Redis cache. | `string` | n/a | yes |
 | <a name="input_workload"></a> [workload](#input\_workload) | Short, descriptive name for the application, service, or workload. Used in resource naming conventions. | `string` | n/a | yes |
@@ -47,7 +50,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_hostname"></a> [hostname](#output\_hostname) | The Hostname of the Redis Instance. |
 | <a name="output_id"></a> [id](#output\_id) | The Redis ID. |
 | <a name="output_name"></a> [name](#output\_name) | The name of the Redis Instance. |
@@ -58,10 +61,13 @@ No modules.
 | <a name="output_secondary_connection_string"></a> [secondary\_connection\_string](#output\_secondary\_connection\_string) | The secondary connection string of the Redis Instance. |
 | <a name="output_ssl_port"></a> [ssl\_port](#output\_ssl\_port) | The SSL Port of the Redis Instance. |
 | <a name="output_workload"></a> [workload](#output\_workload) | The redis instance workload name. |
+<!-- END_TF_DOCS -->
 
 ## How to use it?
 
-A number of code snippets demonstrating different use cases for the module have been included to help you understand how to use the module in Terraform.
+The module always provisions a private endpoint for the Redis cache (`redisCache` subresource). Every caller must supply `private_endpoint_settings` with the subnet ID where the PEP NIC lands and the resource ID of the `privatelink.redis.cache.windows.net` DNS zone. `public_network_access_enabled` defaults to `false` (PEP-only posture); set it to `true` only when public reachability is genuinely needed alongside the private endpoint.
+
+`sequence_number` is optional and intended only for power-user scenarios where multiple Redis caches share the same workload/env/region (e.g., sharding). Omit it for the common single-instance case. When supplied, it is appended to the resource name as a zero-padded `-NNN` suffix.
 
 ### Basic Redis Cache (Minimal Configuration)
 
@@ -72,14 +78,20 @@ module "redis_cache" {
   source = "git::github.com/Nmbrs/tf-modules//azure/redis_cache"
 
   workload            = "shared"
-  company_prefix      = "org"
-  sequence_number     = 1
+  company_prefix      = "nmbrs"
   environment         = "dev"
   location            = "westeurope"
   resource_group_name = "rg-yha-dev"
 
   sku_name         = "Basic"
   cache_size_in_gb = 1
+
+  private_endpoint_settings = {
+    subnet_id = "/subscriptions/.../subnets/snet-private-endpoints"
+    private_dns_zone_ids = {
+      redisCache = module.dns_zone_redis.id
+    }
+  }
 }
 ```
 
@@ -92,8 +104,7 @@ module "redis_cache" {
   source = "git::github.com/Nmbrs/tf-modules//azure/redis_cache"
 
   workload            = "auth"
-  company_prefix      = "org"
-  sequence_number     = 2
+  company_prefix      = "nmbrs"
   environment         = "prod"
   location            = "westeurope"
   resource_group_name = "rg-module-prod"
@@ -101,7 +112,12 @@ module "redis_cache" {
   sku_name         = "Standard"
   cache_size_in_gb = 2.5
 
-  public_network_access_enabled = false
+  private_endpoint_settings = {
+    subnet_id = "/subscriptions/.../subnets/snet-private-endpoints"
+    private_dns_zone_ids = {
+      redisCache = module.dns_zone_redis.id
+    }
+  }
 }
 ```
 
@@ -114,15 +130,21 @@ module "redis_cache" {
   source = "git::github.com/Nmbrs/tf-modules//azure/redis_cache"
 
   workload            = "session"
+  company_prefix      = "nmbrs"
   environment         = "prod"
   location            = "westeurope"
   resource_group_name = "rg-try-prod"
 
   sku_name         = "Premium"
   cache_size_in_gb = 6
-  shard_count      = 0  # No clustering
+  shard_count      = 0 # No clustering
 
-  public_network_access_enabled = false
+  private_endpoint_settings = {
+    subnet_id = "/subscriptions/.../subnets/snet-private-endpoints"
+    private_dns_zone_ids = {
+      redisCache = module.dns_zone_redis.id
+    }
+  }
 }
 ```
 
@@ -135,15 +157,21 @@ module "redis_cache" {
   source = "git::github.com/Nmbrs/tf-modules//azure/redis_cache"
 
   workload            = "analytics"
+  company_prefix      = "nmbrs"
   environment         = "prod"
   location            = "westeurope"
   resource_group_name = "rg-logs-prod"
 
   sku_name         = "Premium"
   cache_size_in_gb = 26
-  shard_count      = 3  # Enable clustering with 3 shards
+  shard_count      = 3 # Enable clustering with 3 shards
 
-  public_network_access_enabled = false
+  private_endpoint_settings = {
+    subnet_id = "/subscriptions/.../subnets/snet-private-endpoints"
+    private_dns_zone_ids = {
+      redisCache = module.dns_zone_redis.id
+    }
+  }
 }
 ```
 
@@ -162,6 +190,12 @@ module "redis_cache" {
 
   sku_name         = "Standard"
   cache_size_in_gb = 6
+
+  private_endpoint_settings = {
+    subnet_id = "/subscriptions/.../subnets/snet-private-endpoints"
+    private_dns_zone_ids = {
+      redisCache = module.dns_zone_redis.id
+    }
+  }
 }
 ```
-<!-- END_TF_DOCS -->
