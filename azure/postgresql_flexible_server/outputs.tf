@@ -17,3 +17,8 @@ output "fqdn" {
   description = "The fully qualified domain name of the PostgreSQL Flexible Server."
   value       = azurerm_postgresql_flexible_server.main.fqdn
 }
+
+output "administrator_login" {
+  description = "The local administrator login of the PostgreSQL Flexible Server, or null when Entra ID is the only authentication method."
+  value       = local.local_admin_enabled ? azurerm_postgresql_flexible_server.main.administrator_login : null
+}
